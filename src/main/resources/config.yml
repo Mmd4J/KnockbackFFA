@@ -1,0 +1,7 @@
+#use %player% to get the playername so you can use it for a better custom join message
+joinmessage: &5 hey %player% welcome to knockbackFFA
+spawn:
+  x:
+  y:
+  z:
+  world:
