@@ -1,5 +1,6 @@
-package me.gameisntover.kbffa.knockbackffa;
+package me.gameisntover.kbffa.knockbackffa.commands;
 
+import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -8,7 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -24,15 +24,14 @@ public class NotCommandslist  implements CommandExecutor {
             if (KnockbackFFA.getInstance().getCommand("setspawn").getName().equalsIgnoreCase(command.getName())) {
                 KnockbackFFA.getInstance().getConfig();
                 KnockbackFFA.getInstance().getConfig();
-                KnockbackFFA.getInstance().getConfig().set("spawnpoint.x",((Player) sender).getLocation().getX());
-                KnockbackFFA.getInstance().getConfig().set("spawnpoint.y",((Player) sender).getLocation().getY());
-                KnockbackFFA.getInstance().getConfig().set("spawnpoint.z",((Player) sender).getLocation().getZ());
-                KnockbackFFA.getInstance().getConfig().addDefault("spawnpoint.world",((Player) sender).getLocation().getWorld());
+                KnockbackFFA.getInstance().getConfig().set("spawnpoint.x", ((Player) sender).getLocation().getX());
+                KnockbackFFA.getInstance().getConfig().set("spawnpoint.y", ((Player) sender).getLocation().getY());
+                KnockbackFFA.getInstance().getConfig().set("spawnpoint.z", ((Player) sender).getLocation().getZ());
+                KnockbackFFA.getInstance().getConfig().addDefault("spawnpoint.world", ((Player) sender).getLocation().getWorld());
                 KnockbackFFA.getInstance().saveConfig();
-                 sender.sendMessage(ChatColor.AQUA + "Spawn point successfully set on " + ((Player) sender).getLocation().getX() + " , " + ((Player) sender).getLocation().getY() + " , " + ((Player) sender).getLocation().getZ());
+                sender.sendMessage(ChatColor.AQUA + "Spawn point successfully set on " + ((Player) sender).getLocation().getX() + " , " + ((Player) sender).getLocation().getY() + " , " + ((Player) sender).getLocation().getZ());
             }
-        }
-        else {
+        } else {
             sender.sendMessage("sorry but you need to be a player to do that!");
         }
         if (sender instanceof Player) {
@@ -50,6 +49,11 @@ public class NotCommandslist  implements CommandExecutor {
                 kits.addItem(normal);
             }
         }
-        return true;
+        if (KnockbackFFA.getInstance().getCommand("reload").getName().equalsIgnoreCase(command.getName())) {
+            KnockbackFFA.getInstance().reloadConfig();
+                sender.sendMessage(ChatColor.AQUA + "Configs are reloaded!");
+        }
+        return false;
+        }
     }
-}
+

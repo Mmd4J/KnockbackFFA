@@ -3,8 +3,28 @@ joinmessage: '&5 hey %player% welcome to knockbackFFA'
 leavemessage: '&8hope to see you again soon %player% :('
 #player = %player% the guy who killed player = %killer%
 deathmessage: '&c %player%  &a was killed by &c %killer%'
+#ChatFormat is for customizing playerchats so you can use %player% for the playername and you can use %message% for the message
+chatformat: '&7[&4%player%&7]&f : %message%'
 spawnpoint:
  world: 'world' #set your world
  x:
  y:
  z:
+  #Scoreboard is not completed yet and im working on it ignore it for now :)
+ scoreboard:
+  title: '&6KnockBack&eFFA'
+  line1: '&4Hi'
+  line2: '&4How are you?'
+  line3: '&4This is from KnockBackFFA Scoreboard'
+  line4: '&4you can config it by your taste in config files'
+  line5: '&4so what are you looking for???'
+  line6: '&4go and config it Right now!!'
+  line7: '&4If you like the plugin pleasee give 5 star :('
+  line8: '&4Also Join my discord server'
+  line9: '&4More Features SOOON!'
+  line10: '&4Wait, Are you still reading this?'
+  line11: '&4go and config it!'
+  line12: '&4Byeeeeeeeeee'
+#set it true or false so players cant break blocks
+  block-break:
+

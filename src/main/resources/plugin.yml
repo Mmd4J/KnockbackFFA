@@ -8,5 +8,14 @@ description: Knockback ffa is a gamemode which gives every players knockback sti
 commands:
   kits:
     description: GUI Kits
+    permission: kbffa.command.kits
+    permission-message: Sorry but you need to have permission for this!
   setspawn:
-    description: Set Spawn
+    description: sets the spawnpoint so players can spawn there!
+    permission: kbffa.command.setspawn
+    permission-message: Sorry but you need to have permission for this!
+    usage: just stay on the position that you wanna set the spawn then type /setspawn if you done this. don't worry this message is just a reminder
+  reload:
+    description: reload the config
+    permission: kbffa.command.reload
+    permission-message: Sorry but you need to have permission for this!

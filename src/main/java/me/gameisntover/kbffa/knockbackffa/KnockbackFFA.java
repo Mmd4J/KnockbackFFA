@@ -1,23 +1,34 @@
 package me.gameisntover.kbffa.knockbackffa;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import me.gameisntover.kbffa.knockbackffa.commands.NotCommandslist;
+import me.gameisntover.kbffa.knockbackffa.kits.kbffakits;
+import me.gameisntover.kbffa.knockbackffa.messages.ChatFormats;
+import me.gameisntover.kbffa.knockbackffa.messages.JoinLeaveListeners;
+import me.gameisntover.kbffa.knockbackffa.otherlisteners.deathlistener;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-public final class KnockbackFFA extends JavaPlugin  {
+
+public final class KnockbackFFA extends JavaPlugin implements Listener {
     public static KnockbackFFA INSTANCE;
 
     @Override
     public void onEnable() {
-        INSTANCE= this;
-
+        INSTANCE = this;
         getCommand("setspawn").setExecutor(new NotCommandslist());
         getCommand("kits").setExecutor(new NotCommandslist());
+        getCommand("reload").setExecutor(new NotCommandslist());
         saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new JoinLeaveListeners(),this);
-        
-        getServer().getPluginManager().registerEvents(new deathlistener() ,this);
-        getServer().getPluginManager().registerEvents(new GUIClickevent(),this);
+        getServer().getPluginManager().registerEvents(new JoinLeaveListeners(), this);
+        getServer().getPluginManager().registerEvents(new ChatFormats(), this);
+        getServer().getPluginManager().registerEvents(new deathlistener(), this);
+        getServer().getPluginManager().registerEvents(new kbffakits(), this);
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            Bukkit.getPluginManager().registerEvents(this, this);
+        } else {
+            getLogger().warning("Could not find PlaceholderAPI! This plugin is required for better configurable!");
+            Bukkit.getPluginManager().disablePlugin(this);
 
+        }
     }
     public static KnockbackFFA getInstance() {
         return INSTANCE;
@@ -27,5 +38,4 @@ public final class KnockbackFFA extends JavaPlugin  {
     public void onDisable() {
         // Plugin shutdown logic
     }
-
 }

@@ -1,32 +1,24 @@
-package me.gameisntover.kbffa.knockbackffa;
+package me.gameisntover.kbffa.knockbackffa.otherlisteners;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.potion.PotionEffectType;
 
 
-import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class deathlistener implements Listener {
-    public static KnockbackFFA plugin3;
-
+    Map<Entity,Integer > killStreak = new HashMap<>();
     Map<Entity, Entity> damagers = new HashMap<>();
-    Map<String, Integer> killStreak = new HashMap<String, Integer>();
-
     @EventHandler
     public void damaged(EntityDamageByEntityEvent e) {
         Entity player = e.getEntity();
@@ -57,9 +49,16 @@ public class deathlistener implements Listener {
         if (damager == null) {
         player.sendMessage(ChatColor.AQUA + "You died by falling into the void");
         } else {
-            String damagername = damager.getName();
+                if(killStreak.get(damager == null) == null) {
+                    killStreak.put(damager, 0);
+                }
+            killStreak.put(damager, killStreak.get(damager).intValue() +1);
             damagers.remove(player);
-            e.setDeathMessage(KnockbackFFA.getInstance().getConfig().getString("deathmessage").replace("%player%", player.getDisplayName()).replace("&", "§").replace("%killer%", damager.getName()));
+            String deathText = KnockbackFFA.getInstance().getConfig().getString("deathmessage").replace("&", "§");
+            deathText = PlaceholderAPI.setPlaceholders(e.getEntity(), deathText);
+            e.setDeathMessage(deathText);
+
+            e.setDeathMessage(KnockbackFFA.getInstance().getConfig().getString("deathmessage").replace("%player%", player.getDisplayName()).replace("&", "§").replace("%killer%", damager.getName()).replace("%kills%",killStreak.get(damager).toString()));
             damager.sendMessage(ChatColor.GREEN + "You killed " + ChatColor.BOLD + player.getDisplayName() + " " );
             Double x = KnockbackFFA.getInstance().getConfig().getDouble("spawnpoint.x");
             Double y = KnockbackFFA.getInstance().getConfig().getDouble("spawnpoint.y");
