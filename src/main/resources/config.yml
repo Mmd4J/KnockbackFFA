@@ -1,7 +1,10 @@
-#use %player% to get the playername so you can use it for a better custom join message
-joinmessage: &5 hey %player% welcome to knockbackFFA
-spawn:
-  x:
-  y:
-  z:
-  world:
+#use %player% to get the playername so you can use it for a better custom join message!s
+joinmessage: '&5 hey %player% welcome to knockbackFFA'
+leavemessage: '&8hope to see you again soon %player% :('
+#player = %player% the guy who killed player = %killer%
+deathmessage: '&c %player%  &a was killed by &c %killer%'
+spawnpoint:
+ world: 'world' #set your world
+ x:
+ y:
+ z:
