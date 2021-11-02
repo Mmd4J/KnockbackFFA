@@ -27,7 +27,6 @@ public class NotCommandslist  implements CommandExecutor {
                 KnockbackFFA.getInstance().getConfig().set("spawnpoint.x", ((Player) sender).getLocation().getX());
                 KnockbackFFA.getInstance().getConfig().set("spawnpoint.y", ((Player) sender).getLocation().getY());
                 KnockbackFFA.getInstance().getConfig().set("spawnpoint.z", ((Player) sender).getLocation().getZ());
-                KnockbackFFA.getInstance().getConfig().addDefault("spawnpoint.world", ((Player) sender).getLocation().getWorld());
                 KnockbackFFA.getInstance().saveConfig();
                 sender.sendMessage(ChatColor.AQUA + "Spawn point successfully set on " + ((Player) sender).getLocation().getX() + " , " + ((Player) sender).getLocation().getY() + " , " + ((Player) sender).getLocation().getZ());
             }

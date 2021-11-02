@@ -3,6 +3,8 @@ import me.gameisntover.kbffa.knockbackffa.commands.NotCommandslist;
 import me.gameisntover.kbffa.knockbackffa.kits.kbffakits;
 import me.gameisntover.kbffa.knockbackffa.messages.ChatFormats;
 import me.gameisntover.kbffa.knockbackffa.messages.JoinLeaveListeners;
+import me.gameisntover.kbffa.knockbackffa.otherlisteners.NoHunger;
+import me.gameisntover.kbffa.knockbackffa.otherlisteners.NoItemDrop;
 import me.gameisntover.kbffa.knockbackffa.otherlisteners.deathlistener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -17,6 +19,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getCommand("setspawn").setExecutor(new NotCommandslist());
         getCommand("kits").setExecutor(new NotCommandslist());
         getCommand("reload").setExecutor(new NotCommandslist());
+        getServer().getPluginManager().registerEvents(new NoHunger(), this);
+        getServer().getPluginManager().registerEvents(new NoItemDrop(),this);
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new JoinLeaveListeners(), this);
         getServer().getPluginManager().registerEvents(new ChatFormats(), this);

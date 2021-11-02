@@ -6,7 +6,7 @@
 
     <groupId>me.gameisntover</groupId>
     <artifactId>knockbackffa</artifactId>
-    <version>1.4-BETA</version>
+    <version>1.5-BETA</version>
     <packaging>jar</packaging>
 
     <name>Knockbackffa</name>

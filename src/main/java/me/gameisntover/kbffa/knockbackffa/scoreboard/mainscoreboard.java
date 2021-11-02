@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scoreboard.*;
 
 public class mainscoreboard implements Listener {
-    @EventHandler
+ /*   @EventHandler
     public void playerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         ScoreboardManager board  = Bukkit.getScoreboardManager();
@@ -42,5 +42,5 @@ public class mainscoreboard implements Listener {
         score11.setScore(11);
         score12.setScore(12);
         player.setScoreboard(scoreboard);
-        }
+        }*/
     }
