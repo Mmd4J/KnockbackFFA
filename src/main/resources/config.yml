@@ -19,3 +19,5 @@ killstreak:
  15message: '&7PLAYER &l&4%killer% &7IS &l&4INSANE &7HE REACHED TO &c15 KILLSTREAKS'
  lastmessage: '&4%killer% This guy is &4&lGOD he added another kill to his collection'
 no-item-drop: true
+scoreboard:
+ title: 'KnockbackFFA'

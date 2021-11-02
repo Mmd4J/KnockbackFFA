@@ -6,16 +6,14 @@
 
     <groupId>me.gameisntover</groupId>
     <artifactId>knockbackffa</artifactId>
-    <version>1.5-BETA</version>
+    <version>1.6-BETA</version>
     <packaging>jar</packaging>
 
     <name>Knockbackffa</name>
-
-    <description>a fun minigame for 1.16</description>
     <properties>
-        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <description>a fun minigame for 1.16 </description>
 
     <build>
         <plugins>
