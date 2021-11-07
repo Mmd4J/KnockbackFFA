@@ -1,23 +1,22 @@
-joinmessage: '&f -=&7[&4+&7]&f=- &7hey &2%player_name% &7welcome to knockbackFFA'
-leavemessage: '&f -=&7[&4-&7]&f=- &7Hope to see you again &4%player_name% &7:(!'
-#player = %player% the guy who killed player = %killer%
-deathmessage: '&c %player_name%  &a was killed by &c %killer%'
-#ChatFormat is for customizing playerchats so you can use %player% for the playername and you can use %message% for the message
-chatformat: '&7[&8%player%&7]&f : %message%'
-spawnpoint:
- world: 'world' #set your world
- x:
- y:
- z:
+
 
 #set it true or false so players cant break blocks
-block-break:
-kill: '&7You Killed &c %player% '
 killstreak:
  5message: '&2 %killer% &7has just reached to 5 KILLSTREAKS'
  10message: '&7Be Careful! Player &2 %killer% has reached to &c10 killstreaks!'
  15message: '&7PLAYER &l&4%killer% &7IS &l&4INSANE &7HE REACHED TO &c15 KILLSTREAKS'
  lastmessage: '&4%killer% This guy is &4&lGOD he added another kill to his collection'
 no-item-drop: true
+block-break: true
 scoreboard:
- title: 'KnockbackFFA'
+ title: '&3Knockback&bFFA'
+ lines:
+  - '&7Hi &3%player_name%!'
+  - '&f Welcome to &6Knockback&eFFA'
+  - ''
+  - '&7Players online : %server_online%'
+  - ''
+  - 'Hope you enjoy playing in YourServer ;)'
+  - 'yourdomain.com'
+  - 'play.yourdomain.com'
+

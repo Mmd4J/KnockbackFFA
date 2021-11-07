@@ -1,0 +1,7 @@
+joinmessage: '&f -=&7[&4+&7]&f=- &7hey &2%player_name% &7welcome to knockbackFFA'
+leavemessage: '&f -=&7[&4-&7]&f=- &7Hope to see you again &4%player_name% &7:(!'
+#player = %player% the guy who killed player = %killer%
+deathmessage: '&c %player_name%  &a was killed by &c %killer%'
+#ChatFormat is for customizing playerchats so you can use %player% for the playername and you can use %message% for the message
+chatformat: '&7[&8%player%&7]&f : %message%'
+kill: '&7You Killed &c %player%'

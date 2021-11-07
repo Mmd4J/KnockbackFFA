@@ -1,8 +1,11 @@
 package me.gameisntover.kbffa.knockbackffa.otherlisteners;
 
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerKickEvent;
 
 public class BlockBreakListener implements Listener {
     @EventHandler
@@ -13,4 +16,9 @@ public class BlockBreakListener implements Listener {
             event.setCancelled(true);
         }
     }
+    @EventHandler
+    public void kickPlayer(PlayerKickEvent e) {
+        Player player = e.getPlayer();
+
+        }
 }
