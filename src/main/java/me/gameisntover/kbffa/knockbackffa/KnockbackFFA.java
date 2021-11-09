@@ -1,6 +1,7 @@
 package me.gameisntover.kbffa.knockbackffa;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlaySoundConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerConfiguration;
 import me.gameisntover.kbffa.knockbackffa.arenas.GameRules;
 import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
@@ -18,8 +19,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.RunnableScheduledFuture;
+
 public final class KnockbackFFA extends JavaPlugin implements Listener {
-    Integer Checkarenaid=0;
+    Map<String, Integer> ArenaID = new HashMap<>();
     public static KnockbackFFA INSTANCE;
     @Override
     public void onEnable() {
@@ -28,15 +33,17 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getCommand("reload").setExecutor(new NotCommandslist());
         getCommand("setsafezone").setExecutor(new ArenaCommands());
         INSTANCE = this;
-            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(this, new Runnable() {
+        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+        scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
-                for (int arena=0;arena<4;arena++){
+                    int testinteger = 0;
+                    ArenaID.put("test", testinteger+1);
+                    Bukkit.broadcastMessage(""+testinteger);
 
                 }
-                }
-            }, 100);
+
+            } ,0 , 100);
 
             getConfig().addDefault("enabledarena","world");
         PlaySoundConfiguration.setup();
@@ -56,6 +63,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         MessageConfiguration.get().addDefault("joinmessage","&f -=&7[&4+&7]&f=- &7hey &2%player_name% &7welcome to knockbackFFA");
         MessageConfiguration.get().options().copyDefaults(true);
         MessageConfiguration.save();
+
         ArenaConfiguration.setup();
         ArenaConfiguration.get().addDefault("arena1","arena1 ");
         ArenaConfiguration.get().addDefault("arena2","arena2 ");

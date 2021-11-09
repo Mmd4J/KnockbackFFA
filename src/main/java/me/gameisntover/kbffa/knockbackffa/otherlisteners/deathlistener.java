@@ -3,6 +3,7 @@ package me.gameisntover.kbffa.knockbackffa.otherlisteners;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlaySoundConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerConfiguration;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import org.bukkit.*;
@@ -16,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class deathlistener implements Listener {
     Map<Entity, Integer> killStreak = new HashMap<>();
@@ -49,21 +52,37 @@ public class deathlistener implements Listener {
             if (e.getCause() == EntityDamageEvent.DamageCause.CONTACT.VOID) {
                 p.setHealth(0.5);
                 p.getInventory().clear();
+
             }
         }
     }
+        @EventHandler
+        public void onPlayerJoin(PlayerJoinEvent e){
+        Player player =e.getPlayer() ;
+            PlayerConfiguration.load(player);
+            deathCount.get(player.equals( PlayerConfiguration.get().getInt("deaths")));
+            PlayerConfiguration.save();
+        }
+
     @EventHandler
     public void playerDeathByVoid(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Entity damager = damagers.get(player);
+        PlayerConfiguration.save();
         killStreak.put(player, 0);
+        player.spigot().respawn();
+        PlayerConfiguration.load(player);
+        PlayerConfiguration.get().set("deaths", deathCount.get(player).intValue() + 1);
+        PlayerConfiguration.save();
+        if(deathCount==null){
+            deathCount.put(player,0);
+        }
         double x = ArenaConfiguration.get().getDouble("arena1.x");
         double y = ArenaConfiguration.get().getDouble("arena1.y");;
         double z = ArenaConfiguration.get().getDouble("arena1.z");
         World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena1.world"));
-        player.spigot().respawn();
         player.teleport(new org.bukkit.Location(world, x, y, z));
-
+        deathCount.put(player, deathCount.get(player).intValue() + 1);
         if (damager == null) {
             player.sendMessage(ChatColor.AQUA + "You died by falling into the void");
         } else{
