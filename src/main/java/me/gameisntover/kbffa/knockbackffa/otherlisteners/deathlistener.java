@@ -68,15 +68,14 @@ public class deathlistener implements Listener {
     public void playerDeathByVoid(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Entity damager = damagers.get(player);
-        PlayerConfiguration.save();
-        killStreak.put(player, 0);
         player.spigot().respawn();
-        PlayerConfiguration.load(player);
-        PlayerConfiguration.get().set("deaths", deathCount.get(player).intValue() + 1);
-        PlayerConfiguration.save();
         if(deathCount==null){
             deathCount.put(player,0);
         }
+        killStreak.put(player, 0);
+        PlayerConfiguration.load(player);
+        PlayerConfiguration.get().set("deaths", deathCount.get(player));
+        PlayerConfiguration.save();
         double x = ArenaConfiguration.get().getDouble("arena1.x");
         double y = ArenaConfiguration.get().getDouble("arena1.y");;
         double z = ArenaConfiguration.get().getDouble("arena1.z");

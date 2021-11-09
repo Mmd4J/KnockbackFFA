@@ -15,7 +15,9 @@ import me.gameisntover.kbffa.knockbackffa.otherlisteners.RespawnListener;
 import me.gameisntover.kbffa.knockbackffa.otherlisteners.deathlistener;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.mainscoreboard;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -24,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.RunnableScheduledFuture;
 
 public final class KnockbackFFA extends JavaPlugin implements Listener {
-    Map<String, Integer> ArenaID = new HashMap<>();
+    int ArenaID = 0;
     public static KnockbackFFA INSTANCE;
     @Override
     public void onEnable() {
@@ -37,9 +39,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
-                    int testinteger = 0;
-                    ArenaID.put("test", testinteger+1);
-                    Bukkit.broadcastMessage(""+testinteger);
+                    ArenaID ++;
+                    Bukkit.broadcastMessage(""+ArenaID);
 
                 }
 

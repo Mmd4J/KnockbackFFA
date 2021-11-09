@@ -44,6 +44,8 @@ public class JoinLeaveListeners  implements Listener {
         pinventory.addItem(kbstick, enderpearl);
         player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(999999999, 255));
         PlayerConfiguration.create(player);
+        PlayerConfiguration.get().addDefault("deaths",0);
+        PlayerConfiguration.save();
         PlayerConfiguration.save();
         String joinText = MessageConfiguration.get().getString("joinmessage").replace("&", "§");
         joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);
