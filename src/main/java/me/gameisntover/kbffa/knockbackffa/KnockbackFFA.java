@@ -15,6 +15,9 @@ import me.gameisntover.kbffa.knockbackffa.otherlisteners.RespawnListener;
 import me.gameisntover.kbffa.knockbackffa.otherlisteners.deathlistener;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.mainscoreboard;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
@@ -36,17 +39,80 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getCommand("setsafezone").setExecutor(new ArenaCommands());
         INSTANCE = this;
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
-                @Override
-                public void run() {
-                    ArenaID ++;
-                    Bukkit.broadcastMessage(""+ArenaID);
+        int i = scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                ArenaID++;
+                if (ArenaID == 1) {
+                    if(ArenaConfiguration.get().getString("arena1.world")!=null) {
+                        ArenaConfiguration.get().set("EnabledArena", "arena1");
+                        ArenaConfiguration.save();
+                        double x = ArenaConfiguration.get().getDouble("arena1.x");
+                        double y = ArenaConfiguration.get().getDouble("arena1.y");
+                        double z = ArenaConfiguration.get().getDouble("arena1.z");
+                        World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena1.world"));
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                            p.teleport(new Location(world, x, y, z));
+                        }
+                        Bukkit.broadcastMessage(ChatColor.GREEN + "Changing arena to arena 1...");
+                    }else {
+                            ArenaID ++;
+                    }
+                    } else if (ArenaID == 2) {
+                    if(ArenaConfiguration.get().getString("arena2.world")!=null) {
+                        ArenaConfiguration.get().set("EnabledArena", "arena2");
+                        ArenaConfiguration.save();
+                        double x = ArenaConfiguration.get().getDouble("arena2.x");
+                    double y = ArenaConfiguration.get().getDouble("arena2.y");
+                    double z = ArenaConfiguration.get().getDouble("arena2.z");
+                    World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena2.world"));
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        p.teleport(new Location(world, x, y, z));
+                    }
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "Changing arena to arena 2...");}
+                    else {
+                        ArenaID ++;
+                    }
+                } else if (ArenaID == 3) {
+                    if(ArenaConfiguration.get().getString("arena3.world")!=null) {
+                        ArenaConfiguration.get().set("EnabledArena", "arena3");
+                        ArenaConfiguration.save();
+                        double x = ArenaConfiguration.get().getDouble("arena3.x");
+                    double y = ArenaConfiguration.get().getDouble("arena3.y");
+                    double z = ArenaConfiguration.get().getDouble("arena3.z");
+                    World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena3.world"));
 
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        p.teleport(new Location(world, x, y, z));
+                    }
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "Changing arena to arena 3...");}
+                    else {
+                        ArenaID++;
+                    }
+                } else if (ArenaID == 4) {
+                    if(ArenaConfiguration.get().getString("arena4.world")!=null) {
+                        ArenaConfiguration.get().set("EnabledArena", "arena4");
+                        ArenaConfiguration.save();
+                        double x = ArenaConfiguration.get().getDouble("arena4.x");
+                    double y = ArenaConfiguration.get().getDouble("arena4.y");
+                    double z = ArenaConfiguration.get().getDouble("arena4.z");
+                    World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena4.world"));
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        p.teleport(new Location(world, x, y, z));
+                    }
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "Changing arena to arena 4...");
+                    ArenaID = 0;}
+                    else {
+                        ArenaID =0;
+                    }
                 }
 
-            } ,0 , 100);
+            }
 
-            getConfig().addDefault("enabledarena","world");
+        }, 0, 18000);
+
+
+        getConfig().addDefault("enabledarena","world");
         PlaySoundConfiguration.setup();
         PlaySoundConfiguration.get().addDefault("join", "ENTITY_PLAYER_LEVELUP");
         PlaySoundConfiguration.get().addDefault("5kills", "ENTITY_WOLF_HOWL");

@@ -28,7 +28,57 @@ public class JoinLeaveListeners  implements Listener {
     @EventHandler
     public void playerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena1")) {
+            if(ArenaConfiguration.get().getString("arena1.world")!=null) {
+                double x = ArenaConfiguration.get().getDouble("arena1.x");
+                double y = ArenaConfiguration.get().getDouble("arena1.y");
+                double z = ArenaConfiguration.get().getDouble("arena1.z");
+                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena1.world"));
+                player.teleport(new Location(world, x, y, z));
 
+            }else {
+                ArenaConfiguration.get().set("EnabledArena","arena2");
+
+                }
+        } else         if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena2")) {
+            if(ArenaConfiguration.get().getString("arena2.world")!=null) {
+                double x = ArenaConfiguration.get().getDouble("arena2.x");
+                double y = ArenaConfiguration.get().getDouble("arena2.y");
+                double z = ArenaConfiguration.get().getDouble("arena2.z");
+                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena2.world"));
+                player.teleport(new Location(world, x, y, z));
+
+            }
+            else {
+                ArenaConfiguration.get().set("EnabledArena","arena3");
+            }
+        } else         if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena3")) {
+
+            if(ArenaConfiguration.get().getString("arena3.world")!=null) {
+                double x = ArenaConfiguration.get().getDouble("arena3.x");
+                double y = ArenaConfiguration.get().getDouble("arena3.y");
+                double z = ArenaConfiguration.get().getDouble("arena3.z");
+                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena3.world"));
+                player.teleport(new Location(world, x, y, z));
+
+            }
+            else {
+                ArenaConfiguration.get().set("EnabledArena","arena4");
+            }
+        } else        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena4")) {
+
+            if(ArenaConfiguration.get().getString("arena4.world")!=null) {
+                double x = ArenaConfiguration.get().getDouble("arena4.x");
+                double y = ArenaConfiguration.get().getDouble("arena4.y");
+                double z = ArenaConfiguration.get().getDouble("arena4.z");
+                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena4.world"));
+                player.teleport(new Location(world, x, y, z));
+
+            }
+            else {
+                ArenaConfiguration.get().set("EnabledArena","arena1");
+            }
+        }
         ItemStack kbstick = new ItemStack(Material.STICK, 1);
         ItemMeta meta = kbstick.getItemMeta();
         meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
@@ -55,7 +105,6 @@ public class JoinLeaveListeners  implements Listener {
         double y = ArenaConfiguration.get().getDouble("arena1.y");;
         double z = ArenaConfiguration.get().getDouble("arena1.z");
         World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena1.world"));
-        player.teleport(new org.bukkit.Location(world, x, y, z));
         if (ArenaConfiguration.get().getString("arena1.x") == null ) {
             if(player.isOp()){
                 player.sendMessage("§cSpawn is not set! Please set it in the config or /setspawn!");
