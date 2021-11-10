@@ -126,7 +126,7 @@ public class deathlistener implements Listener {
             else {
                 ArenaConfiguration.get().set("EnabledArena","arena1");
             }
-        deathCount.put(player, deathCount.get(player).intValue() + 1);
+//        deathCount.put(player, deathCount.get(player).intValue() + 1);
         if (damager == null) {
             player.sendMessage(ChatColor.AQUA + "You died by falling into the void");
         } else{
