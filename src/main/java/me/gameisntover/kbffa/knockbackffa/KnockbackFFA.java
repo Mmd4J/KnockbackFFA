@@ -109,9 +109,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
             }
 
-        }, 0, 18000);
+        }, 0, getConfig().getInt("ArenaChangeTimer")*20);
 
-
+        getConfig().addDefault("ArenaChangeTimer",900);
         getConfig().addDefault("enabledarena","world");
         PlaySoundConfiguration.setup();
         PlaySoundConfiguration.get().addDefault("join", "ENTITY_PLAYER_LEVELUP");
