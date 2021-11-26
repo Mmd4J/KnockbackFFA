@@ -125,12 +125,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 for(Entity current : entList) {
                     if (current instanceof Item) {
                         current.remove();
-                        for(Player p : Bukkit.getServer().getOnlinePlayers()) {
                             p.playSound(p.getLocation(),Sound.valueOf(PlaySoundConfiguration.get().getString("itemremoved")), 1, 1);}
                         Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
                     }
                 }
-            }}
+            }
                 },getConfig().getInt("ClearItems.delay"),getConfig().getInt("ClearItems.period")*20);
 
         PlaySoundConfiguration.setup();
