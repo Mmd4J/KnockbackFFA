@@ -118,8 +118,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         int o= scheduler1.scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
             public void run() {
-                World world = getServer().getWorld("world");//get the world
-                List<Entity> entList = world.getEntities();//get all entities in the world
+                for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    World world = getServer().getWorld(p.getWorld().getName());
+                    List<Entity> entList = world.getEntities();
 
                 for(Entity current : entList) {
                     if (current instanceof Item) {
@@ -129,7 +130,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                         Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
                     }
                 }
-            }
+            }}
                 },getConfig().getInt("ClearItems.delay"),getConfig().getInt("ClearItems.period")*20);
 
         PlaySoundConfiguration.setup();
