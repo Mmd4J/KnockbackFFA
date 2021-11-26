@@ -57,13 +57,67 @@ public class DeathListener implements Listener {
     public void playerDeathByVoid(PlayerDeathEvent e) {
         Player player = e.getEntity();
        Entity killer = player.getKiller();
+
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        int i = scheduler.scheduleSyncRepeatingTask(KnockbackFFA.getInstance(), new Runnable() {
+        int i = scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), new Runnable() {
             @Override
             public void run() {
                 player.spigot().respawn();
+                KnockbackFFAKit.Kits(player);
+                if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena1")) {
+                    if(ArenaConfiguration.get().getString("arena1.world")!=null) {
+                        double x = ArenaConfiguration.get().getDouble("arena1.x");
+                        double y = ArenaConfiguration.get().getDouble("arena1.y");
+                        double z = ArenaConfiguration.get().getDouble("arena1.z");
+                        World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena1.world"));
+                        player.teleport(new Location(world, x, y, z));
+
+                    }else {
+                        ArenaConfiguration.get().set("EnabledArena","arena2");
+
+                    }
+                } else         if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena2")) {
+                    if(ArenaConfiguration.get().getString("arena2.world")!=null) {
+                        double x = ArenaConfiguration.get().getDouble("arena2.x");
+                        double y = ArenaConfiguration.get().getDouble("arena2.y");
+                        double z = ArenaConfiguration.get().getDouble("arena2.z");
+                        World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena2.world"));
+                        player.teleport(new Location(world, x, y, z));
+
+                    }
+                    else {
+                        ArenaConfiguration.get().set("EnabledArena","arena3");
+                    }
+                } else         if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena3")) {
+
+                    if(ArenaConfiguration.get().getString("arena3.world")!=null) {
+                        double x = ArenaConfiguration.get().getDouble("arena3.x");
+                        double y = ArenaConfiguration.get().getDouble("arena3.y");
+                        double z = ArenaConfiguration.get().getDouble("arena3.z");
+                        World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena3.world"));
+                        player.teleport(new Location(world, x, y, z));
+
+                    }
+                    else {
+                        ArenaConfiguration.get().set("EnabledArena","arena4");
+                    }
+                } else        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena4")) {
+
+                    if(ArenaConfiguration.get().getString("arena4.world")!=null) {
+                        double x = ArenaConfiguration.get().getDouble("arena4.x");
+                        double y = ArenaConfiguration.get().getDouble("arena4.y");
+                        double z = ArenaConfiguration.get().getDouble("arena4.z");
+                        World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena4.world"));
+                        player.teleport(new Location(world, x, y, z));
+                    }
+                }
+                else {
+                    ArenaConfiguration.get().set("EnabledArena","arena1");
+                }
+
             }
-        }, 1, 20);        killStreak.put(player, 0);
+        }, 1);        killStreak.put(player, 0);
+
         PlayerConfiguration.load(player);
         PlayerConfiguration.get().set("deaths",PlayerConfiguration.get().getInt("deaths") + 1);
         PlayerConfiguration.save();
@@ -72,56 +126,6 @@ public class DeathListener implements Listener {
             PlayerConfiguration.get().set("kills", PlayerConfiguration.get().getInt("kills") + 1);
             PlayerConfiguration.save();
         }
-        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena1")) {
-            if(ArenaConfiguration.get().getString("arena1.world")!=null) {
-                double x = ArenaConfiguration.get().getDouble("arena1.x");
-                double y = ArenaConfiguration.get().getDouble("arena1.y");
-                double z = ArenaConfiguration.get().getDouble("arena1.z");
-                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena1.world"));
-                player.teleport(new Location(world, x, y, z));
-
-            }else {
-                ArenaConfiguration.get().set("EnabledArena","arena2");
-
-            }
-        } else         if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena2")) {
-            if(ArenaConfiguration.get().getString("arena2.world")!=null) {
-                double x = ArenaConfiguration.get().getDouble("arena2.x");
-                double y = ArenaConfiguration.get().getDouble("arena2.y");
-                double z = ArenaConfiguration.get().getDouble("arena2.z");
-                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena2.world"));
-                player.teleport(new Location(world, x, y, z));
-
-            }
-            else {
-                ArenaConfiguration.get().set("EnabledArena","arena3");
-            }
-        } else         if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena3")) {
-
-            if(ArenaConfiguration.get().getString("arena3.world")!=null) {
-                double x = ArenaConfiguration.get().getDouble("arena3.x");
-                double y = ArenaConfiguration.get().getDouble("arena3.y");
-                double z = ArenaConfiguration.get().getDouble("arena3.z");
-                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena3.world"));
-                player.teleport(new Location(world, x, y, z));
-
-            }
-            else {
-                ArenaConfiguration.get().set("EnabledArena","arena4");
-            }
-        } else        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase("arena4")) {
-
-            if(ArenaConfiguration.get().getString("arena4.world")!=null) {
-                double x = ArenaConfiguration.get().getDouble("arena4.x");
-                double y = ArenaConfiguration.get().getDouble("arena4.y");
-                double z = ArenaConfiguration.get().getDouble("arena4.z");
-                World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena4.world"));
-                player.teleport(new Location(world, x, y, z));
-                }
-            }
-            else {
-                ArenaConfiguration.get().set("EnabledArena","arena1");
-            }
         if (killer == null) {
             player.sendMessage(ChatColor.AQUA + "You died by falling into the void");
         } else{

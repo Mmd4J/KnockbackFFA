@@ -9,6 +9,7 @@ import me.gameisntover.kbffa.knockbackffa.messages.ChatFormats;
 import me.gameisntover.kbffa.knockbackffa.messages.JoinLeaveListeners;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.otherlisteners.*;
+import me.gameisntover.kbffa.knockbackffa.placeholderapisupport.Expansion;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.mainscoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -120,9 +121,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 World world = getServer().getWorld("world");//get the world
                 List<Entity> entList = world.getEntities();//get all entities in the world
 
-                for(Entity current : entList) {//loop through the list
-                    if (current instanceof Item) {//make sure we aren't deleting mobs/players
-                        current.remove();//remove it
+                for(Entity current : entList) {
+                    if (current instanceof Item) {
+                        current.remove();
                         for(Player p : Bukkit.getServer().getOnlinePlayers()) {
                             p.playSound(p.getLocation(),Sound.valueOf(PlaySoundConfiguration.get().getString("itemremoved")), 1, 1);}
                         Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
@@ -130,10 +131,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 }
             }
                 },getConfig().getInt("ClearItems.delay"),getConfig().getInt("ClearItems.period")*20);
-        getConfig().addDefault("ArenaChangeTimer",900);
-        getConfig().addDefault("ClearItems.delay",0);
-        getConfig().addDefault("ClearItems.period",60);
-        getConfig().addDefault("enabledarena","world");
+
         PlaySoundConfiguration.setup();
         PlaySoundConfiguration.get().addDefault("arenachange","BLOCK_NOTE_BLOCK_HAT");
         PlaySoundConfiguration.get().addDefault("itemremoved", "BLOCK_NOTE_BLOCK_BASS");
@@ -167,7 +165,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         ArenaConfiguration.get().addDefault("arena4.world","world");
         ArenaConfiguration.get().options().copyDefaults();
         ArenaConfiguration.save();
-        getServer().getPluginManager().registerEvents(new RespawnListener(), this);
         getServer().getPluginManager().registerEvents(new NoHunger(), this);
         getServer().getPluginManager().registerEvents(new NoItemDrop(),this);
         getServer().getPluginManager().registerEvents(new mainscoreboard(), this);

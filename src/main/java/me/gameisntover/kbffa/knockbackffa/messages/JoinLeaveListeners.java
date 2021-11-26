@@ -70,6 +70,7 @@ public class JoinLeaveListeners  implements Listener {
             }
         }
         KnockbackFFAKit.Kits(player);
+        PlayerConfiguration.create(player);
         String joinText = MessageConfiguration.get().getString("joinmessage").replace("&", "§");
         joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);
         player.playSound(player.getLocation(),Sound.valueOf(PlaySoundConfiguration.get().getString("join")), 1, 1);

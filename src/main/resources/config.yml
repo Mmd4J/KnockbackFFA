@@ -1,5 +1,8 @@
-
-
+ArenaChangeTimer: 900
+ClearItems:
+ delay: 0
+ period: 60
+enabledarena: 'world'
 #set it true or false so players cant break blocks
 killstreak:
  5message: '&2 %killer% &7has just reached to 5 KILLSTREAKS'
