@@ -131,7 +131,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 }
             }
                 },getConfig().getInt("ClearItems.delay"),getConfig().getInt("ClearItems.period")*20);
-
+        new Expansion(this).register();
         PlaySoundConfiguration.setup();
         PlaySoundConfiguration.get().addDefault("arenachange","BLOCK_NOTE_BLOCK_HAT");
         PlaySoundConfiguration.get().addDefault("itemremoved", "BLOCK_NOTE_BLOCK_BASS");
