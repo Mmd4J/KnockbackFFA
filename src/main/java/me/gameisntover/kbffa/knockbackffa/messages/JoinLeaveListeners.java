@@ -5,24 +5,14 @@ import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlaySoundConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerConfiguration;
-import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+import me.gameisntover.kbffa.knockbackffa.otherlisteners.KnockbackFFAKit;
 import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.Async;
-
-import java.io.File;
-import java.io.IOException;
 
 public class JoinLeaveListeners  implements Listener {
     @EventHandler
@@ -79,32 +69,11 @@ public class JoinLeaveListeners  implements Listener {
                 ArenaConfiguration.get().set("EnabledArena","arena1");
             }
         }
-        ItemStack kbstick = new ItemStack(Material.STICK, 1);
-        ItemMeta meta = kbstick.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
-        meta.setUnbreakable(true);
-        meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
-        kbstick.setItemMeta(meta);
-        ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 16);
-        ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-        enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
-        enderpearl.setItemMeta(enderpearlmeta);
-        Inventory pinventory = player.getInventory();
-        pinventory.clear();
-        pinventory.addItem(kbstick, enderpearl);
-        player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(999999999, 255));
-        PlayerConfiguration.create(player);
-        PlayerConfiguration.get().addDefault("deaths",0);
-        PlayerConfiguration.save();
-        PlayerConfiguration.save();
+        KnockbackFFAKit.Kits(player);
         String joinText = MessageConfiguration.get().getString("joinmessage").replace("&", "§");
         joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);
         player.playSound(player.getLocation(),Sound.valueOf(PlaySoundConfiguration.get().getString("join")), 1, 1);
         e.setJoinMessage(joinText);
-        double x = ArenaConfiguration.get().getDouble("arena1.x");
-        double y = ArenaConfiguration.get().getDouble("arena1.y");;
-        double z = ArenaConfiguration.get().getDouble("arena1.z");
-        World world = Bukkit.getWorld(ArenaConfiguration.get().getString("arena1.world"));
         if (ArenaConfiguration.get().getString("arena1.x") == null ) {
             if(player.isOp()){
                 player.sendMessage("§cSpawn is not set! Please set it in the config or /setspawn!");

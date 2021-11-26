@@ -1,29 +1,31 @@
 package me.gameisntover.kbffa.knockbackffa.placeholderapisupport;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerConfiguration;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.entity.Player;
 
-public class SomeExpansion extends PlaceholderExpansion {
+public class Expansion extends PlaceholderExpansion {
 
     private final KnockbackFFA plugin;
 
-    public SomeExpansion(KnockbackFFA plugin) {
+    public Expansion(KnockbackFFA plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public String getAuthor() {
-        return "someauthor";
+        return "GaMeIsNtOvEr";
     }
 
     @Override
     public String getIdentifier() {
-        return "example";
+        return "AdvancedKnockbackFFA";
     }
 
     @Override
     public String getVersion() {
-        return "1.0.0";
+        return "2.2";
     }
 
     @Override
@@ -33,12 +35,16 @@ public class SomeExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
-        if(params.equalsIgnoreCase("placeholder1")){
-            return plugin.getConfig().getString("placeholders.placeholder1", "default1");
+        if(params.equalsIgnoreCase("player_kills")){
+        Player player1 = player.getPlayer();
+            PlayerConfiguration.load(player1);
+            return String.valueOf(PlayerConfiguration.get().getInt("kills"));
         }
 
-        if(params.equalsIgnoreCase("placeholder2")) {
-            return plugin.getConfig().getString("placeholders.placeholder2", "default2");
+        if(params.equalsIgnoreCase("player_deaths")) {
+            Player player1 = player.getPlayer();
+            PlayerConfiguration.load(player1);
+            return String.valueOf(PlayerConfiguration.get().getInt("deaths"));
         }
 
         return null; // Placeholder is unknown by the Expansion
