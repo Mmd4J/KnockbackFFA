@@ -1,7 +1,13 @@
 joinmessage: '&f -=&7[&4+&7]&f=- &7hey &2%player_name% &7welcome to knockbackFFA'
 leavemessage: '&f -=&7[&4-&7]&f=- &7Hope to see you again &4%player_name% &7:(!'
-#player = %player% the guy who killed player = %killer%
-deathmessage: '&c %player_name%  &a was killed by &c %killer%'
-#ChatFormat is for customizing playerchats so you can use %player% for the playername and you can use %message% for the message
+deathmessage: '&c %player_name%  &e was killed by &a %killer%"'
 chatformat: '&7[&8%player%&7]&f : %message%'
-kill: '&7You Killed &c %player%'
+kill: '&6You Killed &b %player%'
+bowuse: '&a You have used your bow! you need to wait %timer% seconds to use it again!'
+ItemRemoved:  '&eEvery items that were on ground were&b removed!'
+no-arena-ready: '&c&lSorry! &f&6but there is no arena ready to play ...'
+cannotuseleave: '&cYou cannot use this command! maybe you are not in the game or bungeemode is on?'
+join-arena: '&eYou have joined the game!'
+leave-arena: '&cYou have left the game!'
+arenachangemsg: '&eThe arena has changed to &b%arena%'
+#You can configure your custom messages here!

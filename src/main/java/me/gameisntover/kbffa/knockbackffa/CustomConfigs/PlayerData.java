@@ -9,13 +9,13 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-public class PlayerConfiguration {
+public class PlayerData {
 
 
-    static File cfile;
-    static FileConfiguration config;
-    static File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "player data" + File.separator);
-    static File df = KnockbackFFA.getInstance().getDataFolder();
+    public static File cfile;
+    public static FileConfiguration config;
+    public static File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "player data" + File.separator);
+    public static File df = KnockbackFFA.getInstance().getDataFolder();
 
     public static void create(Player p) {
         cfile = new File(df, "player data" + File.separator + p.getUniqueId() + ".yml");
@@ -54,5 +54,6 @@ public class PlayerConfiguration {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error saving " + cfile.getName() + "!");
         }
     }
+
 
 }

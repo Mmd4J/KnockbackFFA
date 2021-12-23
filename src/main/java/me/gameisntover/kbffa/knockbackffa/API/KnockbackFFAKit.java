@@ -1,21 +1,20 @@
-package me.gameisntover.kbffa.knockbackffa.otherlisteners;
-
-import jdk.nashorn.internal.objects.annotations.Constructor;
-import jdk.nashorn.internal.objects.annotations.Function;
+package me.gameisntover.kbffa.knockbackffa.API;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Endermite;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.ApiStatus;
-
 public class KnockbackFFAKit implements Listener {
 
-    public static void Kits(OfflinePlayer player){
+    public static void Kits(OfflinePlayer player) {
         Player player1 = player.getPlayer();
         ItemStack kbstick = new ItemStack(Material.STICK, 1);
         ItemMeta meta = kbstick.getItemMeta();
@@ -27,11 +26,11 @@ public class KnockbackFFAKit implements Listener {
         ItemMeta enderpearlmeta = enderpearl.getItemMeta();
         enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
         enderpearl.setItemMeta(enderpearlmeta);
-        ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 5);
+        ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 3);
         ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
         jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
         jumpPlate.setItemMeta(jumpPlateMeta);
-        ItemStack buildingBlock = new ItemStack(Material.WHITE_TERRACOTTA, 64);
+        ItemStack buildingBlock = new ItemStack(Material.WHITE_WOOL, 64);
         ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
         buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
         buildingBlock.setItemMeta(buildingBlockMeta);
@@ -49,8 +48,9 @@ public class KnockbackFFAKit implements Listener {
         pinventory.clear();
         pinventory.addItem(kbstick, enderpearl, jumpPlate, buildingBlock, kbBow, kbArrow);
     }
-    public static void kbbowArrow(OfflinePlayer player,Integer amount){
-        Player player1= player.getPlayer();
+
+    public static void kbbowArrow(OfflinePlayer player, Integer amount) {
+        Player player1 = player.getPlayer();
         ItemStack kbArrow = new ItemStack(Material.ARROW, amount);
         ItemMeta kbArrowMeta = kbArrow.getItemMeta();
         kbArrowMeta.setDisplayName(ChatColor.AQUA + "Knockback Arrow");
@@ -58,17 +58,19 @@ public class KnockbackFFAKit implements Listener {
         Inventory pinventory = player1.getInventory();
         pinventory.addItem(kbArrow);
     }
-    public static void BuildingBlock(OfflinePlayer player,Integer amount){
-        Player player1= player.getPlayer();
-        ItemStack buildingBlock = new ItemStack(Material.WHITE_TERRACOTTA, amount);
+
+    public static void BuildingBlock(OfflinePlayer player, Integer amount) {
+        Player player1 = player.getPlayer();
+        ItemStack buildingBlock = new ItemStack(Material.WHITE_WOOL, amount);
         ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
         buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
         buildingBlock.setItemMeta(buildingBlockMeta);
         Inventory pinventory = player1.getInventory();
         pinventory.addItem(buildingBlock);
     }
-    public static void JumpPlate(OfflinePlayer player,Integer amount){
-        Player player1= player.getPlayer();
+
+    public static void JumpPlate(OfflinePlayer player, Integer amount) {
+        Player player1 = player.getPlayer();
         ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, amount);
         ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
         jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
@@ -76,14 +78,26 @@ public class KnockbackFFAKit implements Listener {
         Inventory pinventory = player1.getInventory();
         pinventory.addItem(jumpPlate);
     }
-    public static void EnderPearl(OfflinePlayer player,Integer amount){
-        Player player1= player.getPlayer();
+
+    public static void EnderPearl(OfflinePlayer player, Integer amount) {
+        Player player1 = player.getPlayer();
         ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, amount);
         ItemMeta enderpearlmeta = enderpearl.getItemMeta();
         enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
         enderpearl.setItemMeta(enderpearlmeta);
         Inventory pinventory = player1.getInventory();
         pinventory.addItem(enderpearl);
+    }
+
+
+    @EventHandler
+    public void onEndermiteSpawn(CreatureSpawnEvent e) {
+        Entity endermite = e.getEntity();
+        if (endermite instanceof Endermite) {
+            if (e.getSpawnReason() == CreatureSpawnEvent.SpawnReason.ENDER_PEARL) {
+                e.setCancelled(true);
+            }
+        }
     }
 
 }

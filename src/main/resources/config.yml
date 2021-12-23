@@ -1,25 +1,17 @@
+#It would changes arena when you give it a time so it would change the arena after that time. the default time is 900 or 15 minutes.
 ArenaChangeTimer: 900
+
 ClearItems:
  delay: 0
  period: 60
-enabledarena: 'world'
-#set it true or false so players cant break blocks
+#Clearing items after a time. the default time is 60 seconds or 1 minutes. 
 killstreak:
  5message: '&2 %killer% &7has just reached to 5 KILLSTREAKS'
  10message: '&7Be Careful! Player &2 %killer% has reached to &c10 killstreaks!'
  15message: '&7PLAYER &l&4%killer% &7IS &l&4INSANE &7HE REACHED TO &c15 KILLSTREAKS'
  lastmessage: '&4%killer% This guy is &4&lGOD he added another kill to his collection'
-no-item-drop: true
-block-break: true
-scoreboard:
- title: '&3Knockback&bFFA'
- lines:
-  - '&7Hi &3%player_name%!'
-  - '&f Welcome to &6Knockback&eFFA'
-  - ''
-  - '&7Players online : %server_online%'
-  - ''
-  - 'Hope you enjoy playing in YourServer ;)'
-  - 'yourdomain.com'
-  - 'play.yourdomain.com'
-
+#Killstreaks messages
+Bungee-Mode: true
+#Bungee-Mode would make players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
+save-inventory-on-join: true
+#stores player inventory before they join the game but you can set it to false so when a player leaves the game. They'll lose their previous inventory before they join the game(Bungee-Mode Only)

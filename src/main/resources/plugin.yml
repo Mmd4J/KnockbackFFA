@@ -12,14 +12,43 @@ commands:
   reload:
     description: reload the config
     permission: kbffa.command.reload
-    permission-message: Sorry but you need to have permission for this!
+    permission-message: §cSorry but you need to have permission for this!
 
   wand:
     description: Gives player safezone wand selector
     permission: kbffa.command.wand
-    permission-message: Sorry but you need to have permission for this!
+    permission-message: §cSorry but you need to have permission for this!
 
   setsafezone:
     description: Sets the safezone
     permission: kbffa.command.setsafezone
-    permission-message: Sorry but you need to have permission for this!
+    permission-message: §cSorry but you need to have permission for this!
+  gotoworld:
+    description: Teleports player to world
+    permission: kbffa.command.gotoworld
+    permission-message: §cSorry but you need to have permission for this!
+  leave:
+    description: Teleports player to mainlobby if bungeemode is false
+    permission: kbffa.command.leave
+    permission-message: §cSorry but you need to have permission for this!
+  setMainLobby:
+    description: Sets the mainlobby spawn (works only in bungeemode false)
+    permission: kbffa.command.setmainlobby
+    permission-message: §cSorry but you need to have permission for this!
+  join:
+    aliases: joingame
+    description: Teleports player to mainlobby if bungeemode is false
+    permission: kbffa.command.join
+    permission-message: §cSorry but you need to have permission for this!
+  createworld:
+    description: Creates a new world
+    permission: kbffa.command.createworld
+    permission-message: §cSorry but you need to have permission for this!
+  createarena:
+    description: Creates a new arena
+    permission: kbffa.command.createarena
+    permission-message: §cSorry but you need to have permission for this!
+  editarena:
+    description: Edits an arena
+        permission: kbffa.command.editarena
+    permission-message: §cSorry but you need to have permission for this!

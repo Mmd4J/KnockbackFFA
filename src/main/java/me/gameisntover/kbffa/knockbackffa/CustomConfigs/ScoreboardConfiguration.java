@@ -8,16 +8,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class MessageConfiguration {
+public class ScoreboardConfiguration {
     private static File file;
 
     private static FileConfiguration messages;
     public static void setup(){
-        file=new File("plugins/KnockbackFFA/messages.yml");
+        file=new File("plugins/KnockbackFFA/scoreboard.yml");
         if(!file.exists()) {
             try {
                 file.createNewFile();
-                Files.copy(KnockbackFFA.getInstance().getResource("messages.yml"), file.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(KnockbackFFA.getInstance().getResource("scoreboard.yml"), file.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }catch(IOException e){
 
                 }
