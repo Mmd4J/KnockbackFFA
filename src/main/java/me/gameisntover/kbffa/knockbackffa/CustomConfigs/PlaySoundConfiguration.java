@@ -16,7 +16,6 @@ public class PlaySoundConfiguration {
             try {
                 file.createNewFile();
             }catch(IOException e){
-            //uwu
             }
         }
         soundConfig= YamlConfiguration.loadConfiguration(file);
