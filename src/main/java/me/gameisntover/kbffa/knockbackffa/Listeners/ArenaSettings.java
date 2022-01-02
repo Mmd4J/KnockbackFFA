@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaSettings implements Listener {
-    Integer arenaID = 1;
     Integer arenaID1 = 1;
 
     @EventHandler
@@ -187,8 +186,38 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onPlayerGoesToArena(PlayerMoveEvent e){
         Player player = e.getPlayer();
-        if (KnockbackFFAAPI.isInGame(player)||KnockbackFFAAPI.BungeeMode()){
-            new BukkitRunnable(){
+        Integer arenaID = 1;
+        while (KnockbackFFAAPI.isInGame(player)||KnockbackFFAAPI.BungeeMode()){
+            String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
+            ArenaData.load(arenaName);
+            if (ArenaData.getfile().exists()){
+                ArenaData.load(arenaName);
+                BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"),ArenaData.get().getDouble("arena.pos1.y"),ArenaData.get().getDouble("arena.pos1.z"),ArenaData.get().getDouble("arena.pos2.x"),ArenaData.get().getDouble("arena.pos2.y"),ArenaData.get().getDouble("arena.pos2.z"));
+                World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
+                Location location = player.getLocation();
+                if (s1box.contains(location.toVector()) && player.getWorld() == world) {
+                    PlayerData.load(player);
+                    PlayerData.get().set("status","arena");
+                    PlayerData.save();
+                    if (player.getInventory().isEmpty()){
+                        KnockbackFFAKit.Kits(player);
+                    }
+                    arenaID=1;
+                    break;
+                } else {
+                    arenaID++;
+                }
+            } else if (!ArenaData.getfile().exists()){
+                if (PlayerData.get().getString("status").equals("arena")){
+                    PlayerData.get().set("status","");
+                    PlayerData.save();
+                }
+                arenaID=1;
+                break;
+            }
+        }
+
+        /*    new BukkitRunnable(){
                 @Override
                 public void run() {
               String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
@@ -220,6 +249,6 @@ public class ArenaSettings implements Listener {
                 }
                 }
             }.runTaskTimer(KnockbackFFA.getInstance(),0,1);
-        }
+        }*/
     }
 }

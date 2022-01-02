@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa.knockbackffa.CustomConfigs;
 
+import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,7 +12,7 @@ public class PlaySoundConfiguration {
 
     private static FileConfiguration soundConfig;
     public static void setup(){
-        file=new File("plugins/KnockbackFFA/sounds.yml");
+        file=new File(KnockbackFFA.getInstance().getDataFolder() + "/sounds.yml");
         if(!file.exists()) {
             try {
                 file.createNewFile();

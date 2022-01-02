@@ -50,5 +50,5 @@ commands:
     permission-message: §cSorry but you need to have permission for this!
   editarena:
     description: Edits an arena
-        permission: kbffa.command.editarena
+    permission: kbffa.command.editarena
     permission-message: §cSorry but you need to have permission for this!

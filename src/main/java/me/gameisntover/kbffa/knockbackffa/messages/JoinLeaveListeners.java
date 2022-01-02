@@ -7,8 +7,6 @@ import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlaySoundConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
-import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,18 +23,19 @@ public class JoinLeaveListeners  implements Listener {
 
         player.playSound(player.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("join")), 1, 1);
         e.setJoinMessage(joinText);
-        if (KnockbackFFAAPI.BungeeMode()) {
-            KnockbackFFAArena.teleportPlayertoArena(player);
-            if (!KnockbackFFAArena.arenaisReady(1) && !KnockbackFFAArena.arenaisReady(2) && !KnockbackFFAArena.arenaisReady(3) && !KnockbackFFAArena.arenaisReady(4)) {
-                if (player.isOp()) {
-                    player.sendMessage("§cSpawn is not set! Please set it in the config or /setspawn!");
-                } else if (player.isOp() == false) {
-                    player.sendMessage("§cAsk an admin to create the spawnpoint so i can get you there!");
-                }
+        if (KnockbackFFAArena.isEnabled(KnockbackFFAArena.getEnabledArena()) == false) {
+            if (player.isOp()) {
+                player.sendMessage("§cSpawn is not set! Please set it in the config or /setspawn!");
+            } else if (player.isOp() == false) {
+                player.sendMessage("§cAsk an admin to create the spawnpoint so i can get you there!");
             }
-        } else if (KnockbackFFAAPI.BungeeMode() == false) {
-            if (!KnockbackFFAAPI.isInGame(player)) {
-                KnockbackFFAArena.leaveArena(player);
+        } else {
+            if (KnockbackFFAAPI.BungeeMode()) {
+                KnockbackFFAArena.teleportPlayertoArena(player);
+            } else if (KnockbackFFAAPI.BungeeMode() == false) {
+                if (!KnockbackFFAAPI.isInGame(player)) {
+                    KnockbackFFAArena.leaveArena(player);
+                }
             }
         }
     }

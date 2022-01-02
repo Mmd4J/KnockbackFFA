@@ -24,29 +24,27 @@ import java.util.*;
 
 public class ArenaCommands implements CommandExecutor {
     Integer sz = 1;
-    Integer arenaID;
     public static Map <UUID,Integer> arenaidMap = new HashMap<>();
     @Override
     public boolean onCommand( CommandSender sender,  Command command, String label, String[] args) {
         if (sender instanceof Player){
             Player p = (Player) sender;
-            if (KnockbackFFA.getInstance().getCommand("createarena").getName().equalsIgnoreCase(command.getName())){
-                if (args.length == 0){
+            if (KnockbackFFA.getInstance().getCommand("createarena").getName().equalsIgnoreCase(command.getName())) {
+                if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "You must specify a name for the arena!");
-                }
-                else if (args.length == 1){
-                    if (WandListener.pos1m.get(p) == null&&WandListener.pos2m.get(p) == null){
+                } else if (args.length == 1) {
+                    if (WandListener.pos1m.get(p) == null && WandListener.pos2m.get(p) == null) {
                         p.sendMessage(ChatColor.RED + "You must set the first and second positions of the arena!");
-                    } else if (WandListener.pos1m.get(p) != null&&WandListener.pos2m.get(p) != null){
+                    } else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                         Location loc1 = WandListener.pos1m.get(p);
                         Location loc2 = WandListener.pos2m.get(p);
-                        BoundingBox box = new BoundingBox(loc1.getX(),loc1.getY(),loc1.getZ(),loc2.getX(),loc2.getY(),loc2.getZ());
-                        p.getWorld().getWorldBorder().setCenter(box.getCenterX(),box.getCenterZ());
-                        p.getWorld().getWorldBorder().setSize(box.getMaxX()-box.getMinX());
+                        BoundingBox box = new BoundingBox(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
+                        p.getWorld().getWorldBorder().setCenter(box.getCenterX(), box.getCenterZ());
+                        p.getWorld().getWorldBorder().setSize(box.getMaxX() - box.getMinX());
                         ArenaData.create(args[0]);
                         ArenaData.get().addDefault("block-break", false);
                         ArenaData.get().addDefault("item-drop", true);
-                        ArenaData.get().addDefault("world-border",false);
+                        ArenaData.get().addDefault("world-border", false);
                         ArenaData.get().set("arena.pos1.x", loc1.getX());
                         ArenaData.get().set("arena.pos1.y", loc1.getY());
                         ArenaData.get().set("arena.pos1.z", loc1.getZ());
@@ -56,29 +54,22 @@ public class ArenaCommands implements CommandExecutor {
                         String world = p.getWorld().getName();
                         ArenaData.get().set("arena.world", world);
                         ArenaData.save();
-                        new BukkitRunnable(){
-                            @Override
-                            public void run() {
-                                if (arenaID== null){
-                                    arenaID=1;
-                                }
-                            if (ArenaConfiguration.get().getString("arena"+arenaID+ ".name") == null){
-                                String world = p.getWorld().getName();
-                                sender.sendMessage(ChatColor.GREEN + "Arena"+arenaID+"has been created!");
-                                ArenaConfiguration.get().set("arena"+arenaID+".x", ((Player) sender).getLocation().getX());
-                                ArenaConfiguration.get().set("arena"+arenaID+".y", ((Player) sender).getLocation().getY());
-                                ArenaConfiguration.get().set("arena"+arenaID+".z", ((Player) sender).getLocation().getZ());
-                                ArenaConfiguration.get().set("arena"+arenaID+".world", world);
-                                String arenaname=args[0];
-                                ArenaConfiguration.get().set("arena"+arenaID+".name",arenaname);
+                        Integer arenaID = 1;
+                        while (ArenaConfiguration.get().getString("arena" + arenaID + ".name") != null){
+                            arenaID++;
+                        }
+                        while (ArenaConfiguration.get().getString("arena" + arenaID + ".name") == null) {
+                                sender.sendMessage(ChatColor.GREEN + "Arena" + arenaID + "has been created!");
+                                ArenaConfiguration.get().set("arena" + arenaID + ".x", ((Player) sender).getLocation().getX());
+                                ArenaConfiguration.get().set("arena" + arenaID + ".y", ((Player) sender).getLocation().getY());
+                                ArenaConfiguration.get().set("arena" + arenaID + ".z", ((Player) sender).getLocation().getZ());
+                                ArenaConfiguration.get().set("arena" + arenaID + ".world", world);
+                                String arenaname = args[0];
+                                ArenaConfiguration.get().set("arena" + arenaID + ".name", arenaname);
                                 ArenaConfiguration.save();
-                                cancel();
-                                arenaID = 1;
-                            } else if (!KnockbackFFAArena.isEnabled("arena"+ arenaID)){
-                                arenaID++;
-                            }
-                            }
-                        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);
+                                break;
+                        }
+
                     }
                 }
             }

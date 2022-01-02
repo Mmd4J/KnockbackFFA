@@ -1,6 +1,6 @@
 joinmessage: '&f -=&7[&4+&7]&f=- &7hey &2%player_name% &7welcome to knockbackFFA'
 leavemessage: '&f -=&7[&4-&7]&f=- &7Hope to see you again &4%player_name% &7:(!'
-deathmessage: '&c %player_name%  &e was killed by &a %killer%"'
+deathmessage: '&c %player_name%&e was killed by &a %killer%"'
 chatformat: '&7[&8%player%&7]&f : %message%'
 kill: '&6You Killed &b %player%'
 bowuse: '&a You have used your bow! you need to wait %timer% seconds to use it again!'

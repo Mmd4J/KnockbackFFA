@@ -82,6 +82,68 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         ScoreboardConfiguration.setup();
         saveDefaultConfig();
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+        scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                if (KnockbackFFAArena.arenaisReady(1)) {
+                    ArenaID++;
+                    if (KnockbackFFAArena.arenaisReady(ArenaID)&& ArenaID != KnockbackFFAArena.getEnabledArena()) {
+                        ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
+                        ArenaConfiguration.save();
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
+                                p.playSound(p.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("arenachange")), 1, 1);
+                                p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                            }
+                        }
+                    } else if (!KnockbackFFAArena.arenaisReady(ArenaID)) {
+                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArena()) {
+                            ArenaID = ArenaID + 1;
+                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
+                            ArenaConfiguration.save();
+                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
+                                    p.playSound(p.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("arenachange")), 1, 1);
+                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                                }
+                            }
+                        }
+                        else{
+                            ArenaID = 0;
+                        }
+                    }
+                    if (KnockbackFFAArena.arenaisReady(ArenaID)&& ArenaID != KnockbackFFAArena.getEnabledArena()) {
+                        ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
+                        ArenaConfiguration.save();
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
+                                p.playSound(p.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("arenachange")), 1, 1);
+                                p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                            }
+                        }
+                    }else if (!KnockbackFFAArena.arenaisReady(ArenaID)) {
+                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArena()) {
+                            ArenaID = ArenaID + 1;
+                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
+                            ArenaConfiguration.save();
+                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
+                                    p.playSound(p.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("arenachange")), 1, 1);
+                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                                }
+                            }
+                        }
+                        else{
+                            ArenaID = 0;
+                        }
+                    }
+                }
+            }
+        }, 0, getConfig().getInt("ArenaChangeTimer") * 20);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -105,33 +167,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 }
             }
         }.runTaskTimer(this, 0, 5);
-        scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                if (KnockbackFFAArena.arenaisReady(1)) {
-                    ArenaID++;
-                    String arenaName = ArenaConfiguration.get().getString("arena" + ArenaID + ".name");
-                    ArenaData.load(arenaName);
-                    if (ArenaData.getfile().exists()) {
-                        if (KnockbackFFAArena.arenaisReady(ArenaID)) {
-                            ArenaConfiguration.get().set("EnabledArena", "arena"+ArenaID);
-                            ArenaConfiguration.save();
-                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
-                                    p.playSound(p.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("arenachange")), 1, 1);
-                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
-                                }
-                            }
-                        } else {
-                            ArenaID++;
-                        }
-                    } else {
-                        ArenaID=0;
-                    }
-                }
-                }
-        }, 0, getConfig().getInt("ArenaChangeTimer") * 20);
 
         BukkitScheduler scheduler1 = Bukkit.getServer().getScheduler();
         int o = scheduler1.scheduleSyncRepeatingTask(this, new Runnable() {
@@ -191,6 +226,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         if (PlayerData.get().getLocation("deaths")==null){
             PlayerData.load(player);
             PlayerData.get().set("deaths", 0);
+            PlayerData.get().set("status","");
             PlayerData.get().set("kills", 0);
             PlayerData.save();
         }
