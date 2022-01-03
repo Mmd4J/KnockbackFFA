@@ -47,13 +47,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getCommand("leave").setExecutor(new Commands());
         getCommand("setmainLobby").setExecutor(new Commands());
         getCommand("wand").setExecutor(new ArenaCommands());
-        getCommand("setspawn").setExecutor(new Commands());
         getCommand("reload").setExecutor(new Commands());
         getCommand("setsafezone").setExecutor(new ArenaCommands());
         getCommand("gotoworld").setExecutor(new ArenaCommands());
         getCommand("createarena").setExecutor(new ArenaCommands());
         getCommand("createworld").setExecutor(new Commands());
-        getCommand("setspawn").setTabCompleter(new CommandsTabCompleter());
         getCommand("gotoworld").setTabCompleter(new CommandsTabCompleter());
         getCommand("editarena").setExecutor(new ArenaCommands());
         INSTANCE = this;
@@ -87,7 +85,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             public void run() {
                 if (KnockbackFFAArena.arenaisReady(1)) {
                     ArenaID++;
-                    if (KnockbackFFAArena.arenaisReady(ArenaID)&& ArenaID != KnockbackFFAArena.getEnabledArena()) {
+                    if (KnockbackFFAArena.arenaisReady(ArenaID)&& ArenaID != KnockbackFFAArena.getEnabledArenaint()) {
                         ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
                         ArenaConfiguration.save();
                         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
@@ -98,7 +96,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                             }
                         }
                     } else if (!KnockbackFFAArena.arenaisReady(ArenaID)) {
-                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArena()) {
+                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArenaint()) {
                             ArenaID = ArenaID + 1;
                             ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
                             ArenaConfiguration.save();
@@ -114,7 +112,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                             ArenaID = 0;
                         }
                     }
-                    if (KnockbackFFAArena.arenaisReady(ArenaID)&& ArenaID != KnockbackFFAArena.getEnabledArena()) {
+                    if (KnockbackFFAArena.arenaisReady(ArenaID)&& ArenaID != KnockbackFFAArena.getEnabledArenaint()) {
                         ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
                         ArenaConfiguration.save();
                         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
@@ -125,7 +123,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                             }
                         }
                     }else if (!KnockbackFFAArena.arenaisReady(ArenaID)) {
-                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArena()) {
+                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArenaint()) {
                             ArenaID = ArenaID + 1;
                             ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
                             ArenaConfiguration.save();
@@ -226,7 +224,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         if (PlayerData.get().getLocation("deaths")==null){
             PlayerData.load(player);
             PlayerData.get().set("deaths", 0);
-            PlayerData.get().set("status","");
             PlayerData.get().set("kills", 0);
             PlayerData.save();
         }

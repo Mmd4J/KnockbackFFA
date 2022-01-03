@@ -74,9 +74,10 @@ public class DeathListener implements Listener {
         Player player = e.getEntity();
         Entity damager = killer.get(player);
         killer.remove(player);
+        ArenaSettings.playerArena.remove(player);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            int i = scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), new Runnable() {
+            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     player.spigot().respawn();

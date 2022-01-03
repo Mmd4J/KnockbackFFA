@@ -21,13 +21,14 @@ public class JoinLeaveListeners  implements Listener {
         String joinText = MessageConfiguration.get().getString("joinmessage").replace("&", "§");
         joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);
 
+
         player.playSound(player.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("join")), 1, 1);
         e.setJoinMessage(joinText);
-        if (KnockbackFFAArena.isEnabled(KnockbackFFAArena.getEnabledArena()) == false) {
+        if (KnockbackFFAArena.isEnabled(KnockbackFFAArena.getEnabledArena()) ==false) {
             if (player.isOp()) {
-                player.sendMessage("§cSpawn is not set! Please set it in the config or /setspawn!");
+                player.sendMessage("§cSpawn is not set! If you have an ready arena set the spawnpoint for it.");
             } else if (player.isOp() == false) {
-                player.sendMessage("§cAsk an admin to create the spawnpoint so i can get you there!");
+                player.sendMessage(MessageConfiguration.get().getString("nospawnpoint").replace("&", "§"));
             }
         } else {
             if (KnockbackFFAAPI.BungeeMode()) {

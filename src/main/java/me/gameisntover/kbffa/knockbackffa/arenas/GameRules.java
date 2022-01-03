@@ -7,6 +7,7 @@ import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
+import me.gameisntover.kbffa.knockbackffa.Listeners.ArenaSettings;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -39,7 +40,7 @@ public class GameRules implements Listener {
                         if (s1box.contains(location.toVector()) && player.getWorld() == s1world) {
                             player.setInvulnerable(true);
                             PlayerData.load(player);
-                            PlayerData.get().set("status", "safezone");
+                        ArenaSettings.playerArena.put(player,"safezone");
                             PlayerData.save();
                             cancel();
                             arenaID = 1;

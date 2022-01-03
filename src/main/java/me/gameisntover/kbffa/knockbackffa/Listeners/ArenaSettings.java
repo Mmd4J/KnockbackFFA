@@ -20,28 +20,31 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArenaSettings implements Listener {
     Integer arenaID1 = 1;
-
+    public static Map<Player,String> playerArena= new HashMap<>();
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
-            for (int i = 1; i <= ArenaData.getfolder().list().length; i++) {
-                String arenaName = ArenaConfiguration.get().getString("arena" + i + ".name");
-                PlayerData.load(player);
-                if (PlayerData.get().getString("status").equalsIgnoreCase("arena")) {
-                    ArenaData.load(arenaName);
-                    if (ArenaData.get().getBoolean("block-break")) {
-                        e.setCancelled(true);
+        if (playerArena.get(player) != null) {
+            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
+                for (int i = 1; i <= ArenaData.getfolder().list().length; i++) {
+                    String arenaName = ArenaConfiguration.get().getString("arena" + i + ".name");
+                    PlayerData.load(player);
+                    if (playerArena.get(player).equalsIgnoreCase("arena")) {
+                        ArenaData.load(arenaName);
+                        if (ArenaData.get().getBoolean("block-break")) {
+                            e.setCancelled(true);
+                        }
                     }
                 }
             }
         }
     }
-
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
@@ -49,7 +52,7 @@ public class ArenaSettings implements Listener {
             for (int i = 1; i <= ArenaData.getfolder().list().length; i++) {
                 String arenaName = ArenaConfiguration.get().getString("arena" + i + ".name");
                 PlayerData.load(player);
-                if (PlayerData.get().getString("status").equalsIgnoreCase("arena")) {
+                if (playerArena.get(player).equalsIgnoreCase("arena")) {
                     ArenaData.load(arenaName);
                     if (ArenaData.get().getBoolean("item-drop")) {
                         e.setCancelled(false);
@@ -191,64 +194,26 @@ public class ArenaSettings implements Listener {
             String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
             ArenaData.load(arenaName);
             if (ArenaData.getfile().exists()){
-                ArenaData.load(arenaName);
                 BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"),ArenaData.get().getDouble("arena.pos1.y"),ArenaData.get().getDouble("arena.pos1.z"),ArenaData.get().getDouble("arena.pos2.x"),ArenaData.get().getDouble("arena.pos2.y"),ArenaData.get().getDouble("arena.pos2.z"));
                 World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
                 Location location = player.getLocation();
                 if (s1box.contains(location.toVector()) && player.getWorld() == world) {
-                    PlayerData.load(player);
-                    PlayerData.get().set("status","arena");
-                    PlayerData.save();
+                    playerArena.put(player,"arena");
                     if (player.getInventory().isEmpty()){
                         KnockbackFFAKit.Kits(player);
                     }
-                    arenaID=1;
                     break;
                 } else {
                     arenaID++;
                 }
-            } else if (!ArenaData.getfile().exists()){
-                if (PlayerData.get().getString("status").equals("arena")){
-                    PlayerData.get().set("status","");
-                    PlayerData.save();
-                }
-                arenaID=1;
+        } else if (!ArenaData.getfile().exists()&&playerArena.get(player)!=null){
+        if (playerArena.get(player).equals("arena")){
+                    playerArena.remove(player);
+                    break;
+        }
+            } else{
                 break;
             }
         }
-
-        /*    new BukkitRunnable(){
-                @Override
-                public void run() {
-              String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
-                ArenaData.load(arenaName);
-                if (ArenaData.getfile().exists()){
-                    ArenaData.load(arenaName);
-                    BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"),ArenaData.get().getDouble("arena.pos1.y"),ArenaData.get().getDouble("arena.pos1.z"),ArenaData.get().getDouble("arena.pos2.x"),ArenaData.get().getDouble("arena.pos2.y"),ArenaData.get().getDouble("arena.pos2.z"));
-                    World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
-                    Location location = player.getLocation();
-                    if (s1box.contains(location.toVector()) && player.getWorld() == world) {
-                    PlayerData.load(player);
-                    PlayerData.get().set("status","arena");
-                    PlayerData.save();
-                    if (player.getInventory().isEmpty()){
-                        KnockbackFFAKit.Kits(player);
-                    }
-                        cancel();
-                    arenaID=1;
-                    } else {
-                        arenaID++;
-                    }
-                } else if (!ArenaData.getfile().exists()){
-                    if (PlayerData.get().getString("status").equals("arena")){
-                        PlayerData.get().set("status","");
-                        PlayerData.save();
-                    }
-                    cancel();
-                    arenaID=1;
-                }
-                }
-            }.runTaskTimer(KnockbackFFA.getInstance(),0,1);
-        }*/
     }
 }

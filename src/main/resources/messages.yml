@@ -10,4 +10,5 @@ cannotuseleave: '&cYou cannot use this command! maybe you are not in the game or
 join-arena: '&eYou have joined the game!'
 leave-arena: '&cYou have left the game!'
 arenachangemsg: '&eThe arena has changed to &b%arena%'
+nospawnpoint: '§cAsk an admin to create the spawnpoint so i can get you there!'
 #You can configure your custom messages here!

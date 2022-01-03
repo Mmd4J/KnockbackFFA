@@ -11,8 +11,15 @@ import org.bukkit.entity.Player;
 public class KnockbackFFAArena {
 
     public static boolean isEnabled(Integer arenaID) {
-        String arenaName = "arena" + arenaID;
-        if (ArenaConfiguration.get().getString("EnabledArena") == arenaName) {
+        String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
+        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean isEnabled(String arenaName){
+        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName)) {
             return true;
         } else {
             return false;
@@ -38,7 +45,7 @@ public class KnockbackFFAArena {
     }
 
     public static void teleportPlayertoArena(Player player) {
-        String enabledArena = ArenaConfiguration.get().getString("EnabledArena");
+        String enabledArena = getEnabledArena().toString();
         ArenaConfiguration.save();
         if (ArenaData.getfolder().list().length > 0) {
             Integer arenaList = ArenaData.getfolder().listFiles().length;
@@ -56,9 +63,17 @@ public class KnockbackFFAArena {
             System.out.println("[KnockbackFFA] There are no arenas to teleport the player there!");
         }
     }
-    public static Integer getEnabledArena(){
-            String arenaString = ArenaConfiguration.get().getString("EnabledArena");
-            return Integer.parseInt(arenaString.replace("arena", ""));
+    public static String getEnabledArena() {
+        String arenaString = ArenaConfiguration.get().getString("EnabledArena");
+        if (arenaString != null) {
+            return arenaString;
+        } else {
+            return null;
+        }
+    }
+    public static Integer getEnabledArenaint(){
+        String arenaName = ArenaConfiguration.get().getString("EnabledArena");
+       return Integer.parseInt(arenaName.replace("arena", ""));
     }
     public static void leaveArena(Player player) {
         if (ArenaConfiguration.get().getString("mainlobby.world") != null) {

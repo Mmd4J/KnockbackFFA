@@ -38,9 +38,6 @@ public class ArenaCommands implements CommandExecutor {
                     } else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                         Location loc1 = WandListener.pos1m.get(p);
                         Location loc2 = WandListener.pos2m.get(p);
-                        BoundingBox box = new BoundingBox(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
-                        p.getWorld().getWorldBorder().setCenter(box.getCenterX(), box.getCenterZ());
-                        p.getWorld().getWorldBorder().setSize(box.getMaxX() - box.getMinX());
                         ArenaData.create(args[0]);
                         ArenaData.get().addDefault("block-break", false);
                         ArenaData.get().addDefault("item-drop", true);
@@ -54,6 +51,10 @@ public class ArenaCommands implements CommandExecutor {
                         String world = p.getWorld().getName();
                         ArenaData.get().set("arena.world", world);
                         ArenaData.save();
+                        if (ArenaData.getfolder().list().length==1){
+                            ArenaConfiguration.get().set("EnabledArena","arena1");
+                            ArenaConfiguration.save();
+                        }
                         Integer arenaID = 1;
                         while (ArenaConfiguration.get().getString("arena" + arenaID + ".name") != null){
                             arenaID++;
@@ -98,12 +99,13 @@ public class ArenaCommands implements CommandExecutor {
                         ItemMeta worldBorderMeta = worldBorder.getItemMeta();
                         worldBorderMeta.setDisplayName(ChatColor.GRAY + "World Border");
                                 List blockBreaklore = new ArrayList<String>();
-                                ArenaData.load(args[0]);
                                 List itemDropLore = new ArrayList<String>();
                                 List setspawnLore = new ArrayList<String>();
                                 List setposLore = new ArrayList<String>();
                                 List worldBorderLore = new ArrayList<String>();
-                                        blockBreaklore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
+                                String arenaName = ArenaConfiguration.get().getString("arena" + args[0] + ".name");
+                                ArenaData.load(arenaName);
+                                blockBreaklore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
                                         blockBreaklore.add(ChatColor.GREEN + "Currently Block Breaking is "+ ArenaData.get().getBoolean("block-break"));
                                         itemDropLore.add(ChatColor.GRAY + "Toggle whether or not players can drop items");
                                         itemDropLore.add(ChatColor.GREEN +"Currently Item Dropping is "+ArenaData.get().getBoolean("item-drop"));
@@ -134,7 +136,7 @@ public class ArenaCommands implements CommandExecutor {
         if (KnockbackFFA.getInstance().getCommand("wand").getName().equalsIgnoreCase(command.getName())) {
             ItemStack wand = new ItemStack(Material.BLAZE_ROD);
             ItemMeta wandmeta = wand.getItemMeta();
-            wandmeta.setDisplayName(ChatColor.DARK_PURPLE + "Safezone Wand");
+            wandmeta.setDisplayName(ChatColor.DARK_PURPLE + "PositionSelector Wand");
             wandmeta.addEnchant(Enchantment.MENDING, 1, true);
             wandmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             wand.setItemMeta(wandmeta);

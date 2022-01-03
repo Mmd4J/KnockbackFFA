@@ -5,17 +5,12 @@ api-version: 1.16
 authors: [ GaMeIsNtOvEr ]
 description: Knockback ffa is a gamemode which gives every players knockback stick and some other stuffs which makes the game more fun!
 commands:
-  setspawn:
-    description: sets the spawnpoint so players can spawn there!
-    permission: kbffa.command.setspawn
-    permission-message: Sorry but you need to have permission for this!
   reload:
     description: reload the config
     permission: kbffa.command.reload
     permission-message: §cSorry but you need to have permission for this!
-
   wand:
-    description: Gives player safezone wand selector
+    description: Gives player positionselector wand
     permission: kbffa.command.wand
     permission-message: §cSorry but you need to have permission for this!
 
@@ -31,7 +26,7 @@ commands:
     description: Teleports player to mainlobby if bungeemode is false
     permission: kbffa.command.leave
     permission-message: §cSorry but you need to have permission for this!
-  setMainLobby:
+  setmainlobby:
     description: Sets the mainlobby spawn (works only in bungeemode false)
     permission: kbffa.command.setmainlobby
     permission-message: §cSorry but you need to have permission for this!
