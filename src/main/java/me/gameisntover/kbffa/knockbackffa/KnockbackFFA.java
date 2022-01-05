@@ -167,25 +167,27 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }.runTaskTimer(this, 0, 5);
 
         BukkitScheduler scheduler1 = Bukkit.getServer().getScheduler();
-        int o = scheduler1.scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                        World world = p.getWorld();
-                        List<Entity> entList = world.getEntities();
+        if (getConfig().getBoolean("ClearItems.enabled")) {
+                scheduler1.scheduleSyncRepeatingTask(this, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                            World world = p.getWorld();
+                            List<Entity> entList = world.getEntities();
 
-                        for (Entity current : entList) {
-                            if (current instanceof Item) {
-                                current.remove();
-                                p.playSound(p.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("itemremoved")), 1, 1);
+                            for (Entity current : entList) {
+                                if (current instanceof Item) {
+                                    current.remove();
+                                    p.playSound(p.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("itemremoved")), 1, 1);
+                                }
                             }
                         }
                     }
                 }
-            }
-        }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20);
+            }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20);
+        }
         loadListeners();
         ScoreboardConfiguration.setup();
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
