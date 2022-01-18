@@ -19,9 +19,13 @@ public class KnockbackFFAArena {
         }
     }
     public static boolean isEnabled(String arenaName){
-        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName)) {
-            return true;
-        } else {
+        if (ArenaConfiguration.get().getString("EnabledArena")!=null) {
+            if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName)) {
+                return true;
+            } else {
+                return false;
+            }
+        }else {
             return false;
         }
     }

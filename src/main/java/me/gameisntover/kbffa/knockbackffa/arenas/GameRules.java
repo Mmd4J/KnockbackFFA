@@ -18,6 +18,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
@@ -29,6 +30,39 @@ public class GameRules implements Listener {
     @EventHandler
     public void playerMove(PlayerMoveEvent e) {
         if (KnockbackFFAAPI.isInGame(e.getPlayer()) || KnockbackFFAAPI.BungeeMode()) {
+            Player player = e.getPlayer();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    int vd = 1;
+                    if (ArenaConfiguration.get().getLocation("voids." + vd + ".pos1") != null) {
+                        Location pos1 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos1");
+                        Location pos2 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos2");
+                        BoundingBox bb = new BoundingBox(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
+                        if (bb.contains(player.getLocation().toVector()) && player.getWorld() == pos1.getWorld()) {
+
+                            Integer damage = ArenaConfiguration.get().getInt("voids." + vd + ".damage");
+                            if (damage != null) {
+                                player.damage(damage);
+                                player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, damage));
+                                if (player.isDead()){
+                                cancel();
+                            }
+
+                            } else {
+                                throw new NullPointerException("Void " + vd + " damage is null");
+                            }
+                        } else {
+                            arenaID++;
+                        }
+                    } else {
+                        arenaID++;
+                    }
+                    if (ArenaConfiguration.get().getLocation("voids." + vd + ".pos1") == null) {
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -40,7 +74,7 @@ public class GameRules implements Listener {
                         if (s1box.contains(location.toVector()) && player.getWorld() == s1world) {
                             player.setInvulnerable(true);
                             PlayerData.load(player);
-                        ArenaSettings.playerArena.put(player,"safezone");
+                            ArenaSettings.playerArena.put(player, "safezone");
                             PlayerData.save();
                             cancel();
                             arenaID = 1;
@@ -56,6 +90,7 @@ public class GameRules implements Listener {
             }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);
         }
     }
+
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(e.getPlayer())) {

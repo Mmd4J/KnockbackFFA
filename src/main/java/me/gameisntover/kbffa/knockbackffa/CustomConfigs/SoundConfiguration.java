@@ -6,16 +6,20 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
-public class PlaySoundConfiguration {
+public class SoundConfiguration {
     private static File file;
 
     private static FileConfiguration soundConfig;
     public static void setup(){
-        file=new File(KnockbackFFA.getInstance().getDataFolder() + "/sounds.yml");
+        file=new File("plugins/KnockbackFFA/sound.yml");
+
         if(!file.exists()) {
             try {
                 file.createNewFile();
+                Files.copy(KnockbackFFA.getInstance().getResource("sound.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }catch(IOException e){
             }
         }

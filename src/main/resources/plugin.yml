@@ -1,8 +1,9 @@
 name: KnockbackFFA
 version: '${project.version}'
 main: me.gameisntover.kbffa.knockbackffa.KnockbackFFA
-api-version: 1.16
 authors: [ GaMeIsNtOvEr ]
+softdepend:
+  - 'PlaceholderAPI'
 description: Knockback ffa is a gamemode which gives every players knockback stick and some other stuffs which makes the game more fun!
 commands:
   reload:
@@ -13,7 +14,10 @@ commands:
     description: Gives player positionselector wand
     permission: kbffa.command.wand
     permission-message: §cSorry but you need to have permission for this!
-
+  setvoid:
+    description: Sets the void to the current position
+    permission: kbffa.command.setvoid
+    permission-message: §cSorry but you need to have permission for this!
   setsafezone:
     description: Sets the safezone
     permission: kbffa.command.setsafezone

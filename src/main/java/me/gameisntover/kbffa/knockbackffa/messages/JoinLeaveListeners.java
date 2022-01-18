@@ -3,9 +3,8 @@ package me.gameisntover.kbffa.knockbackffa.messages;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlaySoundConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.SoundConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.*;
@@ -24,7 +23,7 @@ public class JoinLeaveListeners  implements Listener {
             joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);
             e.setJoinMessage(joinText);
         } if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound")) {
-            player.playSound(player.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("join")), 1, 1);
+            KnockbackFFAAPI.playSound(player,"join",1,1);
         }
             if (KnockbackFFAArena.isEnabled(KnockbackFFAArena.getEnabledArena()) == false) {
                 if (player.isOp()) {

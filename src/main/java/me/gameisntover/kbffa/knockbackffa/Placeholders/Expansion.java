@@ -10,9 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Expansion extends PlaceholderExpansion {
-    String arenaName = "";
     private final KnockbackFFA plugin;
-    Integer arenaID=1;
     public Expansion(KnockbackFFA plugin) {
         this.plugin = plugin;
     }
@@ -29,7 +27,7 @@ public class Expansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "2.2";
+        return "2.9";
     }
 
     @Override

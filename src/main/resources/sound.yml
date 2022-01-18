@@ -1,0 +1,19 @@
+Legacy:
+  arenachange: NOTE_PLING
+  itemremoved: NOTE_BASS
+  jumpplate: BAT_TAKEOFF
+  join: LEVEL_UP
+  5kills: WOLF_HOWL
+  10kills: AMBIENCE_THUNDER
+  15kills: EXPLODE
+  +15kills: HORSE_SKELETON_DEATH
+  #Note that legacy only works on versions before 1.13.
+
+arenachange: BLOCK_NOTE_BLOCK_HAT
+itemremoved: BLOCK_NOTE_BLOCK_BASS
+jumpplate: ENTITY_BAT_TAKEOFF
+join: ENTITY_PLAYER_LEVELUP
+5kills: ENTITY_WOLF_HOWL
+10kills: ENTITY_LIGHTNING_BOLT_THUNDER
+15kills: UI_TOAST_CHALLENGE_COMPLETE
++15kills: ENTITY_LIGHTNING_BOLT_THUNDER

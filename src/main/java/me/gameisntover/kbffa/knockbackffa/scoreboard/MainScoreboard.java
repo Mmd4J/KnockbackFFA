@@ -1,6 +1,4 @@
 package me.gameisntover.kbffa.knockbackffa.scoreboard;
-
-import fr.mrmicky.fastboard.FastBoard;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ScoreboardConfiguration;
@@ -10,47 +8,43 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
-import java.awt.*;
-import java.util.Arrays;
+import org.bukkit.scoreboard.*;
 import java.util.List;
 
 
 public class MainScoreboard implements Listener {
-    @EventHandler
+        @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
-            if (ScoreboardConfiguration.get().getBoolean("enabled") == true) {
+            if (ScoreboardConfiguration.get().getBoolean("enabled")) {
                 toggleScoreboard(player, true);
             }
         } else {
             toggleScoreboard(player, false);
         }
     }
-
     public static void toggleScoreboard(Player player, boolean toggle) {
-        FastBoard board = new FastBoard((player));
         if (toggle) {
-            if (ScoreboardConfiguration.get().getBoolean("enabled") == true) {
-                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                board.size();
-                scheduler.scheduleSyncRepeatingTask(KnockbackFFA.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        String title = ScoreboardConfiguration.get().getString("Title");
-                        PlaceholderAPI.setPlaceholders(player, title);
-                        board.updateTitle(title.replace("&", "§"));
-                        board.updateLines(PlaceholderAPI.setPlaceholders(player, ScoreboardConfiguration.get().getStringList("lines".replace("&", "§"))));
+            BukkitScheduler scheduler = Bukkit.getScheduler();
+            int i =   scheduler.scheduleSyncRepeatingTask(KnockbackFFA.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    List<String> scoreboardLines = ScoreboardConfiguration.get().getStringList("lines");
+                    SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
+                    if(player.getScoreboard() != null) {
+                        player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                     }
-                }, 0L, 20L);
+                    for (String string : scoreboardLines) {
+                        string = PlaceholderAPI.setPlaceholders(player, string);
+                        sidebar.add(string.replaceAll("&", "§"));
+                    }
+                    sidebar.apply(player);
 
-            }
-        } else if (!toggle){
-            board.size();
-            board.updateTitle("");
-            board.updateLines(Arrays.asList(""));
-            board.removeLine(0);
+                        }
+            }, 0, 20);
         }
     }
-}
+    }

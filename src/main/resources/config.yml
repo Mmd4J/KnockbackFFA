@@ -1,6 +1,5 @@
 #It would changes arena when you give it a time so it would change the arena after that time. the default time is 900 or 15 minutes.
 ArenaChangeTimer: 900
-
 ClearItems:
  enabled: true
  delay: 0

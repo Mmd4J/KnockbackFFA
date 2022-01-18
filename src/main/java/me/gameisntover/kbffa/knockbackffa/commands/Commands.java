@@ -1,14 +1,17 @@
 package me.gameisntover.kbffa.knockbackffa.commands;
 
+import javafx.geometry.BoundingBox;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.*;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
 import me.gameisntover.kbffa.knockbackffa.arenas.VoidChunkGenerator;
+import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -99,9 +102,28 @@ public class Commands implements CommandExecutor {
                 KnockbackFFA.getInstance().reloadConfig();
                 MessageConfiguration.reload();
                 ArenaConfiguration.reload();
-                PlaySoundConfiguration.reload();
+                SoundConfiguration.reload();
                 ScoreboardConfiguration.reload();
                 sender.sendMessage(ChatColor.AQUA + "Configs are reloaded!");
+            }
+            if (KnockbackFFA.getInstance().getCommand("setvoid").getName().equalsIgnoreCase(command.getName())) {
+                if(WandListener.pos1m.get(p)!=null&&WandListener.pos2m.get(p)!=null){
+                    Location pos1 = WandListener.pos1m.get(p);
+                    Location pos2 = WandListener.pos2m.get(p);
+                    Integer vd = 1;
+                    while (ArenaConfiguration.get().getString("voids." + vd) != null) {
+                        vd++;
+                    }
+                    if (ArenaConfiguration.get().getString("voids." + vd) == null) {
+                        ArenaConfiguration.get().set("voids." + vd+".pos1", pos1);
+                        ArenaConfiguration.get().set("voids." + vd+".pos2", pos2);
+                        ArenaConfiguration.get().set("voids."+vd+".damage",8);
+                        ArenaConfiguration.save();
+                        sender.sendMessage(ChatColor.GREEN + "Void " + vd + " has been set and now players will get damage if they go there");
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.RED + "You have to set two positions first!");
+                }
             }
             return false;
         }

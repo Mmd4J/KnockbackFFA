@@ -1,9 +1,11 @@
 package me.gameisntover.kbffa.knockbackffa.arenas;
 
+import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+import me.gameisntover.kbffa.knockbackffa.MaterialLegacy;
 import org.apache.commons.lang.BooleanUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -134,6 +136,16 @@ public class ArenaCommands implements CommandExecutor {
                 }
             }
         if (KnockbackFFA.getInstance().getCommand("wand").getName().equalsIgnoreCase(command.getName())) {
+            if (KnockbackFFAAPI.isLegacyVersion()){
+                ItemStack wand = new ItemStack(Material.getMaterial(MaterialLegacy.BLAZE_ROD.name()));
+                ItemMeta wandmeta = wand.getItemMeta();
+                wandmeta.setDisplayName("PositionSelector Wand");
+                wandmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+                wandmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                wand.setItemMeta(wandmeta);
+                p.getInventory().addItem(wand);
+
+            }
             ItemStack wand = new ItemStack(Material.BLAZE_ROD);
             ItemMeta wandmeta = wand.getItemMeta();
             wandmeta.setDisplayName(ChatColor.DARK_PURPLE + "PositionSelector Wand");

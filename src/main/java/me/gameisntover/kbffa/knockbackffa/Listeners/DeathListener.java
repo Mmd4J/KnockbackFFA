@@ -3,15 +3,12 @@ package me.gameisntover.kbffa.knockbackffa.Listeners;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlaySoundConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.SoundConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -23,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DeathListener implements Listener {
@@ -64,7 +62,15 @@ public class DeathListener implements Listener {
         if (player.getType().equals(EntityType.PLAYER)) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame((Player) player)) {
             if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)||e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)||e.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-                killer.put(player, damager);
+                if (damager instanceof Arrow) {
+                    Arrow arrow = (Arrow) damager;
+                    if (arrow.getShooter() instanceof Player) {
+                        Player shooter = (Player) arrow.getShooter();
+                        killer.put(player, shooter);
+                    }
+                } else if (damager instanceof Player) {
+                    killer.put(player, damager);
+                }
             }
             }
         }
@@ -73,6 +79,7 @@ public class DeathListener implements Listener {
     public void playerDeathByVoid(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Entity damager = killer.get(player);
+
         killer.remove(player);
         ArenaSettings.playerArena.remove(player);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
@@ -82,6 +89,13 @@ public class DeathListener implements Listener {
                 public void run() {
                     player.spigot().respawn();
                     KnockbackFFAArena.teleportPlayertoArena(player);
+                            World world = player.getWorld();
+                            List<Entity> entList = world.getEntities();
+                            for (Entity current : entList) {
+                                if (current instanceof Item) {
+                                current.remove();
+                                }
+                                }
                 }
             }, 1);
             killStreak.put(player, 0);
@@ -108,7 +122,7 @@ public class DeathListener implements Listener {
                         Inventory inv = playerdamager.getInventory();
                         Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.5message").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()));
                         inv.addItem(enderpearl);
-                        playerdamager.playSound(damager.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("5kills")), 1, 1);
+                        KnockbackFFAAPI.playSound(playerdamager,"5kills", 1, 1);
                     } else if (killStreak.get(damager) == 10) {
 
                         ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 8);
@@ -119,7 +133,7 @@ public class DeathListener implements Listener {
                         Inventory inv = playerdamager.getInventory();
                         Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.10message").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()));
                         inv.addItem(enderpearl);
-                        playerdamager.playSound(damager.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("10kills")), 1, 1);
+                        KnockbackFFAAPI.playSound(playerdamager,"10kills", 1, 1);
                     } else if (killStreak.get(damager) == 15) {
                         ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 16);
                         ItemMeta enderpearlmeta = enderpearl.getItemMeta();
@@ -129,10 +143,10 @@ public class DeathListener implements Listener {
                         Inventory inv = playerdamager.getInventory();
                         Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.15message").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()));
                         inv.addItem(enderpearl);
-                        playerdamager.playSound(damager.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("15kills")), 1, 1);
+                        KnockbackFFAAPI.playSound(playerdamager,"15kills", 1, 1);
                     } else if (killStreak.get(damager) >= 15) {
                         Player playerdamager = (Player) damager;
-                        playerdamager.playSound(damager.getLocation(), Sound.valueOf(PlaySoundConfiguration.get().getString("+15kills")), 1, 1);
+                        KnockbackFFAAPI.playSound(playerdamager,"+15kills", 1, 1);
                         Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.lastmessage").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()).replace("%killstreak%", killStreak.get(damager).intValue() - 1 + "kills"));
                     }
 
