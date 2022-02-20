@@ -5,11 +5,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 
-public class ArenaData {
+public class ArenaData
+{
 
 
     public static File cfile;
@@ -23,7 +23,7 @@ public class ArenaData {
         if (!cfile.exists()) {
             try {
                 cfile.createNewFile();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error creating " + cfile.getName() + "!");
             }
         }
@@ -50,7 +50,7 @@ public class ArenaData {
     public static void save() {
         try {
             config.save(cfile);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error saving " + cfile.getName() + "!");
         }
     }

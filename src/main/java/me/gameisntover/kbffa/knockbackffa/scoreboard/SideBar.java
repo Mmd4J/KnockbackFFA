@@ -7,18 +7,18 @@ import org.bukkit.scoreboard.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SideBar {
-    private static ScoreboardManager manager = Bukkit.getScoreboardManager();
+public class SideBar
+{
+    private static final ScoreboardManager manager = Bukkit.getScoreboardManager();
 
-    private String name;
-    private String identifier;
+    private final String name;
+    private final String identifier;
 
-    private Scoreboard board;
-    private Objective obj;
-    private List<Score> scores;
+    private final Scoreboard board;
+    private final Objective obj;
+    private final List<Score> scores;
 
-    public SideBar(String name, String identifier)
-    {
+    public SideBar(String name, String identifier) {
         this.name = name;
         this.identifier = identifier;
         this.board = manager.getNewScoreboard();
@@ -28,14 +28,12 @@ public class SideBar {
         obj.setDisplayName(name);
     }
 
-    public void add(String s)
-    {
+    public void add(String s) {
         Score score = obj.getScore(s);
         scores.add(0, score);
     }
 
-    public void apply(Player player)
-    {
+    public void apply(Player player) {
         for (int i = 0; i < scores.size(); i++)
             scores.get(i).setScore(i);
         player.setScoreboard(board);

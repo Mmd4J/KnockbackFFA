@@ -1,5 +1,5 @@
 package me.gameisntover.kbffa.knockbackffa.API;
-import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+
 import me.gameisntover.kbffa.knockbackffa.MaterialLegacy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,7 +14,9 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-public class KnockbackFFAKit implements Listener {
+
+public class KnockbackFFAKit implements Listener
+{
 
     public static void Kits(OfflinePlayer player) {
         Player player1 = player.getPlayer();
@@ -85,6 +87,7 @@ public class KnockbackFFAKit implements Listener {
             pinventory.addItem(kbstick, enderpearl, jumpPlate, buildingBlock, kbBow, kbArrow);
         }
     }
+
     public static void kbbowArrow(OfflinePlayer player, Integer amount) {
         if (KnockbackFFAAPI.isLegacyVersion()) {
             Player player1 = player.getPlayer();
@@ -94,7 +97,7 @@ public class KnockbackFFAKit implements Listener {
             kbArrow.setItemMeta(kbArrowMeta);
             Inventory pinventory = player1.getInventory();
             pinventory.addItem(kbArrow);
-        }else {
+        } else {
             Player player1 = player.getPlayer();
             ItemStack kbArrow = new ItemStack(Material.ARROW, amount);
             ItemMeta kbArrowMeta = kbArrow.getItemMeta();
@@ -104,6 +107,7 @@ public class KnockbackFFAKit implements Listener {
             pinventory.addItem(kbArrow);
         }
     }
+
     public static void BuildingBlock(OfflinePlayer player, Integer amount) {
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
@@ -121,6 +125,7 @@ public class KnockbackFFAKit implements Listener {
             pinventory.addItem(buildingBlock);
         }
     }
+
     public static void JumpPlate(OfflinePlayer player, Integer amount) {
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
@@ -130,7 +135,7 @@ public class KnockbackFFAKit implements Listener {
             jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
             jumpPlate.setItemMeta(jumpPlateMeta);
             pinventory.addItem(jumpPlate);
-        }else{
+        } else {
             ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, amount);
             ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
             jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
@@ -138,6 +143,7 @@ public class KnockbackFFAKit implements Listener {
             pinventory.addItem(jumpPlate);
         }
     }
+
     public static void EnderPearl(OfflinePlayer player, Integer amount) {
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
@@ -147,7 +153,7 @@ public class KnockbackFFAKit implements Listener {
             enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
             enderpearl.setItemMeta(enderpearlmeta);
             pinventory.addItem(enderpearl);
-        }else{
+        } else {
             ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, amount);
             ItemMeta enderpearlmeta = enderpearl.getItemMeta();
             enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");

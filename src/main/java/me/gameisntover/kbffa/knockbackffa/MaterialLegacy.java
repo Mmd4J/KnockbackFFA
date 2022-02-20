@@ -1,67 +1,18 @@
 package me.gameisntover.kbffa.knockbackffa;
 
+import com.google.common.collect.Maps;
+import org.apache.commons.lang.Validate;
+import org.bukkit.map.MapView;
+import org.bukkit.material.*;
+import org.bukkit.potion.Potion;
+
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
-import org.bukkit.SandstoneType;
-import org.bukkit.map.MapView;
-import org.bukkit.material.Bed;
-import org.bukkit.material.Button;
-import org.bukkit.material.Cake;
-import org.bukkit.material.Cauldron;
-import org.bukkit.material.Chest;
-import org.bukkit.material.Coal;
-import org.bukkit.material.CocoaPlant;
-import org.bukkit.material.Command;
-import org.bukkit.material.Crops;
-import org.bukkit.material.DetectorRail;
-import org.bukkit.material.Diode;
-import org.bukkit.material.Dispenser;
-import org.bukkit.material.Door;
-import org.bukkit.material.Dye;
-import org.bukkit.material.EnderChest;
-import org.bukkit.material.FlowerPot;
-import org.bukkit.material.Furnace;
-import org.bukkit.material.Gate;
-import org.bukkit.material.Ladder;
-import org.bukkit.material.Lever;
-import org.bukkit.material.LongGrass;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.MonsterEggs;
-import org.bukkit.material.Mushroom;
-import org.bukkit.material.NetherWarts;
-import org.bukkit.material.PistonBaseMaterial;
-import org.bukkit.material.PistonExtensionMaterial;
-import org.bukkit.material.PoweredRail;
-import org.bukkit.material.PressurePlate;
-import org.bukkit.material.Pumpkin;
-import org.bukkit.material.Rails;
-import org.bukkit.material.RedstoneTorch;
-import org.bukkit.material.RedstoneWire;
-import org.bukkit.material.Sandstone;
-import org.bukkit.material.Sign;
-import org.bukkit.material.Skull;
-import org.bukkit.material.SmoothBrick;
-import org.bukkit.material.SpawnEgg;
-import org.bukkit.material.Stairs;
-import org.bukkit.material.Step;
-import org.bukkit.material.Torch;
-import org.bukkit.material.TrapDoor;
-import org.bukkit.material.Tree;
-import org.bukkit.material.Tripwire;
-import org.bukkit.material.TripwireHook;
-import org.bukkit.material.Vine;
-import org.bukkit.material.WoodenStep;
-import org.bukkit.material.Wool;
-import org.bukkit.potion.Potion;
 
-import com.google.common.collect.Maps;
-import org.bukkit.material.Banner;
-
-
-public enum MaterialLegacy {
+public enum MaterialLegacy
+{
     AIR(0, 0),
     STONE(1),
     GRASS(2),
@@ -456,34 +407,47 @@ public enum MaterialLegacy {
     RECORD_12(2267, 1),
     ;
 
+    private final static Map<String, MaterialLegacy> BY_NAME = Maps.newHashMap();
+    private static MaterialLegacy[] byId = new MaterialLegacy[383];
+
+    static {
+        for (MaterialLegacy material : values()) {
+            if (byId.length > material.id) {
+                byId[material.id] = material;
+            } else {
+                byId = Arrays.copyOfRange(byId, 0, material.id + 2);
+                byId[material.id] = material;
+            }
+            BY_NAME.put(material.name(), material);
+        }
+    }
+
     private final int id;
     private final Constructor<? extends MaterialData> ctor;
-    private static MaterialLegacy[] byId = new MaterialLegacy[383];
-    private final static Map<String, MaterialLegacy> BY_NAME = Maps.newHashMap();
     private final int maxStack;
     private final short durability;
 
-    private MaterialLegacy(final int id) {
+    MaterialLegacy(final int id) {
         this(id, 64);
     }
 
-    private MaterialLegacy(final int id, final int stack) {
+    MaterialLegacy(final int id, final int stack) {
         this(id, stack, MaterialData.class);
     }
 
-    private MaterialLegacy(final int id, final int stack, final int durability) {
+    MaterialLegacy(final int id, final int stack, final int durability) {
         this(id, stack, durability, MaterialData.class);
     }
 
-    private MaterialLegacy(final int id, final Class<? extends MaterialData> data) {
+    MaterialLegacy(final int id, final Class<? extends MaterialData> data) {
         this(id, 64, data);
     }
 
-    private MaterialLegacy(final int id, final int stack, final Class<? extends MaterialData> data) {
+    MaterialLegacy(final int id, final int stack, final Class<? extends MaterialData> data) {
         this(id, stack, 0, data);
     }
 
-    private MaterialLegacy(final int id, final int stack, final int durability, final Class<? extends MaterialData> data) {
+    MaterialLegacy(final int id, final int stack, final int durability, final Class<? extends MaterialData> data) {
         this.id = id;
         this.durability = (short) durability;
         this.maxStack = stack;
@@ -495,6 +459,39 @@ public enum MaterialLegacy {
         } catch (SecurityException ex) {
             throw new AssertionError(ex);
         }
+    }
+
+    @Deprecated
+    public static MaterialLegacy getMaterial(final int id) {
+        if (byId.length > id && id >= 0) {
+            return byId[id];
+        } else {
+            return null;
+        }
+    }
+
+    public static MaterialLegacy getMaterial(final String name) {
+        return BY_NAME.get(name);
+    }
+
+    public static MaterialLegacy matchMaterial(final String name) {
+        Validate.notNull(name, "Name cannot be null");
+
+        MaterialLegacy result = null;
+
+        try {
+            result = getMaterial(Integer.parseInt(name));
+        } catch (NumberFormatException ex) {
+        }
+
+        if (result == null) {
+            String filtered = name.toUpperCase();
+
+            filtered = filtered.replaceAll("\\s+", "_").replaceAll("\\W", "");
+            result = BY_NAME.get(filtered);
+        }
+
+        return result;
     }
 
     @Deprecated
@@ -570,50 +567,11 @@ public enum MaterialLegacy {
                 return false;
         }
     }
-    @Deprecated
-    public static MaterialLegacy getMaterial(final int id) {
-        if (byId.length > id && id >= 0) {
-            return byId[id];
-        } else {
-            return null;
-        }
-    }
-    public static MaterialLegacy getMaterial(final String name) {
-        return BY_NAME.get(name);
-    }
-    public static MaterialLegacy matchMaterial(final String name) {
-        Validate.notNull(name, "Name cannot be null");
 
-        MaterialLegacy result = null;
-
-        try {
-            result = getMaterial(Integer.parseInt(name));
-        } catch (NumberFormatException ex) {}
-
-        if (result == null) {
-            String filtered = name.toUpperCase();
-
-            filtered = filtered.replaceAll("\\s+", "_").replaceAll("\\W", "");
-            result = BY_NAME.get(filtered);
-        }
-
-        return result;
-    }
-
-    static {
-        for (MaterialLegacy material : values()) {
-            if (byId.length > material.id) {
-                byId[material.id] = material;
-            } else {
-                byId = Arrays.copyOfRange(byId, 0, material.id + 2);
-                byId[material.id] = material;
-            }
-            BY_NAME.put(material.name(), material);
-        }
-    }
     public boolean isRecord() {
         return id >= GOLD_RECORD.id && id <= RECORD_12.id;
     }
+
     public boolean isSolid() {
         if (!isBlock() || id == 0) {
             return false;
@@ -773,6 +731,7 @@ public enum MaterialLegacy {
                 return false;
         }
     }
+
     public boolean isTransparent() {
         if (!isBlock()) {
             return false;
@@ -827,6 +786,7 @@ public enum MaterialLegacy {
                 return false;
         }
     }
+
     public boolean isFlammable() {
         if (!isBlock()) {
             return false;
@@ -938,6 +898,7 @@ public enum MaterialLegacy {
                 return false;
         }
     }
+
     public boolean isOccluding() {
         if (!isBlock()) {
             return false;
@@ -1018,6 +979,7 @@ public enum MaterialLegacy {
                 return false;
         }
     }
+
     public boolean hasGravity() {
         if (!isBlock()) {
             return false;

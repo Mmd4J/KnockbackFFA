@@ -1,16 +1,16 @@
 package me.gameisntover.kbffa.knockbackffa.Placeholders;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
+
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public class Expansion extends PlaceholderExpansion {
+public class Expansion extends PlaceholderExpansion
+{
     private final KnockbackFFA plugin;
+
     public Expansion(KnockbackFFA plugin) {
         this.plugin = plugin;
     }
@@ -37,13 +37,13 @@ public class Expansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
-        if(params.equalsIgnoreCase("player_kills")){
-        Player player1 = player.getPlayer();
+        if (params.equalsIgnoreCase("player_kills")) {
+            Player player1 = player.getPlayer();
             PlayerData.load(player1);
             return String.valueOf(PlayerData.get().getInt("kills"));
         }
 
-        if(params.equalsIgnoreCase("player_deaths")) {
+        if (params.equalsIgnoreCase("player_deaths")) {
             Player player1 = player.getPlayer();
             PlayerData.load(player1);
             return String.valueOf(PlayerData.get().getInt("deaths"));

@@ -3,39 +3,28 @@ package me.gameisntover.kbffa.knockbackffa.API;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public class KnockbackFFAArena {
+public class KnockbackFFAArena
+{
 
     public static boolean isEnabled(Integer arenaID) {
         String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
-        if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName)) {
-            return true;
-        } else {
-            return false;
-        }
+        return ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName);
     }
-    public static boolean isEnabled(String arenaName){
-        if (ArenaConfiguration.get().getString("EnabledArena")!=null) {
-            if (ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName)) {
-                return true;
-            } else {
-                return false;
-            }
-        }else {
+
+    public static boolean isEnabled(String arenaName) {
+        if (ArenaConfiguration.get().getString("EnabledArena") != null) {
+            return ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaName);
+        } else {
             return false;
         }
     }
 
     public static boolean arenaisReady(int arenaid) {
-        if (ArenaConfiguration.get().getString("arena" + arenaid + ".world") != null && ArenaConfiguration.get().getDouble("arena" + arenaid + ".x") != 0 && ArenaConfiguration.get().getDouble("arena" + arenaid + ".y") != 0 && ArenaConfiguration.get().getDouble("arena" + arenaid + ".z") != 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return ArenaConfiguration.get().getString("arena" + arenaid + ".world") != null && ArenaConfiguration.get().getDouble("arena" + arenaid + ".x") != 0 && ArenaConfiguration.get().getDouble("arena" + arenaid + ".y") != 0 && ArenaConfiguration.get().getDouble("arena" + arenaid + ".z") != 0;
     }
 
     public static void teleportPlayertoArena(Player player, int arenaId) {
@@ -49,7 +38,7 @@ public class KnockbackFFAArena {
     }
 
     public static void teleportPlayertoArena(Player player) {
-        String enabledArena = getEnabledArena().toString();
+        String enabledArena = getEnabledArena();
         ArenaConfiguration.save();
         if (ArenaData.getfolder().list().length > 0) {
             Integer arenaList = ArenaData.getfolder().listFiles().length;
@@ -67,18 +56,17 @@ public class KnockbackFFAArena {
             System.out.println("[KnockbackFFA] There are no arenas to teleport the player there!");
         }
     }
+
     public static String getEnabledArena() {
         String arenaString = ArenaConfiguration.get().getString("EnabledArena");
-        if (arenaString != null) {
-            return arenaString;
-        } else {
-            return null;
-        }
+        return arenaString;
     }
-    public static Integer getEnabledArenaint(){
+
+    public static Integer getEnabledArenaint() {
         String arenaName = ArenaConfiguration.get().getString("EnabledArena");
-       return Integer.parseInt(arenaName.replace("arena", ""));
+        return Integer.parseInt(arenaName.replace("arena", ""));
     }
+
     public static void leaveArena(Player player) {
         if (ArenaConfiguration.get().getString("mainlobby.world") != null) {
             Double x = ArenaConfiguration.get().getDouble("mainlobby.x");

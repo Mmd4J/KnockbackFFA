@@ -5,7 +5,6 @@ import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
-import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
 import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import org.bukkit.*;
@@ -16,7 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
@@ -24,9 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ArenaSettings implements Listener {
+public class ArenaSettings implements Listener
+{
+    public static Map<Player, String> playerArena = new HashMap<>();
     Integer arenaID1 = 1;
-    public static Map<Player,String> playerArena= new HashMap<>();
+
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
@@ -45,6 +45,7 @@ public class ArenaSettings implements Listener {
             }
         }
     }
+
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
@@ -149,7 +150,8 @@ public class ArenaSettings implements Listener {
                         ArenaData.save();
                         e.getWhoClicked().sendMessage(ChatColor.GREEN + "Arena Positions Set!");
                     }
-                } if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
+                }
+                if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
                     ArenaData.load(ArenaConfiguration.get().getString("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".name"));
                     if (ArenaData.get().getBoolean("world-border") == false) {
                         ArenaData.get().set("world-border", true);
@@ -166,7 +168,7 @@ public class ArenaSettings implements Listener {
                         List<String> lore = new ArrayList<>();
                         ItemMeta im = e.getCurrentItem().getItemMeta();
                         lore.add(ChatColor.GRAY + "Toggle whether or not the world border is enabled.");
-                        lore.add(ChatColor.GREEN + "Currently the world border is "+ArenaData.get().getBoolean("world-border"));
+                        lore.add(ChatColor.GREEN + "Currently the world border is " + ArenaData.get().getBoolean("world-border"));
                         im.setLore(lore);
                         e.getCurrentItem().setItemMeta(im);
                     } else {
@@ -177,7 +179,7 @@ public class ArenaSettings implements Listener {
                         List<String> lore = new ArrayList<>();
                         ItemMeta im = e.getCurrentItem().getItemMeta();
                         lore.add(ChatColor.GRAY + "Toggle whether or not the world border is enabled.");
-                        lore.add(ChatColor.GREEN + "Currently the world border is "+ArenaData.get().getBoolean("world-border"));
+                        lore.add(ChatColor.GREEN + "Currently the world border is " + ArenaData.get().getBoolean("world-border"));
                         im.setLore(lore);
                         e.getCurrentItem().setItemMeta(im);
                     }
@@ -187,31 +189,31 @@ public class ArenaSettings implements Listener {
     }
 
     @EventHandler
-    public void onPlayerGoesToArena(PlayerMoveEvent e){
+    public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         Integer arenaID = 1;
-        while (KnockbackFFAAPI.isInGame(player)||KnockbackFFAAPI.BungeeMode()){
+        while (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) {
             String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
             ArenaData.load(arenaName);
-            if (ArenaData.getfile().exists()){
-                BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"),ArenaData.get().getDouble("arena.pos1.y"),ArenaData.get().getDouble("arena.pos1.z"),ArenaData.get().getDouble("arena.pos2.x"),ArenaData.get().getDouble("arena.pos2.y"),ArenaData.get().getDouble("arena.pos2.z"));
+            if (ArenaData.getfile().exists()) {
+                BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"), ArenaData.get().getDouble("arena.pos1.y"), ArenaData.get().getDouble("arena.pos1.z"), ArenaData.get().getDouble("arena.pos2.x"), ArenaData.get().getDouble("arena.pos2.y"), ArenaData.get().getDouble("arena.pos2.z"));
                 World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
                 Location location = player.getLocation();
                 if (s1box.contains(location.toVector()) && player.getWorld() == world) {
-                    playerArena.put(player,"arena");
-                    if (player.getInventory().isEmpty()){
+                    playerArena.put(player, "arena");
+                    if (player.getInventory().isEmpty()) {
                         KnockbackFFAKit.Kits(player);
                     }
                     break;
                 } else {
                     arenaID++;
                 }
-        } else if (!ArenaData.getfile().exists()&&playerArena.get(player)!=null){
-        if (playerArena.get(player).equals("arena")){
+            } else if (!ArenaData.getfile().exists() && playerArena.get(player) != null) {
+                if (playerArena.get(player).equals("arena")) {
                     playerArena.remove(player);
                     break;
-        }
-            } else{
+                }
+            } else {
                 break;
             }
         }
