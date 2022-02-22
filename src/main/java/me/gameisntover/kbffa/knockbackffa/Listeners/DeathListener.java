@@ -90,18 +90,14 @@ public class DeathListener implements Listener
         ArenaSettings.playerArena.remove(player);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), new Runnable()
-            {
-                @Override
-                public void run() {
-                    player.spigot().respawn();
-                    KnockbackFFAArena.teleportPlayertoArena(player);
-                    World world = player.getWorld();
-                    List<Entity> entList = world.getEntities();
-                    for (Entity current : entList) {
-                        if (current instanceof Item) {
-                            current.remove();
-                        }
+            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), () -> {
+                player.spigot().respawn();
+                KnockbackFFAArena.teleportPlayertoArena(player);
+                World world = player.getWorld();
+                List<Entity> entList = world.getEntities();
+                for (Entity current : entList) {
+                    if (current instanceof Item) {
+                        current.remove();
                     }
                 }
             }, 1);

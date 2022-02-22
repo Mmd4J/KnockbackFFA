@@ -20,22 +20,18 @@ public class MainScoreboard implements Listener
     public static void toggleScoreboard(Player player, boolean toggle) {
         if (toggle) {
             BukkitScheduler scheduler = Bukkit.getScheduler();
-            int i = scheduler.scheduleSyncRepeatingTask(KnockbackFFA.getInstance(), new Runnable()
-            {
-                @Override
-                public void run() {
-                    List<String> scoreboardLines = ScoreboardConfiguration.get().getStringList("lines");
-                    SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
-                    if (player.getScoreboard() != null) {
-                        player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
-                    }
-                    for (String string : scoreboardLines) {
-                        string = PlaceholderAPI.setPlaceholders(player, string);
-                        sidebar.add(string.replaceAll("&", "§"));
-                    }
-                    sidebar.apply(player);
-
+            scheduler.scheduleSyncRepeatingTask(KnockbackFFA.getInstance(), () -> {
+                List<String> scoreboardLines = ScoreboardConfiguration.get().getStringList("lines");
+                SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
+                if (player.getScoreboard() != null) {
+                    player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                 }
+                for (String string : scoreboardLines) {
+                    string = PlaceholderAPI.setPlaceholders(player, string);
+                    sidebar.add(string.replaceAll("&", "§"));
+                }
+                sidebar.apply(player);
+
             }, 0, 20);
         }
     }

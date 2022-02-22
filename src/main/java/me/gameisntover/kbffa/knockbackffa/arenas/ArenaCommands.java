@@ -22,7 +22,7 @@ import java.util.*;
 public class ArenaCommands implements CommandExecutor
 {
     public static Map<UUID, Integer> arenaidMap = new HashMap<>();
-    Integer sz = 1;
+    int sz = 1;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -54,11 +54,11 @@ public class ArenaCommands implements CommandExecutor
                             ArenaConfiguration.get().set("EnabledArena", "arena1");
                             ArenaConfiguration.save();
                         }
-                        Integer arenaID = 1;
+                        int arenaID = 1;
                         while (ArenaConfiguration.get().getString("arena" + arenaID + ".name") != null) {
                             arenaID++;
                         }
-                        while (ArenaConfiguration.get().getString("arena" + arenaID + ".name") == null) {
+                        if (ArenaConfiguration.get().getString("arena" + arenaID + ".name") == null) {
                             sender.sendMessage(ChatColor.GREEN + "Arena" + arenaID + "has been created!");
                             ArenaConfiguration.get().set("arena" + arenaID + ".x", ((Player) sender).getLocation().getX());
                             ArenaConfiguration.get().set("arena" + arenaID + ".y", ((Player) sender).getLocation().getY());
@@ -67,7 +67,6 @@ public class ArenaCommands implements CommandExecutor
                             String arenaname = args[0];
                             ArenaConfiguration.get().set("arena" + arenaID + ".name", arenaname);
                             ArenaConfiguration.save();
-                            break;
                         }
 
                     }
@@ -96,11 +95,11 @@ public class ArenaCommands implements CommandExecutor
                         ItemStack worldBorder = new ItemStack(Material.BARRIER, 1);
                         ItemMeta worldBorderMeta = worldBorder.getItemMeta();
                         worldBorderMeta.setDisplayName(ChatColor.GRAY + "World Border");
-                        List blockBreaklore = new ArrayList<String>();
-                        List itemDropLore = new ArrayList<String>();
-                        List setspawnLore = new ArrayList<String>();
-                        List setposLore = new ArrayList<String>();
-                        List worldBorderLore = new ArrayList<String>();
+                        List<String> blockBreaklore = new ArrayList<>();
+                        List<String>  itemDropLore = new ArrayList<>();
+                        List<String>  setspawnLore = new ArrayList<>();
+                        List<String>  setposLore = new ArrayList<>();
+                        List<String>  worldBorderLore = new ArrayList<>();
                         String arenaName = ArenaConfiguration.get().getString("arena" + args[0] + ".name");
                         ArenaData.load(arenaName);
                         blockBreaklore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
