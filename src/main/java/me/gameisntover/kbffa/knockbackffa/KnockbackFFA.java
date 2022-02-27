@@ -60,7 +60,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                 if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
-                    KnockbackFFAKit.kbbowArrow(p, 1);
+                    KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                    kitManager.kbbowArrow(p, 1);
                 }
             }
         }
@@ -86,7 +87,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         SoundConfiguration.setup();
         ArenaConfiguration.setup();
         ScoreboardConfiguration.setup();
-
+        ItemConfiguration.setup();
         saveDefaultConfig();
 
     }
@@ -294,7 +295,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 {
                     @Override
                     public void run() {
-                        KnockbackFFAKit.BuildingBlock(player, 1);
+                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                        kitManager.BuildingBlock(player, 1);
                     }
                 }, 1);
             }

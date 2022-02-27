@@ -2,9 +2,7 @@ package me.gameisntover.kbffa.knockbackffa.arena;
 
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.Config;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 import java.io.File;
 import java.util.HashMap;
@@ -22,8 +20,7 @@ public class Arena
     private boolean worldBorder;
     private Location pos1;
     private Location pos2;
-    private World world;
-
+    private Location spawnPoint;
     private Config config;
 
     private Arena(String name) {
@@ -33,7 +30,7 @@ public class Arena
         this.worldBorder = false;
         this.pos1 = null;
         this.pos2 = null;
-        this.world = null;
+        this.spawnPoint = null;
 
         ARENA_CACHE.put(name, this);
 
@@ -56,10 +53,10 @@ public class Arena
         this.worldBorder = config.getBoolean("worldBorder");
         this.pos1 = config.getLocation("pos1");
         this.pos2 = config.getLocation("pos2");
+        this.spawnPoint = config.getLocation("spawn");
 
         String world = config.getString("world");
         assert world != null;
-        this.world = Bukkit.getWorld(world);
     }
 
     private void save() {
@@ -69,7 +66,7 @@ public class Arena
         config.set("worldBorder", worldBorder);
         config.set("pos1", pos1);
         config.set("pos2", pos2);
-        config.set("world", world);
+        config.set("spawn", spawnPoint);
         config.save();
     }
 }

@@ -2,9 +2,9 @@ enabled: true
 Title : '&l&6KnockbackFFA'
 lines:
   - '&6Welcome to &l&ethe server!'
-  - '$empty'
+  - ''
   - '&6Players&f : %server_online%/%server_max_players%'
-  - '$empty'
+  - ''
   - '&6 Kills&f : %advancedknockbackffa_player_kills%'
   - '&6 Deaths&f : %advancedknockbackffa_player_deaths%'
   - '&6 CurrentMap : &e%advancedknockbackffa_current_map%'

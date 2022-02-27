@@ -202,7 +202,8 @@ public class ArenaSettings implements Listener
                 if (s1box.contains(location.toVector()) && player.getWorld() == world) {
                     playerArena.put(player, "arena");
                     if (player.getInventory().isEmpty()) {
-                        KnockbackFFAKit.Kits(player);
+                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                        kitManager.DefaultKit(player);
                     }
                     break;
                 } else {

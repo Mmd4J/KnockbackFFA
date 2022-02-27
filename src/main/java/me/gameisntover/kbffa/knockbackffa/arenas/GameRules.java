@@ -126,7 +126,8 @@ public class GameRules implements Listener
                                     cancel();
                                     timer = 10;
                                 } else {
-                                    KnockbackFFAKit.kbbowArrow(player, 1);
+                                    KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                                    kitManager.kbbowArrow(player, 1);
                                     cancel();
                                     timer = 10;
                                 }

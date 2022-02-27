@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa.knockbackffa.API;
 
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ItemConfiguration;
 import me.gameisntover.kbffa.knockbackffa.MaterialLegacy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,13 +13,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
 
 public class KnockbackFFAKit implements Listener
 {
 
-    public static void Kits(OfflinePlayer player) {
+    public void DefaultKit(OfflinePlayer player) {
         Player player1 = player.getPlayer();
         if (KnockbackFFAAPI.isLegacyVersion()) {
             ItemStack kbstick = new ItemStack(Material.LEGACY_STICK, 1);
@@ -88,7 +92,7 @@ public class KnockbackFFAKit implements Listener
         }
     }
 
-    public static void kbbowArrow(OfflinePlayer player, Integer amount) {
+    public void kbbowArrow(OfflinePlayer player, Integer amount) {
         if (KnockbackFFAAPI.isLegacyVersion()) {
             Player player1 = player.getPlayer();
             ItemStack kbArrow = new ItemStack(Material.getMaterial(MaterialLegacy.ARROW.name()), amount);
@@ -108,7 +112,7 @@ public class KnockbackFFAKit implements Listener
         }
     }
 
-    public static void BuildingBlock(OfflinePlayer player, Integer amount) {
+    public void BuildingBlock(OfflinePlayer player, Integer amount) {
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
         if (KnockbackFFAAPI.isLegacyVersion()) {
@@ -126,7 +130,7 @@ public class KnockbackFFAKit implements Listener
         }
     }
 
-    public static void JumpPlate(OfflinePlayer player, Integer amount) {
+    public void JumpPlate(OfflinePlayer player, Integer amount) {
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
         if (KnockbackFFAAPI.isLegacyVersion()) {
@@ -144,7 +148,7 @@ public class KnockbackFFAKit implements Listener
         }
     }
 
-    public static void EnderPearl(OfflinePlayer player, Integer amount) {
+    public void EnderPearl(OfflinePlayer player, Integer amount) {
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
         if (KnockbackFFAAPI.isLegacyVersion()) {
@@ -161,7 +165,39 @@ public class KnockbackFFAKit implements Listener
             pinventory.addItem(enderpearl);
         }
     }
-
+    public void lobbyItems(Integer shopSlot, Integer cosmeticSlot, Integer kitsSlot, Player player){
+        ItemStack shop = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.shop.material")));
+        ItemStack cosmetics = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.cosmetic.material")));
+        ItemStack kits = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.kits.material")));
+        ItemMeta shopMeta = shop.getItemMeta();
+        ItemMeta cosmeticsMeta = cosmetics.getItemMeta();
+        ItemMeta kitsMeta = kits.getItemMeta();
+        shopMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.shop.name").replace("&", "§"));
+        cosmeticsMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.cosmetic.name").replace("&", "§"));
+        kitsMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.kits.name").replace("&", "§"));
+        List<String> shopLore = ItemConfiguration.get().getStringList("LobbyItems.shop.lore");
+        List<String> cosmeticsLore = ItemConfiguration.get().getStringList("LobbyItems.cosmetic.lore");
+        List<String> kitsLore = ItemConfiguration.get().getStringList("LobbyItems.kits.lore");
+        shopMeta.setLore(shopLore);
+        cosmeticsMeta.setLore(cosmeticsLore);
+        kitsMeta.setLore(kitsLore);
+        shopMeta.setUnbreakable(true);
+        cosmeticsMeta.setUnbreakable(true);
+        kitsMeta.setUnbreakable(true);
+        kitsMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        cosmeticsMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        shopMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        kitsMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        cosmeticsMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        shopMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        shop.setItemMeta(shopMeta);
+        cosmetics.setItemMeta(cosmeticsMeta);
+        kits.setItemMeta(kitsMeta);
+        Inventory pinventory = player.getInventory();
+        pinventory.setItem(shopSlot, shop);
+        pinventory.setItem(cosmeticSlot, cosmetics);
+        pinventory.setItem(kitsSlot, kits);
+    }
     @EventHandler
     public void onEndermiteSpawn(CreatureSpawnEvent e) {
         Entity endermite = e.getEntity();

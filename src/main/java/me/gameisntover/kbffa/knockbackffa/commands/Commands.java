@@ -37,9 +37,8 @@ public class Commands implements CommandExecutor
                         p.getPlayer().getInventory().clear();
                     }
                     MainScoreboard.toggleScoreboard(p, true);
-                    PlayerData.load(p.getPlayer());
-                    PlayerData.get().set("In-Game", true);
-                    PlayerData.save();
+                    KnockbackFFAAPI.inGamePlayer.put(p.getUniqueId(),true);
+
                 } else {
                     sender.sendMessage(MessageConfiguration.get().getString("no-arena-ready").replace("&", "§"));
                 }
@@ -61,9 +60,7 @@ public class Commands implements CommandExecutor
                     p.getInventory().setArmorContents(armor.toArray(new ItemStack[armor.size()]));
                 }
                 MainScoreboard.toggleScoreboard(p, false);
-                PlayerData.load(p.getPlayer());
-                PlayerData.get().set("In-Game", false);
-                PlayerData.save();
+                KnockbackFFAAPI.inGamePlayer.put(p.getUniqueId(),false);
             } else {
                 p.sendMessage(MessageConfiguration.get().getString("cannotuseleave").replace("&", "§"));
             }

@@ -5,6 +5,7 @@ import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.MaterialLegacy;
+import me.gameisntover.kbffa.knockbackffa.arena.Arena;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

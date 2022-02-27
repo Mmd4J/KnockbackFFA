@@ -1,21 +1,24 @@
 package me.gameisntover.kbffa.knockbackffa.API;
 
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.SoundConfiguration;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class KnockbackFFAAPI
 {
+   public static Map<UUID , Boolean> inGamePlayer = new HashMap<>();
     public static boolean BungeeMode() {
         return KnockbackFFA.getInstance().getConfig().getBoolean("Bungee-Mode");
     }
 
     public static boolean isInGame(Player playername) {
-        PlayerData.load(playername);
-        return PlayerData.get().getBoolean("In-Game");
+        return inGamePlayer.get(playername.getUniqueId());
     }
 
     public static boolean isLegacyVersion() {
