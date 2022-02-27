@@ -9,7 +9,7 @@
     <version>2.8</version>
     <packaging>jar</packaging>
     <name>Knockbackffa</name>
-    <description>a fun minigame for 1.9-1.18 </description>
+    <description>a fun minigame for 1.13-1.18 </description>
 
     <build>
         <plugins>

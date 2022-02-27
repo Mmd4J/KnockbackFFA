@@ -1,0 +1,17 @@
+#In The New Update Item names and materials are customizable customize them from here!
+LobbyItems:
+  shop:
+    name: "§6Shop"
+    material: "EMERALD"
+    lore:
+      - '§7Click to open the shop'
+  cosmetic:
+    name: "§7Cosmetic"
+    material: "CHEST"
+    lore:
+      - '§7Click to open the cosmetic shop'
+  kits:
+    name: "§eKits"
+    material: "DIAMOND_SWORD"
+    lore:
+      - '§7Click to open the kits shop'
