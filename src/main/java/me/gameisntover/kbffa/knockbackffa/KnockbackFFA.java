@@ -7,7 +7,7 @@ import me.gameisntover.kbffa.knockbackffa.CustomConfigs.*;
 import me.gameisntover.kbffa.knockbackffa.Listeners.ArenaSettings;
 import me.gameisntover.kbffa.knockbackffa.Listeners.DeathListener;
 import me.gameisntover.kbffa.knockbackffa.Listeners.NoHunger;
-import me.gameisntover.kbffa.knockbackffa.Listeners.itemInteractListener;
+import me.gameisntover.kbffa.knockbackffa.Listeners.guiStuff;
 import me.gameisntover.kbffa.knockbackffa.Placeholders.Expansion;
 import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
 import me.gameisntover.kbffa.knockbackffa.arenas.GameRules;
@@ -84,6 +84,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         if (!dataFolder.exists()) {
             dataFolder.mkdir();
         }
+        CosmeticConfiguration.setup();
         MessageConfiguration.setup();
         SoundConfiguration.setup();
         ArenaConfiguration.setup();
@@ -219,7 +220,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new WandListener(), this);
         getServer().getPluginManager().registerEvents(new GameRules(), this);
         getServer().getPluginManager().registerEvents(new MainScoreboard(), this);
-        getServer().getPluginManager().registerEvents(new itemInteractListener(),this);
+        getServer().getPluginManager().registerEvents(new guiStuff(),this);
         getServer().getPluginManager().registerEvents(new KnockbackFFAKit(), this);
         getServer().getPluginManager().registerEvents(new ArenaSettings(), this);
     }

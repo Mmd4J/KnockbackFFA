@@ -1,9 +1,10 @@
 package me.gameisntover.kbffa.knockbackffa.API;
 
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.CosmeticConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.SoundConfiguration;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
-import org.bukkit.Bukkit;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -21,7 +22,19 @@ public class KnockbackFFAAPI
 
         return inGamePlayer.get(playername.getUniqueId());
     }
-
+    public static String selectedCosmetic(Player player) {
+        PlayerData.load(player);
+        return PlayerData.get().getString("selected-cosmetic");
+    }
+    public static void loadCosmetic(Player player,String cosmeticName){
+        String cosmeticType = CosmeticConfiguration.get().getString(cosmeticName + ".type");
+        if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE")){
+            player.spawnParticle(Particle.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")),player.getLocation(),CosmeticConfiguration.get().getInt(cosmeticName + ".amount"));
+        }
+        else if (cosmeticType.equalsIgnoreCase("KILL_EFFECT")){
+            player.playEffect(EntityEffect.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")));
+        }
+    }
     public static boolean isLegacyVersion() {
         return Bukkit.getVersion().contains("1.8") || Bukkit.getVersion().contains("1.9") || Bukkit.getVersion().contains("1.10") || Bukkit.getVersion().contains("1.11") || Bukkit.getVersion().contains("1.12");
     }

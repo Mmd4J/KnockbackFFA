@@ -1,17 +1,25 @@
 #In The New Update Item names and materials are customizable customize them from here!
 LobbyItems:
   shop:
-    name: "§6Shop"
+    name: "&6Shop"
     material: "EMERALD"
     lore:
-      - '§7Click to open the shop'
+      - '&7Click to open the shop'
   cosmetic:
-    name: "§7Cosmetic"
+    name: "&7Cosmetic"
     material: "CHEST"
     lore:
-      - '§7Click to open the cosmetic shop'
+      - '&7Click to open the cosmetic shop'
   kits:
-    name: "§eKits"
+    name: "&eKits"
     material: "DIAMOND_SWORD"
     lore:
-      - '§7Click to open the kits shop'
+      - '&7Click to open the kits shop'
+CosmeticMenu:
+  EndKillEffect:
+    name: "&5End Kill Effect"
+    material: "ENDER_PEARL"
+    price: 100
+    orgname: 'EndKillEffect'
+    lore:
+      - '&7Free the power of the end from yourself when you kill someone!'

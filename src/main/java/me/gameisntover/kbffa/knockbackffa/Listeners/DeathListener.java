@@ -86,6 +86,7 @@ public class DeathListener implements Listener
         Player player = e.getEntity();
         Entity damager = killer.get(player);
 
+        KnockbackFFAAPI.loadCosmetic((Player) damager,KnockbackFFAAPI.selectedCosmetic((Player) damager));
         killer.remove(player);
         ArenaSettings.playerArena.remove(player);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
