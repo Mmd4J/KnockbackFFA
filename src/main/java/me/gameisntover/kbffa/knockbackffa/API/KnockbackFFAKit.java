@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class KnockbackFFAKit implements Listener
 {
@@ -25,25 +26,25 @@ public class KnockbackFFAKit implements Listener
     public void DefaultKit(OfflinePlayer player) {
         Player player1 = player.getPlayer();
         if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack kbstick = new ItemStack(Material.LEGACY_STICK, 1);
+            ItemStack kbstick = new ItemStack(Material.getMaterial(MaterialLegacy.STICK.name()),1);
             ItemMeta meta = kbstick.getItemMeta();
             meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
             kbstick.setItemMeta(meta);
-            ItemStack enderpearl = new ItemStack(Material.LEGACY_ENDER_PEARL, 16);
+            ItemStack enderpearl = new ItemStack(Material.getMaterial(MaterialLegacy.ENDER_PEARL.name()), 16);
             ItemMeta enderpearlmeta = enderpearl.getItemMeta();
             enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
             enderpearl.setItemMeta(enderpearlmeta);
-            ItemStack jumpPlate = new ItemStack(Material.LEGACY_GOLD_PLATE, 3);
+            ItemStack jumpPlate = new ItemStack(Material.getMaterial(MaterialLegacy.GOLD_PLATE.name()), 3);
             ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
             jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
             jumpPlate.setItemMeta(jumpPlateMeta);
-            ItemStack buildingBlock = new ItemStack(Material.LEGACY_WHITE_GLAZED_TERRACOTTA, 64);
+            ItemStack buildingBlock = new ItemStack(Material.getMaterial(MaterialLegacy.IRON_BLOCK.name()), 64);
             ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
             buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
             buildingBlock.setItemMeta(buildingBlockMeta);
-            ItemStack kbBow = new ItemStack(Material.LEGACY_BOW, 1);
+            ItemStack kbBow = new ItemStack(Material.getMaterial(MaterialLegacy.BOW.name()), 1);
             ItemMeta kbBowMeta = kbBow.getItemMeta();
             kbBowMeta.setDisplayName(ChatColor.AQUA + "Knockback Bow");
             kbBowMeta.setUnbreakable(true);
@@ -165,38 +166,63 @@ public class KnockbackFFAKit implements Listener
             pinventory.addItem(enderpearl);
         }
     }
-    public void lobbyItems(Integer shopSlot, Integer cosmeticSlot, Integer kitsSlot, Player player){
-        ItemStack shop = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.shop.material")));
-        ItemStack cosmetics = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.cosmetic.material")));
-        ItemStack kits = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.kits.material")));
-        ItemMeta shopMeta = shop.getItemMeta();
-        ItemMeta cosmeticsMeta = cosmetics.getItemMeta();
-        ItemMeta kitsMeta = kits.getItemMeta();
-        shopMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.shop.name").replace("&", "§"));
+    public ItemStack cosmetic() {
+         ItemStack cosmetics = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.cosmetic.material")));
+        return cosmetics;
+    }
+    public ItemMeta guiItemMeta(ItemStack guiItem){
+        ItemMeta guimeta = guiItem.getItemMeta();
+        guimeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        guimeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        guimeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        guimeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        guimeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+        guimeta.setUnbreakable(true);
+        return guimeta;
+    }
+    public ItemMeta cosmeticMeta(){
+     ItemMeta cosmeticsMeta = guiItemMeta(cosmetic());
         cosmeticsMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.cosmetic.name").replace("&", "§"));
-        kitsMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.kits.name").replace("&", "§"));
-        List<String> shopLore = ItemConfiguration.get().getStringList("LobbyItems.shop.lore");
-        List<String> cosmeticsLore = ItemConfiguration.get().getStringList("LobbyItems.cosmetic.lore");
-        List<String> kitsLore = ItemConfiguration.get().getStringList("LobbyItems.kits.lore");
-        shopMeta.setLore(shopLore);
+        List<String> cosmeticsLore = ItemConfiguration.get().getStringList("LobbyItems.cosmetic.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
         cosmeticsMeta.setLore(cosmeticsLore);
-        kitsMeta.setLore(kitsLore);
-        shopMeta.setUnbreakable(true);
-        cosmeticsMeta.setUnbreakable(true);
-        kitsMeta.setUnbreakable(true);
-        kitsMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        cosmeticsMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        shopMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        kitsMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        cosmeticsMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        shopMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        shop.setItemMeta(shopMeta);
-        cosmetics.setItemMeta(cosmeticsMeta);
-        kits.setItemMeta(kitsMeta);
+        return cosmeticsMeta;
+    }
+    public ItemStack kits(){
+        ItemStack kit = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.kits.material")));
+        return kit;
+    }
+    public ItemMeta kitsMeta(){
+        ItemMeta kitMeta = guiItemMeta(kits());
+        kitMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.kits.name").replace("&", "§"));
+        List<String> kitsLore = ItemConfiguration.get().getStringList("LobbyItems.kits.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
+        kitMeta.setLore(kitsLore);
+        return kitMeta;
+    }
+    public ItemStack shop(){
+        ItemStack shop = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.shop.material")));
+        return shop;
+    }
+    public ItemMeta shopMeta(){
+        ItemMeta shopMeta = guiItemMeta(shop());
+        shopMeta.setDisplayName(ItemConfiguration.get().getString("LobbyItems.shop.name").replace("&", "§"));
+        List<String> shopLore = ItemConfiguration.get().getStringList("LobbyItems.shop.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
+        shopMeta.setLore(shopLore);
+        return shopMeta;
+    }
+    public void lobbyItems(Integer shopSlot, Integer cosmeticSlot, Integer kitsSlot, Player player){
         Inventory pinventory = player.getInventory();
+        ItemStack cosmeticMenu = cosmetic();
+        ItemMeta cosmeticMeta = cosmeticMeta();
+        ItemStack kitsMenu = kits();
+        ItemMeta kitsMeta = kitsMeta();
+        ItemStack shop = shop();
+        ItemMeta shopMeta = shopMeta();
+        cosmeticMenu.setItemMeta(cosmeticMeta);
+        kitsMenu.setItemMeta(kitsMeta);
+        shop.setItemMeta(shopMeta);
         pinventory.setItem(shopSlot, shop);
-        pinventory.setItem(cosmeticSlot, cosmetics);
-        pinventory.setItem(kitsSlot, kits);
+        pinventory.setItem(cosmeticSlot, cosmeticMenu);
+        pinventory.setItem(kitsSlot, kitsMenu);
     }
     @EventHandler
     public void onEndermiteSpawn(CreatureSpawnEvent e) {

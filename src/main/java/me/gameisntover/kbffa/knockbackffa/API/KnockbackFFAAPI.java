@@ -18,6 +18,7 @@ public class KnockbackFFAAPI
     }
 
     public static boolean isInGame(Player playername) {
+
         return inGamePlayer.get(playername.getUniqueId());
     }
 
