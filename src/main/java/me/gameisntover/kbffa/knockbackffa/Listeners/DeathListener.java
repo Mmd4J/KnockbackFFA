@@ -3,9 +3,12 @@ package me.gameisntover.kbffa.knockbackffa.Listeners;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
+import me.gameisntover.kbffa.knockbackffa.API.balanceAPI;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -85,80 +88,49 @@ public class DeathListener implements Listener
     public void playerDeathByVoid(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Entity damager = killer.get(player);
-
-        KnockbackFFAAPI.loadCosmetic((Player) damager,KnockbackFFAAPI.selectedCosmetic((Player) damager));
         killer.remove(player);
         ArenaSettings.playerArena.remove(player);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
+            KnockbackFFAAPI.loadCosmetic((Player) damager,KnockbackFFAAPI.selectedCosmetic((Player) damager));
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
             scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), () -> {
                 player.spigot().respawn();
                 KnockbackFFAArena.teleportPlayertoArena(player);
-                World world = player.getWorld();
-                List<Entity> entList = world.getEntities();
-                for (Entity current : entList) {
-                    if (current instanceof Item) {
-                        current.remove();
-                    }
-                }
             }, 1);
+            World world = player.getWorld();
+            List<Entity> entList = world.getEntities();
+            for (Entity current : entList) {
+                if (current instanceof Item) {
+                    current.remove();
+                }
+            }
             killStreak.put(player, 0);
             PlayerData.load(player);
             PlayerData.get().set("deaths", PlayerData.get().getInt("deaths") + 1);
             PlayerData.save();
             if (damager != null) {
                 PlayerData.load((Player) damager);
+                float prize = KnockbackFFA.getInstance().getConfig().getInt("killprize");
+                damager.sendMessage(MessageConfiguration.get().getString("prize").replace("%prize%",prize+"").replace("&", "§"));
+                balanceAPI.addBalance((Player) damager, prize);
                 PlayerData.get().set("kills", PlayerData.get().getInt("kills") + 1);
-                PlayerData.save();
-                String deathText = MessageConfiguration.get().getString("deathmessage").replace("&", "§").replace("%killer%", damager.getName());
-                deathText = PlaceholderAPI.setPlaceholders(e.getEntity(), deathText);
-                e.setDeathMessage(deathText);
                 if (killStreak.get(damager) == null) {
                     killStreak.put(damager, 1);
                 } else {
                     killStreak.put(damager, killStreak.get(damager).intValue() + 1);
-                    if (killStreak.get(damager) == 5) {
-                        ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 4);
-                        ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-                        enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
-                        enderpearl.setItemMeta(enderpearlmeta);
-                        Player playerdamager = (Player) damager;
-                        Inventory inv = playerdamager.getInventory();
-                        Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.5message").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()));
-                        inv.addItem(enderpearl);
-                        KnockbackFFAAPI.playSound(playerdamager, "5kills", 1, 1);
-                    } else if (killStreak.get(damager) == 10) {
-
-                        ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 8);
-                        ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-                        enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
-                        enderpearl.setItemMeta(enderpearlmeta);
-                        Player playerdamager = (Player) damager;
-                        Inventory inv = playerdamager.getInventory();
-                        Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.10message").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()));
-                        inv.addItem(enderpearl);
-                        KnockbackFFAAPI.playSound(playerdamager, "10kills", 1, 1);
-                    } else if (killStreak.get(damager) == 15) {
-                        ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 16);
-                        ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-                        enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
-                        enderpearl.setItemMeta(enderpearlmeta);
-                        Player playerdamager = (Player) damager;
-                        Inventory inv = playerdamager.getInventory();
-                        Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.15message").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()));
-                        inv.addItem(enderpearl);
-                        KnockbackFFAAPI.playSound(playerdamager, "15kills", 1, 1);
-                    } else if (killStreak.get(damager) >= 15) {
-                        Player playerdamager = (Player) damager;
-                        KnockbackFFAAPI.playSound(playerdamager, "+15kills", 1, 1);
-                        Bukkit.broadcastMessage(KnockbackFFA.getInstance().getConfig().getString("killstreak.lastmessage").replace("&", "§").replace("%damager%", playerdamager.getDisplayName()).replace("%killstreak%", killStreak.get(damager).intValue() - 1 + "kills"));
-                    }
-
                 }
+                if (killStreak.get(damager) > PlayerData.get().getInt("best-ks")) {
+                    Player damagerP =(Player) damager;
+                    String msg = MessageConfiguration.get().getString("killstreakrecord").replace("%killstreak%", PlayerData.get().getInt("best-ks")+ "").replace("&", "§");
+                    damagerP.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+                    PlayerData.get().set("best-ks", killStreak.get(damager));
+                }
+                PlayerData.save();
+                String deathText = MessageConfiguration.get().getString("deathmessage").replace("&", "§").replace("%killer%", damager.getName());
+                deathText = PlaceholderAPI.setPlaceholders(e.getEntity(), deathText);
+                e.setDeathMessage(deathText);
             } else if (damager == null) {
-
                 player.sendMessage(ChatColor.AQUA + "You died by falling into the void");
-            } else {
             }
         }
     }

@@ -4,13 +4,7 @@ ClearItems:
  enabled: true
  delay: 0
  period: 60
-#Clearing items after a time. the default time is 60 seconds or 1 minutes. 
-killstreak:
- 5message: '&2 %killer% &7has just reached to 5 KILLSTREAKS'
- 10message: '&7Be Careful! Player &2 %killer% has reached to &c10 killstreaks!'
- 15message: '&7PLAYER &l&4%killer% &7IS &l&4INSANE &7HE REACHED TO &c15 KILLSTREAKS'
- lastmessage: '&4%killer% This guy is &4&lGOD he added another kill to his collection'
-#Killstreaks messages
+#Clearing items after a time. the default time is 60 seconds or 1 minutes.
 Bungee-Mode: true
 #Bungee-Mode would make players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
 save-inventory-on-join: true
@@ -18,3 +12,4 @@ save-inventory-on-join: true
 joinmessage: true
 leavemessage: true
 joinsound: true
+killprize: 10

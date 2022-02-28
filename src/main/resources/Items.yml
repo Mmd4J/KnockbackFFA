@@ -20,6 +20,5 @@ CosmeticMenu:
     name: "&5End Kill Effect"
     material: "ENDER_PEARL"
     price: 100
-    orgname: 'EndKillEffect'
     lore:
       - '&7Free the power of the end from yourself when you kill someone!'

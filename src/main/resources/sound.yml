@@ -3,10 +3,6 @@ Legacy:
   itemremoved: NOTE_BASS
   jumpplate: BAT_TAKEOFF
   join: LEVEL_UP
-  5kills: WOLF_HOWL
-  10kills: AMBIENCE_THUNDER
-  15kills: EXPLODE
-  +15kills: HORSE_SKELETON_DEATH
   guiclose: ENDER_CHEST_CLOSE
   guiopen: ENDER_CHEST_OPEN
   #Note that legacy only works on versions before 1.13.
@@ -15,9 +11,5 @@ arenachange: BLOCK_NOTE_BLOCK_HAT
 itemremoved: BLOCK_NOTE_BLOCK_BASS
 jumpplate: ENTITY_BAT_TAKEOFF
 join: ENTITY_PLAYER_LEVELUP
-5kills: ENTITY_WOLF_HOWL
-10kills: ENTITY_LIGHTNING_BOLT_THUNDER
-15kills: ENTITY_GHAST_SCREAM
-+15kills: ENTITY_LIGHTNING_BOLT_THUNDER
 guiclose: BLOCK_ENDER_CHEST_CLOSE
 guiopen: BLOCK_ENDER_CHEST_OPEN

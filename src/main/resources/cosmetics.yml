@@ -2,3 +2,5 @@ EndKillEffect:
   type: 'KILL_PARTICLE'
   effect-type: 'DRAGON_BREATH'
   amount: 20
+registered-cosmetics:
+  - 'EndKillEffect'

@@ -3,11 +3,15 @@ package me.gameisntover.kbffa.knockbackffa.Listeners;
 import jdk.tools.jlink.internal.plugins.StripNativeCommandsPlugin;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
+import me.gameisntover.kbffa.knockbackffa.API.balanceAPI;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.CosmeticConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ItemConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -27,42 +31,70 @@ import java.util.stream.Collectors;
 
 public class guiStuff implements Listener {
     @EventHandler
-    public void onPlayerItemInteract(PlayerInteractEvent e){
+    public void onPlayerItemInteract(PlayerInteractEvent e) {
         KnockbackFFAKit kits = new KnockbackFFAKit();
-        ItemStack item = e.getItem();
-        ItemMeta itemMeta = item.getItemMeta();
-        Player player = e.getPlayer();
-        if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
-            e.setCancelled(true);
-            Inventory cosmeticMenu = Bukkit.createInventory(null, 54, "Cosmetic Menu");
-            PlayerData.load(player);
-            List<String> cList = PlayerData.get().getStringList("owned-cosmetics");
-            if (cList != null) {
-                cList.forEach(cosmetic -> {
-                    ItemStack cosmeticItem = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("CosmeticMenu." + cosmetic + ".material")));
-                    ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticItem);
-                    cosmeticMeta.setDisplayName(ItemConfiguration.get().getString("CosmeticMenu." + cosmetic + ".name".replace("&", "§")));
-                    cosmeticMeta.setLore(ItemConfiguration.get().getStringList("CosmeticMenu." + cosmetic + ".lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
-                    if (PlayerData.get().getString("selected-cosmetic").equals(cosmetic)) {
-                        cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&","§") + " §8(§aSelected§8)");
-                        cosmeticMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-                        cosmeticItem.setItemMeta(cosmeticMeta);
-                    }else {
-                        cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&", "§"));
-                        cosmeticItem.setItemMeta(cosmeticMeta);
-                    }
-                    cosmeticMenu.addItem(cosmeticItem);
-                });
-            }
+        if (e.getItem() != null) {
+            ItemStack item = e.getItem();
+            ItemMeta itemMeta = item.getItemMeta();
+
+            Player player = e.getPlayer();
+            if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                e.setCancelled(true);
+                Inventory cosmeticMenu = Bukkit.createInventory(null, 54, "Cosmetic Menu");
+                PlayerData.load(player);
+                List<String> cList = PlayerData.get().getStringList("owned-cosmetics");
+                if (cList != null) {
+                    cList.forEach(cosmetic -> {
+                        ItemStack cosmeticItem = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("CosmeticMenu." + cosmetic + ".material")));
+                        ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticItem);
+                        cosmeticMeta.setDisplayName(ItemConfiguration.get().getString("CosmeticMenu." + cosmetic + ".name".replace("&", "§")));
+                        cosmeticMeta.setLore(ItemConfiguration.get().getStringList("CosmeticMenu." + cosmetic + ".lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
+                        if (PlayerData.get().getString("selected-cosmetic").equals(cosmetic)) {
+                            cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
+                            cosmeticMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+                            cosmeticItem.setItemMeta(cosmeticMeta);
+                        } else {
+                            cosmeticMeta.removeEnchant(Enchantment.DURABILITY);
+                            cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&", "§"));
+                            cosmeticItem.setItemMeta(cosmeticMeta);
+                        }
+                        cosmeticMenu.addItem(cosmeticItem);
+                    });
+                }
                 player.openInventory(cosmeticMenu);
             }
 
-        if (kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
-            e.setCancelled(true);
-        }
-        if (kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
-        e.setCancelled(true);
+            if (kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                e.setCancelled(true);
+                Inventory cosmeticMenu = Bukkit.createInventory(null, 54, "Shop Menu");
+                PlayerData.load(player);
+                List<String> cosmetics = CosmeticConfiguration.get().getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
+                List<String> cList = PlayerData.get().getStringList("owned-cosmetics");
+                for (String cosmetic : cosmetics) {
+                    ItemStack cosmeticItem = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("CosmeticMenu." + cosmetic + ".material")));
+                    ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticItem);
+                    cosmeticMeta.setDisplayName(ItemConfiguration.get().getString("CosmeticMenu." + cosmetic + ".name").replace("&", "§"));
+                    List<String> lore = ItemConfiguration.get().getStringList("CosmeticMenu." + cosmetic + ".lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
+                    lore.add("§7Cost: §a" + ItemConfiguration.get().getInt("CosmeticMenu." + cosmetic + ".price"));
+                    cosmeticMeta.setLore(lore);
+                    if (cList.contains(cosmetic)) {
+                        cosmeticMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+                        cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&", "§") + " §8(§aOwned§8)");
+                        cosmeticItem.setItemMeta(cosmeticMeta);
+                    }else{
+                        cosmeticMeta.removeEnchant(Enchantment.DURABILITY);
+                        cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&", "§").replace(" §8(§aOwned§8)",""));
+                        cosmeticItem.setItemMeta(cosmeticMeta);
+                    }
+                    cosmeticItem.setItemMeta(cosmeticMeta);
+                    cosmeticMenu.addItem(cosmeticItem);
+                }
+                player.openInventory(cosmeticMenu);
+            }
+            if (kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                e.setCancelled(true);
 
+            }
         }
     }
     @EventHandler
@@ -88,7 +120,36 @@ public class guiStuff implements Listener {
             e.setCancelled(true);
             }
             }
-    }
+        if (e.getView().getTitle().equals("Shop Menu")){
+            e.setCancelled(true);
+            ItemStack item = e.getCurrentItem();
+            Player player = (Player) e.getWhoClicked();
+            if(item!=null && e.getClickedInventory()!= player.getInventory()){
+                PlayerData.load(player);
+                List<String> cosmetics = CosmeticConfiguration.get().getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
+                float playerBal = balanceAPI.getBalance(player);
+                if(playerBal>=ItemConfiguration.get().getInt("CosmeticMenu." + cosmetics.get(e.getSlot()) + ".price")){
+                  List<String> ownedCosmetics = PlayerData.get().getStringList("owned-cosmetics");
+                  if (!ownedCosmetics.contains(cosmetics.get(e.getSlot()))) {
+                      balanceAPI.removeBalance(player, ItemConfiguration.get().getInt("CosmeticMenu." + cosmetics.get(e.getSlot()) + ".price"));
+                      ownedCosmetics.add(cosmetics.get(e.getSlot()));
+                      PlayerData.get().set("owned-cosmetics", ownedCosmetics);
+                      PlayerData.save();
+                      player.closeInventory();
+                      player.sendMessage(MessageConfiguration.get().getString("purchase-success").replace("&", "§").replace("%cosmetic%", cosmetics.get(e.getSlot())));
+                  }else {
+                      player.sendMessage(MessageConfiguration.get().getString("already-owned").replace("&", "§").replace("%cosmetic%", cosmetics.get(e.getSlot())));
+                    player.closeInventory();
+                  }
+                }else{
+                    player.sendMessage(MessageConfiguration.get().getString("not-enough-money").replace("&", "§"));
+                    player.closeInventory();
+                }
+                }           else if(item!=null && e.getClickedInventory()== player.getInventory()) {
+                e.setCancelled(true);
+            }
+            }
+        }
     @EventHandler
     public void onPlayerCloseInventory(InventoryCloseEvent e){
         if (e.getView().getTitle().equals("Cosmetic Menu")){

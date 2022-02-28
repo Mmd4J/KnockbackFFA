@@ -11,4 +11,9 @@ join-arena: '&eYou have joined the game!'
 leave-arena: '&cYou have left the game!'
 arenachangemsg: '&eThe arena has changed to &b%arena%'
 nospawnpoint: '§cAsk an admin to create the spawnpoint so i can get you there!'
+killstreakrecord: "&c You've beaten your previous record of %killstreak% kills!"
+prize: '&c+ &f%prize%'
+purchase-success: "&aYou have successfully purchased %cosmetic%"
+not-enough-money: "&cYou don't have enough money to purchase this item!"
+already-owned: "&cYou already own this item!"
 #You can configure your custom messages here!

@@ -1,6 +1,7 @@
 package me.gameisntover.kbffa.knockbackffa.Placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.gameisntover.kbffa.knockbackffa.API.balanceAPI;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
@@ -47,6 +48,9 @@ public class Expansion extends PlaceholderExpansion
             Player player1 = player.getPlayer();
             PlayerData.load(player1);
             return String.valueOf(PlayerData.get().getInt("deaths"));
+        }
+        if (params.equalsIgnoreCase("player_balance")){
+            return balanceAPI.getBalance(player.getPlayer())+"";
         }
         if (params.equalsIgnoreCase("current_map")) {
             String arenaName = ArenaConfiguration.get().getString("EnabledArena");
