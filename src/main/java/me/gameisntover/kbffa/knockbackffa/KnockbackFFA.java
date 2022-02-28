@@ -53,11 +53,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     @Override
     public void onEnable() {
         INSTANCE = this;
-
         loadCommands();
         loadTasks();
         loadConfig();
         loadListeners();
+
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                 if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
@@ -173,7 +173,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                         current.remove();
                                     }
                                 } else {
-                                    if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE || ((Item) current).getItemStack().getType() == Material.LEGACY_GOLD_PLATE) {
+                                    if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE || ((Item) current).getItemStack().getType() == Material.getMaterial(MaterialLegacy.GOLD_PLATE.name())) {
                                         current.remove();
                                     }
                                     if (((Item) current).getItemStack().getType() == Material.TERRACOTTA) {

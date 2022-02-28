@@ -50,7 +50,7 @@ public class KnockbackFFAKit implements Listener
             kbBowMeta.setUnbreakable(true);
             kbBowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, 3, true);
             kbBow.setItemMeta(kbBowMeta);
-            ItemStack kbArrow = new ItemStack(Material.LEGACY_ARROW, 1);
+            ItemStack kbArrow = new ItemStack(Material.getMaterial(MaterialLegacy.ARROW.name()), 1);
             ItemMeta kbArrowMeta = kbArrow.getItemMeta();
             kbArrowMeta.setDisplayName(ChatColor.AQUA + "Knockback Arrow");
             kbArrow.setItemMeta(kbArrowMeta);
@@ -117,7 +117,7 @@ public class KnockbackFFAKit implements Listener
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
         if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack buildingBlock = new ItemStack(Material.LEGACY_WHITE_GLAZED_TERRACOTTA, amount);
+            ItemStack buildingBlock = new ItemStack(Material.getMaterial(MaterialLegacy.IRON_BLOCK.name()), amount);
             ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
             buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
             buildingBlock.setItemMeta(buildingBlockMeta);
@@ -135,7 +135,7 @@ public class KnockbackFFAKit implements Listener
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
         if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack jumpPlate = new ItemStack(Material.LEGACY_GOLD_PLATE, amount);
+            ItemStack jumpPlate = new ItemStack(Material.getMaterial(MaterialLegacy.GOLD_PLATE.name()), amount);
             ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
             jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
             jumpPlate.setItemMeta(jumpPlateMeta);
@@ -153,7 +153,7 @@ public class KnockbackFFAKit implements Listener
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
         if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack enderpearl = new ItemStack(Material.LEGACY_ENDER_PEARL, amount);
+            ItemStack enderpearl = new ItemStack(Material.getMaterial(MaterialLegacy.ENDER_PEARL.name()), amount);
             ItemMeta enderpearlmeta = enderpearl.getItemMeta();
             enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
             enderpearl.setItemMeta(enderpearlmeta);
