@@ -202,7 +202,7 @@ public class ArenaSettings implements Listener
                 Location location = player.getLocation();
                 if (s1box.contains(location.toVector()) && player.getWorld() == world) {
                     playerArena.put(player, "arena");
-                    if (player.getInventory().isEmpty()) {
+                    player.getInventory().clear();
                         PlayerData.load(player);
                         if (PlayerData.get().getString("selected-kit")== null){
                             PlayerData.get().set("selected-kit","none");
@@ -212,8 +212,6 @@ public class ArenaSettings implements Listener
 
                         }
                         kit.giveKit(player);
-
-                    }
                     break;
                 } else {
                     arenaID++;
