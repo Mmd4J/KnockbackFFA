@@ -2,11 +2,18 @@ name: KnockbackFFA
 version: '${project.version}'
 main: me.gameisntover.kbffa.knockbackffa.KnockbackFFA
 authors: [ GaMeIsNtOvEr ]
-api-version: 1.13
 softdepend:
   - 'PlaceholderAPI'
 description: Knockback ffa is a gamemode which gives every players knockback stick and some other stuffs which makes the game more fun!
 commands:
+  createkit:
+    permission: 'kbffa.command.createkit'
+    description: 'Create a kit'
+    permission-message: §cSorry but you need to have permission for this!
+  delkit:
+    permission: 'kbffa.command.delkit'
+    description: 'Delete a kit'
+    permission-message: §cSorry but you need to have permission for this!
   reload:
     description: reload the config
     permission: kbffa.command.reload

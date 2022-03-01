@@ -19,9 +19,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
@@ -121,16 +118,16 @@ public class DeathListener implements Listener
                 }
                 if (killStreak.get(damager) > PlayerData.get().getInt("best-ks")) {
                     Player damagerP =(Player) damager;
-                    String msg = MessageConfiguration.get().getString("killstreakrecord").replace("%killstreak%", PlayerData.get().getInt("best-ks")+ "").replace("&", "§");
-                    damagerP.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+                    String msg = MessageConfiguration.get().getString("killstreakrecord").replace("%killstreak%", PlayerData.get().getInt("best-ks")+ "");
+                    damagerP.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', msg)));
                     PlayerData.get().set("best-ks", killStreak.get(damager));
                 }
                 PlayerData.save();
-                String deathText = MessageConfiguration.get().getString("deathmessage").replace("&", "§").replace("%killer%", damager.getName());
+                String deathText = MessageConfiguration.get().getString("deathmessage").replace("%killer%", damager.getName());
                 deathText = PlaceholderAPI.setPlaceholders(e.getEntity(), deathText);
-                e.setDeathMessage(deathText);
-            } else if (damager == null) {
-                player.sendMessage(ChatColor.AQUA + "You died by falling into the void");
+                e.setDeathMessage(ChatColor.translateAlternateColorCodes('&', deathText));
+            } else if (damager.equals(null)) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("suicides")));
             }
         }
     }

@@ -22,77 +22,24 @@ import java.util.stream.Collectors;
 
 public class KnockbackFFAKit implements Listener
 {
-
-    public void DefaultKit(OfflinePlayer player) {
-        Player player1 = player.getPlayer();
-        if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack kbstick = new ItemStack(Material.getMaterial(MaterialLegacy.STICK.name()),1);
-            ItemMeta meta = kbstick.getItemMeta();
-            meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
-            meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
-            kbstick.setItemMeta(meta);
-            ItemStack enderpearl = new ItemStack(Material.getMaterial(MaterialLegacy.ENDER_PEARL.name()), 16);
-            ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-            enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
-            enderpearl.setItemMeta(enderpearlmeta);
-            ItemStack jumpPlate = new ItemStack(Material.getMaterial(MaterialLegacy.GOLD_PLATE.name()), 3);
-            ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
-            jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
-            jumpPlate.setItemMeta(jumpPlateMeta);
-            ItemStack buildingBlock = new ItemStack(Material.getMaterial(MaterialLegacy.IRON_BLOCK.name()), 64);
-            ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
-            buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
-            buildingBlock.setItemMeta(buildingBlockMeta);
-            ItemStack kbBow = new ItemStack(Material.getMaterial(MaterialLegacy.BOW.name()), 1);
-            ItemMeta kbBowMeta = kbBow.getItemMeta();
-            kbBowMeta.setDisplayName(ChatColor.AQUA + "Knockback Bow");
-            kbBowMeta.setUnbreakable(true);
-            kbBowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, 3, true);
-            kbBow.setItemMeta(kbBowMeta);
-            ItemStack kbArrow = new ItemStack(Material.getMaterial(MaterialLegacy.ARROW.name()), 1);
-            ItemMeta kbArrowMeta = kbArrow.getItemMeta();
-            kbArrowMeta.setDisplayName(ChatColor.AQUA + "Knockback Arrow");
-            kbArrow.setItemMeta(kbArrowMeta);
-            Inventory pinventory = player1.getInventory();
-            pinventory.clear();
-            pinventory.addItem(kbstick, enderpearl, jumpPlate, buildingBlock, kbBow, kbArrow);
-
-        } else {
-            ItemStack kbstick = new ItemStack(Material.STICK, 1);
-            ItemMeta meta = kbstick.getItemMeta();
-            meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
-            meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
-            kbstick.setItemMeta(meta);
-            ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, 16);
-            ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-            enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
-            enderpearl.setItemMeta(enderpearlmeta);
-            ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 3);
-            ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
-            jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
-            jumpPlate.setItemMeta(jumpPlateMeta);
-            ItemStack buildingBlock = new ItemStack(Material.WHITE_WOOL, 64);
-            ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
-            buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
-            buildingBlock.setItemMeta(buildingBlockMeta);
-            ItemStack kbBow = new ItemStack(Material.BOW, 1);
-            ItemMeta kbBowMeta = kbBow.getItemMeta();
-            kbBowMeta.setDisplayName(ChatColor.AQUA + "Knockback Bow");
-            kbBowMeta.setUnbreakable(true);
-            kbBowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, 3, true);
-            kbBow.setItemMeta(kbBowMeta);
-            ItemStack kbArrow = new ItemStack(Material.ARROW, 1);
-            ItemMeta kbArrowMeta = kbArrow.getItemMeta();
-            kbArrowMeta.setDisplayName(ChatColor.AQUA + "Knockback Arrow");
-            kbArrow.setItemMeta(kbArrowMeta);
-            Inventory pinventory = player1.getInventory();
-            pinventory.clear();
-            pinventory.addItem(kbstick, enderpearl, jumpPlate, buildingBlock, kbBow, kbArrow);
-        }
+    public ItemStack kbStick() {
+        ItemStack kbstick = new ItemStack(Material.getMaterial(MaterialLegacy.STICK.name()),1);
+        ItemMeta meta = kbstick.getItemMeta();
+        meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
+        meta.setUnbreakable(true);
+        meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
+        kbstick.setItemMeta(meta);
+        return kbstick;
     }
-
+    public ItemStack kbBow() {
+        ItemStack kbBow = new ItemStack(Material.getMaterial(MaterialLegacy.BOW.name()), 1);
+        ItemMeta kbBowMeta = kbBow.getItemMeta();
+        kbBowMeta.setDisplayName(ChatColor.AQUA + "Knockback Bow");
+        kbBowMeta.setUnbreakable(true);
+        kbBowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, 3, true);
+        kbBow.setItemMeta(kbBowMeta);
+        return kbBow;
+    }
     public void kbbowArrow(OfflinePlayer player, Integer amount) {
         if (KnockbackFFAAPI.isLegacyVersion()) {
             Player player1 = player.getPlayer();
@@ -113,21 +60,19 @@ public class KnockbackFFAKit implements Listener
         }
     }
 
-    public void BuildingBlock(OfflinePlayer player, Integer amount) {
-        Player player1 = player.getPlayer();
-        Inventory pinventory = player1.getInventory();
+    public ItemStack BuildingBlock() {
         if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack buildingBlock = new ItemStack(Material.getMaterial(MaterialLegacy.IRON_BLOCK.name()), amount);
+            ItemStack buildingBlock = new ItemStack(Material.getMaterial(MaterialLegacy.IRON_BLOCK.name()));
             ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
             buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
             buildingBlock.setItemMeta(buildingBlockMeta);
-            pinventory.addItem(buildingBlock);
+            return  buildingBlock;
         } else {
-            ItemStack buildingBlock = new ItemStack(Material.WHITE_WOOL, amount);
+            ItemStack buildingBlock = new ItemStack(Material.WHITE_WOOL);
             ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
             buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
             buildingBlock.setItemMeta(buildingBlockMeta);
-            pinventory.addItem(buildingBlock);
+            return  buildingBlock;
         }
     }
 
@@ -153,7 +98,7 @@ public class KnockbackFFAKit implements Listener
         Player player1 = player.getPlayer();
         Inventory pinventory = player1.getInventory();
         if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack enderpearl = new ItemStack(Material.getMaterial(MaterialLegacy.ENDER_PEARL.name()), amount);
+            ItemStack enderpearl = new ItemStack(Material.getMaterial(MaterialLegacy.ENDER_PEARL    .name()), amount);
             ItemMeta enderpearlmeta = enderpearl.getItemMeta();
             enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
             enderpearl.setItemMeta(enderpearlmeta);

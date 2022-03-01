@@ -4,6 +4,7 @@ import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.Kits;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
 import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
@@ -202,8 +203,16 @@ public class ArenaSettings implements Listener
                 if (s1box.contains(location.toVector()) && player.getWorld() == world) {
                     playerArena.put(player, "arena");
                     if (player.getInventory().isEmpty()) {
-                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                        kitManager.DefaultKit(player);
+                        PlayerData.load(player);
+                        if (PlayerData.get().getString("selected-kit")== null){
+                            PlayerData.get().set("selected-kit","none");
+                        }
+                        Kits kit = new Kits(PlayerData.get().getString("selected-kit"));
+                        if (PlayerData.get().getString("selected-kit").equalsIgnoreCase("none")){
+
+                        }
+                        kit.giveKit(player);
+
                     }
                     break;
                 } else {

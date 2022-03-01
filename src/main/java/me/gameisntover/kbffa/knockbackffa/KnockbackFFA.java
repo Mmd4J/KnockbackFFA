@@ -173,7 +173,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                         current.remove();
                                     }
                                 } else {
-                                    if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE || ((Item) current).getItemStack().getType() == Material.getMaterial(MaterialLegacy.GOLD_PLATE.name())) {
+                                    if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
                                         current.remove();
                                     }
                                     if (((Item) current).getItemStack().getType() == Material.TERRACOTTA) {
@@ -238,6 +238,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         getCommand("gotoworld").setTabCompleter(new CommandsTabCompleter());
         getCommand("editarena").setExecutor(new ArenaCommands());
         getCommand("setvoid").setExecutor(new Commands());
+        getCommand("createkit").setExecutor(new Commands());
+        getCommand("delkit").setExecutor(new Commands());
     }
 
     @Override
@@ -299,7 +301,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                     @Override
                     public void run() {
                         KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                        kitManager.BuildingBlock(player, 1);
+                        player.getInventory().addItem(kitManager.BuildingBlock());
                     }
                 }, 1);
             }

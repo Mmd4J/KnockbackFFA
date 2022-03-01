@@ -13,15 +13,72 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Commands implements CommandExecutor
 {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
+        if (KnockbackFFA.getInstance().getCommand("createkit").getName().equalsIgnoreCase(command.getName())) {
+            if (p.hasPermission("kbffa.command.createkit")) {
+                if (args.length == 0) {
+                    p.sendMessage(ChatColor.RED + "Usage: /createkit <kitname>");
+                } if (args.length == 1) {
+                    Kits kit = new Kits(args[0]);
+                    kit.get().set("KitContents", Arrays.stream(p.getInventory().getContents()).filter(item -> item != null));
+                    kit.get().set("Price",100);
+                    kit.get().set("KitName",args[0]);
+                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".name",args[0]);
+                    if (p.getInventory().getItemInMainHand()!=null){
+                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".material",p.getInventory().getItemInMainHand().getType().toString());
+                    kit.get().set("KitIcon",p.getInventory().getItemInMainHand().getType().toString());
+                    }else {
+                        kit.get().set("KitIcon","BARRIER");
+                        ItemConfiguration.get().set("CosmeticMenu."+args[0]+".material","BARRIER");
+                    }
+                    List<String> lore = new ArrayList<>();
+                    lore.add("this is a kit");
+                    List<String> defaultKitLore = new ArrayList<>();
+                    defaultKitLore.add(ChatColor.GRAY + "Another cool kit!");
+                    defaultKitLore.add(ChatColor.GRAY + "Must be configured in plugins/KnockbackFFA/kits !");
+                    kit.get().set("KitDescription",defaultKitLore);
+                    kit.save();
+                    ItemConfiguration.get().addDefault("CosmeticMenu."+args[0]+".",null);
+                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".lore",lore);
+                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".price",100);
+                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".type","KIT");
+                    ItemConfiguration.save();
+                    List<String> registeredC = CosmeticConfiguration.get().getStringList("registered-cosmetics");
+                    if (!registeredC.contains(args[0])){
+                        registeredC.add(args[0]);
+                    }
+                    CosmeticConfiguration.get().set("registered-cosmetics",registeredC);
+                    CosmeticConfiguration.save();
+                    p.sendMessage(ChatColor.GREEN + "I've created the kit " + args[0]+ "! now you need to configure it in the plugins plugins/KnockbackFFA/kits!");
+                }
+            }else {
+                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+            }
+        }
+        if (KnockbackFFA.getInstance().getCommand("delkit").getName().equalsIgnoreCase(command.getName())) {
+            if (p.hasPermission("kbffa.command.delkit")) {
+                if (args.length == 0) {
+                    p.sendMessage(ChatColor.RED + "Usage: /delkit <kitname>");
+                }else if (args.length == 1) {
+                    Kits kit = new Kits(args[0]);
+                    kit.getfile().delete();
+
+                    p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0]+ "!");
+                }
+            }
+        }
         if (KnockbackFFA.getInstance().getCommand("join").getName().equalsIgnoreCase(command.getName())) {
             if (!KnockbackFFAAPI.BungeeMode() && !KnockbackFFAAPI.isInGame(p)) {
                 if (KnockbackFFAArena.arenaisReady(1)) {
