@@ -74,14 +74,17 @@ public class Commands implements CommandExecutor
                 }else if (args.length == 1) {
                     Kits kit = new Kits(args[0]);
                     kit.getfile().delete();
-
+                    ItemConfiguration.get().set("CosmeticMenu."+args[0],null);
+                    ItemConfiguration.save();
+                    CosmeticConfiguration.get().set("registered-cosmetics",CosmeticConfiguration.get().getStringList("registered-cosmetics").stream().filter(s -> !s.equalsIgnoreCase(args[0])).collect(Collectors.toList()));
+                    CosmeticConfiguration.save();
                     p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0]+ "!");
                 }
             }
         }
         if (KnockbackFFA.getInstance().getCommand("join").getName().equalsIgnoreCase(command.getName())) {
             if (!KnockbackFFAAPI.BungeeMode() && !KnockbackFFAAPI.isInGame(p)) {
-                if (KnockbackFFAArena.arenaisReady(1)) {
+                    if (KnockbackFFAArena.arenaisReady(1)) {
                     KnockbackFFAArena.teleportPlayertoArena(p.getPlayer());
                     String joinText = MessageConfiguration.get().getString("join-arena").replace("&", "§");
                     joinText = PlaceholderAPI.setPlaceholders(p, joinText);

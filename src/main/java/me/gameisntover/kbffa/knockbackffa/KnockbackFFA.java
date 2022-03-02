@@ -39,13 +39,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public final class KnockbackFFA extends JavaPlugin implements Listener
 {
     public static KnockbackFFA INSTANCE;
     int ArenaID = 0;
-
     public static KnockbackFFA getInstance() {
         return INSTANCE;
     }
@@ -53,11 +53,16 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     @Override
     public void onEnable() {
         INSTANCE = this;
-        loadCommands();
-        loadTasks();
-        loadConfig();
-        loadListeners();
+        if (KnockbackFFAAPI.isLegacyVersion()) {
+            getLogger().info("[KnockbackFFA] : Legacy version detected i don't recommend you to use this version");
+            loadLegacyConfig();
 
+        }else {
+            loadCommands();
+            loadTasks();
+            loadConfig();
+            loadListeners();
+        }
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                 if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
@@ -66,24 +71,41 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 }
             }
         }
-        if (KnockbackFFAAPI.isLegacyVersion()) {
-            getLogger().info("[KnockbackFFA] : Legacy version detected i dont reommend you to use this version");
-        }
+
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getPluginManager().registerEvents(this, this);
             new Expansion(this).register();
         } else {
             getLogger().warning("Could not find placeholder API. This plugin is needed!");
-            Bukkit.getPluginManager().disablePlugin(this);
         }
+        List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+        System.out.println(arenaList);
 
     }
+    private void loadLegacyConfig(){
+        File file = new File(getDataFolder(), "config.yml");
+        File dataFolder = getDataFolder();
+        if (!file.exists()) {
+            getLogger().info("[KnockbackFFA] : Creating DataFolder");
+            dataFolder.mkdir();
+        }
+            getLogger().info("[KnockbackFFA] : Loading Configuration files");
+            CosmeticConfiguration.setup();
+            MessageConfiguration.setup();
+            SoundConfiguration.setup();
+            ArenaConfiguration.setup();
+            ScoreboardConfiguration.setup();
+            ItemConfiguration.setup();
+            saveDefaultConfig();
+        }
 
     private void loadConfig() {
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
+            getLogger().info("[KnockbackFFA] : Creating DataFolder");
             dataFolder.mkdir();
         }
+        getLogger().info("[KnockbackFFA] : Loading Configuration files");
         CosmeticConfiguration.setup();
         MessageConfiguration.setup();
         SoundConfiguration.setup();
@@ -168,11 +190,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
 
                         for (Entity current : entList) {
                             if (current instanceof Item) {
-                                if (KnockbackFFAAPI.isLegacyVersion()) {
-                                    if (((Item) current).getItemStack().getType().getId() == MaterialLegacy.GOLD_PLATE.getId() || ((Item) current).getItemStack().getType().getId() == MaterialLegacy.ARROW.getId() || ((Item) current).getItemStack().getType().getId() == MaterialLegacy.STICK.getId()) {
-                                        current.remove();
-                                    }
-                                } else {
                                     if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
                                         current.remove();
                                     }
@@ -181,7 +198,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                     }
                                 }
                             }
-                        }
                     }
                 }
             }
@@ -211,7 +227,29 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20);
         }
     }
+    private void loadLegacyTasks(){
+        new BukkitRunnable()
+        {
+            @Override
+            public void run() {
+                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
+                        World world = p.getWorld();
+                        List<Entity> entList = world.getEntities();
 
+                        for (Entity current : entList) {
+                            if (current instanceof Item) {
+                                    if (((Item) current).getItemStack().getType().name() == MaterialLegacy.GOLD_PLATE.name() || ((Item) current).getItemStack().getType().name() == MaterialLegacy.ARROW.name() || ((Item) current).getItemStack().getType().name() == MaterialLegacy.STICK.name()) {
+                                        current.remove();
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
+        }.runTaskTimer(this, 0, 5);
+
+    }
     private void loadListeners() {
         getServer().getPluginManager().registerEvents(new NoHunger(), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveListeners(), this);
