@@ -130,25 +130,27 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                         ArenaID++;
                         if (ArenaID <= arenaList.size()) { //checking if arenaID is not higher than last index of arenalist
                             //next arena codes
-                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
+                            String arenaName = arenaList.get(ArenaID-1).replace(".yml","");
+                            ArenaConfiguration.get().set("EnabledArena", arenaName.replace(".yml", ""));
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                 if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
+                                    KnockbackFFAArena.teleportPlayertoArena(p);
                                     KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
                                 }
                             }
                         } else {
                             //arena changes to the first arena
                             ArenaID = 1;
-                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
+                            String arenaName = arenaList.get(ArenaID-1).replace(".yml","");
+                            ArenaConfiguration.get().set("EnabledArena", arenaName.replace(".yml", ""));
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                 if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
+                                    KnockbackFFAArena.teleportPlayertoArena(p);
                                     KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
                                 }
                             }
                         }

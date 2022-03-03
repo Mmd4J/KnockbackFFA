@@ -45,6 +45,9 @@ public class ArenaCommands implements CommandExecutor
                         ArenaData.get().set("arena.pos1.x", loc1.getX());
                         ArenaData.get().set("arena.pos1.y", loc1.getY());
                         ArenaData.get().set("arena.pos1.z", loc1.getZ());
+                        ArenaData.get().set("arena.x", ((Player) sender).getLocation().getX());
+                        ArenaData.get().set("arena.y", ((Player) sender).getLocation().getY());
+                        ArenaData.get().set("arena.z",  ((Player) sender).getLocation().getZ());
                         ArenaData.get().set("arena.pos2.x", loc2.getX());
                         ArenaData.get().set("arena.pos2.y", loc2.getY());
                         ArenaData.get().set("arena.pos2.z", loc2.getZ());
@@ -61,13 +64,6 @@ public class ArenaCommands implements CommandExecutor
                         }
                         if (ArenaConfiguration.get().getString("arena" + arenaID + ".name") == null) {
                             sender.sendMessage(ChatColor.GREEN + "Arena" + arenaID + "has been created!");
-                            ArenaConfiguration.get().set("arena" + arenaID + ".x", ((Player) sender).getLocation().getX());
-                            ArenaConfiguration.get().set("arena" + arenaID + ".y", ((Player) sender).getLocation().getY());
-                            ArenaConfiguration.get().set("arena" + arenaID + ".z", ((Player) sender).getLocation().getZ());
-                            ArenaConfiguration.get().set("arena" + arenaID + ".world", world);
-                            String arenaname = args[0];
-                            ArenaConfiguration.get().set("arena" + arenaID + ".name", arenaname);
-                            ArenaConfiguration.save();
                         }
 
                     }

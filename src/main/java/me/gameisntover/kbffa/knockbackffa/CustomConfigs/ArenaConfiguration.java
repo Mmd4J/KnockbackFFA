@@ -13,7 +13,7 @@ public class ArenaConfiguration
     private static FileConfiguration arenas;
 
     public static void setup() {
-        file = new File("plugins/KnockbackFFA/arenas.yml");
+        file = new File("plugins/KnockbackFFA/zones.yml");
         if (!file.exists()) {
             try {
                 file.createNewFile();

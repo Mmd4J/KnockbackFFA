@@ -57,7 +57,7 @@ public class Expansion extends PlaceholderExpansion
             if (arenaName == null) {
                 return "No Arena";
             } else {
-                return ArenaConfiguration.get().getString(arenaName + ".name");
+                return arenaName;
             }
         }
         return null;
