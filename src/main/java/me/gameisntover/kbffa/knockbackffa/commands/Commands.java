@@ -97,7 +97,7 @@ public class Commands implements CommandExecutor
                         p.getPlayer().getInventory().clear();
                     }
                     MainScoreboard.toggleScoreboard(p, true);
-                    KnockbackFFAAPI.inGamePlayer.put(p.getUniqueId(),true);
+                    KnockbackFFAAPI.setInGamePlayer(p,true);
 
                 } else {
                     sender.sendMessage(MessageConfiguration.get().getString("no-arena-ready").replace("&", "§"));
@@ -120,7 +120,7 @@ public class Commands implements CommandExecutor
                     p.getInventory().setArmorContents(armor.toArray(new ItemStack[armor.size()]));
                 }
                 MainScoreboard.toggleScoreboard(p, false);
-                KnockbackFFAAPI.inGamePlayer.put(p.getUniqueId(),false);
+                KnockbackFFAAPI.setInGamePlayer(p,false);
             } else {
                 p.sendMessage(MessageConfiguration.get().getString("cannotuseleave").replace("&", "§"));
             }

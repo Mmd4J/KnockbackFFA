@@ -56,10 +56,18 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     @Override
     public void onEnable() {
         INSTANCE = this;
+        if(Bukkit.getOnlinePlayers().size() > 0){
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (KnockbackFFAAPI.BungeeMode()) {
+                    KnockbackFFAAPI.setInGamePlayer(player, true);
+                } else {
+                    KnockbackFFAAPI.setInGamePlayer(player, false);
+                }
+            }
+        }
         if (KnockbackFFAAPI.isLegacyVersion()) {
             getLogger().info("[KnockbackFFA] : Legacy version detected i don't recommend you to use this version");
             loadLegacyConfig();
-
         }else {
             loadCommands();
             loadTasks();
@@ -128,6 +136,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                     timer = getConfig().getInt("ArenaChangeTimer");
                     if (arenaList.size() > 1) { //checking if arenaList even has arenas
                         ArenaID++;
+
                         if (ArenaID <= arenaList.size()) { //checking if arenaID is not higher than last index of arenalist
                             //next arena codes
                             String arenaName = arenaList.get(ArenaID-1).replace(".yml","");
@@ -155,6 +164,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                             }
                         }
                     }
+                   else if (arenaList.size() == 1) {
+                        ArenaConfiguration.get().set("EnabledArena", arenaList.get(0).replace(".yml", ""));
+                        ArenaConfiguration.save();
+                    }
 
                 }
             }
@@ -173,9 +186,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                     if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
                                         current.remove();
                                     }
-                                    if (((Item) current).getItemStack().getType() == Material.TERRACOTTA) {
-                                        current.remove();
-                                    }
+
                                 }
                             }
                     }
@@ -258,6 +269,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         getCommand("setvoid").setExecutor(new Commands());
         getCommand("createkit").setExecutor(new Commands());
         getCommand("delkit").setExecutor(new Commands());
+        getCommand("editarena").setTabCompleter(new CommandsTabCompleter());
     }
 
     @Override

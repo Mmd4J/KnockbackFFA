@@ -32,18 +32,18 @@ public class JoinLeaveListeners implements Listener
             } else if (player.isOp() == false) {
                 player.sendMessage(MessageConfiguration.get().getString("nospawnpoint").replace("&", "§"));
             }
-            KnockbackFFAAPI.inGamePlayer.put(player.getUniqueId(),false);
+            KnockbackFFAAPI.setInGamePlayer(player,false);
         } else {
             if (KnockbackFFAAPI.BungeeMode()) {
                 KnockbackFFAArena.teleportPlayertoArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 kitManager.lobbyItems(4,5,6,player);
-                KnockbackFFAAPI.inGamePlayer.put(player.getUniqueId(),true);
+                KnockbackFFAAPI.setInGamePlayer(player,true);
 
             } else if (KnockbackFFAAPI.BungeeMode() == false) {
                 if (!KnockbackFFAAPI.isInGame(player)) {
                     KnockbackFFAArena.leaveArena(player);
-                    KnockbackFFAAPI.inGamePlayer.put(player.getUniqueId(),false);
+                    KnockbackFFAAPI.setInGamePlayer(player,false);
                 }
             }
         }
@@ -58,7 +58,7 @@ public class JoinLeaveListeners implements Listener
         }
         Player player = e.getPlayer();
         if (!KnockbackFFAAPI.BungeeMode()) {
-            KnockbackFFAAPI.inGamePlayer.put(player.getUniqueId(),false);
+            KnockbackFFAAPI.setInGamePlayer(player,false);
         }
     }
 }

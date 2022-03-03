@@ -15,29 +15,26 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.BoundingBox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ArenaSettings implements Listener
-{
+public class ArenaSettings implements Listener {
     public static Map<Player, String> playerArena = new HashMap<>();
-    Integer arenaID1 = 1;
 
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
         if (playerArena.get(player) != null) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
-                for (int i = 1; i <= ArenaData.getfolder().list().length; i++) {
-                    String arenaName = ArenaConfiguration.get().getString("arena" + i + ".name");
+                List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+                for (String arenaName : arenaList) {
+                    ArenaData.load(arenaName.replace(".yml", ""));
                     PlayerData.load(player);
                     if (playerArena.get(player).equalsIgnoreCase("arena")) {
-                        ArenaData.load(arenaName);
                         if (ArenaData.get().getBoolean("block-break")) {
                             e.setCancelled(true);
                         }
@@ -51,11 +48,11 @@ public class ArenaSettings implements Listener
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
-            for (int i = 1; i <= ArenaData.getfolder().list().length; i++) {
-                String arenaName = ArenaConfiguration.get().getString("arena" + i + ".name");
+            List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+            for (String arenaName : arenaList) {
+                ArenaData.load(arenaName.replace(".yml", ""));
                 PlayerData.load(player);
                 if (playerArena.get(player).equalsIgnoreCase("arena")) {
-                    ArenaData.load(arenaName);
                     if (ArenaData.get().getBoolean("item-drop")) {
                         e.setCancelled(false);
                     } else if (!ArenaData.get().getBoolean("item-drop")) {
@@ -75,7 +72,7 @@ public class ArenaSettings implements Listener
                 return;
             } else {
                 if (e.getCurrentItem().getType().equals(Material.DIAMOND_PICKAXE)) {
-                    ArenaData.load(ArenaConfiguration.get().getString("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".name"));
+                    ArenaData.load(ArenaCommands.arenaNameMap.get(e.getWhoClicked().getUniqueId()));
                     if (!ArenaData.get().getBoolean("block-break")) {
                         ArenaData.get().set("block-break", true);
                         ArenaData.save();
@@ -97,7 +94,7 @@ public class ArenaSettings implements Listener
                     }
                 }
                 if (e.getCurrentItem().getType().equals(Material.DIAMOND)) {
-                    ArenaData.load(ArenaConfiguration.get().getString("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".name"));
+                    ArenaData.load(ArenaCommands.arenaNameMap.get(e.getWhoClicked().getUniqueId()));
                     if (!ArenaData.get().getBoolean("item-drop")) {
                         ArenaData.get().set("item-drop", true);
                         ArenaData.save();
@@ -119,21 +116,21 @@ public class ArenaSettings implements Listener
                     }
                 }
                 if (e.getCurrentItem().getType().equals(Material.NETHER_STAR)) {
-                    ArenaData.load(ArenaConfiguration.get().getString("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".name"));
+                    ArenaData.load(ArenaCommands.arenaNameMap.get(e.getWhoClicked().getUniqueId()));
                     Player player = (Player) e.getWhoClicked();
                     double x = player.getLocation().getX();
                     double y = player.getLocation().getY();
                     double z = player.getLocation().getZ();
                     String world = player.getWorld().getName();
-                    ArenaConfiguration.get().set("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".x", x);
-                    ArenaConfiguration.get().set("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".y", y);
-                    ArenaConfiguration.get().set("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".z", z);
-                    ArenaConfiguration.get().set("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".world", world);
+                    ArenaData.get().set("arena.x", x);
+                    ArenaData.get().set("arena.y", y);
+                    ArenaData.get().set("arena.z", z);
+                    ArenaData.get().set("arena.world", world);
                     ArenaConfiguration.save();
                     player.sendMessage(ChatColor.GREEN + "Arena Spawn Location Set!");
                 }
                 if (e.getCurrentItem().getType().equals(Material.REDSTONE_BLOCK)) {
-                    ArenaData.load(ArenaConfiguration.get().getString("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".name"));
+                    ArenaData.load(ArenaCommands.arenaNameMap.get(e.getWhoClicked().getUniqueId()));
                     if (WandListener.pos1m.get(e.getWhoClicked()) != null && WandListener.pos2m.get(e.getWhoClicked()) != null) {
                         Location loc1 = WandListener.pos1m.get(e.getWhoClicked());
                         Location loc2 = WandListener.pos2m.get(e.getWhoClicked());
@@ -153,7 +150,7 @@ public class ArenaSettings implements Listener
                     }
                 }
                 if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
-                    ArenaData.load(ArenaConfiguration.get().getString("arena" + ArenaCommands.arenaidMap.get(e.getWhoClicked().getUniqueId()) + ".name"));
+                    ArenaData.load(ArenaCommands.arenaNameMap.get(e.getWhoClicked().getUniqueId()));
                     if (ArenaData.get().getBoolean("world-border") == false) {
                         ArenaData.get().set("world-border", true);
                         ArenaData.save();
@@ -192,38 +189,38 @@ public class ArenaSettings implements Listener
     @EventHandler
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        Integer arenaID = 1;
-        while (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) {
-            String arenaName = ArenaConfiguration.get().getString("arena" + arenaID + ".name");
-            ArenaData.load(arenaName);
-            if (ArenaData.getfile().exists()) {
+        if (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) {
+            List<String> arenaList = Arrays.asList(Arrays.stream(ArenaData.getfolder().list()).map(s -> {
+                return s.replace(".yml", "");
+            }).toArray(String[]::new));
+            for (String arena : arenaList) {
+                ArenaData.load(arena);
                 BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"), ArenaData.get().getDouble("arena.pos1.y"), ArenaData.get().getDouble("arena.pos1.z"), ArenaData.get().getDouble("arena.pos2.x"), ArenaData.get().getDouble("arena.pos2.y"), ArenaData.get().getDouble("arena.pos2.z"));
                 World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
                 Location location = player.getLocation();
                 if (s1box.contains(location.toVector()) && player.getWorld() == world) {
                     playerArena.put(player, "arena");
-                    player.getInventory().clear();
-                        PlayerData.load(player);
-                        if (PlayerData.get().getString("selected-kit")== null){
-                            PlayerData.get().set("selected-kit","none");
-                        }
-                        Kits kit = new Kits(PlayerData.get().getString("selected-kit"));
-                        if (PlayerData.get().getString("selected-kit").equalsIgnoreCase("none")){
+                    PlayerData.load(player);
+                    if (PlayerData.get().getString("selected-kit") == null) {
+                        PlayerData.get().set("selected-kit", "none");
+                    }
+                    Kits kit = new Kits(PlayerData.get().getString("selected-kit"));
+                    if (PlayerData.get().getString("selected-kit").equalsIgnoreCase("none")) {
 
+                    }
+                    KnockbackFFAKit kits = new KnockbackFFAKit();
+                    for (ItemStack item : player.getInventory().getContents()){
+                        if (item != null){
+                            ItemMeta itemMeta = item.getItemMeta();
+                            if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)||kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)||kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
+                                player.getInventory().clear();
+                                kit.giveKit(player);
+                                break;
+                            }
                         }
-                        kit.giveKit(player);
-                    break;
-                } else {
-                    arenaID++;
+                    }
+                    }
                 }
-            } else if (!ArenaData.getfile().exists() && playerArena.get(player) != null) {
-                if (playerArena.get(player).equals("arena")) {
-                    playerArena.remove(player);
-                    break;
-                }
-            } else {
-                break;
             }
         }
     }
-}

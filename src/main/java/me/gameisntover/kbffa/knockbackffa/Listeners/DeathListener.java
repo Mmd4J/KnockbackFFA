@@ -88,7 +88,6 @@ public class DeathListener implements Listener
         killer.remove(player);
         ArenaSettings.playerArena.remove(player);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
-            KnockbackFFAAPI.loadCosmetic((Player) damager,KnockbackFFAAPI.selectedCosmetic((Player) damager));
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
             scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), () -> {
                 player.spigot().respawn();
@@ -106,6 +105,8 @@ public class DeathListener implements Listener
             PlayerData.get().set("deaths", PlayerData.get().getInt("deaths") + 1);
             PlayerData.save();
             if (damager != null) {
+                    KnockbackFFAAPI.loadCosmetic((Player) damager,KnockbackFFAAPI.selectedCosmetic((Player) damager));
+
                 PlayerData.load((Player) damager);
                 float prize = KnockbackFFA.getInstance().getConfig().getInt("killprize");
                 damager.sendMessage(MessageConfiguration.get().getString("prize").replace("%prize%",prize+"").replace("&", "§"));
@@ -126,8 +127,8 @@ public class DeathListener implements Listener
                 String deathText = MessageConfiguration.get().getString("deathmessage").replace("%killer%", damager.getName());
                 deathText = PlaceholderAPI.setPlaceholders(e.getEntity(), deathText);
                 e.setDeathMessage(ChatColor.translateAlternateColorCodes('&', deathText));
-            } else if (damager.equals(null)) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("suicides")));
+            } else if (damager==null) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("suicide")));
             }
         }
     }

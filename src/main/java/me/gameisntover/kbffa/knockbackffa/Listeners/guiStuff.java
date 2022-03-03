@@ -73,7 +73,6 @@ public class guiStuff implements Listener {
                 }
                 player.openInventory(cosmeticMenu);
             }
-
             if (kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
                 e.setCancelled(true);
                 Inventory shopMenu = Bukkit.createInventory(null, 54, "Shop Menu");

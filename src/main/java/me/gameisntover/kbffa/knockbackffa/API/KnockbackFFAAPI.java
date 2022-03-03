@@ -13,19 +13,25 @@ import java.util.UUID;
 
 public class KnockbackFFAAPI
 {
-   public static Map<UUID , Boolean> inGamePlayer = new HashMap<>();
+   private static Map<UUID , Boolean> inGamePlayer = new HashMap<>();
     public static boolean BungeeMode() {
         return KnockbackFFA.getInstance().getConfig().getBoolean("Bungee-Mode");
     }
 
-    public static boolean isInGame(Player playername) {
-
-        return inGamePlayer.get(playername.getUniqueId());
+    public static boolean isInGame(Player player) {
+        return inGamePlayer.get(player.getUniqueId());
+    }
+    public static void setInGamePlayer(Player player,boolean inGame) {
+        inGamePlayer.put(player.getUniqueId(), inGame);
     }
     public static String selectedCosmetic(Player player) {
         PlayerData.load(player);
         return PlayerData.get().getString("selected-cosmetic");
     }
+    public static String selectedKit(Player player) {
+    PlayerData.load(player);
+    return PlayerData.get().getString("selected-kit");
+}
     public static void loadCosmetic(Player player,String cosmeticName){
         String cosmeticType = CosmeticConfiguration.get().getString(cosmeticName + ".type");
         if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE")){

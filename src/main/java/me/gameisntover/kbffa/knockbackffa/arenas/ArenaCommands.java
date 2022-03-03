@@ -22,7 +22,7 @@ import java.util.*;
 
 public class ArenaCommands implements CommandExecutor
 {
-    public static Map<UUID, Integer> arenaidMap = new HashMap<>();
+    public static Map<UUID, String> arenaNameMap = new HashMap<>();
     int sz = 1;
 
     @Override
@@ -58,23 +58,19 @@ public class ArenaCommands implements CommandExecutor
                             ArenaConfiguration.get().set("EnabledArena", "arena1");
                             ArenaConfiguration.save();
                         }
-                        int arenaID = 1;
-                        while (ArenaConfiguration.get().getString("arena" + arenaID + ".name") != null) {
-                            arenaID++;
-                        }
-                        if (ArenaConfiguration.get().getString("arena" + arenaID + ".name") == null) {
-                            sender.sendMessage(ChatColor.GREEN + "Arena" + arenaID + "has been created!");
-                        }
+                            sender.sendMessage(ChatColor.GREEN + "Arena " + arenaNameMap + " has been created!");
+
 
                     }
                 }
             }
             if (KnockbackFFA.getInstance().getCommand("editarena").getName().equalsIgnoreCase(command.getName())) {
                 if (args.length == 1) {
-                    if (ArenaConfiguration.get().getString("arena" + args[0] + ".name") == null) {
-                        p.sendMessage(ChatColor.RED + "That arena ID does not exist!");
-                    } else if (ArenaConfiguration.get().getString("arena" + args[0] + ".name") != null) {
-                        p.sendMessage(ChatColor.GREEN + "You are now editing arena " + args[0]);
+                    List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+                    if (!arenaList.contains(args[0] + ".yml")) {
+                        p.sendMessage(ChatColor.RED + "That arena name does not exist!");
+                    } else if (arenaList.contains(args[0] + ".yml")) {
+                        p.sendMessage(ChatColor.GREEN + "You are now editing " + args[0]);
                         Inventory arenaGUI = Bukkit.createInventory(null, 54, "Arena Editor");
                         ItemStack blockBreak = new ItemStack(Material.DIAMOND_PICKAXE, 1);
                         ItemMeta blockBreakMeta = blockBreak.getItemMeta();
@@ -97,7 +93,7 @@ public class ArenaCommands implements CommandExecutor
                         List<String>  setspawnLore = new ArrayList<>();
                         List<String>  setposLore = new ArrayList<>();
                         List<String>  worldBorderLore = new ArrayList<>();
-                        String arenaName = ArenaConfiguration.get().getString("arena" + args[0] + ".name");
+                        String arenaName = args[0];
                         ArenaData.load(arenaName);
                         blockBreaklore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
                         blockBreaklore.add(ChatColor.GREEN + "Currently Block Breaking is " + ArenaData.get().getBoolean("block-break"));
@@ -122,8 +118,7 @@ public class ArenaCommands implements CommandExecutor
                         arenaGUI.setItem(13, setpos);
                         arenaGUI.setItem(14, worldBorder);
                         p.openInventory(arenaGUI);
-                        Integer arena = Integer.parseInt(args[0]);
-                        arenaidMap.put(p.getUniqueId(), arena);
+                        arenaNameMap.put(p.getUniqueId(), arenaName);
                     }
                 }
             }
