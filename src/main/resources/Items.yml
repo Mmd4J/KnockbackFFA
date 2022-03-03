@@ -23,3 +23,16 @@ CosmeticMenu:
     price: 100
     lore:
       - '&7Free the power of the end from yourself when you kill someone!'
+ShopMenu:
+  kit:
+    name: "&eKits"
+    material: "STICK"
+    lore:
+      - '&7Click to open the kits shopmenu'
+    slot: 20
+  cosmetic:
+    name: "&7Cosmetic"
+    material: "CHEST"
+    lore:
+      - '&7Click to open the cosmetic shopmenu'
+    slot: 25

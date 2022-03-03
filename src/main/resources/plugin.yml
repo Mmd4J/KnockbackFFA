@@ -60,3 +60,36 @@ commands:
     description: Edits an arena
     permission: kbffa.command.editarena
     permission-message: §cSorry but you need to have permission for this!
+  specialitems:
+    description: GUI with special items for kit creation
+    permission: kbffa.command.specialitems
+    permission-message: §cSorry but you need to have permission for this!
+permissions:
+  kbffa.command.specialitems:
+    default: op
+  kbffa.command.createkit:
+    default: op
+  kbffa.command.delkit:
+    default: op
+  kbffa.command.reload:
+    default: op
+  kbffa.command.wand:
+    default: op
+  kbffa.command.setvoid:
+    default: op
+  kbffa.command.setsafezone:
+    default: op
+  kbffa.command.gotoworld:
+    default: op
+  kbffa.command.leave:
+    default: not op
+  kbffa.command.join:
+    default: not op
+  kbffa.command.createworld:
+    default: op
+  kbffa.command.createarena:
+    default: op
+  kbffa.command.editarena:
+    default: op
+  kbffa.command.setmainlobby:
+    default: op

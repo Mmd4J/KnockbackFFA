@@ -3,6 +3,7 @@ package me.gameisntover.kbffa.knockbackffa.Listeners;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
+import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.API.balanceAPI;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
@@ -92,6 +93,8 @@ public class DeathListener implements Listener
             scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), () -> {
                 player.spigot().respawn();
                 KnockbackFFAArena.teleportPlayertoArena(player);
+                KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                kitManager.lobbyItems(4,5,6,player);
             }, 1);
             World world = player.getWorld();
             List<Entity> entList = world.getEntities();

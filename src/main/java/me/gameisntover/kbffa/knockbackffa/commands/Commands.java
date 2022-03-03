@@ -3,6 +3,7 @@ package me.gameisntover.kbffa.knockbackffa.commands;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
+import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.*;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.arenas.VoidChunkGenerator;
@@ -15,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -158,6 +160,8 @@ public class Commands implements CommandExecutor
             ArenaConfiguration.reload();
             SoundConfiguration.reload();
             ScoreboardConfiguration.reload();
+            ItemConfiguration.reload();
+            CosmeticConfiguration.reload();
             sender.sendMessage(ChatColor.AQUA + "Configs are reloaded!");
         }
         if (KnockbackFFA.getInstance().getCommand("setvoid").getName().equalsIgnoreCase(command.getName())) {
@@ -178,6 +182,17 @@ public class Commands implements CommandExecutor
             } else {
                 sender.sendMessage(ChatColor.RED + "You have to set two positions first!");
             }
+        }
+        if (KnockbackFFA.getInstance().getCommand("specialitems").getName().equalsIgnoreCase(command.getName())) {
+            Inventory specialItems = Bukkit.createInventory(null, 9, "Special Items");
+            KnockbackFFAKit kits = new KnockbackFFAKit();
+            specialItems.addItem(kits.kbStick());
+            specialItems.addItem(kits.kbBow());
+            specialItems.addItem(kits.kbbowArrow());
+            specialItems.addItem(kits.JumpPlate());
+            specialItems.addItem(kits.EnderPearl());
+            specialItems.addItem(kits.BuildingBlock());
+            p.openInventory(specialItems);
         }
         return false;
     }

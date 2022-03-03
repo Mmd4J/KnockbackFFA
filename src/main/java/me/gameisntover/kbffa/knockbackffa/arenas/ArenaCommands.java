@@ -51,6 +51,9 @@ public class ArenaCommands implements CommandExecutor
                         ArenaData.get().set("arena.pos2.x", loc2.getX());
                         ArenaData.get().set("arena.pos2.y", loc2.getY());
                         ArenaData.get().set("arena.pos2.z", loc2.getZ());
+                        ArenaData.get().set("block-break", false);
+                        ArenaData.get().set("item-drop", false);
+                        ArenaData.get().set("world-border", false);
                         String world = p.getWorld().getName();
                         ArenaData.get().set("arena.world", world);
                         ArenaData.save();
@@ -96,7 +99,7 @@ public class ArenaCommands implements CommandExecutor
                         String arenaName = args[0];
                         ArenaData.load(arenaName);
                         blockBreaklore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
-                        blockBreaklore.add(ChatColor.GREEN + "Currently Block Breaking is " + ArenaData.get().getBoolean("block-break"));
+                        blockBreaklore.add(ChatColor.GREEN + "Currently breaking block is " + ArenaData.get().getBoolean("block-break"));
                         itemDropLore.add(ChatColor.GRAY + "Toggle whether or not players can drop items");
                         itemDropLore.add(ChatColor.GREEN + "Currently Item Dropping is " + ArenaData.get().getBoolean("item-drop"));
                         setspawnLore.add(ChatColor.GRAY + "Set the spawnpoint for the arena so players will spawn there");

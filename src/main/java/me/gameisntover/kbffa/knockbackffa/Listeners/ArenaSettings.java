@@ -35,8 +35,10 @@ public class ArenaSettings implements Listener {
                     ArenaData.load(arenaName.replace(".yml", ""));
                     PlayerData.load(player);
                     if (playerArena.get(player).equalsIgnoreCase("arena")) {
-                        if (ArenaData.get().getBoolean("block-break")) {
+                        if (!ArenaData.get().getBoolean("block-break")) {
                             e.setCancelled(true);
+                        }else{
+                            e.setCancelled(false);
                         }
                     }
                 }

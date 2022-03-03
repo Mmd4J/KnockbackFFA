@@ -78,7 +78,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                 if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
                     KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                    kitManager.kbbowArrow(p, 1);
+                    p.getInventory().addItem(kitManager.kbbowArrow());
                 }
             }
         }
@@ -270,6 +270,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         getCommand("createkit").setExecutor(new Commands());
         getCommand("delkit").setExecutor(new Commands());
         getCommand("editarena").setTabCompleter(new CommandsTabCompleter());
+        getCommand("specialitems").setExecutor(new Commands());
     }
 
     @Override

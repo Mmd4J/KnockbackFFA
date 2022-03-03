@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class KnockbackFFAKit implements Listener
 {
     public ItemStack kbStick() {
-        ItemStack kbstick = new ItemStack(Material.getMaterial(MaterialLegacy.STICK.name()),1);
+        ItemStack kbstick = new ItemStack(Material.STICK,1);
         ItemMeta meta = kbstick.getItemMeta();
         meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
         meta.setUnbreakable(true);
@@ -32,7 +32,7 @@ public class KnockbackFFAKit implements Listener
         return kbstick;
     }
     public ItemStack kbBow() {
-        ItemStack kbBow = new ItemStack(Material.getMaterial(MaterialLegacy.BOW.name()), 1);
+        ItemStack kbBow = new ItemStack(Material.BOW, 1);
         ItemMeta kbBowMeta = kbBow.getItemMeta();
         kbBowMeta.setDisplayName(ChatColor.AQUA + "Knockback Bow");
         kbBowMeta.setUnbreakable(true);
@@ -40,76 +40,37 @@ public class KnockbackFFAKit implements Listener
         kbBow.setItemMeta(kbBowMeta);
         return kbBow;
     }
-    public void kbbowArrow(OfflinePlayer player, Integer amount) {
-        if (KnockbackFFAAPI.isLegacyVersion()) {
-            Player player1 = player.getPlayer();
-            ItemStack kbArrow = new ItemStack(Material.getMaterial(MaterialLegacy.ARROW.name()), amount);
+    public ItemStack kbbowArrow() {
+            ItemStack kbArrow = new ItemStack(Material.ARROW);
             ItemMeta kbArrowMeta = kbArrow.getItemMeta();
             kbArrowMeta.setDisplayName(ChatColor.AQUA + "Knockback Arrow");
             kbArrow.setItemMeta(kbArrowMeta);
-            Inventory pinventory = player1.getInventory();
-            pinventory.addItem(kbArrow);
-        } else {
-            Player player1 = player.getPlayer();
-            ItemStack kbArrow = new ItemStack(Material.ARROW, amount);
-            ItemMeta kbArrowMeta = kbArrow.getItemMeta();
-            kbArrowMeta.setDisplayName(ChatColor.AQUA + "Knockback Arrow");
-            kbArrow.setItemMeta(kbArrowMeta);
-            Inventory pinventory = player1.getInventory();
-            pinventory.addItem(kbArrow);
+            return kbArrow;
         }
-    }
 
     public ItemStack BuildingBlock() {
-        if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack buildingBlock = new ItemStack(Material.getMaterial(MaterialLegacy.IRON_BLOCK.name()));
-            ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
-            buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
-            buildingBlock.setItemMeta(buildingBlockMeta);
-            return  buildingBlock;
-        } else {
             ItemStack buildingBlock = new ItemStack(Material.WHITE_WOOL);
             ItemMeta buildingBlockMeta = buildingBlock.getItemMeta();
             buildingBlockMeta.setDisplayName(ChatColor.WHITE + "Building Block");
             buildingBlock.setItemMeta(buildingBlockMeta);
             return  buildingBlock;
         }
-    }
 
-    public void JumpPlate(OfflinePlayer player, Integer amount) {
-        Player player1 = player.getPlayer();
-        Inventory pinventory = player1.getInventory();
-        if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack jumpPlate = new ItemStack(Material.getMaterial(MaterialLegacy.GOLD_PLATE.name()), amount);
+
+    public ItemStack JumpPlate() {
+            ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
             ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
             jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
             jumpPlate.setItemMeta(jumpPlateMeta);
-            pinventory.addItem(jumpPlate);
-        } else {
-            ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, amount);
-            ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
-            jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
-            jumpPlate.setItemMeta(jumpPlateMeta);
-            pinventory.addItem(jumpPlate);
-        }
+            return jumpPlate;
     }
 
-    public void EnderPearl(OfflinePlayer player, Integer amount) {
-        Player player1 = player.getPlayer();
-        Inventory pinventory = player1.getInventory();
-        if (KnockbackFFAAPI.isLegacyVersion()) {
-            ItemStack enderpearl = new ItemStack(Material.getMaterial(MaterialLegacy.ENDER_PEARL    .name()), amount);
+    public ItemStack EnderPearl() {
+            ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL);
             ItemMeta enderpearlmeta = enderpearl.getItemMeta();
             enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
             enderpearl.setItemMeta(enderpearlmeta);
-            pinventory.addItem(enderpearl);
-        } else {
-            ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL, amount);
-            ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-            enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
-            enderpearl.setItemMeta(enderpearlmeta);
-            pinventory.addItem(enderpearl);
-        }
+            return enderpearl;
     }
     public ItemStack cosmetic() {
          ItemStack cosmetics = new ItemStack(Material.getMaterial(ItemConfiguration.get().getString("LobbyItems.cosmetic.material")));
