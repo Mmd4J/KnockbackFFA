@@ -47,7 +47,7 @@ import java.util.Random;
 public final class KnockbackFFA extends JavaPlugin implements Listener
 {
     public static KnockbackFFA INSTANCE;
-    int ArenaID = -1;
+    int ArenaID = 0;
     Integer timer = 0;
     public static KnockbackFFA getInstance() {
         return INSTANCE;
@@ -126,11 +126,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 if (timer == 0) {
                     //what should happen when timer is up
                     timer = getConfig().getInt("ArenaChangeTimer");
-                    ArenaID++;
                     if (arenaList.size() > 1) { //checking if arenaList even has arenas
-                        if (ArenaID <= arenaList.size() - 1) { //checking if arenaID is not higher than last index of arenalist
+                        ArenaID++;
+                        if (ArenaID <= arenaList.size()) { //checking if arenaID is not higher than last index of arenalist
                             //next arena codes
-                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID++);
+                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                 if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
@@ -141,12 +141,12 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                             }
                         } else {
                             //arena changes to the first arena
-                            ArenaID = 0;
-                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID++);
+                            ArenaID = 1;
+                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                 if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID++);
+                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
                                     KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                     p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
                                 }
