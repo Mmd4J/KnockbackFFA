@@ -9,6 +9,7 @@ import me.gameisntover.kbffa.knockbackffa.Listeners.DeathListener;
 import me.gameisntover.kbffa.knockbackffa.Listeners.NoHunger;
 import me.gameisntover.kbffa.knockbackffa.Listeners.guiStuff;
 import me.gameisntover.kbffa.knockbackffa.Placeholders.Expansion;
+import me.gameisntover.kbffa.knockbackffa.arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
 import me.gameisntover.kbffa.knockbackffa.arenas.GameRules;
 import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
@@ -41,11 +42,13 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public final class KnockbackFFA extends JavaPlugin implements Listener
 {
     public static KnockbackFFA INSTANCE;
-    int ArenaID = 0;
+    int ArenaID = -1;
+    Integer timer = 0;
     public static KnockbackFFA getInstance() {
         return INSTANCE;
     }
@@ -78,9 +81,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         } else {
             getLogger().warning("Could not find placeholder API. This plugin is needed!");
         }
-        List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
-        System.out.println(arenaList);
-
     }
     private void loadLegacyConfig(){
         File file = new File(getDataFolder(), "config.yml");
@@ -117,7 +117,28 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     }
 
     private void loadTasks() {
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+        List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+        timer=getConfig().getInt("ArenaChangeTimer");
+        new BukkitRunnable(){
+            @Override
+            public void run(){
+                timer--;
+                if (timer==0) {
+                    timer = getConfig().getInt("ArenaChangeTimer");
+                    ArenaID ++;
+                    if (arenaList.size() > 0) {
+                        if (ArenaID <= arenaList.size()-1) {
+                            Bukkit.broadcastMessage(arenaList.get(ArenaID));
+                        }else {
+                            ArenaID = 0;
+                            Bukkit.broadcastMessage(arenaList.get(ArenaID)+"reset");
+                        }
+                    }
+                }
+
+            }
+        }.runTaskTimer(this,0, 20);
+        /*BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
         scheduler.scheduleSyncRepeatingTask(this, new Runnable()
         {
             @Override
@@ -178,7 +199,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                     }
                 }
             }
-        }, 0, getConfig().getInt("ArenaChangeTimer") * 20);
+        }, 0, getConfig().getInt("ArenaChangeTimer") * 20);*/
         new BukkitRunnable()
         {
             @Override
