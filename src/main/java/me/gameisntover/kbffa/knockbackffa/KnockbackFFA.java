@@ -121,85 +121,42 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         timer=getConfig().getInt("ArenaChangeTimer");
         new BukkitRunnable(){
             @Override
-            public void run(){
+            public void run() {
                 timer--;
-                if (timer==0) {
+                if (timer == 0) {
+                    //what should happen when timer is up
                     timer = getConfig().getInt("ArenaChangeTimer");
-                    ArenaID ++;
-                    if (arenaList.size() > 0) {
-                        if (ArenaID <= arenaList.size()-1) {
-                            Bukkit.broadcastMessage(arenaList.get(ArenaID));
-                        }else {
+                    ArenaID++;
+                    if (arenaList.size() > 1) { //checking if arenaList even has arenas
+                        if (ArenaID <= arenaList.size() - 1) { //checking if arenaID is not higher than last index of arenalist
+                            //next arena codes
+                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID++);
+                            ArenaConfiguration.save();
+                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
+                                    KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
+                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                                }
+                            }
+                        } else {
+                            //arena changes to the first arena
                             ArenaID = 0;
-                            Bukkit.broadcastMessage(arenaList.get(ArenaID)+"reset");
+                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID++);
+                            ArenaConfiguration.save();
+                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID++);
+                                    KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
+                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
+                                }
+                            }
                         }
                     }
-                }
 
+                }
             }
         }.runTaskTimer(this,0, 20);
-        /*BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(this, new Runnable()
-        {
-            @Override
-            public void run() {
-                if (KnockbackFFAArena.arenaisReady(1)) {
-                    ArenaID++;
-                    if (KnockbackFFAArena.arenaisReady(ArenaID) && ArenaID != KnockbackFFAArena.getEnabledArenaint()) {
-                        ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
-                        ArenaConfiguration.save();
-                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
-                                KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
-                            }
-                        }
-                    } else if (!KnockbackFFAArena.arenaisReady(ArenaID)) {
-                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArenaint()) {
-                            ArenaID = ArenaID + 1;
-                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
-                            ArenaConfiguration.save();
-                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
-                                    KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
-                                }
-                            }
-                        } else {
-                            ArenaID = 0;
-                        }
-                    }
-                    if (KnockbackFFAArena.arenaisReady(ArenaID) && ArenaID != KnockbackFFAArena.getEnabledArenaint()) {
-                        ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
-                        ArenaConfiguration.save();
-                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
-                                KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
-                            }
-                        }
-                    } else if (!KnockbackFFAArena.arenaisReady(ArenaID)) {
-                        if (KnockbackFFAArena.arenaisReady(ArenaID + 1) && ArenaID + 1 != KnockbackFFAArena.getEnabledArenaint()) {
-                            ArenaID = ArenaID + 1;
-                            ArenaConfiguration.get().set("EnabledArena", "arena" + ArenaID);
-                            ArenaConfiguration.save();
-                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
-                                    KnockbackFFAArena.teleportPlayertoArena(p, ArenaID);
-                                    KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                    p.sendMessage(MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", ArenaConfiguration.get().getString("arena" + ArenaID + ".name")).replace("&", "§"));
-                                }
-                            }
-                        } else {
-                            ArenaID = 0;
-                        }
-                    }
-                }
-            }
-        }, 0, getConfig().getInt("ArenaChangeTimer") * 20);*/
         new BukkitRunnable()
         {
             @Override
