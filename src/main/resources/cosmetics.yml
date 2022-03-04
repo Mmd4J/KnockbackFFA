@@ -2,5 +2,10 @@ EndKillEffect:
   type: 'KILL_PARTICLE'
   effect-type: 'DRAGON_BREATH'
   amount: 20
+  icon: "ENDER_PEARL"
+  name: "&5End Kill Effect"
+  price: 100
+  lore:
+    - '&7Free the power of the end from yourself when you kill someone!'
 registered-cosmetics:
   - 'EndKillEffect'

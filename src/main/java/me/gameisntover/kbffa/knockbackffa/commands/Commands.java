@@ -34,16 +34,14 @@ public class Commands implements CommandExecutor
                     p.sendMessage(ChatColor.RED + "Usage: /createkit <kitname>");
                 } if (args.length == 1) {
                     Kits kit = new Kits(args[0]);
-                    kit.get().set("KitContents", Arrays.stream(p.getInventory().getContents()).filter(item -> item != null));
+                    List<ItemStack> kitItems = Arrays.asList(Arrays.stream(p.getInventory().getContents()).filter(item -> item != null).toArray(ItemStack[]::new));
+                    kit.get().set("KitContents", kitItems);
                     kit.get().set("Price",100);
                     kit.get().set("KitName",args[0]);
-                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".name",args[0]);
                     if (p.getInventory().getItemInMainHand()!=null){
-                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".material",p.getInventory().getItemInMainHand().getType().toString());
                     kit.get().set("KitIcon",p.getInventory().getItemInMainHand().getType().toString());
                     }else {
                         kit.get().set("KitIcon","BARRIER");
-                        ItemConfiguration.get().set("CosmeticMenu."+args[0]+".material","BARRIER");
                     }
                     List<String> lore = new ArrayList<>();
                     lore.add("this is a kit");
@@ -52,17 +50,6 @@ public class Commands implements CommandExecutor
                     defaultKitLore.add(ChatColor.GRAY + "Must be configured in plugins/KnockbackFFA/kits !");
                     kit.get().set("KitDescription",defaultKitLore);
                     kit.save();
-                    ItemConfiguration.get().addDefault("CosmeticMenu."+args[0]+".",null);
-                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".lore",lore);
-                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".price",100);
-                    ItemConfiguration.get().set("CosmeticMenu."+args[0]+".type","KIT");
-                    ItemConfiguration.save();
-                    List<String> registeredC = CosmeticConfiguration.get().getStringList("registered-cosmetics");
-                    if (!registeredC.contains(args[0])){
-                        registeredC.add(args[0]);
-                    }
-                    CosmeticConfiguration.get().set("registered-cosmetics",registeredC);
-                    CosmeticConfiguration.save();
                     p.sendMessage(ChatColor.GREEN + "I've created the kit " + args[0]+ "! now you need to configure it in the plugins plugins/KnockbackFFA/kits!");
                 }
             }else {
@@ -76,10 +63,6 @@ public class Commands implements CommandExecutor
                 }else if (args.length == 1) {
                     Kits kit = new Kits(args[0]);
                     kit.getfile().delete();
-                    ItemConfiguration.get().set("CosmeticMenu."+args[0],null);
-                    ItemConfiguration.save();
-                    CosmeticConfiguration.get().set("registered-cosmetics",CosmeticConfiguration.get().getStringList("registered-cosmetics").stream().filter(s -> !s.equalsIgnoreCase(args[0])).collect(Collectors.toList()));
-                    CosmeticConfiguration.save();
                     p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0]+ "!");
                 }
             }

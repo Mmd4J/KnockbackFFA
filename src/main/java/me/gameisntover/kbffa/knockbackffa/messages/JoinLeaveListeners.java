@@ -7,6 +7,7 @@ import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+import me.gameisntover.kbffa.knockbackffa.scoreboard.MainScoreboard;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +38,8 @@ public class JoinLeaveListeners implements Listener
             if (KnockbackFFAAPI.BungeeMode()) {
                 KnockbackFFAArena.teleportPlayertoArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                kitManager.lobbyItems(4,5,6,player);
+                player.getInventory().clear();
+                kitManager.lobbyItems(player);
                 KnockbackFFAAPI.setInGamePlayer(player,true);
 
             } else if (KnockbackFFAAPI.BungeeMode() == false) {
@@ -57,6 +59,7 @@ public class JoinLeaveListeners implements Listener
             e.setQuitMessage(leaveText);
         }
         Player player = e.getPlayer();
+        MainScoreboard.toggleScoreboard(player,false);
         if (!KnockbackFFAAPI.BungeeMode()) {
             KnockbackFFAAPI.setInGamePlayer(player,false);
         }

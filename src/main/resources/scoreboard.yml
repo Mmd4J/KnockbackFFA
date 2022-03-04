@@ -4,8 +4,9 @@ lines:
   - '&6Welcome to &l&ethe server!'
   - ''
   - '&6Players&f : %server_online%/%server_max_players%'
-  - ''
   - '&6 Kills&f : %advancedknockbackffa_player_kills%'
   - '&6 Deaths&f : %advancedknockbackffa_player_deaths%'
   - '&6 CurrentMap : &e%advancedknockbackffa_current_map%'
+  - '&6 Next map : &e%advancedknockbackffa_next_map%'
+  - '&6 Next map in : &e%advancedknockbackffa_timer_nextmap%'
 #The Scoreboard (you can add lines too!

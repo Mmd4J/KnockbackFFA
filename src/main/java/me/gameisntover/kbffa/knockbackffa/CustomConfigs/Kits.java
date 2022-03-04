@@ -42,11 +42,11 @@ public class Kits
         config = YamlConfiguration.loadConfiguration(cfile);
     }
 
-    public File getfolder() {
+    public static File getfolder() {
         return folder;
     }
 
-    public File getfile() {
+    public static File getfile() {
         return cfile;
     }
 

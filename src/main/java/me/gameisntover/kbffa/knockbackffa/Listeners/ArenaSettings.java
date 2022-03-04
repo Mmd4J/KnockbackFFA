@@ -28,7 +28,7 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
-        if (playerArena.get(player) != null) {
+        if (playerArena.get(player) == "arena") {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
                 List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
                 for (String arenaName : arenaList) {
@@ -221,8 +221,14 @@ public class ArenaSettings implements Listener {
                             }
                         }
                     }
+                    } if (!s1box.contains(location.toVector()) && player.getWorld() != world){
+                    if (playerArena.get(player)==null || playerArena.get(player).equalsIgnoreCase("arena")) {
+                        playerArena.put(player,"not-arena");
+                        //problem! it always sets the player arena to not arena
                     }
                 }
-            }
+                }
+
+        }
         }
     }

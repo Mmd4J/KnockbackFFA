@@ -75,9 +75,6 @@ public class GameRules implements Listener
                         Location location = player.getLocation();
                         if (s1box.contains(location.toVector()) && player.getWorld() == s1world) {
                             player.setInvulnerable(true);
-                            PlayerData.load(player);
-                            ArenaSettings.playerArena.put(player, "safezone");
-                            PlayerData.save();
                             cancel();
                             arenaID = 1;
                         } else {

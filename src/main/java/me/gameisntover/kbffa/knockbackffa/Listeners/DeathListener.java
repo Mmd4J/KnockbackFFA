@@ -94,7 +94,7 @@ public class DeathListener implements Listener
                 player.spigot().respawn();
                 KnockbackFFAArena.teleportPlayertoArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                kitManager.lobbyItems(4,5,6,player);
+                kitManager.lobbyItems(player);
             }, 1);
             World world = player.getWorld();
             List<Entity> entList = world.getEntities();

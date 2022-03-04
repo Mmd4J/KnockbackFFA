@@ -61,7 +61,7 @@ public class ArenaCommands implements CommandExecutor
                             ArenaConfiguration.get().set("EnabledArena", "arena1");
                             ArenaConfiguration.save();
                         }
-                            sender.sendMessage(ChatColor.GREEN + "Arena " + arenaNameMap + " has been created!");
+                            sender.sendMessage(ChatColor.GREEN + "Arena " + args [0] + " has been created!");
 
 
                     }

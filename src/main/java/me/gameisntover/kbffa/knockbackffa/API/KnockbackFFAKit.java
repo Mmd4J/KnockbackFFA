@@ -115,7 +115,7 @@ public class KnockbackFFAKit implements Listener
         shopMeta.setLore(shopLore);
         return shopMeta;
     }
-    public void lobbyItems(Integer shopSlot, Integer cosmeticSlot, Integer kitsSlot, Player player){
+    public void lobbyItems(Player player){
         Inventory pinventory = player.getInventory();
         ItemStack cosmeticMenu = cosmetic();
         ItemMeta cosmeticMeta = cosmeticMeta();
@@ -126,9 +126,9 @@ public class KnockbackFFAKit implements Listener
         cosmeticMenu.setItemMeta(cosmeticMeta);
         kitsMenu.setItemMeta(kitsMeta);
         shop.setItemMeta(shopMeta);
-        pinventory.setItem(shopSlot, shop);
-        pinventory.setItem(cosmeticSlot, cosmeticMenu);
-        pinventory.setItem(kitsSlot, kitsMenu);
+        pinventory.setItem(ItemConfiguration.get().getInt("LobbyItems.shop.slot"), shop);
+        pinventory.setItem(ItemConfiguration.get().getInt("LobbyItems.cosmetic.slot"), cosmeticMenu);
+        pinventory.setItem(ItemConfiguration.get().getInt("LobbyItems.kits.slot"), kitsMenu);
     }
     @EventHandler
     public void onEndermiteSpawn(CreatureSpawnEvent e) {
