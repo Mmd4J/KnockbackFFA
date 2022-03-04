@@ -195,39 +195,42 @@ public class ArenaSettings implements Listener {
             List<String> arenaList = Arrays.asList(Arrays.stream(ArenaData.getfolder().list()).map(s -> {
                 return s.replace(".yml", "");
             }).toArray(String[]::new));
+            Location loc1 = null;
+            Location loc2 = null;
             for (String arena : arenaList) {
                 ArenaData.load(arena);
                 BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"), ArenaData.get().getDouble("arena.pos1.y"), ArenaData.get().getDouble("arena.pos1.z"), ArenaData.get().getDouble("arena.pos2.x"), ArenaData.get().getDouble("arena.pos2.y"), ArenaData.get().getDouble("arena.pos2.z"));
                 World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
                 Location location = player.getLocation();
                 if (s1box.contains(location.toVector()) && player.getWorld() == world) {
-                    playerArena.put(player, "arena");
-                    PlayerData.load(player);
-                    if (PlayerData.get().getString("selected-kit") == null) {
-                        PlayerData.get().set("selected-kit", "none");
+                    loc1 = new Location(world, ArenaData.get().getDouble("arena.pos1.x"), ArenaData.get().getDouble("arena.pos1.y"), ArenaData.get().getDouble("arena.pos1.z"));
+                    loc2 = new Location(world, ArenaData.get().getDouble("arena.pos2.x"), ArenaData.get().getDouble("arena.pos2.y"), ArenaData.get().getDouble("arena.pos2.z"));
                     }
-                    Kits kit = new Kits(PlayerData.get().getString("selected-kit"));
-                    if (PlayerData.get().getString("selected-kit").equalsIgnoreCase("none")) {
-
-                    }
-                    KnockbackFFAKit kits = new KnockbackFFAKit();
-                    for (ItemStack item : player.getInventory().getContents()){
-                        if (item != null){
-                            ItemMeta itemMeta = item.getItemMeta();
-                            if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)||kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)||kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
-                                player.getInventory().clear();
-                                kit.giveKit(player);
-                                break;
-                            }
+                }
+            if (loc1 != null && loc2 != null) {
+                playerArena.put(player, "arena");
+                PlayerData.load(player);
+                if (PlayerData.get().getString("selected-kit") == null) {
+                    PlayerData.get().set("selected-kit", "Default");
+                }
+                Kits kit = new Kits(PlayerData.get().getString("selected-kit"));
+                KnockbackFFAKit kits = new KnockbackFFAKit();
+                for (ItemStack item : player.getInventory().getContents()){
+                    if (item != null){
+                        ItemMeta itemMeta = item.getItemMeta();
+                        if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)||kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)||kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
+                            player.getInventory().clear();
+                            kit.giveKit(player);
+                            break;
                         }
                     }
-                    } if (!s1box.contains(location.toVector()) && player.getWorld() != world){
-                    if (playerArena.get(player)==null || playerArena.get(player).equalsIgnoreCase("arena")) {
-                        playerArena.put(player,"not-arena");
-                        //problem! it always sets the player arena to not arena
-                    }
                 }
+            }else {
+                if (playerArena.get(player)==null || playerArena.get(player).equalsIgnoreCase("arena")) {
+                    //problem! it always sets the player arena to not arena
+                    playerArena.put(player,"not-arena");
                 }
+            }
 
         }
         }
