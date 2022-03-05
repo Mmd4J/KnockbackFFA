@@ -6,7 +6,7 @@ import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.Kits;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
-import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
+import me.gameisntover.kbffa.knockbackffa.commands.ArenaCommands;
 import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -227,7 +227,6 @@ public class ArenaSettings implements Listener {
                 }
             }else {
                 if (playerArena.get(player)==null || playerArena.get(player).equalsIgnoreCase("arena")) {
-                    //problem! it always sets the player arena to not arena
                     playerArena.put(player,"not-arena");
                 }
             }

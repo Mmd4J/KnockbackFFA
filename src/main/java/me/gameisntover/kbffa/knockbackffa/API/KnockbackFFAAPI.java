@@ -40,6 +40,9 @@ public class KnockbackFFAAPI
         else if (cosmeticType.equalsIgnoreCase("KILL_EFFECT")){
             player.playEffect(EntityEffect.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")));
         }
+        if (CosmeticConfiguration.get().getString("sound")!=null){
+            player.playSound(player.getLocation(), Sound.valueOf(CosmeticConfiguration.get().getString(cosmeticName +".sound")), CosmeticConfiguration.get().getInt(cosmeticName +".volume"), CosmeticConfiguration.get().getInt(cosmeticName +".pitch"));
+        }
     }
     public static boolean isLegacyVersion() {
         return Bukkit.getVersion().contains("1.8") || Bukkit.getVersion().contains("1.9") || Bukkit.getVersion().contains("1.10") || Bukkit.getVersion().contains("1.11") || Bukkit.getVersion().contains("1.12");

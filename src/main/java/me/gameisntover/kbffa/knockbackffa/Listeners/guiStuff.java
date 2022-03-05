@@ -98,6 +98,9 @@ public class guiStuff implements Listener {
                             Kits kitItems = new Kits(kit);
                                 if (kitItems.get().getString("KitIcon") != null||kitItems.get().getString("KitIcon")!="AIR") {
                                     ItemStack kitItem = new ItemStack(Material.getMaterial(kitItems.get().getString("KitIcon")));
+                                if (kitItem.getType()==Material.AIR){
+                                    kitItem.setType(Material.BARRIER);
+                                }
                                     ItemMeta kitMeta = kits.guiItemMeta(kitItem);
                                     kitMeta.setDisplayName(kitItems.get().getString("KitName").replace("&", "§"));
                                     kitMeta.setLore(kitItems.get().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
@@ -169,7 +172,10 @@ public class guiStuff implements Listener {
                         cosmetic = cosmetic.replace(".yml", "");
                             Kits kit = new Kits(cosmetic.replace(".yml",""));
                                 ItemStack cosmeticItem = new ItemStack(Material.getMaterial(kit.get().getString("KitIcon")));
-                            ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticItem);
+                            if (cosmeticItem.getType()==Material.AIR){
+                                cosmeticItem.setType(Material.BARRIER);
+                            }
+                                ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticItem);
                             cosmeticMeta.setDisplayName(kit.get().getString("KitName").replace("&", "§"));
                             List<String> lore = kit.get().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
                             lore.add("§7Cost: §a" + kit.get().getInt("Price"));

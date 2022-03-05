@@ -25,25 +25,25 @@ public class KnockbackFFAKit implements Listener
     public ItemStack kbStick() {
         ItemStack kbstick = new ItemStack(Material.STICK,1);
         ItemMeta meta = kbstick.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + "Knocbkack Stick");
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&',ItemConfiguration.get().getString("SpecialItems.KBStick.name")));
         meta.setUnbreakable(true);
-        meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
+        meta.addEnchant(Enchantment.KNOCKBACK, ItemConfiguration.get().getInt("SpecialItems.KBStick.kb-level"), true);
         kbstick.setItemMeta(meta);
         return kbstick;
     }
     public ItemStack kbBow() {
         ItemStack kbBow = new ItemStack(Material.BOW, 1);
         ItemMeta kbBowMeta = kbBow.getItemMeta();
-        kbBowMeta.setDisplayName(ChatColor.AQUA + "Knockback Bow");
+        kbBowMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',ItemConfiguration.get().getString("SpecialItems.KBBow.name")));
         kbBowMeta.setUnbreakable(true);
-        kbBowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, 3, true);
+        kbBowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, ItemConfiguration.get().getInt("SpecialItems.KBBow.kb-level"), true);
         kbBow.setItemMeta(kbBowMeta);
         return kbBow;
     }
     public ItemStack kbbowArrow() {
             ItemStack kbArrow = new ItemStack(Material.ARROW);
             ItemMeta kbArrowMeta = kbArrow.getItemMeta();
-            kbArrowMeta.setDisplayName(ChatColor.AQUA + "Knockback Arrow");
+            kbArrowMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',ItemConfiguration.get().getString("SpecialItems.KBArrow.name")));
             kbArrow.setItemMeta(kbArrowMeta);
             return kbArrow;
         }
@@ -60,15 +60,14 @@ public class KnockbackFFAKit implements Listener
     public ItemStack JumpPlate() {
             ItemStack jumpPlate = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
             ItemMeta jumpPlateMeta = jumpPlate.getItemMeta();
-            jumpPlateMeta.setDisplayName(ChatColor.YELLOW + "Jump Plate");
+            jumpPlateMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',ItemConfiguration.get().getString("SpecialItems.JumpPlate.name")));
             jumpPlate.setItemMeta(jumpPlateMeta);
             return jumpPlate;
     }
-
     public ItemStack EnderPearl() {
             ItemStack enderpearl = new ItemStack(Material.ENDER_PEARL);
             ItemMeta enderpearlmeta = enderpearl.getItemMeta();
-            enderpearlmeta.setDisplayName(ChatColor.GREEN + "Ender Pearl");
+            enderpearlmeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',ItemConfiguration.get().getString("SpecialItems.EnderPearl.name")));
             enderpearl.setItemMeta(enderpearlmeta);
             return enderpearl;
     }

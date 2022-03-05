@@ -3,30 +3,33 @@ package me.gameisntover.kbffa.knockbackffa.arenas;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ItemConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.Listeners.ArenaSettings;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 
 public class GameRules implements Listener
 {
     Integer arenaID = 1;
-
     @EventHandler
     public void playerMove(PlayerMoveEvent e) {
         if (KnockbackFFAAPI.isInGame(e.getPlayer()) || KnockbackFFAAPI.BungeeMode()) {
@@ -68,6 +71,7 @@ public class GameRules implements Listener
             {
                 @Override
                 public void run() {
+
                     if (ArenaConfiguration.get().getString("Safezones." + arenaID + ".Safezone.world") != null) {
                         BoundingBox s1box = new BoundingBox(ArenaConfiguration.get().getDouble("Safezones." + arenaID + ".Safezone.pos1.x"), ArenaConfiguration.get().getDouble("Safezones." + arenaID + ".Safezone.pos1.y"), ArenaConfiguration.get().getDouble("Safezones." + arenaID + ".Safezone.pos1.z"), ArenaConfiguration.get().getDouble("Safezones." + arenaID + ".Safezone.pos2.x"), ArenaConfiguration.get().getDouble("Safezones." + arenaID + ".Safezone.pos2.y"), ArenaConfiguration.get().getDouble("Safezones." + arenaID + ".Safezone.pos2.z"));
                         World s1world = Bukkit.getWorld(ArenaConfiguration.get().getString("Safezones." + arenaID + ".Safezone.world"));

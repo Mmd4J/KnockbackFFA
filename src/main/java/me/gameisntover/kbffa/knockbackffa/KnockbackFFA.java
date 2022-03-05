@@ -9,8 +9,7 @@ import me.gameisntover.kbffa.knockbackffa.Listeners.DeathListener;
 import me.gameisntover.kbffa.knockbackffa.Listeners.NoHunger;
 import me.gameisntover.kbffa.knockbackffa.Listeners.guiStuff;
 import me.gameisntover.kbffa.knockbackffa.Placeholders.Expansion;
-import me.gameisntover.kbffa.knockbackffa.arena.Arena;
-import me.gameisntover.kbffa.knockbackffa.arenas.ArenaCommands;
+import me.gameisntover.kbffa.knockbackffa.commands.ArenaCommands;
 import me.gameisntover.kbffa.knockbackffa.arenas.GameRules;
 import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import me.gameisntover.kbffa.knockbackffa.commands.Commands;
@@ -35,14 +34,17 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public final class KnockbackFFA extends JavaPlugin implements Listener
 {
@@ -69,10 +71,15 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             getLogger().info("[KnockbackFFA] : Legacy version detected i don't recommend you to use this version");
             loadLegacyConfig();
         }else {
+            getLogger().info("[KnockbackFFA] : Loading Commands");
             loadCommands();
+            getLogger().info("[KnockbackFFA] : Loading Configuration Files");
             loadConfig();
+            getLogger().info("[KnockbackFFA] : Loading Java Classes");
             loadListeners();
+            getLogger().info("[KnockbackFFA] : Loading Tasks");
             loadTasks();
+            getLogger().info("[KnockbackFFA] : Enjoy using plugin :)");
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
@@ -113,7 +120,17 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             getLogger().info("[KnockbackFFA] : Creating DataFolder");
             dataFolder.mkdir();
         }
-        getLogger().info("[KnockbackFFA] : Loading Configuration files");
+         File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
+        if (!folder.exists()) {
+            folder.mkdir();
+            File file = new File("plugins/KnockbackFFA/Kits/Default.yml");
+            try {
+                file.createNewFile();
+                Files.copy(KnockbackFFA.getInstance().getResource("Default.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                getLogger().info("[KnockbackFFA] : Default Kit Created");
+            } catch (IOException e) {
+            }
+        }
         CosmeticConfiguration.setup();
         MessageConfiguration.setup();
         SoundConfiguration.setup();
@@ -289,6 +306,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             PlayerData.load(player);
             PlayerData.get().set("deaths", 0);
             PlayerData.get().set("kills", 0);
+            PlayerData.get().set("owned-kits",PlayerData.get().getStringList("owned-kits").add("Default"));
+            PlayerData.get().set("selected-kit","Default");
             PlayerData.save();
         }
     }
@@ -311,7 +330,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 {
                     @Override
                     public void run() {
-                        switch (block.getType()) {
+                       switch (block.getType()) {
                             case WHITE_WOOL:
                                 block.setType(Material.YELLOW_WOOL);
                                 break;
@@ -362,7 +381,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
                     Block block = e.getClickedBlock();
                     block.getDrops().clear();
-                    player.setVelocity(player.getLocation().getDirection().setY(3));
+                    player.setVelocity(player.getLocation().getDirection().setY(ItemConfiguration.get().getInt("SpecialItems.JumpPlate.jumpLevel")));
                     KnockbackFFAAPI.playSound(player, "jumpplate", 1, 1);
                 }
             }

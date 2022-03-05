@@ -7,5 +7,21 @@ EndKillEffect:
   price: 100
   lore:
     - '&7Free the power of the end from yourself when you kill someone!'
+  sound: 'ENTITY_ENDERMAN_TELEPORT'
+  pitch: 1
+  volume: 1
+FireKillEffect:
+  type: 'KILL_PARTICLE'
+  effect-type: 'FLAME'
+  amount: 50
+  icon: "BLAZE_ROD"
+  name: "&5Fire Kill Effect"
+  price: 100
+  lore:
+    - '&7Drops cool flame particle when you kill someone!'
+  sound : 'ENTITY_BLAZE_SHOOT'
+  pitch: 1
+  volume: 1
 registered-cosmetics:
   - 'EndKillEffect'
+  - 'FireKillEffect'

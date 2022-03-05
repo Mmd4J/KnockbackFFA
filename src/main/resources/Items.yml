@@ -31,4 +31,17 @@ ShopMenu:
     lore:
       - '&7Click to open the cosmetic shopmenu'
     slot: 25
-
+SpecialItems:
+  KBStick:
+    name: "&bKnocbkack Stick"
+    kb-level: 3
+  KBBow:
+    name: "&bKnockback Bow"
+    kb-level: 3
+  KBArrow:
+    name: "&bKnockback Arrow"
+  JumpPlate:
+    name: "&eJump Plate"
+    jumpLevel: 3
+  EnderPearl:
+    name: "&aEnder Pearl"

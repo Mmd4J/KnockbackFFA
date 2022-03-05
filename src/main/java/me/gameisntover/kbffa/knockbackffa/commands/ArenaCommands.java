@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.knockbackffa.arenas;
+package me.gameisntover.kbffa.knockbackffa.commands;
 
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
@@ -6,6 +6,7 @@ import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.MaterialLegacy;
 import me.gameisntover.kbffa.knockbackffa.arena.Arena;
+import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
