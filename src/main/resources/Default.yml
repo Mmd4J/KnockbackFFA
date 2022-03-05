@@ -1,0 +1,63 @@
+KitContents:
+- ==: org.bukkit.inventory.ItemStack
+  v: 2586
+  type: STICK
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"Knocbkack
+      Stick"}],"text":""}'
+    enchants:
+      KNOCKBACK: 3
+    Unbreakable: true
+- ==: org.bukkit.inventory.ItemStack
+  v: 2586
+  type: BOW
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"Knockback
+      Bow"}],"text":""}'
+    enchants:
+      ARROW_KNOCKBACK: 3
+    Unbreakable: true
+- ==: org.bukkit.inventory.ItemStack
+  v: 2586
+  type: ENDER_PEARL
+  amount: 3
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"green","text":"Ender
+      Pearl"}],"text":""}'
+- ==: org.bukkit.inventory.ItemStack
+  v: 2586
+  type: LIGHT_WEIGHTED_PRESSURE_PLATE
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"yellow","text":"Jump
+      Plate"}],"text":""}'
+- ==: org.bukkit.inventory.ItemStack
+  v: 2586
+  type: ARROW
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"Knockback
+      Arrow"}],"text":""}'
+- ==: org.bukkit.inventory.ItemStack
+  v: 2586
+  type: WHITE_WOOL
+  amount: 64
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"Building
+      Block"}],"text":""}'
+Price: 0
+KitName: Default
+KitIcon: STICK
+KitDescription:
+- §7Another cool kit!
+- §7Must be configured in plugins/KnockbackFFA/kits !
