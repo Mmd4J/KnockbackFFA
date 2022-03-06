@@ -165,9 +165,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                         p.getInventory().clear();
                                         KnockbackFFAArena.teleportPlayertoArena(p);
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
                                     }
                                 }
+                                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
                             } else {
                                 //arena changes to the first arena
                                 ArenaID = 1;

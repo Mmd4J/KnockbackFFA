@@ -28,6 +28,8 @@ public class KnockbackFFAKit implements Listener
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&',ItemConfiguration.get().getString("SpecialItems.KBStick.name")));
         meta.setUnbreakable(true);
         meta.addEnchant(Enchantment.KNOCKBACK, ItemConfiguration.get().getInt("SpecialItems.KBStick.kb-level"), true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         kbstick.setItemMeta(meta);
         return kbstick;
     }
@@ -37,6 +39,8 @@ public class KnockbackFFAKit implements Listener
         kbBowMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',ItemConfiguration.get().getString("SpecialItems.KBBow.name")));
         kbBowMeta.setUnbreakable(true);
         kbBowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, ItemConfiguration.get().getInt("SpecialItems.KBBow.kb-level"), true);
+        kbBowMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        kbBowMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         kbBow.setItemMeta(kbBowMeta);
         return kbBow;
     }
