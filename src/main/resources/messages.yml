@@ -17,5 +17,6 @@ purchase-success: "&aYou have successfully purchased %cosmetic%"
 not-enough-money: "&cYou don't have enough money to purchase this item!"
 already-owned: "&cYou already own this item!"
 suicide: "&bYou died by falling into the void"
+fellvoidmsg: "&c %player_name% &e fell in to the void"
 kit-recieve: "&aSuccessfully recieved %kitname%"
 #You can configure your custom messages here!

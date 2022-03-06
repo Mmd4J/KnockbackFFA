@@ -132,6 +132,7 @@ public class DeathListener implements Listener
                 e.setDeathMessage(ChatColor.translateAlternateColorCodes('&', deathText));
             } else if (damager==null) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("suicide")));
+                e.setDeathMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("fellvoidmsg")).replace("%player_name%",player.getName()));
             }
         }
     }
