@@ -128,7 +128,6 @@ public class Commands implements CommandExecutor
                 wc.createWorld();
                 World world = Bukkit.getWorld(args[0]);
                 world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-                world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
 
                 Block stone = world.getSpawnLocation().getBlock();
                 if (stone.getType() == Material.AIR) {

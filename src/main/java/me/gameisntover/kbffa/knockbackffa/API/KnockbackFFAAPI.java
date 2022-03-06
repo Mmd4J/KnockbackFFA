@@ -32,16 +32,17 @@ public class KnockbackFFAAPI
     PlayerData.load(player);
     return PlayerData.get().getString("selected-kit");
 }
-    public static void loadCosmetic(Player player,String cosmeticName){
+    public static void loadCosmetic(Player player,String cosmeticName) {
         String cosmeticType = CosmeticConfiguration.get().getString(cosmeticName + ".type");
-        if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE")){
-            player.spawnParticle(Particle.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")),player.getLocation(),CosmeticConfiguration.get().getInt(cosmeticName + ".amount"));
-        }
-        else if (cosmeticType.equalsIgnoreCase("KILL_EFFECT")){
-            player.playEffect(EntityEffect.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")));
-        }
-        if (CosmeticConfiguration.get().getString("sound")!=null){
-            player.playSound(player.getLocation(), Sound.valueOf(CosmeticConfiguration.get().getString(cosmeticName +".sound")), CosmeticConfiguration.get().getInt(cosmeticName +".volume"), CosmeticConfiguration.get().getInt(cosmeticName +".pitch"));
+        if (cosmeticType != null) {
+            if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE")) {
+                player.spawnParticle(Particle.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")), player.getLocation(), CosmeticConfiguration.get().getInt(cosmeticName + ".amount"));
+            } else if (cosmeticType.equalsIgnoreCase("KILL_EFFECT")) {
+                player.playEffect(EntityEffect.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")));
+            }
+            if (CosmeticConfiguration.get().getString("sound") != null) {
+                player.playSound(player.getLocation(), Sound.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".sound")), CosmeticConfiguration.get().getInt(cosmeticName + ".volume"), CosmeticConfiguration.get().getInt(cosmeticName + ".pitch"));
+            }
         }
     }
     public static boolean isLegacyVersion() {

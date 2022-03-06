@@ -3,9 +3,9 @@ package me.gameisntover.kbffa.knockbackffa.API;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.arena.Arena;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import me.gameisntover.kbffa.knockbackffa.arenas.VoidChunkGenerator;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -42,8 +42,21 @@ public class KnockbackFFAArena
             double x = ArenaData.get().getDouble("arena.x");
             double y = ArenaData.get().getDouble("arena.y");
             double z = ArenaData.get().getDouble("arena.z");
-            World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
-            player.teleport(new Location(world, x, y, z));
+            if(Bukkit.getWorld(ArenaData.get().getString("arena.world"))!=null) {
+                World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
+                player.teleport(new Location(world, x, y, z));
+            }else{
+                    WorldCreator wc = new WorldCreator(ArenaData.get().getString("arena.world"));
+                    wc.generateStructures(false);
+                    wc.generator(new VoidChunkGenerator());
+                    World world1 = wc.createWorld();
+                    world1.setGameRule(GameRule.DO_DAYLIGHT_CYCLE , false);
+                    Bukkit.getWorlds().add(world1);
+                    world1.loadChunk(0,0);
+                System.out.println(world1.getName() + " successfully loaded!");
+                player.teleport(new Location(world1, x, y, z));
+
+            }
         } else {
             System.out.println("[KnockbackFFA] There are no arenas to teleport the player there!");
         }

@@ -45,6 +45,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 
 public final class KnockbackFFA extends JavaPlugin implements Listener
 {
@@ -163,6 +164,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                     if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
                                         p.getInventory().clear();
+                                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                                        kitManager.lobbyItems(p);
                                         KnockbackFFAArena.teleportPlayertoArena(p);
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                     }
@@ -177,11 +180,13 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                     if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
                                         p.getInventory().clear();
+                                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                                        kitManager.lobbyItems(p);
                                         KnockbackFFAArena.teleportPlayertoArena(p);
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
-                                        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
                                     }
                                 }
+                                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
                             }
                         } else if (arenaList.size() == 1) {
                             ArenaConfiguration.get().set("EnabledArena", arenaList.get(0).replace(".yml", ""));
