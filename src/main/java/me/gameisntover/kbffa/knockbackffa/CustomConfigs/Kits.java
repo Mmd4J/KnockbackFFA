@@ -26,22 +26,23 @@ public class Kits
 
 
     public Kits(String kitsName) {
-        this.kitName = kitsName;
-        cfile = new File(df, "Kits" + File.separator + kitsName + ".yml");
-        if (!df.exists()) df.mkdir();
-        if (!cfile.exists()) {
-            try {
-                cfile.createNewFile();
-            } catch (Exception e) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error creating " + cfile.getName() + "!");
-            }
-        }else if (cfile.exists()){
+        if (kitsName != "none") {
+            this.kitName = kitsName;
             cfile = new File(df, "Kits" + File.separator + kitsName + ".yml");
+            if (!df.exists()) df.mkdir();
+            if (!cfile.exists()) {
+                try {
+                    cfile.createNewFile();
+                } catch (Exception e) {
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error creating " + cfile.getName() + "!");
+                }
+            } else if (cfile.exists()) {
+                cfile = new File(df, "Kits" + File.separator + kitsName + ".yml");
+                config = YamlConfiguration.loadConfiguration(cfile);
+            }
             config = YamlConfiguration.loadConfiguration(cfile);
         }
-        config = YamlConfiguration.loadConfiguration(cfile);
     }
-
     public static File getfolder() {
         return folder;
     }

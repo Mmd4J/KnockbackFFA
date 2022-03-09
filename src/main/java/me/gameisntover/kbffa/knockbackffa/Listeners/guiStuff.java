@@ -92,35 +92,36 @@ public class guiStuff implements Listener {
                     e.setCancelled(true);
                     Inventory kitsMenu = Bukkit.createInventory(null, 54, "Kits Menu");
                     PlayerData.load(player);
-                  if (PlayerData.get().getList("owned-kits").size() > 0 && PlayerData.get().getList("owned-kits")!=null) {
-                    List<String> kitsList = PlayerData.get().getList("owned-kits").stream().map(s -> s.toString()).collect(Collectors.toList());
-                        for (String kit : kitsList) {
-                            Kits kitItems = new Kits(kit);
-                                if (kitItems.get().getString("KitIcon") != null||kitItems.get().getString("KitIcon")!="AIR") {
-                                    ItemStack kitItem = new ItemStack(Material.getMaterial(kitItems.get().getString("KitIcon")));
-                                if (kitItem.getType()==Material.AIR){
-                                    kitItem.setType(Material.BARRIER);
-                                }
-                                    ItemMeta kitMeta = kits.guiItemMeta(kitItem);
-                                    kitMeta.setDisplayName(kitItems.get().getString("KitName").replace("&", "§"));
-                                    kitMeta.setLore(kitItems.get().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
-                                    if (PlayerData.get().getString("selected-kit") == null) {
-                                        PlayerData.get().set("selected-kit", kit);
-                                        PlayerData.save();
-                                    }
-                                    if (PlayerData.get().getString("selected-kit").equalsIgnoreCase(kit)) {
-                                        kitMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-                                        kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
-                                    } else {
-                                        kitMeta.removeEnchant(Enchantment.DURABILITY);
-                                        kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§").replace(" §8(§aSelected§8)", ""));
-                                    }
-                                    kitItem.setItemMeta(kitMeta);
-                                    kitsMenu.addItem(kitItem);
-                                }
-                            }
-                        }
-
+                  if ( PlayerData.get().getList("owned-kits")!=null && PlayerData.get().getList("owned-kits").size() > 0) {
+                      List<String> kitsList = PlayerData.get().getList("owned-kits").stream().map(s -> s.toString()).collect(Collectors.toList());
+                      for (String kit : kitsList) {
+                          if (kit !=null && kit != "none.yml") {
+                              Kits kitItems = new Kits(kit);
+                              if (kitItems.get().getString("KitIcon") != null || kitItems.get().getString("KitIcon") != "AIR") {
+                                  ItemStack kitItem = new ItemStack(Material.getMaterial(kitItems.get().getString("KitIcon")));
+                                  if (kitItem.getType() == Material.AIR) {
+                                      kitItem.setType(Material.BARRIER);
+                                  }
+                                  ItemMeta kitMeta = kits.guiItemMeta(kitItem);
+                                  kitMeta.setDisplayName(kitItems.get().getString("KitName").replace("&", "§"));
+                                  kitMeta.setLore(kitItems.get().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
+                                  if (PlayerData.get().getString("selected-kit") == null) {
+                                      PlayerData.get().set("selected-kit", kit);
+                                      PlayerData.save();
+                                  }
+                                  if (PlayerData.get().getString("selected-kit").equalsIgnoreCase(kit)) {
+                                      kitMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+                                      kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
+                                  } else {
+                                      kitMeta.removeEnchant(Enchantment.DURABILITY);
+                                      kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§").replace(" §8(§aSelected§8)", ""));
+                                  }
+                                  kitItem.setItemMeta(kitMeta);
+                                  kitsMenu.addItem(kitItem);
+                              }
+                          }
+                      }
+                  }
                     player.openInventory(kitsMenu);
                 }
             }
@@ -169,13 +170,14 @@ public class guiStuff implements Listener {
                     PlayerData.load(player);
                     List<String> cList = PlayerData.get().getStringList("owned-kits");
                     for (String cosmetic : cosmetics) {
-                        cosmetic = cosmetic.replace(".yml", "");
-                            Kits kit = new Kits(cosmetic.replace(".yml",""));
-                                ItemStack cosmeticItem = new ItemStack(Material.getMaterial(kit.get().getString("KitIcon")));
-                            if (cosmeticItem.getType()==Material.AIR){
+                        if (cosmetic != null && cosmetic != "none.yml") {
+                            cosmetic = cosmetic.replace(".yml", "");
+                            Kits kit = new Kits(cosmetic.replace(".yml", ""));
+                            ItemStack cosmeticItem = new ItemStack(Material.getMaterial(kit.get().getString("KitIcon")));
+                            if (cosmeticItem.getType() == Material.AIR) {
                                 cosmeticItem.setType(Material.BARRIER);
                             }
-                                ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticItem);
+                            ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticItem);
                             cosmeticMeta.setDisplayName(kit.get().getString("KitName").replace("&", "§"));
                             List<String> lore = kit.get().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
                             lore.add("§7Cost: §a" + kit.get().getInt("Price"));
@@ -192,9 +194,11 @@ public class guiStuff implements Listener {
                             cosmeticItem.setItemMeta(cosmeticMeta);
                             shopMenu.addItem(cosmeticItem);
                         }
-                    player.openInventory(shopMenu);
+                    }
+                        player.openInventory(shopMenu);
 
-                }
+                    }
+
                 if (e.getSlot() == ItemConfiguration.get().getInt("ShopMenu.cosmetic.slot") && e.getClickedInventory() != player.getInventory()) {
                     Inventory shopMenu = Bukkit.createInventory(null, 54, "Cosmetic Shop");
                     List<String> cosmetics = CosmeticConfiguration.get().getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
@@ -226,38 +230,40 @@ public class guiStuff implements Listener {
             if (e.getView().getTitle().equalsIgnoreCase("Kit Shop")) {
                 if (item != null && e.getClickedInventory() != player.getInventory()) {
                     PlayerData.load(player);
-                    List<String> cosmetics = Arrays.asList(Arrays.stream(Kits.getfolder().list()).map(s -> s.replace(".yml","")).toArray(String[]::new));
+                    List<String> cosmetics = Arrays.asList(Arrays.stream(Kits.getfolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
                     float playerBal = balanceAPI.getBalance(player);
-                    if (playerBal >= ItemConfiguration.get().getInt("ShopMenu." + cosmetics.get(e.getSlot()) + ".price")) {
-                        List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
-                        if (!ownedKits.contains(cosmetics.get(e.getSlot()))) {
-                            balanceAPI.removeBalance(player, ItemConfiguration.get().getInt("ShopMenu." + cosmetics.get(e.getSlot()) + ".price"));
-                            ownedKits.add(cosmetics.get(e.getSlot()));
-                            PlayerData.get().set("owned-kits", ownedKits);
-                            PlayerData.save();
+                    Kits kits = new Kits(cosmetics.get(e.getSlot()));
+                        if (playerBal >= kits.get().getInt("Price")){
+                            List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
+                            if (!ownedKits.contains(cosmetics.get(e.getSlot()))) {
+                                balanceAPI.removeBalance(player, kits.get().getInt("Price"));
+                                ownedKits.add(cosmetics.get(e.getSlot()));
+                                PlayerData.get().set("owned-kits", ownedKits);
+                                PlayerData.save();
+                                player.closeInventory();
+                                player.sendMessage(MessageConfiguration.get().getString("purchase-success").replace("&", "§").replace("%cosmetic%", cosmetics.get(e.getSlot())));
+                            } else {
+                                player.sendMessage(MessageConfiguration.get().getString("already-owned").replace("&", "§").replace("%cosmetic%", cosmetics.get(e.getSlot())));
+                                player.closeInventory();
+                            }
+                        } else{
+                            player.sendMessage(MessageConfiguration.get().getString("not-enough-money").replace("&", "§"));
                             player.closeInventory();
-                            player.sendMessage(MessageConfiguration.get().getString("purchase-success").replace("&", "§").replace("%cosmetic%", cosmetics.get(e.getSlot())));
-                        } else {
-                            player.sendMessage(MessageConfiguration.get().getString("already-owned").replace("&", "§").replace("%cosmetic%", cosmetics.get(e.getSlot())));
-                            player.closeInventory();
+
                         }
-                    } else {
-                        player.sendMessage(MessageConfiguration.get().getString("not-enough-money").replace("&", "§"));
-                        player.closeInventory();
+                    } else if (item != null && e.getClickedInventory() == player.getInventory()) {
+                        e.setCancelled(true);
                     }
-                } else if (item != null && e.getClickedInventory() == player.getInventory()) {
-                    e.setCancelled(true);
-                }
             }
             if (e.getView().getTitle().equalsIgnoreCase("Cosmetic Shop")) {
                 if (item != null && e.getClickedInventory() != player.getInventory()) {
                     PlayerData.load(player);
                     List<String> cosmetics = CosmeticConfiguration.get().getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
                     float playerBal = balanceAPI.getBalance(player);
-                    if (playerBal >= ItemConfiguration.get().getInt("ShopMenu." + cosmetics.get(e.getSlot()) + ".price")) {
+                    if (playerBal >= CosmeticConfiguration.get().getInt(cosmetics.get(e.getSlot()) + ".price")) {
                         List<String> ownedCosmetics = PlayerData.get().getStringList("owned-cosmetics");
                         if (!ownedCosmetics.contains(cosmetics.get(e.getSlot()))) {
-                            balanceAPI.removeBalance(player, ItemConfiguration.get().getInt("ShopMenu." + cosmetics.get(e.getSlot()) + ".price"));
+                            balanceAPI.removeBalance(player, ItemConfiguration.get().getInt(cosmetics.get(e.getSlot()) + ".price"));
                             ownedCosmetics.add(cosmetics.get(e.getSlot()));
                             PlayerData.get().set("owned-cosmetics", ownedCosmetics);
                             PlayerData.save();

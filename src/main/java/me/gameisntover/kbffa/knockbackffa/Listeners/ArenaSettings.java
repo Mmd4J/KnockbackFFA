@@ -211,6 +211,11 @@ public class ArenaSettings implements Listener {
                 playerArena.put(player, "arena");
                 PlayerData.load(player);
                 if (PlayerData.get().getString("selected-kit") == null) {
+                    List <String> ownedKits = PlayerData.get().getStringList("owned-kits");
+                    if (ownedKits.contains("Default")) {
+                        ownedKits.add("Default");
+                        PlayerData.get().set("owned-kits",ownedKits);
+                    }
                     PlayerData.get().set("selected-kit", "Default");
                 }
                 Kits kit = new Kits(PlayerData.get().getString("selected-kit"));
