@@ -1,10 +1,8 @@
 package me.gameisntover.kbffa.knockbackffa.API;
 
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ItemConfiguration;
-import me.gameisntover.kbffa.knockbackffa.MaterialLegacy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Endermite;
 import org.bukkit.entity.Entity;

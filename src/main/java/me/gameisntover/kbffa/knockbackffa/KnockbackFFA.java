@@ -45,7 +45,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
+import java.util.Objects;
 
 public final class KnockbackFFA extends JavaPlugin implements Listener
 {
@@ -68,10 +68,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 }
             }
         }
-        if (KnockbackFFAAPI.isLegacyVersion()) {
-            getLogger().info("[KnockbackFFA] : Legacy version detected i don't recommend you to use this version");
-            loadLegacyConfig();
-        }else {
             getLogger().info("[KnockbackFFA] : Loading Commands");
             loadCommands();
             getLogger().info("[KnockbackFFA] : Loading Configuration Files");
@@ -81,7 +77,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             getLogger().info("[KnockbackFFA] : Loading Tasks");
             loadTasks();
             getLogger().info("[KnockbackFFA] : Enjoy using plugin :)");
-        }
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                 if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
@@ -98,23 +93,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             getLogger().warning("Could not find placeholder API. This plugin is needed!");
         }
     }
-    private void loadLegacyConfig(){
-        File file = new File(getDataFolder(), "config.yml");
-        File dataFolder = getDataFolder();
-        if (!file.exists()) {
-            getLogger().info("[KnockbackFFA] : Creating DataFolder");
-            dataFolder.mkdir();
-        }
-            getLogger().info("[KnockbackFFA] : Loading Configuration files");
-            CosmeticConfiguration.setup();
-            MessageConfiguration.setup();
-            SoundConfiguration.setup();
-            ArenaConfiguration.setup();
-            ScoreboardConfiguration.setup();
-            ItemConfiguration.setup();
-            saveDefaultConfig();
-        }
-
     private void loadConfig() {
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
@@ -127,7 +105,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             File file = new File("plugins/KnockbackFFA/Kits/Default.yml");
             try {
                 file.createNewFile();
-                Files.copy(KnockbackFFA.getInstance().getResource("Default.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(Objects.requireNonNull(KnockbackFFA.getInstance().getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 getLogger().info("[KnockbackFFA] : Default Kit Created");
             } catch (IOException e) {
             }
@@ -145,17 +123,44 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     private void loadTasks() {
         if (ArenaData.getfolder().listFiles() != null) {
             List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+            ArenaConfiguration.get().set("EnabledArena",arenaList.get(0));
             timer = getConfig().getInt("ArenaChangeTimer");
+
+            new BukkitRunnable(){
+                @Override
+                public void run(){
+                    if (arenaList.size() > 0) {
+                        String arenaName = arenaList.get(0).replace(".yml", "");
+                        ArenaConfiguration.get().set("EnabledArena", arenaName.replace(".yml", ""));
+                        ArenaConfiguration.save();
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                p.getInventory().clear();
+                                KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                                kitManager.lobbyItems(p);
+                                KnockbackFFAArena.teleportPlayertoArena(p);
+                                KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
+                                MainScoreboard.toggleScoreboard(p,true);
+                            }
+                            cancel();
+                        }
+                        if (arenaList.size() > 1) {
+                            ArenaID++;
+                        }
+                        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
+                    }
+                }
+            }.runTaskTimer(this, 0, 1);
             new BukkitRunnable() {
                 @Override
                 public void run() {
+
                     timer--;
                     if (timer == 0) {
                         //what should happen when timer is up
                         timer = getConfig().getInt("ArenaChangeTimer");
                         if (arenaList.size() > 1) { //checking if arenaList even has arenas
                             ArenaID++;
-
                             if (ArenaID <= arenaList.size()) { //checking if arenaID is not higher than last index of arenalist
                                 //next arena codes
                                 String arenaName = arenaList.get(ArenaID - 1).replace(".yml", "");
@@ -170,7 +175,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                     }
                                 }
-                                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
+                                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                             } else {
                                 //arena changes to the first arena
                                 ArenaID = 1;
@@ -242,31 +247,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 }
             }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20);
         }
-    }
-    private void loadLegacyTasks(){
-        new BukkitRunnable()
-        {
-            @Override
-            public void run() {
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
-                        World world = p.getWorld();
-                        List<Entity> entList = world.getEntities();
-
-                        for (Entity current : entList) {
-                            if (current instanceof Item) {
-                                    if (((Item) current).getItemStack().getType().name() == MaterialLegacy.GOLD_PLATE.name() || ((Item) current).getItemStack().getType().name() == MaterialLegacy.ARROW.name() || ((Item) current).getItemStack().getType().name() == MaterialLegacy.STICK.name()) {
-                                        current.remove();
-                                    }
-                                }
-                            }
-                    }
-                }
-            }
-        }.runTaskTimer(this, 0, 5);
-
-    }
-    private void loadListeners() {
+    }private void loadListeners() {
         getServer().getPluginManager().registerEvents(new NoHunger(), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveListeners(), this);
         getServer().getPluginManager().registerEvents(new ChatFormats(), this);

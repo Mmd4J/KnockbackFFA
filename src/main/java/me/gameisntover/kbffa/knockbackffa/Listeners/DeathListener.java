@@ -12,7 +12,6 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -107,12 +106,12 @@ public class DeathListener implements Listener
             PlayerData.load(player);
             PlayerData.get().set("deaths", PlayerData.get().getInt("deaths") + 1);
             PlayerData.save();
-            if (damager != null) {
-                    KnockbackFFAAPI.loadCosmetic((Player) damager,KnockbackFFAAPI.selectedCosmetic((Player) damager));
+            if (damager != null && damager != player) {
+                KnockbackFFAAPI.loadCosmetic((Player) damager, KnockbackFFAAPI.selectedCosmetic((Player) damager));
 
                 PlayerData.load((Player) damager);
                 float prize = KnockbackFFA.getInstance().getConfig().getInt("killprize");
-                damager.sendMessage(MessageConfiguration.get().getString("prize").replace("%prize%",prize+"").replace("&", "§"));
+                damager.sendMessage(MessageConfiguration.get().getString("prize").replace("%prize%", prize + "").replace("&", "§"));
                 balanceAPI.addBalance((Player) damager, prize);
                 PlayerData.get().set("kills", PlayerData.get().getInt("kills") + 1);
                 if (killStreak.get(damager) == null) {
@@ -121,8 +120,8 @@ public class DeathListener implements Listener
                     killStreak.put(damager, killStreak.get(damager).intValue() + 1);
                 }
                 if (killStreak.get(damager) > PlayerData.get().getInt("best-ks")) {
-                    Player damagerP =(Player) damager;
-                    String msg = MessageConfiguration.get().getString("killstreakrecord").replace("%killstreak%", PlayerData.get().getInt("best-ks")+ "");
+                    Player damagerP = (Player) damager;
+                    String msg = MessageConfiguration.get().getString("killstreakrecord").replace("%killstreak%", PlayerData.get().getInt("best-ks") + "");
                     damagerP.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', msg)));
                     PlayerData.get().set("best-ks", killStreak.get(damager));
                 }
@@ -130,9 +129,9 @@ public class DeathListener implements Listener
                 String deathText = MessageConfiguration.get().getString("deathmessage").replace("%killer%", damager.getName());
                 deathText = PlaceholderAPI.setPlaceholders(e.getEntity(), deathText);
                 e.setDeathMessage(ChatColor.translateAlternateColorCodes('&', deathText));
-            } else if (damager==null) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("suicide")));
-                e.setDeathMessage(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("fellvoidmsg")).replace("%player_name%",player.getName()));
+            } else if (damager == null || damager == player) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("suicide")));
+                e.setDeathMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("fellvoidmsg")).replace("%player_name%", player.getName()));
             }
         }
     }

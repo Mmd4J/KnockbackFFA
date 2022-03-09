@@ -1,11 +1,9 @@
 package me.gameisntover.kbffa.knockbackffa.commands;
 
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
+import jdk.tools.jlink.internal.plugins.StripNativeCommandsPlugin;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
-import me.gameisntover.kbffa.knockbackffa.MaterialLegacy;
-import me.gameisntover.kbffa.knockbackffa.arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -20,11 +18,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArenaCommands implements CommandExecutor
 {
     public static Map<UUID, String> arenaNameMap = new HashMap<>();
-    int sz = 1;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -40,31 +38,21 @@ public class ArenaCommands implements CommandExecutor
                         Location loc1 = WandListener.pos1m.get(p);
                         Location loc2 = WandListener.pos2m.get(p);
                         ArenaData.create(args[0]);
-                        ArenaData.get().addDefault("block-break", false);
-                        ArenaData.get().addDefault("item-drop", true);
-                        ArenaData.get().addDefault("world-border", false);
-                        ArenaData.get().set("arena.pos1.x", loc1.getX());
-                        ArenaData.get().set("arena.pos1.y", loc1.getY());
-                        ArenaData.get().set("arena.pos1.z", loc1.getZ());
-                        ArenaData.get().set("arena.x", ((Player) sender).getLocation().getX());
-                        ArenaData.get().set("arena.y", ((Player) sender).getLocation().getY());
-                        ArenaData.get().set("arena.z",  ((Player) sender).getLocation().getZ());
-                        ArenaData.get().set("arena.pos2.x", loc2.getX());
-                        ArenaData.get().set("arena.pos2.y", loc2.getY());
-                        ArenaData.get().set("arena.pos2.z", loc2.getZ());
+                        ArenaData.get().set("block-break", false);
+                        ArenaData.get().set("item-drop", true);
+                        ArenaData.get().set("world-border", false);
+                        ArenaData.get().set("arena", ((Player) sender).getLocation());
+                        ArenaData.get().set("arena.pos1", loc1);
+                        ArenaData.get().set("arena.pos2", loc2);
                         ArenaData.get().set("block-break", false);
                         ArenaData.get().set("item-drop", false);
                         ArenaData.get().set("world-border", false);
-                        String world = p.getWorld().getName();
-                        ArenaData.get().set("arena.world", world);
                         ArenaData.save();
                         if (ArenaData.getfolder().list().length == 1) {
-                            ArenaConfiguration.get().set("EnabledArena", "arena1");
+                            ArenaConfiguration.get().set("EnabledArena", args[0]);
                             ArenaConfiguration.save();
                         }
                             sender.sendMessage(ChatColor.GREEN + "Arena " + args [0] + " has been created!");
-
-
                     }
                 }
             }
@@ -125,18 +113,11 @@ public class ArenaCommands implements CommandExecutor
                         arenaNameMap.put(p.getUniqueId(), arenaName);
                     }
                 }
+                else {
+                    p.sendMessage(ChatColor.RED + "Command Arguements missing or is invalid /editarena arenaname");
+                }
             }
             if (KnockbackFFA.getInstance().getCommand("wand").getName().equalsIgnoreCase(command.getName())) {
-                if (KnockbackFFAAPI.isLegacyVersion()) {
-                    ItemStack wand = new ItemStack(Material.getMaterial(MaterialLegacy.BLAZE_ROD.name()));
-                    ItemMeta wandmeta = wand.getItemMeta();
-                    wandmeta.setDisplayName("PositionSelector Wand");
-                    wandmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
-                    wandmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    wand.setItemMeta(wandmeta);
-                    p.getInventory().addItem(wand);
-
-                }
                 ItemStack wand = new ItemStack(Material.BLAZE_ROD);
                 ItemMeta wandmeta = wand.getItemMeta();
                 wandmeta.setDisplayName(ChatColor.DARK_PURPLE + "PositionSelector Wand");
@@ -147,33 +128,26 @@ public class ArenaCommands implements CommandExecutor
             }
             if (KnockbackFFA.getInstance().getCommand("setsafezone").getName().equalsIgnoreCase(command.getName())) {
                 if (WandListener.pos2m.get(p) != null && WandListener.pos1m.get(p) != null) {
-                    new BukkitRunnable()
-                    {
-                        @Override
-                        public void run() {
-                            if (ArenaConfiguration.get().getString("Safezones." + sz + ".Safezone.world") == null) {
+                    List<String> safezones = ArenaConfiguration.get().getStringList("registered-safezones");
+                    int sz;
+                      if (safezones.size() == 0) {
+                        sz = 1;
+                      }else{
+                        String szstring = safezones.get(safezones.size()-1);
+                         sz = Integer.parseInt(szstring);
+                        sz++;}
                                 String world = p.getWorld().getName();
                                 Location loc1 = WandListener.pos1m.get(p);
                                 Location loc2 = WandListener.pos2m.get(p);
-                                ArenaConfiguration.get().set("Safezones." + sz + ".Safezone.world", world);
-                                ArenaConfiguration.get().set("Safezones." + sz + ".Safezone.pos1.x", loc1.getX());
-                                ArenaConfiguration.get().set("Safezones." + sz + ".Safezone.pos1.y", loc1.getY());
-                                ArenaConfiguration.get().set("Safezones." + sz + ".Safezone.pos1.z", loc1.getZ());
-                                ArenaConfiguration.get().set("Safezones." + sz + ".Safezone.pos2.x", loc2.getX());
-                                ArenaConfiguration.get().set("Safezones." + sz + ".Safezone.pos2.y", loc2.getY());
-                                ArenaConfiguration.get().set("Safezones." + sz + ".Safezone.pos2.z", loc2.getZ());
+                                ArenaConfiguration.get().set("Safezones." + sz + ".world", world);
+                                ArenaConfiguration.get().set("Safezones." + sz + ".pos1", loc1);
+                                ArenaConfiguration.get().set("Safezones." + sz + ".pos2", loc2);
+                                safezones.add(sz+"");
+                                ArenaConfiguration.get().set("registered-safezones", safezones);
                                 ArenaConfiguration.save();
                                 p.sendMessage(ChatColor.GREEN + "Safezone " + sz + " has been saved in the arena config file!");
-                                sz = 1;
-                                cancel();
-                            } else if (ArenaConfiguration.get().getString("Safezones." + sz + ".Safezone.world") != null) {
-                                sz++;
-                            }
-                        }
-                    }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);
+                    }
                 }
-            }
-
             if (command.getName().equalsIgnoreCase("gotoworld")) {
                 if (args.length > 0) {
                     World world = Bukkit.getWorld(args[0]);
