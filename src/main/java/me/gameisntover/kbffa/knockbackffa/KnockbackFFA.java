@@ -141,13 +141,13 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                 KnockbackFFAArena.teleportPlayertoArena(p);
                                 KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                 MainScoreboard.toggleScoreboard(p,true);
+                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                             }
                             cancel();
                         }
                         if (arenaList.size() > 1) {
                             ArenaID++;
                         }
-                        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                     }
                 }
             }.runTaskTimer(this, 0, 1);
@@ -173,9 +173,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                         kitManager.lobbyItems(p);
                                         KnockbackFFAArena.teleportPlayertoArena(p);
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
+                                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                                     }
                                 }
-                                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                             } else {
                                 //arena changes to the first arena
                                 ArenaID = 1;
@@ -189,9 +189,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                         kitManager.lobbyItems(p);
                                         KnockbackFFAArena.teleportPlayertoArena(p);
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
+                                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                                     }
                                 }
-                                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("arenachangemsg").replace("%arena%", arenaName)));
                             }
                         } else if (arenaList.size() == 1) {
                             ArenaConfiguration.get().set("EnabledArena", arenaList.get(0).replace(".yml", ""));
@@ -312,24 +312,29 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
             if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
                 Block block = e.getBlockPlaced();
+                String arenaName = KnockbackFFAArena.getEnabledArena();
                 BukkitRunnable runnable = new BukkitRunnable()
                 {
                     @Override
                     public void run() {
-                       switch (block.getType()) {
-                            case WHITE_WOOL:
-                                block.setType(Material.YELLOW_WOOL);
-                                break;
-                            case YELLOW_WOOL:
-                                block.setType(Material.ORANGE_WOOL);
-                                break;
-                            case ORANGE_WOOL:
-                                block.setType(Material.RED_WOOL);
-                                break;
-                            case RED_WOOL:
-                                block.setType(Material.AIR);
-                                cancel();
-                                break;
+                        if (KnockbackFFAArena.getEnabledArena() == arenaName) {
+                            switch (block.getType()) {
+                                case WHITE_WOOL:
+                                    block.setType(Material.YELLOW_WOOL);
+                                    break;
+                                case YELLOW_WOOL:
+                                    block.setType(Material.ORANGE_WOOL);
+                                    break;
+                                case ORANGE_WOOL:
+                                    block.setType(Material.RED_WOOL);
+                                    break;
+                                case RED_WOOL:
+                                    block.setType(Material.AIR);
+                                    cancel();
+                                    break;
+                            }
+                        }else {
+                            block.setType(Material.AIR);
                         }
                     }
                 };

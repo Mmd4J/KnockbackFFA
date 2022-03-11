@@ -77,8 +77,11 @@ public class Commands implements CommandExecutor
                         PlayerData.get().set("inventory", p.getPlayer().getInventory().getContents());
                         PlayerData.get().set("armor", p.getPlayer().getInventory().getArmorContents());
                         PlayerData.save();
-                        p.getPlayer().getInventory().clear();
                     }
+                        p.getPlayer().getInventory().clear();
+                        p.setFoodLevel(20);
+                        KnockbackFFAKit kit = new KnockbackFFAKit();
+                        kit.lobbyItems(p);
                     MainScoreboard.toggleScoreboard(p, true);
                     KnockbackFFAAPI.setInGamePlayer(p,true);
 
@@ -93,6 +96,7 @@ public class Commands implements CommandExecutor
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);
                 KnockbackFFAArena.leaveArena(p.getPlayer());
+                p.getInventory().clear();
                 if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
                     PlayerData.load(p.getPlayer());
                     List<ItemStack> items = (List<ItemStack>) PlayerData.get().get("inventory");

@@ -26,7 +26,6 @@ public class Kits
 
 
     public Kits(String kitsName) {
-        if (kitsName != "none") {
             this.kitName = kitsName;
             cfile = new File(df, "Kits" + File.separator + kitsName + ".yml");
             if (!df.exists()) df.mkdir();
@@ -42,7 +41,6 @@ public class Kits
             }
             config = YamlConfiguration.loadConfiguration(cfile);
         }
-    }
     public static File getfolder() {
         return folder;
     }
@@ -77,7 +75,6 @@ public class Kits
           } else {
               PlayerData.load(player);
               PlayerData.get().set("owned-kits", PlayerData.get().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
-              PlayerData.get().set("selected-kit", "none");
               PlayerData.save();
           }
       }

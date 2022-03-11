@@ -5,7 +5,6 @@ import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.MainScoreboard;
 import org.bukkit.entity.Player;
@@ -19,6 +18,9 @@ public class JoinLeaveListeners implements Listener
     @EventHandler
     public void playerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        if (!KnockbackFFAAPI.BungeeMode()) {
+            KnockbackFFAAPI.setInGamePlayer(player, false);
+        }
         if (KnockbackFFA.getInstance().getConfig().getBoolean("joinmessage")) {
             String joinText = MessageConfiguration.get().getString("joinmessage").replace("&", "§");
             joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);

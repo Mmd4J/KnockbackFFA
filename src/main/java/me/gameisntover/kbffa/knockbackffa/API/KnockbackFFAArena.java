@@ -2,10 +2,8 @@ package me.gameisntover.kbffa.knockbackffa.API;
 
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
-import me.gameisntover.kbffa.knockbackffa.arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.arenas.VoidChunkGenerator;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;

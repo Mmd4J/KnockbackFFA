@@ -95,7 +95,7 @@ public class guiStuff implements Listener {
                   if ( PlayerData.get().getList("owned-kits")!=null && PlayerData.get().getList("owned-kits").size() > 0) {
                       List<String> kitsList = PlayerData.get().getList("owned-kits").stream().map(s -> s.toString()).collect(Collectors.toList());
                       for (String kit : kitsList) {
-                          if (kit !=null && kit != "none.yml") {
+                          if (kit !=null) {
                               Kits kitItems = new Kits(kit);
                               if (kitItems.get().getString("KitIcon") != null || kitItems.get().getString("KitIcon") != "AIR") {
                                   ItemStack kitItem = new ItemStack(Material.getMaterial(kitItems.get().getString("KitIcon")));
@@ -170,7 +170,7 @@ public class guiStuff implements Listener {
                     PlayerData.load(player);
                     List<String> cList = PlayerData.get().getStringList("owned-kits");
                     for (String cosmetic : cosmetics) {
-                        if (cosmetic != null && cosmetic != "none.yml") {
+                        if (cosmetic != null) {
                             cosmetic = cosmetic.replace(".yml", "");
                             Kits kit = new Kits(cosmetic.replace(".yml", ""));
                             ItemStack cosmeticItem = new ItemStack(Material.getMaterial(kit.get().getString("KitIcon")));
@@ -289,7 +289,7 @@ public class guiStuff implements Listener {
                     List<String> ownedCosmetics = PlayerData.get().getStringList("owned-kits");
                     String selC = ownedCosmetics.get(e.getSlot());
                     if (meta.hasEnchant(Enchantment.DURABILITY)) {
-                        PlayerData.get().set("selected-kit", "none");
+                        PlayerData.get().set("selected-kit", null);
                     } else {
                         PlayerData.get().set("selected-kit", selC);
                     }

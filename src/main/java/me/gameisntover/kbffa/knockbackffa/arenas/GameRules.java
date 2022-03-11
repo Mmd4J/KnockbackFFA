@@ -1,5 +1,4 @@
 package me.gameisntover.kbffa.knockbackffa.arenas;
-
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
@@ -8,6 +7,8 @@ import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -51,10 +52,10 @@ public class GameRules implements Listener
             }
         }
     }
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        if (KnockbackFFAAPI.isInGame(e.getPlayer()) || KnockbackFFAAPI.BungeeMode()) {
-            Player player = e.getPlayer();
+        Player player = e.getPlayer();
             List<String> voids = ArenaConfiguration.get().getStringList("registered-voids");
             for (String vd: voids){
                     if (ArenaConfiguration.get().getLocation("voids." + vd + ".pos1") != null) {
@@ -82,7 +83,6 @@ public class GameRules implements Listener
                         }
                     }
                 }
-            }
             }
 
     @EventHandler

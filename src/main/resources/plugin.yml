@@ -82,9 +82,9 @@ permissions:
   kbffa.command.gotoworld:
     default: op
   kbffa.command.leave:
-    default: not op
+    default: true
   kbffa.command.join:
-    default: not op
+    default: true
   kbffa.command.createworld:
     default: op
   kbffa.command.createarena:
