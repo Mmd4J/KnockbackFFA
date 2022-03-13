@@ -1,6 +1,5 @@
 package me.gameisntover.kbffa.knockbackffa.commands;
 
-import jdk.tools.jlink.internal.plugins.StripNativeCommandsPlugin;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
@@ -11,11 +10,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BoundingBox;
+import redempt.redlib.inventorygui.InventoryGUI;
+import redempt.redlib.inventorygui.ItemButton;
+import redempt.redlib.itemutils.ItemBuilder;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,23 +64,86 @@ public class ArenaCommands implements CommandExecutor
                         p.sendMessage(ChatColor.RED + "That arena name does not exist!");
                     } else if (arenaList.contains(args[0] + ".yml")) {
                         p.sendMessage(ChatColor.GREEN + "You are now editing " + args[0]);
-                        Inventory arenaGUI = Bukkit.createInventory(null, 54, "Arena Editor");
-                        ItemStack blockBreak = new ItemStack(Material.DIAMOND_PICKAXE, 1);
-                        ItemMeta blockBreakMeta = blockBreak.getItemMeta();
-                        blockBreakMeta.setDisplayName(ChatColor.GRAY + "Block Break");
-                        ItemStack itemDrop = new ItemStack(Material.DIAMOND, 1);
-                        ItemMeta itemDropMeta = itemDrop.getItemMeta();
+                        InventoryGUI arenaGUI = new InventoryGUI(Bukkit.createInventory(null, 54, "Arena Editor"));
+                        ItemButton blockBreak = ItemButton.create(new ItemBuilder(Material.DIAMOND_PICKAXE).setName(ChatColor.GRAY+ "Block Break"),e -> {
+                            ArenaData.load(arenaNameMap.get(e.getWhoClicked().getUniqueId()));
+                                ArenaData.get().set("block-break", !ArenaData.get().getBoolean("block-break"));
+                                ArenaData.save();
+                                List<String> lore = new ArrayList<>();
+                                ItemMeta im = e.getCurrentItem().getItemMeta();
+                                lore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
+                                lore.add(ChatColor.GREEN + "Currently Block Breaking is " + ArenaData.get().getBoolean("block-break"));
+                                im.setLore(lore);
+                                e.getCurrentItem().setItemMeta(im);
+                        });
+                        ItemMeta blockBreakMeta = blockBreak.getItem().getItemMeta();
+                        ItemButton itemDrop = ItemButton.create(new ItemBuilder(Material.DIAMOND).setName(ChatColor.GRAY+ "Item Drop"),e -> {
+                            ArenaData.load(arenaNameMap.get(e.getWhoClicked().getUniqueId()));
+                                ArenaData.get().set("item-drop", !ArenaData.get().getBoolean("item-drop"));
+                                ArenaData.save();
+                                List<String> lore = new ArrayList<>();
+                                ItemMeta im = e.getCurrentItem().getItemMeta();
+                                lore.add(ChatColor.GRAY + "Toggle whether or not players can drop items");
+                                lore.add(ChatColor.GREEN + "Currently Item Dropping is " + ArenaData.get().getBoolean("item-drop"));
+                                im.setLore(lore);
+                                e.getCurrentItem().setItemMeta(im);
+                                });
+                        ItemMeta itemDropMeta = itemDrop.getItem().getItemMeta();
                         blockBreakMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                        itemDropMeta.setDisplayName(ChatColor.GRAY + "Item Drop");
-                        ItemStack setspawn = new ItemStack(Material.NETHER_STAR, 1);
-                        ItemMeta setspawnMeta = setspawn.getItemMeta();
-                        setspawnMeta.setDisplayName(ChatColor.GRAY + "Set Spawn");
-                        ItemStack setpos = new ItemStack(Material.REDSTONE_BLOCK, 1);
-                        ItemMeta setposMeta = setpos.getItemMeta();
-                        setposMeta.setDisplayName(ChatColor.GRAY + "Set Arena Positions");
-                        ItemStack worldBorder = new ItemStack(Material.BARRIER, 1);
-                        ItemMeta worldBorderMeta = worldBorder.getItemMeta();
-                        worldBorderMeta.setDisplayName(ChatColor.GRAY + "World Border");
+                        ItemButton setspawn = ItemButton.create(new ItemBuilder(Material.NETHER_STAR).setName(ChatColor.GRAY+ "Set Spawn"),e -> {
+                            ArenaData.load(ArenaCommands.arenaNameMap.get(e.getWhoClicked().getUniqueId()));
+                            Player player = (Player) e.getWhoClicked();
+                            ArenaData.get().set("arena", player.getLocation());
+                            ArenaConfiguration.save();
+                            player.sendMessage(ChatColor.GREEN + "Arena Spawn Location Set!");
+                        });
+                        ItemMeta setspawnMeta = setspawn.getItem().getItemMeta();
+                        ItemButton setpos = ItemButton.create(new ItemBuilder(Material.REDSTONE_BLOCK).setName(ChatColor.GRAY+ "Set Position"),e -> {
+                            ArenaData.load(ArenaCommands.arenaNameMap.get(e.getWhoClicked().getUniqueId()));
+                            if (WandListener.pos1m.get(e.getWhoClicked()) != null && WandListener.pos2m.get(e.getWhoClicked()) != null) {
+                                Location loc1 = WandListener.pos1m.get(e.getWhoClicked());
+                                Location loc2 = WandListener.pos2m.get(e.getWhoClicked());
+                                BoundingBox box = new BoundingBox(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
+                                e.getWhoClicked().getWorld().getWorldBorder().setCenter(box.getCenterX(), box.getCenterZ());
+                                e.getWhoClicked().getWorld().getWorldBorder().setSize(box.getMaxX() - box.getMinX());
+                                ArenaData.get().set("arena.pos1.x", loc1.getX());
+                                ArenaData.get().set("arena.pos1.y", loc1.getY());
+                                ArenaData.get().set("arena.pos1.z", loc1.getZ());
+                                ArenaData.get().set("arena.pos2.x", loc2.getX());
+                                ArenaData.get().set("arena.pos2.y", loc2.getY());
+                                ArenaData.get().set("arena.pos2.z", loc2.getZ());
+                                String world = e.getWhoClicked().getWorld().getName();
+                                ArenaData.get().set("arena.world", world);
+                                ArenaData.save();
+                                e.getWhoClicked().sendMessage(ChatColor.GREEN + "Arena Positions Set!");
+                            }});
+                        ItemMeta setposMeta = setpos.getItem().getItemMeta();
+                        ItemButton worldBorder = ItemButton.create(new ItemBuilder(Material.BARRIER).setName(ChatColor.GRAY + "World Border"),e -> {
+                            ArenaData.get().set("world-border", !ArenaData.get().getBoolean("world-border"));
+                            ArenaData.save();
+                            boolean worldBorderBool = ArenaData.get().getBoolean("world-border");
+                            if (worldBorderBool){
+                                Double x1 = ArenaData.get().getDouble("arena.pos1.x");
+                                Double y1 = ArenaData.get().getDouble("arena.pos1.y");
+                                Double z1 = ArenaData.get().getDouble("arena.pos1.z");
+                                Double x2 = ArenaData.get().getDouble("arena.pos2.x");
+                                Double y2 = ArenaData.get().getDouble("arena.pos2.y");
+                                Double z2 = ArenaData.get().getDouble("arena.pos2.z");
+                                BoundingBox box = new BoundingBox(x1, y1, z1, x2, y2, z2);
+                                Bukkit.getWorld(ArenaData.get().getString("arena.world")).getWorldBorder().setCenter(box.getCenterX(), box.getCenterZ());
+                                Bukkit.getWorld(ArenaData.get().getString("arena.world")).getWorldBorder().setSize(box.getMaxX() - box.getMinX());
+                            }else {
+                                WorldBorder worldBorderr = Bukkit.getWorld(ArenaData.get().getString("arena.world")).getWorldBorder();
+                                worldBorderr.reset();
+                            }
+                            List<String> lore = new ArrayList<>();
+                            ItemMeta im = e.getCurrentItem().getItemMeta();
+                            lore.add(ChatColor.GRAY + "Toggle whether or not the world border is enabled.");
+                            lore.add(ChatColor.GREEN + "Currently the world border is " + ArenaData.get().getBoolean("world-border"));
+                            im.setLore(lore);
+                            e.getCurrentItem().setItemMeta(im);
+                                });
+                        ItemMeta worldBorderMeta = worldBorder.getItem().getItemMeta();
                         List<String> blockBreaklore = new ArrayList<>();
                         List<String>  itemDropLore = new ArrayList<>();
                         List<String>  setspawnLore = new ArrayList<>();
@@ -95,21 +159,21 @@ public class ArenaCommands implements CommandExecutor
                         worldBorderLore.add(ChatColor.GRAY + "Toggle whether or not the world border is enabled.");
                         worldBorderLore.add(ChatColor.GREEN + "Currently the world border is " + ArenaData.get().getBoolean("world-border"));
                         itemDropMeta.setLore(itemDropLore);
-                        itemDrop.setItemMeta(itemDropMeta);
+                        itemDrop.getItem().setItemMeta(itemDropMeta);
                         blockBreakMeta.setLore(blockBreaklore);
-                        blockBreak.setItemMeta(blockBreakMeta);
+                        blockBreak.getItem().setItemMeta(blockBreakMeta);
                         setspawnMeta.setLore(setspawnLore);
-                        setspawn.setItemMeta(setspawnMeta);
+                        setspawn.getItem().setItemMeta(setspawnMeta);
                         setposMeta.setLore(setposLore);
-                        setpos.setItemMeta(setposMeta);
+                        setpos.getItem().setItemMeta(setposMeta);
                         worldBorderMeta.setLore(worldBorderLore);
-                        worldBorder.setItemMeta(worldBorderMeta);
-                        arenaGUI.setItem(10, blockBreak);
-                        arenaGUI.setItem(11, itemDrop);
-                        arenaGUI.setItem(12, setspawn);
-                        arenaGUI.setItem(13, setpos);
-                        arenaGUI.setItem(14, worldBorder);
-                        p.openInventory(arenaGUI);
+                        worldBorder.getItem().setItemMeta(worldBorderMeta);
+                        arenaGUI.addButton(10, blockBreak);
+                        arenaGUI.addButton(11, itemDrop);
+                        arenaGUI.addButton(12, setspawn);
+                        arenaGUI.addButton(13, setpos);
+                        arenaGUI.addButton(14, worldBorder);
+                        arenaGUI.open(p);
                         arenaNameMap.put(p.getUniqueId(), arenaName);
                     }
                 }

@@ -114,7 +114,7 @@ public class GameRules implements Listener
                                 }
                             }
                             if (timer == 0) {
-                                if (player.getInventory().contains(Material.ARROW)) {
+                                if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
                                     cancel();
                                     timer = 10;
                                 } else {
