@@ -33,7 +33,7 @@ public class KnockbackFFAArena
         }
     }
 
-    public static void teleportPlayertoArena(Player player) {
+    public static void  teleportPlayertoArena(Player player) {
         if (ArenaData.getfolder().list().length > 0) {
             String enabledArena = getEnabledArena();
             ArenaData.load(enabledArena.replace(".yml", ""));

@@ -39,6 +39,7 @@ commands:
     description: Teleports player to mainlobby if bungeemode is false
     permission: kbffa.command.leave
     permission-message: §cSorry but you need to have permission for this!
+
   setmainlobby:
     description: Sets the mainlobby spawn (works only in bungeemode false)
     permission: kbffa.command.setmainlobby

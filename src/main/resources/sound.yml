@@ -1,11 +1,3 @@
-Legacy:
-  arenachange: NOTE_PLING
-  itemremoved: NOTE_BASS
-  jumpplate: BAT_TAKEOFF
-  join: LEVEL_UP
-  guiclose: ENDER_CHEST_CLOSE
-  guiopen: ENDER_CHEST_OPEN
-  #Note that legacy only works on versions before 1.13.
 
 arenachange: BLOCK_NOTE_BLOCK_HAT
 itemremoved: BLOCK_NOTE_BLOCK_BASS
