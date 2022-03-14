@@ -5,7 +5,7 @@ ClearItems:
  delay: 0
  period: 60
 #Clearing items after a time. the default time is 60 seconds or 1 minutes.
-Bungee-Mode: true
+Bungee-Mode: false
 #Bungee-Mode would make players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
 save-inventory-on-join: true
 #stores player inventory before they join the game but you can set it to false so when a player leaves the game. They'll lose their previous inventory before they join the game(Bungee-Mode Only)

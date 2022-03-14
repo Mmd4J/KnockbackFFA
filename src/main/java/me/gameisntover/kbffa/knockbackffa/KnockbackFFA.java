@@ -1,8 +1,8 @@
 package me.gameisntover.kbffa.knockbackffa;
 
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
+import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.*;
 import me.gameisntover.kbffa.knockbackffa.Listeners.ArenaSettings;
 import me.gameisntover.kbffa.knockbackffa.Listeners.DeathListener;
@@ -10,17 +10,14 @@ import me.gameisntover.kbffa.knockbackffa.Listeners.NoHunger;
 import me.gameisntover.kbffa.knockbackffa.Listeners.guiStuff;
 import me.gameisntover.kbffa.knockbackffa.Placeholders.Expansion;
 import me.gameisntover.kbffa.knockbackffa.commands.ArenaCommands;
-import me.gameisntover.kbffa.knockbackffa.arenas.GameRules;
-import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
+import me.gameisntover.kbffa.knockbackffa.Arena.GameRules;
+import me.gameisntover.kbffa.knockbackffa.Arena.WandListener;
 import me.gameisntover.kbffa.knockbackffa.commands.Commands;
 import me.gameisntover.kbffa.knockbackffa.commands.CommandsTabCompleter;
 import me.gameisntover.kbffa.knockbackffa.messages.ChatFormats;
 import me.gameisntover.kbffa.knockbackffa.messages.JoinLeaveListeners;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.MainScoreboard;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.WallSign;
@@ -34,7 +31,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -121,8 +117,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     }
 
     private void loadTasks() {
-        if (ArenaData.getfolder().listFiles() != null) {
-            List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+        if (Arena.getfolder().listFiles() != null) {
+            List<String> arenaList = Arrays.asList(Arena.getfolder().list());
             ArenaConfiguration.get().set("EnabledArena",arenaList.get(0));
             timer = getConfig().getInt("ArenaChangeTimer");
 
@@ -138,7 +134,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                 p.getInventory().clear();
                                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                                 kitManager.lobbyItems(p);
-                                KnockbackFFAArena.teleportPlayertoArena(p);
+                                Arena.teleportPlayerToArena(p);
                                 KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                 MainScoreboard.toggleScoreboard(p,true);
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
@@ -171,11 +167,13 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                         p.getInventory().clear();
                                         KnockbackFFAKit kitManager = new KnockbackFFAKit();
                                         kitManager.lobbyItems(p);
-                                        KnockbackFFAArena.teleportPlayertoArena(p);
+                                        Arena.teleportPlayerToArena(p);
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                                     }
                                 }
+                                Arena arena = Arena.load(arenaName);
+                                if (arena.get().getBoolean("auto-reset")) {arena.resetArena();}
                             } else {
                                 //arena changes to the first arena
                                 ArenaID = 1;
@@ -183,15 +181,17 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                                 ArenaConfiguration.get().set("EnabledArena", arenaName.replace(".yml", ""));
                                 ArenaConfiguration.save();
                                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                                         p.getInventory().clear();
                                         KnockbackFFAKit kitManager = new KnockbackFFAKit();
                                         kitManager.lobbyItems(p);
-                                        KnockbackFFAArena.teleportPlayertoArena(p);
+                                        Arena.teleportPlayerToArena(p);
                                         KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                                     }
                                 }
+                                Arena arena = Arena.load(arenaName);
+                                if (arena.get().getBoolean("auto-reset")) {arena.resetArena();}
                             }
                         } else if (arenaList.size() == 1) {
                             ArenaConfiguration.get().set("EnabledArena", arenaList.get(0).replace(".yml", ""));
@@ -277,6 +277,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         getCommand("delkit").setExecutor(new Commands());
         getCommand("editarena").setTabCompleter(new CommandsTabCompleter());
         getCommand("specialitems").setExecutor(new Commands());
+        getCommand("resetarena").setExecutor(new Commands());
+        getCommand("resetarena").setTabCompleter(new CommandsTabCompleter());
     }
 
     @Override
@@ -312,12 +314,12 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
             if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
                 Block block = e.getBlockPlaced();
-                String arenaName = KnockbackFFAArena.getEnabledArena();
+                String arenaName = Arena.getEnabledArena();
                 BukkitRunnable runnable = new BukkitRunnable()
                 {
                     @Override
                     public void run() {
-                        if (KnockbackFFAArena.getEnabledArena() == arenaName) {
+                        if (Arena.getEnabledArena() == arenaName) {
                             switch (block.getType()) {
                                 case WHITE_WOOL:
                                     block.setType(Material.YELLOW_WOOL);

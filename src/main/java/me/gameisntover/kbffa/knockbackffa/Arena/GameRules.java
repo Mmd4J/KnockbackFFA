@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.knockbackffa.arenas;
+package me.gameisntover.kbffa.knockbackffa.Arena;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
@@ -101,12 +101,11 @@ public class GameRules implements Listener
                     new BukkitRunnable()
                     {
                         int timer = 10;
-
                         @Override
                         public void run() {
                             timer--;
                             if (timer == 10 || timer == 9 || timer == 8 || timer == 7 || timer == 6 || timer == 5 || timer == 4 || timer == 3 || timer == 2 || timer == 1) {
-                                if (player.getInventory().contains(Material.ARROW)) {
+                                if (player.getInventory().contains(Material.ARROW)|| !player.getInventory().contains(Material.BOW)) {
                                     cancel();
                                     timer = 10;
                                 } else {

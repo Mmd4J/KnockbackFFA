@@ -2,8 +2,8 @@ package me.gameisntover.kbffa.knockbackffa.messages;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
+import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.MainScoreboard;
@@ -29,24 +29,19 @@ public class JoinLeaveListeners implements Listener
         if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound")) {
             KnockbackFFAAPI.playSound(player, "join", 1, 1);
         }
-        if (KnockbackFFAArena.isEnabled(KnockbackFFAArena.getEnabledArena()) == false) {
-            if (player.isOp()) {
-                player.sendMessage("§cSpawn is not set! If you have an ready arena set the spawnpoint for it.");
-            } else if (player.isOp() == false) {
-                player.sendMessage(MessageConfiguration.get().getString("nospawnpoint").replace("&", "§"));
-            }
+        if (Arena.getEnabledArena()==null) {
             KnockbackFFAAPI.setInGamePlayer(player,false);
         } else {
             if (KnockbackFFAAPI.BungeeMode()) {
-                KnockbackFFAArena.teleportPlayertoArena(player);
+                Arena.teleportPlayerToArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 player.getInventory().clear();
                 kitManager.lobbyItems(player);
                 KnockbackFFAAPI.setInGamePlayer(player,true);
 
-            } else if (KnockbackFFAAPI.BungeeMode() == false) {
+            } else if (!KnockbackFFAAPI.BungeeMode()) {
                 if (!KnockbackFFAAPI.isInGame(player)) {
-                    KnockbackFFAArena.leaveArena(player);
+                    Arena.leaveArena(player);
                     KnockbackFFAAPI.setInGamePlayer(player,false);
                 }
             }

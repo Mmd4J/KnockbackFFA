@@ -2,17 +2,13 @@ package me.gameisntover.kbffa.knockbackffa.Listeners;
 
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
+import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.Kits;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
-import me.gameisntover.kbffa.knockbackffa.commands.ArenaCommands;
-import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -30,12 +26,12 @@ public class ArenaSettings implements Listener {
         Player player = e.getPlayer();
         if (playerArena.get(player) == "arena") {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
-                List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+                List<String> arenaList = Arrays.asList(Arena.getfolder().list());
                 for (String arenaName : arenaList) {
-                    ArenaData.load(arenaName.replace(".yml", ""));
+                    Arena arena = Arena.load(arenaName.replace(".yml", ""));
                     PlayerData.load(player);
                     if (playerArena.get(player).equalsIgnoreCase("arena")) {
-                        if (!ArenaData.get().getBoolean("block-break")) {
+                        if (!arena.get().getBoolean("block-break")) {
                             e.setCancelled(true);
                         }else{
                             e.setCancelled(false);
@@ -50,14 +46,14 @@ public class ArenaSettings implements Listener {
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
-            List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+            List<String> arenaList = Arrays.asList(Arena.getfolder().list());
             for (String arenaName : arenaList) {
-                ArenaData.load(arenaName.replace(".yml", ""));
+                Arena arena = Arena.load(arenaName.replace(".yml", ""));
                 PlayerData.load(player);
                 if (playerArena.get(player).equalsIgnoreCase("arena")) {
-                    if (ArenaData.get().getBoolean("item-drop")) {
+                    if (arena.get().getBoolean("item-drop")) {
                         e.setCancelled(false);
-                    } else if (!ArenaData.get().getBoolean("item-drop")) {
+                    } else if (!arena.get().getBoolean("item-drop")) {
                         e.setCancelled(true);
                     }
                 }
@@ -69,19 +65,20 @@ public class ArenaSettings implements Listener {
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) {
-            List<String> arenaList = Arrays.asList(Arrays.stream(ArenaData.getfolder().list()).map(s -> {
+            List<String> arenaList = Arrays.asList(Arrays.stream(Arena.getfolder().list()).map(s -> {
                 return s.replace(".yml", "");
             }).toArray(String[]::new));
             Location loc1 = null;
             Location loc2 = null;
+
             for (String arena : arenaList) {
-                ArenaData.load(arena);
-                BoundingBox s1box = new BoundingBox(ArenaData.get().getDouble("arena.pos1.x"), ArenaData.get().getDouble("arena.pos1.y"), ArenaData.get().getDouble("arena.pos1.z"), ArenaData.get().getDouble("arena.pos2.x"), ArenaData.get().getDouble("arena.pos2.y"), ArenaData.get().getDouble("arena.pos2.z"));
-                World world = Bukkit.getWorld(ArenaData.get().getString("arena.world"));
+               Arena arena1 =  Arena.load(arena);
+                BoundingBox s1box = new BoundingBox(arena1.get().getDouble("arena.pos1.x"), arena1.get().getDouble("arena.pos1.y"), arena1.get().getDouble("arena.pos1.z"), arena1.get().getDouble("arena.pos2.x"), arena1.get().getDouble("arena.pos2.y"), arena1.get().getDouble("arena.pos2.z"));
+                Location spawnLoc = arena1.get().getLocation("arena.spawn");
                 Location location = player.getLocation();
-                if (s1box.contains(location.toVector()) && player.getWorld() == world) {
-                    loc1 = new Location(world, ArenaData.get().getDouble("arena.pos1.x"), ArenaData.get().getDouble("arena.pos1.y"), ArenaData.get().getDouble("arena.pos1.z"));
-                    loc2 = new Location(world, ArenaData.get().getDouble("arena.pos2.x"), ArenaData.get().getDouble("arena.pos2.y"), ArenaData.get().getDouble("arena.pos2.z"));
+                if (s1box.contains(location.toVector()) && player.getWorld() == spawnLoc.getWorld()) {
+                    loc1 = new Location(spawnLoc.getWorld(), arena1.get().getDouble("arena.pos1.x"), arena1.get().getDouble("arena.pos1.y"), arena1.get().getDouble("arena.pos1.z"));
+                    loc2 = new Location(spawnLoc.getWorld(), arena1.get().getDouble("arena.pos2.x"), arena1.get().getDouble("arena.pos2.y"), arena1.get().getDouble("arena.pos2.z"));
                     }
                 }
             if (loc1 != null && loc2 != null) {

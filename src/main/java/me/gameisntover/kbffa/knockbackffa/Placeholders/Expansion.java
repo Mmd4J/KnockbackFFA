@@ -2,8 +2,8 @@ package me.gameisntover.kbffa.knockbackffa.Placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.knockbackffa.API.balanceAPI;
+import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
-import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaData;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
@@ -71,9 +71,10 @@ public class Expansion extends PlaceholderExpansion
             return minutes + ":" + seconds;
         }
         if (params.equalsIgnoreCase("next_map")){
-            if (ArenaData.getfolder()!=null){
+            if (Arena.getfolder().list()!=null && Arena.getfolder().list().length>1){
                 String arenaName = ArenaConfiguration.get().getString("EnabledArena");
-                List<String> arenaList = Arrays.asList(ArenaData.getfolder().list());
+
+                List<String> arenaList = Arrays.asList(Arena.getfolder().list());
                 int index = arenaList.indexOf(arenaName);
                 if (index == arenaList.size()-1){
                     return arenaList.get(0).replace(".yml","");

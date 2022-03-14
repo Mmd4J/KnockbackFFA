@@ -7,6 +7,10 @@ softdepend:
   - 'PlaceholderAPI'
 description: Knockback ffa is a gamemode which gives every players knockback stick and some other stuffs which makes the game more fun!
 commands:
+  resetarena:
+    permission: kbffa.reset
+    description: Reset the arena blocks to the original state.
+    permission-message: §cSorry but you need to have permission for this!
   createkit:
     permission: 'kbffa.command.createkit'
     description: 'Create a kit'

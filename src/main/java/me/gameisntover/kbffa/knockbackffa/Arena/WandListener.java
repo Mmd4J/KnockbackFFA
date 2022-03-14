@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.knockbackffa.arenas;
+package me.gameisntover.kbffa.knockbackffa.Arena;
 
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
 import org.bukkit.Location;

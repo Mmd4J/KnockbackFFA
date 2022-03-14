@@ -2,9 +2,9 @@ package me.gameisntover.kbffa.knockbackffa.Listeners;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.API.balanceAPI;
+import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
@@ -19,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
@@ -88,13 +89,16 @@ public class DeathListener implements Listener
         killer.remove(player);
         ArenaSettings.playerArena.remove(player);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
-            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), () -> {
-                player.spigot().respawn();
-                KnockbackFFAArena.teleportPlayertoArena(player);
-                KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                kitManager.lobbyItems(player);
-            }, 1);
+            new BukkitRunnable() {
+                @Override
+                        public void run() {
+                        player.spigot().respawn();
+                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                        kitManager.lobbyItems(player);
+                        Arena.teleportPlayerToArena(player);
+                        cancel();
+                }
+            }.runTaskTimer(KnockbackFFA.getInstance(),0, 1);
             World world = player.getWorld();
             List<Entity> entList = world.getEntities();
             for (Entity current : entList) {

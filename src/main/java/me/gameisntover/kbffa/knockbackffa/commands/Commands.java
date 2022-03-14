@@ -2,12 +2,12 @@ package me.gameisntover.kbffa.knockbackffa.commands;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
-import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAArena;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.*;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
-import me.gameisntover.kbffa.knockbackffa.arenas.VoidChunkGenerator;
-import me.gameisntover.kbffa.knockbackffa.arenas.WandListener;
+import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
+import me.gameisntover.kbffa.knockbackffa.Arena.VoidChunkGenerator;
+import me.gameisntover.kbffa.knockbackffa.Arena.WandListener;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,8 +68,8 @@ public class Commands implements CommandExecutor
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("join")).getName().equalsIgnoreCase(command.getName())) {
             if (!KnockbackFFAAPI.BungeeMode() && !KnockbackFFAAPI.isInGame(p)) {
-                    if (KnockbackFFAArena.arenaisReady(1)) {
-                    KnockbackFFAArena.teleportPlayertoArena(p.getPlayer());
+                    Arena.leaveArena(p);
+
                     String joinText = Objects.requireNonNull(MessageConfiguration.get().getString("join-arena")).replace("&", "§");
                     joinText = PlaceholderAPI.setPlaceholders(p, joinText);
                     sender.sendMessage(joinText);
@@ -77,7 +78,7 @@ public class Commands implements CommandExecutor
                         PlayerData.get().set("inventory", p.getPlayer().getInventory().getContents());
                         PlayerData.get().set("armor", p.getPlayer().getInventory().getArmorContents());
                         PlayerData.save();
-                    }
+
                         p.getPlayer().getInventory().clear();
                         p.setFoodLevel(20);
                         KnockbackFFAKit kit = new KnockbackFFAKit();
@@ -95,7 +96,7 @@ public class Commands implements CommandExecutor
                 String leaveText = Objects.requireNonNull(MessageConfiguration.get().getString("leave-arena")).replace("&", "§");
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);
-                KnockbackFFAArena.leaveArena(p.getPlayer());
+                Arena.leaveArena(p.getPlayer());
                 p.getInventory().clear();
                 if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
                     PlayerData.load(p.getPlayer());
@@ -123,6 +124,18 @@ public class Commands implements CommandExecutor
             String world = Objects.requireNonNull(loc.getWorld()).getName();
             ArenaConfiguration.get().set("mainlobby.world", world);
             ArenaConfiguration.save();
+        }
+        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("resetarena")).getName().equalsIgnoreCase(command.getName())) {
+            if (args.length > 0){
+                File file = new File(Arena.getfolder() + File.separator + args[0] + ".yml");
+                if (file.exists()) {
+                Arena arena = Arena.load(args[0]);
+                 arena.resetArena();
+                 sender.sendMessage(ChatColor.GREEN + "Arena has been reset!");
+                }else{
+                    sender.sendMessage(ChatColor.RED + "Arena does not exist");
+                }
+            }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("createworld")).getName().equalsIgnoreCase(command.getName())) {
             if (args.length > 0) {
