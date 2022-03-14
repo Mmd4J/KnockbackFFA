@@ -13,10 +13,15 @@ public final class ArenaCreateEvent extends Event {
         this.player = player;
         this.arena = arena;
     }
-
     @Override
     public HandlerList getHandlers() {
         return handlers;
+
+    }
+
+    public HandlerList getHandlerList() {
+        return handlers;
+
     }
     public Arena getArena(){
         return arena;
