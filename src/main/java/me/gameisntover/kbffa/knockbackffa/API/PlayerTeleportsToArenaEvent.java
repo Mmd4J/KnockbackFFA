@@ -15,6 +15,12 @@ public final class PlayerTeleportsToArenaEvent extends Event implements Cancella
         this.player = player;
         this.arena = arena;
     }
+    public Arena getArena(){
+        return arena;
+    }
+    public Player getPlayer(){
+        return player;
+    }
     @Override
     public boolean isCancelled() {
         return this.isCancelled;
@@ -24,14 +30,11 @@ public final class PlayerTeleportsToArenaEvent extends Event implements Cancella
     public void setCancelled(boolean arg0) {
         this.isCancelled = arg0;
     }
-    @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    public Arena getArena(){
-        return arena;
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
-    public Player getPlayer(){
-        return player;
-    }
+
 }
