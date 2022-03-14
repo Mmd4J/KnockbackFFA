@@ -30,9 +30,11 @@ public final class PlayerTeleportsToArenaEvent extends Event implements Cancella
     public void setCancelled(boolean arg0) {
         this.isCancelled = arg0;
     }
+
     public HandlerList getHandlers() {
         return handlers;
     }
+
     public static HandlerList getHandlerList() {
         return handlers;
     }
