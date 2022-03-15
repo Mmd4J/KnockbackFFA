@@ -60,7 +60,7 @@ public class ArenaCommands implements CommandExecutor {
                         arena.get().set("locations", locations);
                         arena.save();
                             if (arena.getfolder().list().length == 1) {
-                                ArenaConfiguration.get().set("EnabledArena", args[0]);
+                                Arena.setEnabledArena(args[0]);
                                 ArenaConfiguration.save();
                             }
                         ArenaCreateEvent event = new ArenaCreateEvent(p,arena);

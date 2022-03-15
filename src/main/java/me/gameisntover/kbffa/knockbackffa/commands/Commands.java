@@ -33,7 +33,7 @@ public class Commands implements CommandExecutor
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Usage: /createkit <kitname>");
                 } if (args.length == 1) {
-                    Kits kit = new Kits(args[0]);
+                    Kits kit = Kits.create(args[0]);
                     List<ItemStack> kitItems = Arrays.asList(Arrays.stream(p.getInventory().getContents()).filter(Objects::nonNull).toArray(ItemStack[]::new));
                     kit.get().set("KitContents", kitItems);
                     kit.get().set("Price",100);

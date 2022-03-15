@@ -22,24 +22,28 @@ public class Kits
     public static FileConfiguration config;
     public static File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
     public static File df = KnockbackFFA.getInstance().getDataFolder();
-    private String kitName;
+    private static String kitName;
 
-
-    public Kits(String kitsName) {
-            this.kitName = kitsName;
+    public static Kits load(String kitsName) {
+            kitName = kitsName;
+            cfile = new File(df, "Kits" + File.separator + kitsName + ".yml");
+            config = YamlConfiguration.loadConfiguration(cfile);
+            return new Kits();
+        }
+        public static Kits create(String kitsName){
+            kitName = kitsName;
             cfile = new File(df, "Kits" + File.separator + kitsName + ".yml");
             if (!df.exists()) df.mkdir();
             if (!cfile.exists()) {
                 try {
                     cfile.createNewFile();
+                    config = YamlConfiguration.loadConfiguration(cfile);
                 } catch (Exception e) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error creating " + cfile.getName() + "!");
                 }
-            } else if (cfile.exists()) {
-                cfile = new File(df, "Kits" + File.separator + kitsName + ".yml");
-                config = YamlConfiguration.loadConfiguration(cfile);
             }
             config = YamlConfiguration.loadConfiguration(cfile);
+            return new Kits();
         }
     public static File getfolder() {
         return folder;
@@ -54,7 +58,7 @@ public class Kits
     }
     public void giveKit(Player player) {
       if (cfile.exists()) {
-          Kits kit = new Kits(kitName);
+          Kits kit = Kits.load(kitName);
           if (kit.get().getList("KitContents") != null) {
               List<ItemStack> kitContents = Arrays.asList(kit.get().getList("KitContents").toArray(new ItemStack[0]));
               player.getInventory().setContents(kitContents.toArray(new ItemStack[0]));

@@ -1,7 +1,10 @@
 package me.gameisntover.kbffa.knockbackffa.Arena;
 
+import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
+import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.API.PlayerTeleportsToArenaEvent;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ArenaConfiguration;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.MessageConfiguration;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -10,15 +13,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Arena
 {
 
-
+    public static Arena enabledArena = null;
     public static File cfile;
     public static FileConfiguration config;
     public static File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData" + File.separator);
@@ -71,13 +71,15 @@ public class Arena
     public void resetArena(){
         Location loc1 = get().getLocation("arena.pos1");
         Location loc2 = get().getLocation("arena.pos2");
+        assert loc2 != null;
+        assert loc1 != null;
         Cuboid region = new Cuboid(loc1, loc2);
         List<String> blocks = get().getStringList("blocks");
         List<String> slocs = get().getStringList("locations");
         for (Block block : region.getBlocks()) {
             String bloc = block.getLocation().toString();
             int index = slocs.indexOf(bloc);
-            if (block.getType().name() != blocks.get(index)) {
+            if (!block.getType().name().equals(blocks.get(index))) {
                 block.setType(Material.getMaterial(blocks.get(index)));
             }
         }
@@ -88,7 +90,7 @@ public class Arena
      * @return true if the arena is ready
      */
     public boolean isReady() {
-        List<String> arenaList = Arrays.asList(Arena.getfolder().list());
+        List<String> arenaList = Arrays.asList(Objects.requireNonNull(Arena.getfolder().list()));
         return arenaList.contains(arenaN);
     }
 
@@ -96,27 +98,25 @@ public class Arena
      * checks if the arena is enabled
      * @return true if the arena is the enabled arena
      */
-    public static boolean isEnabled() {
-        return ArenaConfiguration.get().getString("EnabledArena").equalsIgnoreCase(arenaN);
+    public boolean isEnabled() {
+        return getEnabledArena().getName().equals(arenaN);
     }
 
     /**
      * teleports player to the enabled arena
-     * @param player
+     * @param @player
      */
     public static void  teleportPlayerToArena(Player player) {
         if (Arena.getfolder().list().length > 0) {
-            String enabledArena = getEnabledArena();
-            Arena arena = Arena.load(enabledArena.replace(".yml", ""));
-            PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
+            PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, getEnabledArena());
             Bukkit.getPluginManager().callEvent(event);
-            Location spawnLoc = arena.get().getLocation("arena.spawn");
+            Location spawnLoc = getEnabledArena().getSpawnLocation();
             if(spawnLoc.getWorld()!=null) {
                 if (!event.isCancelled()) {
                     player.teleport(spawnLoc);
                 }
             }else {
-                WorldCreator wc = new WorldCreator(arena.get().getString("arena.spawn.world"));
+                WorldCreator wc = new WorldCreator(getEnabledArena().get().getString("arena.spawn.world"));
                 wc.generateStructures(false);
                 wc.generator(new VoidChunkGenerator());
                 World world1 = wc.createWorld();
@@ -136,27 +136,26 @@ public class Arena
     /**
      * @return the enabledArena
      */
-    public static String getEnabledArena() {
-        return ArenaConfiguration.get().getString("EnabledArena");
+    public static Arena getEnabledArena() {
+        return enabledArena;
     }
 
     /**
      * teleports player to the arena
-     * @param player
+     * @param @player
      */
     public void teleportPlayer(Player player) {
-        if (getEnabledArena()==arenaN) {
+        if (getEnabledArena().getName()==arenaN) {
             Arena arena = Arena.load(arenaN);
-            Location spawnLoc = arena.get().getLocation("arena.spawn");
             PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
             Bukkit.getPluginManager().callEvent(event);
-            player.teleport(spawnLoc);
+            player.teleport(getSpawnLocation());
         }
     }
 
     /**
      * returns player to the main lobby
-     * @param player
+     * @param @player
      */
     public static void leaveArena(Player player) {
         if (ArenaConfiguration.get().getString("mainlobby.world") != null) {
@@ -164,7 +163,7 @@ public class Arena
             Double y = ArenaConfiguration.get().getDouble("mainlobby.y");
             Double z = ArenaConfiguration.get().getDouble("mainlobby.z");
             World world = Bukkit.getWorld(ArenaConfiguration.get().getString("mainlobby.world"));
-            if (world != null && x != null && y != null && z != null) {
+            if (world != null && x != null) {
                 player.teleport(new Location(world, x, y, z));
             } else {
                 player.teleport(Bukkit.getWorld("world").getSpawnLocation());
@@ -177,19 +176,21 @@ public class Arena
      */
     public void removeArena(){
         cfile.delete();
-            while (getEnabledArena()==arenaN){
-                get().set("EnabledArena",randomArena());
+            while (Objects.equals(getEnabledArena(), arenaN)){
+                setEnabledArena(randomArena());
             }
                 save();
         }
 
     /**
      * sets the arena enabled
-     * @param arena
+     * @param @arena
      */
-    public void setEnabledArena(String arena){
-        get().set("EnabledArena",arena);
-        save();
+    public static void setEnabledArena(String arenaName){
+        enabledArena = Arena.load(arenaName);
+    }
+    public static void setEnabledArena(Arena arena){
+        enabledArena = arena;
     }
     /**
      * Returns a list of arena positions.
@@ -213,5 +214,78 @@ public class Arena
         String[] arenas = Arena.getfolder().list();
         int random = new Random().nextInt(arenas.length);
         return arenas[random];
+    }
+    /**
+     * Returns the arena name
+     * @return String
+     */
+    public String getName(){
+        return arenaN;
+    }
+    /**
+     * Checks if the player is in arena region
+     * @param @location
+     * @return true if location is in the region
+     */
+    public boolean contains(Location location){
+        Cuboid cuboid = new Cuboid(getPos1(),getPos2());
+        return cuboid.contains(location);
+    }
+    /**
+     * Returns the arena spawn location
+     * @return Region
+     */
+    public Location getSpawnLocation(){
+        return get().getLocation("arena.spawn");
+    }
+    /**
+     * Returns the arenas first pos
+     * @return First position of the arena
+     */
+    public Location getPos1(){
+        return get().getLocation("arena.pos1");
+    }
+    /**
+     * Returns the arenas second pos
+     * @return Second position of the arena
+     */
+    public Location getPos2(){
+        return get().getLocation("arena.pos2");
+    }
+
+    /**
+     * Returns the arena cuboid region
+     * @return Cuboid
+     */
+    public Cuboid getCuboid(){
+        return new Cuboid(getPos1(),getPos2());
+    }
+    public static List<Arena> getArenaList(){
+        List<Arena> arenas = new ArrayList<>();
+        for (String arena : Arena.getfolder().list()){
+            arenas.add(Arena.load(arena.replace(".yml","")));
+        }
+        return arenas;
+    }
+
+    /**
+     * Changes the arena to another arena
+     * @param @arena
+     */
+    public static void changeArena(Arena arena){
+        String arenaName = arena.getName();
+        setEnabledArena(arenaName);
+        ArenaConfiguration.save();
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                p.getInventory().clear();
+                KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                kitManager.lobbyItems(p);
+                Arena.teleportPlayerToArena(p);
+                KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
+            }
+            if (arena.get().getBoolean("auto-reset")) {arena.resetArena();}
+        }
     }
 }

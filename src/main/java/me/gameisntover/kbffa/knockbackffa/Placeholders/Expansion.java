@@ -57,7 +57,7 @@ public class Expansion extends PlaceholderExpansion
             return balanceAPI.getBalance(player.getPlayer())+"";
         }
         if (params.equalsIgnoreCase("current_map")) {
-            String arenaName = ArenaConfiguration.get().getString("EnabledArena");
+            String arenaName = Arena.enabledArena.getName();
             if (arenaName == null) {
                 return "No Arena";
             } else {
@@ -72,7 +72,7 @@ public class Expansion extends PlaceholderExpansion
         }
         if (params.equalsIgnoreCase("next_map")){
             if (Arena.getfolder().list()!=null && Arena.getfolder().list().length>1){
-                String arenaName = ArenaConfiguration.get().getString("EnabledArena");
+                String arenaName = Arena.getEnabledArena().getName();
 
                 List<String> arenaList = Arrays.asList(Arena.getfolder().list());
                 int index = arenaList.indexOf(arenaName);
