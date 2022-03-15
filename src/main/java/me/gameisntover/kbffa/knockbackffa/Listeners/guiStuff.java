@@ -143,7 +143,7 @@ public class guiStuff implements Listener {
                         List<String> cList = PlayerData.get().getStringList("owned-kits");
                         for (String cosmetic : cosmetics) {
                             if (cosmetic != null) {
-                                Kits kit = new Kits(cosmetic);
+                                Kits kit = Kits.load(cosmetic);
                                 String kitIcon = kit.get().getString("KitIcon");
                                 String kitName = kit.get().getString("KitName").replace("&", "§");
                                 ItemButton kitsItem = ItemButton.create(new ItemBuilder(Material.getMaterial(kitIcon)).setName(kitName), event1 -> {
@@ -206,7 +206,7 @@ public class guiStuff implements Listener {
                       List<String> kitsList = PlayerData.get().getList("owned-kits").stream().map(s -> s.toString()).collect(Collectors.toList());
                       for (String kit : kitsList) {
                           if (kit != null) {
-                              Kits kitItems = new Kits(kit);
+                              Kits kitItems = Kits.load(kit);
                               if (kitItems.get().getString("KitIcon") != null || kitItems.get().getString("KitIcon") != "AIR") {
                                   String icon = kitItems.get().getString("KitIcon");
                                   String name = kitItems.get().getString("KitName").replace("&", "§");
