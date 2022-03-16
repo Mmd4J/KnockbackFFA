@@ -7,8 +7,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import sun.security.krb5.internal.ktab.KeyTabInputStream;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;

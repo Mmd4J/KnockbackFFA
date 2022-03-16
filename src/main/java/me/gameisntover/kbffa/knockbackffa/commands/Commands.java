@@ -3,11 +3,9 @@ package me.gameisntover.kbffa.knockbackffa.commands;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
+import me.gameisntover.kbffa.knockbackffa.Arena.*;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.*;
 import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
-import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
-import me.gameisntover.kbffa.knockbackffa.Arena.VoidChunkGenerator;
-import me.gameisntover.kbffa.knockbackffa.Arena.WandListener;
 import me.gameisntover.kbffa.knockbackffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -18,11 +16,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import javax.swing.plaf.synth.Region;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Commands implements CommandExecutor
 {
@@ -130,7 +130,7 @@ public class Commands implements CommandExecutor
                 File file = new File(Arena.getfolder() + File.separator + args[0] + ".yml");
                 if (file.exists()) {
                 Arena arena = Arena.load(args[0]);
-                 arena.resetArena();
+                arena.resetArena();
                  sender.sendMessage(ChatColor.GREEN + "Arena has been reset!");
                 }else{
                     sender.sendMessage(ChatColor.RED + "Arena does not exist");

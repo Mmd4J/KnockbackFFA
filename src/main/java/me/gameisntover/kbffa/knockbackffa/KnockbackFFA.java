@@ -60,7 +60,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
         if(Bukkit.getOnlinePlayers().size() > 0){
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (KnockbackFFAAPI.BungeeMode()) {
-                    KnockbackFFAAPI.setInGamePlayer(player, true);
+                    KnockbackFFAAPI.setInGamePlayer(player,true);
                 } else {
                     KnockbackFFAAPI.setInGamePlayer(player, false);
                 }

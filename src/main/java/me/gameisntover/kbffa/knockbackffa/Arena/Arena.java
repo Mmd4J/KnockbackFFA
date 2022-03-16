@@ -11,9 +11,11 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Arena
 {
@@ -24,7 +26,8 @@ public class Arena
     public static File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData" + File.separator);
     public static File df = KnockbackFFA.getInstance().getDataFolder();
     private static String arenaN;
-    public static Arena create(String arenaName) {
+
+    public static Arena create(String arenaName, Location position1, Location position2, Location spawnPoint) {
         cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
         if (!df.exists()) df.mkdir();
         if (!cfile.exists()) {
@@ -36,6 +39,18 @@ public class Arena
         }
         config = YamlConfiguration.loadConfiguration(cfile);
         arenaN = arenaName;
+        Arena arena = Arena.load(arenaName);
+        arena.get().set("block-break", false);
+        arena.get().set("item-drop", true);
+        arena.get().set("world-border", false);
+        arena.get().set("block-break", false);
+        arena.get().set("item-drop", false);
+        arena.get().set("world-border", false);
+        arena.get().set("auto-reset", false);
+        arena.get().set("arena.pos1", position1);
+        arena.get().set("arena.pos2", position2);
+        arena.get().set("arena.spawn", spawnPoint);
+        arena.save();
         return new Arena();
     }
 
@@ -64,29 +79,47 @@ public class Arena
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error saving " + cfile.getName() + "!");
         }
     }
-
     /**
      * resets arena blocks to the original state
      */
-    public void resetArena(){
-        Location loc1 = get().getLocation("arena.pos1");
-        Location loc2 = get().getLocation("arena.pos2");
+
+    public void resetArena() {
+        Location loc1 = getPos1();
+        Location loc2 = getPos2();
         assert loc2 != null;
         assert loc1 != null;
         Cuboid region = new Cuboid(loc1, loc2);
-        List<String> blocks = get().getStringList("blocks");
-        List<String> slocs = get().getStringList("locations");
-        for (Block block : region.getBlocks()) {
-            String bloc = block.getLocation().toString();
-            int index = slocs.indexOf(bloc);
-            if (!block.getType().name().equals(blocks.get(index))) {
-                block.setType(Material.getMaterial(blocks.get(index)));
-            }
-        }
+        List<String> materials = get().getStringList("blocks");
+        List<Block> blocks = region.getBlocks();
+        new BukkitRunnable(){
+                    int allBlocks = region.getBlocks().size();
+                    int remainBlocks = region.getBlocks().size();
+                    int amountBlocksEachSec;
+                    int startPoint;
+                    @Override
+            public void run() {
+                        amountBlocksEachSec = KnockbackFFA.getInstance().getConfig().getInt("autoresetcheck-blocks");
+                        startPoint = allBlocks - remainBlocks;
+                        while (startPoint < blocks.size() && amountBlocksEachSec > 0 && remainBlocks > 0) {
+                            Material material = Material.getMaterial(materials.get(startPoint));
+                            Block block = blocks.get(startPoint);
+                            block.setType(material);
+                            amountBlocksEachSec--;
+                            remainBlocks--;
+                            startPoint = allBlocks - remainBlocks;
+                        }
+                        if (remainBlocks <= 0) {
+                            cancel();
+                            System.out.println(getName() + " has been reset!");
+                        }
+                   }
+        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
     }
+
 
     /**
      * checks if the arena is ready and its able to use
+     *
      * @return true if the arena is ready
      */
     public boolean isReady() {
@@ -285,7 +318,8 @@ public class Arena
                 KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
             }
-            if (arena.get().getBoolean("auto-reset")) {arena.resetArena();}
+            if (arena.get().getBoolean("auto-reset")) {//arena.resetArena();
+                 }
         }
     }
 }

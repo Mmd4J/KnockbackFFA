@@ -87,7 +87,7 @@ public class DeathListener implements Listener
         Player player = e.getEntity();
         Entity damager = killer.get(player);
         killer.remove(player);
-        ArenaSettings.playerArena.remove(player);
+        KnockbackFFAAPI.setInArenaPlayer(player,false);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
             new BukkitRunnable() {
                 @Override

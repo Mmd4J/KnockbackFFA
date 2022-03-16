@@ -13,16 +13,32 @@ import java.util.UUID;
 
 public class KnockbackFFAAPI
 {
-   private static Map<UUID , Boolean> inGamePlayer = new HashMap<>();
+    private static Map<UUID,Boolean> inGamePlayer = new HashMap<>();
+   private static Map<UUID , Boolean> inArenaPlayer = new HashMap<>();
     public static boolean BungeeMode() {
         return KnockbackFFA.getInstance().getConfig().getBoolean("Bungee-Mode");
     }
 
     public static boolean isInGame(Player player) {
-        return inGamePlayer.get(player.getUniqueId());
+        if (inGamePlayer.get(player.getUniqueId()) != null) {
+            return inGamePlayer.get(player.getUniqueId());
+        }else{
+            return false;
+        }
     }
-    public static void setInGamePlayer(Player player,boolean inGame) {
-        inGamePlayer.put(player.getUniqueId(), inGame);
+    public static void setInGamePlayer(Player player,boolean value) {
+        inGamePlayer.put(player.getUniqueId(), value);
+    }
+    public static boolean isInArena(Player player){
+        if (inArenaPlayer.get(player.getUniqueId()) != null) {
+            return inArenaPlayer.get(player.getUniqueId());
+        }
+        else{
+            return false;
+        }
+    }
+    public static void setInArenaPlayer(Player player,boolean value){
+        inArenaPlayer.put(player.getUniqueId(),value);
     }
     public static String selectedCosmetic(Player player) {
         PlayerData.load(player);

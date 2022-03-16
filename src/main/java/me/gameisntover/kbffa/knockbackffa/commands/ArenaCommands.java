@@ -38,17 +38,7 @@ public class ArenaCommands implements CommandExecutor {
                     } else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                         Location loc1 = WandListener.pos1m.get(p);
                         Location loc2 = WandListener.pos2m.get(p);
-                       Arena arena =  Arena.create(args[0]);
-                        arena.get().set("block-break", false);
-                        arena.get().set("item-drop", true);
-                        arena.get().set("world-border", false);
-                        arena.get().set("arena.pos1", loc1);
-                        arena.get().set("arena.pos2", loc2);
-                        arena.get().set("block-break", false);
-                        arena.get().set("item-drop", false);
-                        arena.get().set("world-border", false);
-                        arena.get().set("auto-reset",false);
-                        arena.get().set("arena.spawn",p.getLocation());
+                       Arena arena =  Arena.create(args[0],loc1,loc2,p.getLocation());
                         List<String> blocks = new ArrayList<>();
                         List<String> locations = new ArrayList<>();
                         Cuboid region = new Cuboid(loc1, loc2);
@@ -57,7 +47,6 @@ public class ArenaCommands implements CommandExecutor {
                             locations.add(block.getLocation().toString());
                         }
                         arena.get().set("blocks", blocks);
-                        arena.get().set("locations", locations);
                         arena.save();
                             if (arena.getfolder().list().length == 1) {
                                 Arena.setEnabledArena(args[0]);
