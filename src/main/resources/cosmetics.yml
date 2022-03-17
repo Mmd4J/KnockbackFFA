@@ -22,20 +22,17 @@ FireKillEffect:
   sound : 'ENTITY_BLAZE_SHOOT'
   pitch: 1
   volume: 1
-FireWorkKillEffect:
-    type: 'KILL_EFFECT'
-    effect-type: 'FIREWORK_EXPLODE'
-    amount: 150
-    icon: 'FIREWORK_ROCKET'
-    name: "&5FireWork Effect"
-    price: 100
-    lore:
-      - '&7Explodes firework particle when you kill someone!'
-    sound: 'ENTITY_BLAZE_SHOOT'
-    pitch: 1
-    volume: 1
-
+FrozenTrail:
+  type: "TRAIL"
+  blocks:
+    - 'PACKED_ICE'
+  speed: 1
+  name: "&3Frozen Trail"
+  price: 200
+  lore:
+    - '&4Freeze the arena while walking!'
+  icon: "PACKED_ICE"
 registered-cosmetics:
   - 'EndKillEffect'
   - 'FireKillEffect'
-  - 'FireWorkKillEffect'
+  - 'FrozenTrail'

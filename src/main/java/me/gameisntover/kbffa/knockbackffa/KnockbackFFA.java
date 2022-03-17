@@ -37,6 +37,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import redempt.redlib.blockdata.BlockDataManager;
+import redempt.redlib.blockdata.DataBlock;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,10 +55,13 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     public static KnockbackFFA getInstance() {
         return INSTANCE;
     }
+    private BlockDataManager manager;
 
     @Override
     public void onEnable() {
         INSTANCE = this;
+            manager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
+            ArenaSettings.manager = BlockDataManager.createAuto(this,this.getDataFolder().toPath().resolve("blocks.db"),true,true);
         if(Bukkit.getOnlinePlayers().size() > 0){
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (KnockbackFFAAPI.BungeeMode()) {
@@ -280,13 +285,14 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
             event.setLine(1, ChatColor.GREEN + "Join");
         }
     }
-
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         Player player = e.getPlayer();
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
             if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
                 Block block = e.getBlockPlaced();
+                DataBlock db = manager.getDataBlock(block);
+                db.set("block-type","BuildingBlock");
                 String arenaName = Arena.getEnabledArena().getName();
                 BukkitRunnable runnable = new BukkitRunnable()
                 {
@@ -310,6 +316,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                             }
                         }else {
                             block.setType(Material.AIR);
+                            db.set("block-type","");
                         }
                     }
                 };

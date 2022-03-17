@@ -12,6 +12,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import redempt.redlib.blockdata.BlockDataManager;
+import redempt.redlib.blockdata.DataBlock;
 
 import java.io.File;
 import java.util.*;
@@ -82,7 +84,6 @@ public class Arena
     /**
      * resets arena blocks to the original state
      */
-
     public void resetArena() {
         Location loc1 = getPos1();
         Location loc2 = getPos2();
@@ -92,10 +93,10 @@ public class Arena
         List<String> materials = get().getStringList("blocks");
         List<Block> blocks = region.getBlocks();
         new BukkitRunnable(){
-                    int allBlocks = region.getBlocks().size();
-                    int remainBlocks = region.getBlocks().size();
-                    int amountBlocksEachSec;
-                    int startPoint;
+            protected int allBlocks = region.getBlocks().size();
+            protected int remainBlocks = region.getBlocks().size();
+            protected int amountBlocksEachSec;
+            protected int startPoint;
                     @Override
             public void run() {
                         amountBlocksEachSec = KnockbackFFA.getInstance().getConfig().getInt("autoresetcheck-blocks");

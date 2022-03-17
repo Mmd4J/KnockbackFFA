@@ -19,4 +19,5 @@ already-owned: "&cYou already own this item!"
 suicide: "&bYou died by falling into the void"
 fellvoidmsg: "&c %player_name% &e fell in to the void"
 kit-recieve: "&aSuccessfully recieved %kitname%"
+alreadyingame: "&cYou're already in game isnt it?"
 #You can configure your custom messages here!

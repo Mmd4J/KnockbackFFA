@@ -1,6 +1,7 @@
 package me.gameisntover.kbffa.knockbackffa.API;
 
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.ItemConfiguration;
+import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +15,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import redempt.redlib.blockdata.BlockDataManager;
+import redempt.redlib.blockdata.DataBlock;
 
 import java.util.List;
 import java.util.stream.Collectors;

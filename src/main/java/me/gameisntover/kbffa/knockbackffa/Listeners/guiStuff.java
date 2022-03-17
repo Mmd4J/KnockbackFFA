@@ -51,25 +51,45 @@ public class guiStuff implements Listener {
                                     ItemButton cosmeticItem = ItemButton.create(new ItemBuilder(Material.getMaterial(icon)).setName(displayName), event -> {
                                         List<String> ownedCosmetics = PlayerData.get().getStringList("owned-cosmetics");
                                         String selC = ownedCosmetics.get(event.getSlot());
-                                        if (event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
-                                            PlayerData.get().set("selected-cosmetic", null);
-                                        } else {
-                                            PlayerData.get().set("selected-cosmetic", selC);
+                                        if (CosmeticConfiguration.get().getString(selC + ".type") == "KILL_PARTICLE") {
+                                            if (event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
+                                                PlayerData.get().set("selected-cosmetic", null);
+                                            } else {
+                                                PlayerData.get().set("selected-cosmetic", selC);
+                                            }
+                                            PlayerData.save();
+                                            player.closeInventory();
+                                        }else if(CosmeticConfiguration.get().getString(selC + ".type") == "TRAIL"){
+                                            if (event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
+                                                PlayerData.get().set("selected-trails", null);
+                                            } else {
+                                                PlayerData.get().set("selected-trails", selC);
+                                            }
                                         }
-                                        PlayerData.save();
-                                        player.closeInventory();
-
                                     });
                                     ItemMeta meta = kits.guiItemMeta(cosmeticItem.getItem());
-                                    if (PlayerData.get().getString("selected-cosmetic") == null) {
-                                        PlayerData.get().set("selected-cosmetic", cosmetic);
-                                    }
-                                    if (PlayerData.get().getString("selected-cosmetic").equals(cosmetic)) {
-                                        meta.setDisplayName(meta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
-                                        meta.addEnchant(Enchantment.DURABILITY, 1, true);
-                                    } else {
-                                        meta.removeEnchant(Enchantment.DURABILITY);
-                                        meta.setDisplayName(meta.getDisplayName().replace("&", "§"));
+                                    if (CosmeticConfiguration.get().getString(cosmetic + ".type") == "KILL_PARTICLE") {
+                                        if (PlayerData.get().getString("selected-cosmetic") == null) {
+                                            PlayerData.get().set("selected-cosmetic", cosmetic);
+                                        }
+                                        if (PlayerData.get().getString("selected-cosmetic").equals(cosmetic)) {
+                                            meta.setDisplayName(meta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
+                                            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                                        } else {
+                                            meta.removeEnchant(Enchantment.DURABILITY);
+                                            meta.setDisplayName(meta.getDisplayName().replace("&", "§"));
+                                        }
+                                    }else if (CosmeticConfiguration.get().getString(cosmetic + ".type") == "TRAIL"){
+                                        if (PlayerData.get().getString("selected-trails") == null) {
+                                            PlayerData.get().set("selected-trails", cosmetic);
+                                        }
+                                        if (PlayerData.get().getString("selected-trails").equals(cosmetic)) {
+                                            meta.setDisplayName(meta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
+                                            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                                        } else {
+                                            meta.removeEnchant(Enchantment.DURABILITY);
+                                            meta.setDisplayName(meta.getDisplayName().replace("&", "§"));
+                                        }
                                     }
                                     meta.setLore(lore);
                                     cosmeticItem.getItem().setItemMeta(meta);

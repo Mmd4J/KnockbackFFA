@@ -3,8 +3,12 @@ package me.gameisntover.kbffa.knockbackffa.Listeners;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAAPI;
 import me.gameisntover.kbffa.knockbackffa.API.KnockbackFFAKit;
 import me.gameisntover.kbffa.knockbackffa.Arena.Arena;
+import me.gameisntover.kbffa.knockbackffa.CustomConfigs.CosmeticConfiguration;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.Kits;
 import me.gameisntover.kbffa.knockbackffa.CustomConfigs.PlayerData;
+import me.gameisntover.kbffa.knockbackffa.KnockbackFFA;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,11 +17,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import redempt.redlib.blockdata.BlockDataManager;
+import redempt.redlib.blockdata.DataBlock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaSettings implements Listener {
-
+    public static BlockDataManager manager;
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
@@ -50,11 +58,56 @@ public class ArenaSettings implements Listener {
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) {
-                if (Arena.getEnabledArena()!=null) {
-                    Arena arena = Arena.load(Arena.getEnabledArena().getName());
+            PlayerData.load(player);
+            if (PlayerData.get().getString("selected-trails") != null) {
+                String selectedTrails = PlayerData.get().getString("selected-trails");
+                Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
+                DataBlock db = manager.getDataBlock(block);
+                if (block.getType()!=Material.AIR && db.getString("block-type")!="trail") {
+                   db.set("material", block.getType().name());
+                   List<String> materialString = CosmeticConfiguration.get().getStringList(selectedTrails + ".blocks");
+                   List<Material> materialList = new ArrayList<>();
+                   for (String material : materialString) {
+                       materialList.add(Material.getMaterial(material));
+                   }
+                   if (materialList.size() == 1) {
+                       block.setType(materialList.get(0));
+                       db.set("block-type", "trail");
+                       new BukkitRunnable(){
+                           @Override
+                           public void run() {
+                               block.setType(Material.getMaterial(db.getString("material")));
+                               db.set("block-type", "");
+                               cancel();
+                           }
+                       }.runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
+                   } else {
+                       block.setType(materialList.get(0));
+                       db.set("block-type", "trail");
+                       new BukkitRunnable() {
+                           int i = 0;
+
+                           @Override
+                           public void run() {
+                               if (i < materialList.size() - 1) {
+                                   i++;
+                                   String material = materialList.get(i).name();
+                                   block.setType(Material.getMaterial(material));
+                               } else {
+                                   block.setType(Material.getMaterial(db.getString("material")));
+                                   db.set("block-type", "");
+                                   cancel();
+                               }
+                           }
+                       }.
+                               runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
+                   }
+               }
+        }
+            if (Arena.getEnabledArena()!=null) {
+                Arena arena = Arena.load(Arena.getEnabledArena().getName());
                     KnockbackFFAAPI.setInGamePlayer(player, true);
-                        KnockbackFFAAPI.setInArenaPlayer(player, true);
-                        PlayerData.load(player);
+                    KnockbackFFAAPI.setInArenaPlayer(player, true);
                         if (arena.contains(player.getLocation()))
                         if (PlayerData.get().getString("selected-kit") == null) {
                             List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
