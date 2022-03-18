@@ -51,52 +51,47 @@ import java.util.Objects;
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
     @Getter
-    private static KnockbackFFA instance;
     private int arenaID = 0;
     private Integer timer = 0;
     private BlockDataManager manager;
 
     @Override
     public void onEnable() {
-        instance = this;
         manager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
-            }
+            for (Player player : Bukkit.getOnlinePlayers()) KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
+
         }
 
-        getLogger().info("[KnockbackFFA] : Loading Commands");
+        getLogger().info("Loading Commands");
         loadCommands();
-        getLogger().info("[KnockbackFFA] : Loading Configuration Files");
+        getLogger().info("Loading Configuration Files");
         loadConfig();
-        getLogger().info("[KnockbackFFA] : Loading Java Classes");
+        getLogger().info("Loading Java Classes");
         loadListeners();
-        getLogger().info("[KnockbackFFA] : Loading Tasks");
+        getLogger().info("Loading Tasks");
         loadTasks();
-        getLogger().info("[KnockbackFFA] : Enjoy using plugin :)");
+        getLogger().info("Enjoy using plugin :)");
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
+            if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
                 if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
                     KnockbackFFAKit kitManager = new KnockbackFFAKit();
                     p.getInventory().addItem(kitManager.kbbowArrow());
                 }
-            }
         }
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getPluginManager().registerEvents(this, this);
             new Expansion(this).register();
-        } else {
-            getLogger().warning("Could not find placeholder API. This plugin is needed!");
-        }
-    }
+        } else getLogger().warning("Could not find placeholder API. This plugin is needed!");
 
+    }
+    public static KnockbackFFA getInstance() {return getPlugin(KnockbackFFA.class);}
     private void loadConfig() {
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
-            getLogger().info("[KnockbackFFA] : Creating DataFolder");
+            getLogger().info("Creating DataFolder");
             dataFolder.mkdir();
         }
         File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
@@ -106,7 +101,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             try {
                 file.createNewFile();
                 Files.copy(Objects.requireNonNull(KnockbackFFA.getInstance().getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                getLogger().info("[KnockbackFFA] : Default Kit Created");
+                getLogger().info("Default Kit Created");
             } catch (IOException e) {
             }
         }
@@ -134,7 +129,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                         Arena.setEnabledArena(arenaName);
                         ArenaConfiguration.save();
                         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
+                            if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
                                 p.getInventory().clear();
                                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                                 kitManager.lobbyItems(p);
@@ -142,12 +137,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                                 KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                                 MainScoreboard.toggleScoreboard(p, true);
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
-                            }
-                            cancel();
+                        cancel();
                         }
-                        if (arenaList.size() > 1) {
-                            arenaID++;
-                        }
+                        if (arenaList.size() > 1) arenaID++;
+
                     }
                 }
             }.runTaskTimer(this, 0, 1);
@@ -161,14 +154,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                         timer = getConfig().getInt("ArenaChangeTimer");
                         if (arenaList.size() > 1) { //checking if arenaList even has arenas
                             arenaID++;
-                            if (!(arenaID <= arenaList.size())) {
-                                arenaID = 1;
-                            }
+                            if (!(arenaID <= arenaList.size())) arenaID = 1;
                             Arena.changeArena(arenaList.get(arenaID - 1));
-                        } else if (arenaList.size() == 1) {
-                            Arena.setEnabledArena(arenaList.get(0).getName());
-                            ArenaConfiguration.save();
-                        }
+                        } else if (arenaList.size() == 1) Arena.setEnabledArena(arenaList.get(0).getName());
+
                     }
                 }
             }.runTaskTimer(this, 0, 20);
@@ -177,18 +166,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             @Override
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
+                    if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
                         World world = p.getWorld();
                         List<Entity> entList = world.getEntities();
-
-                        for (Entity current : entList) {
-                            if (current instanceof Item) {
-                                if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
-                                    current.remove();
-                                }
-                            }
-                        }
-                    }
+                        for (Entity current : entList) if (current instanceof Item) if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) current.remove();
                 }
             }
         }.runTaskTimer(this, 0, 5);
