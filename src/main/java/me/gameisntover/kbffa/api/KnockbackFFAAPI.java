@@ -22,11 +22,9 @@ public class KnockbackFFAAPI {
     }
 
     public static boolean isInGame(Player player) {
-        if (inGamePlayer.get(player.getUniqueId()) != null) {
-            return inGamePlayer.get(player.getUniqueId());
-        } else {
-            return false;
-        }
+        if (inGamePlayer.get(player.getUniqueId()) != null) return inGamePlayer.get(player.getUniqueId());
+         else return false;
+
     }
 
     public static void setInGamePlayer(Player player, boolean value) {
@@ -34,11 +32,9 @@ public class KnockbackFFAAPI {
     }
 
     public static boolean isInArena(Player player) {
-        if (inArenaPlayer.get(player.getUniqueId()) != null) {
-            return inArenaPlayer.get(player.getUniqueId());
-        } else {
-            return false;
-        }
+        if (inArenaPlayer.get(player.getUniqueId()) != null) return inArenaPlayer.get(player.getUniqueId());
+        else return false;
+
     }
 
     public static void setInArenaPlayer(Player player, boolean value) {
@@ -56,15 +52,13 @@ public class KnockbackFFAAPI {
     }
 
     public static void loadCosmetic(Player player, String cosmeticName) {
-        if (cosmeticName != null) {
+        if (cosmeticName != null) return;
             String cosmeticType = CosmeticConfiguration.get().getString(cosmeticName + ".type");
-            if (cosmeticType != null) {
-                if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE")) {
-                    player.spawnParticle(Particle.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")), player.getLocation(), CosmeticConfiguration.get().getInt(cosmeticName + ".amount"));
-                }
-                if (CosmeticConfiguration.get().getString(CosmeticConfiguration.get().getString(cosmeticName + ".sound")) != null) {
-                    player.playSound(player.getLocation(), Sound.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".sound")), CosmeticConfiguration.get().getInt(cosmeticName + ".volume"), CosmeticConfiguration.get().getInt(cosmeticName + ".pitch"));
-                }
+            if (cosmeticType != null) return;
+                if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE")) player.spawnParticle(Particle.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".effect-type")), player.getLocation(), CosmeticConfiguration.get().getInt(cosmeticName + ".amount"));
+
+                if (CosmeticConfiguration.get().getString(CosmeticConfiguration.get().getString(cosmeticName + ".sound")) != null) player.playSound(player.getLocation(), Sound.valueOf(CosmeticConfiguration.get().getString(cosmeticName + ".sound")), CosmeticConfiguration.get().getInt(cosmeticName + ".volume"), CosmeticConfiguration.get().getInt(cosmeticName + ".pitch"));
+
                 if (cosmeticType.equalsIgnoreCase("SOUND")) {
                     List<String> soundList = CosmeticConfiguration.get().getStringList(cosmeticName + ".sounds");
                     new BukkitRunnable() {
@@ -75,15 +69,11 @@ public class KnockbackFFAAPI {
                                 float pitch = Float.parseFloat(soundList.get(i).substring(soundList.get(i).indexOf(":") + 1, soundList.get(i).indexOf(",")));
                                 float volume = Float.parseFloat(soundList.get(i).substring(soundList.get(i).indexOf(",") + 1));
                                 player.getWorld().playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
-                                if (i == soundList.size() - 1) {
-                                    cancel();
-                                }
+                                if (i == soundList.size() - 1) cancel();
                             }
                         }
                     }.runTaskTimer(KnockbackFFA.getInstance(), 0, CosmeticConfiguration.get().getInt(cosmeticName + ".delay"));
                 }
-            }
-        }
     }
 
 

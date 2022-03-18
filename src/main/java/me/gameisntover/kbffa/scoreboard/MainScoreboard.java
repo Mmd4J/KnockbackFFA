@@ -17,14 +17,12 @@ import java.util.List;
 
 public class MainScoreboard implements Listener {
     public static void toggleScoreboard(Player player, boolean toggle) {
-        if (toggle) {
+        if (!toggle) return;
             BukkitScheduler scheduler = Bukkit.getScheduler();
             scheduler.scheduleSyncRepeatingTask(KnockbackFFA.getInstance(), () -> {
                 List<String> scoreboardLines = ScoreboardConfiguration.get().getStringList("lines");
                 SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
-                if (player.getScoreboard() != null) {
-                    player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
-                }
+                if (player.getScoreboard() != null) player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                 for (String string : scoreboardLines) {
                     string = PlaceholderAPI.setPlaceholders(player, string);
                     sidebar.add(string.replaceAll("&", "§"));
@@ -33,17 +31,12 @@ public class MainScoreboard implements Listener {
 
             }, 0, 20);
         }
-    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
-            if (ScoreboardConfiguration.get().getBoolean("enabled")) {
-                toggleScoreboard(player, true);
-            }
-        } else {
-            toggleScoreboard(player, false);
-        }
+        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer()))
+            toggleScoreboard(player,ScoreboardConfiguration.get().getBoolean("enabled") );
+
     }
 }

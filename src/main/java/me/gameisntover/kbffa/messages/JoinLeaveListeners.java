@@ -17,31 +17,26 @@ public class JoinLeaveListeners implements Listener {
     @EventHandler
     public void playerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if (!KnockbackFFAAPI.BungeeMode()) {
-            KnockbackFFAAPI.setInGamePlayer(player, false);
-        }
+        if (!KnockbackFFAAPI.BungeeMode()) KnockbackFFAAPI.setInGamePlayer(player, false);
         if (KnockbackFFA.getInstance().getConfig().getBoolean("joinmessage")) {
             String joinText = MessageConfiguration.get().getString("joinmessage").replace("&", "§");
             joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);
             e.setJoinMessage(joinText);
         }
-        if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound")) {
-            KnockbackFFAAPI.playSound(player, "join", 1, 1);
-        }
-        if (Arena.getEnabledArena() == null) {
-            KnockbackFFAAPI.setInGamePlayer(player, false);
-        } else {
+        if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound")) KnockbackFFAAPI.playSound(player, "join", 1, 1);
+
+        if (Arena.getEnabledArena() == null) KnockbackFFAAPI.setInGamePlayer(player, false);
+        else {
             if (KnockbackFFAAPI.BungeeMode()) {
                 Arena.teleportPlayerToArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 player.getInventory().clear();
                 kitManager.lobbyItems(player);
-                KnockbackFFAAPI.setInGamePlayer(player, true);
-
-            } else if (!KnockbackFFAAPI.BungeeMode()) {
+                KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
+            } else {
                 if (!KnockbackFFAAPI.isInGame(player)) {
-                    Arena.leaveArena(player);
-                    KnockbackFFAAPI.setInGamePlayer(player, false);
+                    Arena.teleportToMainLobby(player);
+                    KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
                 }
             }
         }
@@ -55,9 +50,7 @@ public class JoinLeaveListeners implements Listener {
             e.setQuitMessage(leaveText);
         }
         Player player = e.getPlayer();
-        MainScoreboard.toggleScoreboard(player, false);
-        if (!KnockbackFFAAPI.BungeeMode()) {
-            KnockbackFFAAPI.setInGamePlayer(player, false);
-        }
+            KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
+
     }
 }

@@ -20,27 +20,24 @@ public class WandListener implements Listener {
     @EventHandler
     public void wandSelection1(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            if (player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD) && player.isOp() && player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.MENDING)) {
+        if (!e.getAction().equals(Action.LEFT_CLICK_BLOCK)) return;
+            if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD) && !player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.MENDING)) return;
                 player.sendMessage("§a Position 1 has been set!");
                 e.setCancelled(true);
                 pos1m.put(player, e.getClickedBlock().getLocation());
                 ArenaConfiguration.save();
-            }
         }
 
-    }
 
     @EventHandler
     public void wandSelection2(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD) && player.isOp() && player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.MENDING)) {
+        if (!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+            if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD) && !player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.MENDING)) return;
                 e.setCancelled(true);
                 player.sendMessage("§a Position 2 has been set!");
                 pos2m.put(player, e.getClickedBlock().getLocation());
                 ArenaConfiguration.save();
-            }
         }
-    }
 }
+

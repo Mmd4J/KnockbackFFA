@@ -56,11 +56,8 @@ public class Expansion extends PlaceholderExpansion {
         }
         if (params.equalsIgnoreCase("current_map")) {
             String arenaName = Arena.enabledArena.getName();
-            if (arenaName == null) {
-                return "No Arena";
-            } else {
-                return arenaName;
-            }
+            if (arenaName == null) return "No Arena";
+             else return arenaName;
         }
         if (params.equalsIgnoreCase("timer_nextmap")) {
             int timer = KnockbackFFA.getInstance().getTimer();
@@ -71,14 +68,10 @@ public class Expansion extends PlaceholderExpansion {
         if (params.equalsIgnoreCase("next_map")) {
             if (Arena.getfolder().list() != null && Arena.getfolder().list().length > 1) {
                 String arenaName = Arena.getEnabledArena().getName();
-
                 List<String> arenaList = Arrays.asList(Arena.getfolder().list());
                 int index = arenaList.indexOf(arenaName);
-                if (index == arenaList.size() - 1) {
-                    return arenaList.get(0).replace(".yml", "");
-                } else {
-                    return arenaList.get(index + 2).replace(".yml", "");
-                }
+                if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
+                else return arenaList.get(index + 2).replace(".yml", "");
             } else {
                 return "No Arena";
             }

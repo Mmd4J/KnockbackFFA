@@ -13,9 +13,8 @@ public class ChatFormats implements Listener {
     public void playerChatFormat(AsyncPlayerChatEvent e) {
         e.getFormat();
         Player player = e.getPlayer();
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
-            e.setFormat(MessageConfiguration.get().getString("chatformat").replace("&", "§").replace("%player%", player.getName().replace("&", "§")).replace("%message%", e.getMessage().replace("&", "§")));
-        }
+        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) e.setFormat(MessageConfiguration.get().getString("chatformat").replace("&", "§").replace("%player%", player.getName().replace("&", "§")).replace("%message%", e.getMessage().replace("&", "§")));
+
     }
 }
 

@@ -93,7 +93,7 @@ public class Commands implements CommandExecutor {
                 String leaveText = Objects.requireNonNull(MessageConfiguration.get().getString("leave-arena")).replace("&", "§");
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);
-                Arena.leaveArena(p.getPlayer());
+                Arena.teleportToMainLobby(p.getPlayer());
                 p.getInventory().clear();
                 if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
                     PlayerData.load(p.getPlayer());

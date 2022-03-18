@@ -187,7 +187,7 @@ public class Arena {
      *
      * @param @player
      */
-    public static void leaveArena(Player player) {
+    public static void teleportToMainLobby(Player player) {
         if (ArenaConfiguration.get().getString("mainlobby.world") == null) return;
             Double x = ArenaConfiguration.get().getDouble("mainlobby.x");
             Double y = ArenaConfiguration.get().getDouble("mainlobby.y");
