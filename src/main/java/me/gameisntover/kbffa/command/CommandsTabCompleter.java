@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.commands;
+package me.gameisntover.kbffa.command;
 
 import me.gameisntover.kbffa.arena.Arena;
 import org.bukkit.Bukkit;
