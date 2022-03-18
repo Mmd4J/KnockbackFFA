@@ -26,17 +26,14 @@ import java.util.List;
 public class GameRules implements Listener {
     @EventHandler
     public void onPlayerItemPickup(EntityPickupItemEvent e) {
-        if (e.getEntity() instanceof Player) {
+        if (!(e.getEntity() instanceof Player)) return;
             Player player = (Player) e.getEntity();
-            if (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) {
-                e.setCancelled(true);
-            }
-        }
+            if (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) e.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerDamages(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player) {
+        if (!(e.getEntity() instanceof Player)) return;
             Player player = (Player) e.getEntity();
             for (String sz : ArenaConfiguration.get().getStringList("registered-safezones")) {
                 if (ArenaConfiguration.get().getString("Safezones." + sz + ".world") != null) {
@@ -52,7 +49,6 @@ public class GameRules implements Listener {
                 }
             }
         }
-    }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {

@@ -23,5 +23,4 @@ public class BalanceAPI {
     public static void removeBalance(Player p, int balance) {
         setBalance(p, getBalance(p) - balance);
     }
-
 }

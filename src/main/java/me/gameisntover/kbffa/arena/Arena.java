@@ -1,11 +1,11 @@
 package me.gameisntover.kbffa.arena;
 
+import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.PlayerTeleportsToArenaEvent;
 import me.gameisntover.kbffa.customconfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.customconfigs.MessageConfiguration;
-import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -91,10 +91,10 @@ public class Arena {
         List<String> materials = get().getStringList("blocks");
         List<Block> blocks = region.getBlocks();
         new BukkitRunnable() {
-            protected int allBlocks = region.getBlocks().size();
-            protected int remainBlocks = region.getBlocks().size();
-            protected int amountBlocksEachSec;
-            protected int startPoint;
+            private int allBlocks = region.getBlocks().size();
+            private int remainBlocks = region.getBlocks().size();
+            private int amountBlocksEachSec;
+            private int startPoint;
 
             @Override
             public void run() {
@@ -110,7 +110,6 @@ public class Arena {
                 }
                 if (remainBlocks <= 0) {
                     cancel();
-                    System.out.println(getName() + " has been reset!");
                 }
             }
         }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
@@ -142,15 +141,13 @@ public class Arena {
      * @param @player
      */
     public static void teleportPlayerToArena(Player player) {
-        if (Arena.getfolder().list().length > 0) {
+        if(!(Arena.getfolder().list().length > 0)) {
             PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, getEnabledArena());
             Bukkit.getPluginManager().callEvent(event);
             Location spawnLoc = getEnabledArena().getSpawnLocation();
-            if (spawnLoc.getWorld() != null) {
-                if (!event.isCancelled()) {
-                    player.teleport(spawnLoc);
-                }
-            } else {
+            if (event.isCancelled()) return;
+            if (spawnLoc.getWorld() != null) player.teleport(spawnLoc);
+            else {
                 WorldCreator wc = new WorldCreator(getEnabledArena().get().getString("arena.spawn.world"));
                 wc.generateStructures(false);
                 wc.generator(new VoidChunkGenerator());
@@ -159,13 +156,10 @@ public class Arena {
                 Bukkit.getWorlds().add(world1);
                 world1.loadChunk(0, 0);
                 System.out.println(world1.getName() + " successfully loaded!");
-                if (!event.isCancelled()) {
-                    player.teleport(new Location(world1, spawnLoc.getX(), spawnLoc.getY(), spawnLoc.getZ()));
-                }
+                player.teleport(new Location(world1, spawnLoc.getX(), spawnLoc.getY(), spawnLoc.getZ()));
             }
-        } else {
-            System.out.println("[KnockbackFFA] There are no arenas to teleport the player there!");
-        }
+        } else System.out.println("[KnockbackFFA] There are no arenas to teleport the player there!");
+
     }
 
     /**
@@ -181,13 +175,12 @@ public class Arena {
      * @param @player
      */
     public void teleportPlayer(Player player) {
-        if (getEnabledArena().getName() == arenaN) {
+        if (!(arenaN.equalsIgnoreCase(getEnabledArena().getName()))) return;
             Arena arena = Arena.load(arenaN);
             PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
             Bukkit.getPluginManager().callEvent(event);
             player.teleport(getSpawnLocation());
         }
-    }
 
     /**
      * returns player to the main lobby
@@ -195,17 +188,13 @@ public class Arena {
      * @param @player
      */
     public static void leaveArena(Player player) {
-        if (ArenaConfiguration.get().getString("mainlobby.world") != null) {
+        if (ArenaConfiguration.get().getString("mainlobby.world") == null) return;
             Double x = ArenaConfiguration.get().getDouble("mainlobby.x");
             Double y = ArenaConfiguration.get().getDouble("mainlobby.y");
             Double z = ArenaConfiguration.get().getDouble("mainlobby.z");
             World world = Bukkit.getWorld(ArenaConfiguration.get().getString("mainlobby.world"));
-            if (world != null && x != null) {
-                player.teleport(new Location(world, x, y, z));
-            } else {
-                player.teleport(Bukkit.getWorld("world").getSpawnLocation());
-            }
-        }
+            if (world != null && x != null) player.teleport(new Location(world, x, y, z));
+            else player.teleport(Bukkit.getWorld("world").getSpawnLocation());
     }
 
     /**
@@ -214,7 +203,7 @@ public class Arena {
      */
     public void removeArena() {
         cfile.delete();
-        while (Objects.equals(getEnabledArena(), arenaN)) {
+        while (getEnabledArena().equals(arenaN)) {
             setEnabledArena(randomArena());
         }
         save();
@@ -332,7 +321,7 @@ public class Arena {
         setEnabledArena(arenaName);
         ArenaConfiguration.save();
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+            if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p))return;
                 p.getInventory().clear();
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 kitManager.lobbyItems(p);
@@ -340,8 +329,6 @@ public class Arena {
                 KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
             }
-            if (arena.get().getBoolean("auto-reset")) {//arena.resetArena();
-            }
-        }
+            if (arena.get().getBoolean("auto-reset")) arena.resetArena();
     }
 }

@@ -195,19 +195,16 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
         BukkitScheduler scheduler1 = Bukkit.getServer().getScheduler();
         if (getConfig().getBoolean("ClearItems.enabled")) {
-            scheduler1.scheduleSyncRepeatingTask(this, new Runnable() {
-                @Override
-                public void run() {
-                    Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
-                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
-                        World world = p.getWorld();
-                        List<Entity> entList = world.getEntities();
-                        for (Entity current : entList) {
-                            if (!(current instanceof Item)) return;
-                            current.remove();
-                            KnockbackFFAAPI.playSound(p, "itemremoved", 1, 1);
-                        }
+            scheduler1.scheduleSyncRepeatingTask(this, () -> {
+                Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
+                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
+                    World world = p.getWorld();
+                    List<Entity> entList = world.getEntities();
+                    for (Entity current : entList) {
+                        if (!(current instanceof Item)) return;
+                        current.remove();
+                        KnockbackFFAAPI.playSound(p, "itemremoved", 1, 1);
                     }
                 }
             }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20L);
