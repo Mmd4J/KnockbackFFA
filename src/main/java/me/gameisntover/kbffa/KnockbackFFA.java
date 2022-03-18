@@ -177,7 +177,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             @Override
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                    if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                         World world = p.getWorld();
                         List<Entity> entList = world.getEntities();
 
@@ -200,20 +200,17 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 public void run() {
                     Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
-                            World world = p.getWorld();
-                            List<Entity> entList = world.getEntities();
-
-                            for (Entity current : entList) {
-                                if (current instanceof Item) {
-                                    current.remove();
-                                    KnockbackFFAAPI.playSound(p, "itemremoved", 1, 1);
-                                }
-                            }
+                        if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
+                        World world = p.getWorld();
+                        List<Entity> entList = world.getEntities();
+                        for (Entity current : entList) {
+                            if (!(current instanceof Item)) return;
+                            current.remove();
+                            KnockbackFFAAPI.playSound(p, "itemremoved", 1, 1);
                         }
                     }
                 }
-            }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20);
+            }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20L);
         }
     }
 
@@ -267,7 +264,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onSign(SignChangeEvent event) {
-        if (event.getLine(0).equalsIgnoreCase("[KnockbackFFA]") && event.getLine(1).equalsIgnoreCase("Join")) {
+        if ("[KnockbackFFA]".equalsIgnoreCase(event.getLine(0)) && "Join".equalsIgnoreCase(event.getLine(1))) {
             event.setLine(0, ChatColor.YELLOW + "[A]KnockbackFFA");
             event.setLine(1, ChatColor.GREEN + "Join");
         }
@@ -285,7 +282,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (Arena.getEnabledArena().getName() == arenaName) {
+                        if (Arena.getEnabledArena().getName().equals(arenaName)) {
                             switch (block.getType()) {
                                 case WHITE_WOOL:
                                     block.setType(Material.YELLOW_WOOL);
