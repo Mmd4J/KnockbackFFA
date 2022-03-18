@@ -6,8 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class ArenaConfiguration
-{
+public class ArenaConfiguration {
     private static File file;
 
     private static FileConfiguration arenas;

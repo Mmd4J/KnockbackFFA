@@ -1,9 +1,9 @@
 #It would changes arena when you give it a time so it would change the arena after that time. the default time is 900 or 15 minutes.
 ArenaChangeTimer: 900
 ClearItems:
- enabled: true
- delay: 0
- period: 60
+  enabled: true
+  delay: 0
+  period: 60
 #Clearing items after a time. the default time is 60 seconds or 1 minutes.
 Bungee-Mode: false
 #Bungee-Mode would make players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
@@ -17,8 +17,8 @@ autoresetcheck-blocks: 10000
 #autoresetcheck-blocks is amount of blocks that will be checked in every second
 #Default is 10000 blocks or 10k blocks which means 10k blocks will be checked in each seconds
 no-trail-blocks:
- - 'WATER'
- - 'LAVA'
- - 'SIGN'
- - 'WALLSIGN'
+  - 'WATER'
+  - 'LAVA'
+  - 'SIGN'
+  - 'WALLSIGN'
 #Trails won't work in these blocks

@@ -8,8 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 
-public class ChatFormats implements Listener
-{
+public class ChatFormats implements Listener {
     @EventHandler
     public void playerChatFormat(AsyncPlayerChatEvent e) {
         e.getFormat();

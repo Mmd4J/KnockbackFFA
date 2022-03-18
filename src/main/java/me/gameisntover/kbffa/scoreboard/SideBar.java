@@ -7,8 +7,7 @@ import org.bukkit.scoreboard.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SideBar
-{
+public class SideBar {
     private static final ScoreboardManager manager = Bukkit.getScoreboardManager();
 
     private final String name;

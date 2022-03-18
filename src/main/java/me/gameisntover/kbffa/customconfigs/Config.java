@@ -5,8 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class Config extends YamlConfiguration
-{
+public class Config extends YamlConfiguration {
     private final KnockbackFFA plugin;
     private final File file;
 

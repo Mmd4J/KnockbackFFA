@@ -11,8 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-public class Expansion extends PlaceholderExpansion
-{
+public class Expansion extends PlaceholderExpansion {
     private final KnockbackFFA plugin;
 
     public Expansion(KnockbackFFA plugin) {
@@ -52,8 +51,8 @@ public class Expansion extends PlaceholderExpansion
             PlayerData.load(player1);
             return String.valueOf(PlayerData.get().getInt("deaths"));
         }
-        if (params.equalsIgnoreCase("player_balance")){
-            return BalanceAPI.getBalance(player.getPlayer())+"";
+        if (params.equalsIgnoreCase("player_balance")) {
+            return BalanceAPI.getBalance(player.getPlayer()) + "";
         }
         if (params.equalsIgnoreCase("current_map")) {
             String arenaName = Arena.enabledArena.getName();
@@ -63,24 +62,24 @@ public class Expansion extends PlaceholderExpansion
                 return arenaName;
             }
         }
-        if (params.equalsIgnoreCase("timer_nextmap")){
+        if (params.equalsIgnoreCase("timer_nextmap")) {
             int timer = KnockbackFFA.getInstance().getTimer();
             int seconds = timer % 60;
             int minutes = timer / 60;
             return minutes + ":" + seconds;
         }
-        if (params.equalsIgnoreCase("next_map")){
-            if (Arena.getfolder().list()!=null && Arena.getfolder().list().length>1){
+        if (params.equalsIgnoreCase("next_map")) {
+            if (Arena.getfolder().list() != null && Arena.getfolder().list().length > 1) {
                 String arenaName = Arena.getEnabledArena().getName();
 
                 List<String> arenaList = Arrays.asList(Arena.getfolder().list());
                 int index = arenaList.indexOf(arenaName);
-                if (index == arenaList.size()-1){
-                    return arenaList.get(0).replace(".yml","");
-                }else {
-                    return arenaList.get(index+2).replace(".yml","");
+                if (index == arenaList.size() - 1) {
+                    return arenaList.get(0).replace(".yml", "");
+                } else {
+                    return arenaList.get(index + 2).replace(".yml", "");
                 }
-            }else {
+            } else {
                 return "No Arena";
             }
         }

@@ -59,7 +59,7 @@ public class GuiStuff implements Listener {
                                             }
                                             PlayerData.save();
                                             player.closeInventory();
-                                        }else if(CosmeticConfiguration.get().getString(selC + ".type") == "TRAIL"){
+                                        } else if (CosmeticConfiguration.get().getString(selC + ".type") == "TRAIL") {
                                             if (event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
                                                 PlayerData.get().set("selected-trails", null);
                                             } else {
@@ -79,7 +79,7 @@ public class GuiStuff implements Listener {
                                             meta.removeEnchant(Enchantment.DURABILITY);
                                             meta.setDisplayName(meta.getDisplayName().replace("&", "§"));
                                         }
-                                    }else if (CosmeticConfiguration.get().getString(cosmetic + ".type") == "TRAIL"){
+                                    } else if (CosmeticConfiguration.get().getString(cosmetic + ".type") == "TRAIL") {
                                         if (PlayerData.get().getString("selected-trails") == null) {
                                             PlayerData.get().set("selected-trails", cosmetic);
                                         }
@@ -113,7 +113,7 @@ public class GuiStuff implements Listener {
                         List<String> cosmetics = CosmeticConfiguration.get().getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
                         List<String> cList = PlayerData.get().getStringList("owned-cosmetics");
                         for (String cosmetic : cosmetics) {
-                            ItemButton cosmeticsItem = ItemButton.create(new ItemBuilder(Material.getMaterial(CosmeticConfiguration.get().getString( cosmetic + ".icon"))).setName(ChatColor.translateAlternateColorCodes('&', CosmeticConfiguration.get().getString(cosmetic + ".name"))), event1 -> {
+                            ItemButton cosmeticsItem = ItemButton.create(new ItemBuilder(Material.getMaterial(CosmeticConfiguration.get().getString(cosmetic + ".icon"))).setName(ChatColor.translateAlternateColorCodes('&', CosmeticConfiguration.get().getString(cosmetic + ".name"))), event1 -> {
                                 float playerBal = BalanceAPI.getBalance(player);
                                 if (playerBal >= CosmeticConfiguration.get().getInt(cosmetics.get(event1.getSlot()) + ".price")) {
                                     List<String> ownedCosmetics = PlayerData.get().getStringList("owned-cosmetics");
@@ -168,7 +168,7 @@ public class GuiStuff implements Listener {
                                 String kitName = kit.get().getString("KitName").replace("&", "§");
                                 ItemButton kitsItem = ItemButton.create(new ItemBuilder(Material.getMaterial(kitIcon)).setName(kitName), event1 -> {
                                     float playerBal = BalanceAPI.getBalance(player);
-                                    if (playerBal >= kit.get().getInt("Price")){
+                                    if (playerBal >= kit.get().getInt("Price")) {
                                         List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
                                         if (!ownedKits.contains(cosmetics.get(event1.getSlot()))) {
                                             BalanceAPI.removeBalance(player, kit.get().getInt("Price"));
@@ -181,7 +181,7 @@ public class GuiStuff implements Listener {
                                             player.sendMessage(MessageConfiguration.get().getString("already-owned").replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                                             player.closeInventory();
                                         }
-                                    } else{
+                                    } else {
                                         player.sendMessage(MessageConfiguration.get().getString("not-enough-money").replace("&", "§"));
                                         player.closeInventory();
                                     }
@@ -219,73 +219,76 @@ public class GuiStuff implements Listener {
                     e.setCancelled(true);
                     InventoryGUI kitsMenu = new InventoryGUI(Bukkit.createInventory(null, 54, "Kits Menu"));
                     PlayerData.load(player);
-                  if ( PlayerData.get().getList("owned-kits")!=null && PlayerData.get().getList("owned-kits").size() > 0) {
-                      if (PlayerData.get().getList("owned-kits") == null) {
-                          PlayerData.get().set("owned-kits", new ArrayList<>());
-                      }
-                      List<String> kitsList = PlayerData.get().getList("owned-kits").stream().map(s -> s.toString()).collect(Collectors.toList());
-                      for (String kit : kitsList) {
-                          if (kit != null) {
-                              Kits kitItems = Kits.load(kit);
-                              if (kitItems.get().getString("KitIcon") != null || kitItems.get().getString("KitIcon") != "AIR") {
-                                  String icon = kitItems.get().getString("KitIcon");
-                                  String name = kitItems.get().getString("KitName").replace("&", "§");
-                                  ItemButton kitItem = ItemButton.create(new ItemBuilder(Material.getMaterial(icon)).setName(name), event -> {
-                                      String selC = kitsList.get(event.getSlot());
-                                      if (event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
-                                          PlayerData.get().set("selected-kit", null);
-                                      } else {
-                                          PlayerData.get().set("selected-kit", selC);
-                                      }
-                                      PlayerData.save();
-                                      player.closeInventory();
-                                  });
-                                  ItemMeta kitMeta = kits.guiItemMeta(kitItem.getItem());
-                                  if (kitItem.getItem().getType() == Material.AIR) {
-                                      kitItem.getItem().setType(Material.BARRIER);
-                                  }
-                                  kitMeta.setLore(kitItems.get().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
-                                  if (PlayerData.get().getString("selected-kit") == null) {
-                                      PlayerData.get().set("selected-kit", kit);
-                                      PlayerData.save();
-                                  }
-                                  if (PlayerData.get().getString("selected-kit").equalsIgnoreCase(kit)) {
-                                      kitMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-                                      kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
-                                  } else {
-                                      kitMeta.removeEnchant(Enchantment.DURABILITY);
-                                      kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§").replace(" §8(§aSelected§8)", ""));
-                                  }
-                                  kitItem.getItem().setItemMeta(kitMeta);
-                                  kitsMenu.addButton(kitItem, kitsList.indexOf(kit));
-                              }
-                          }
-                      }
-                  }
+                    if (PlayerData.get().getList("owned-kits") != null && PlayerData.get().getList("owned-kits").size() > 0) {
+                        if (PlayerData.get().getList("owned-kits") == null) {
+                            PlayerData.get().set("owned-kits", new ArrayList<>());
+                        }
+                        List<String> kitsList = PlayerData.get().getList("owned-kits").stream().map(s -> s.toString()).collect(Collectors.toList());
+                        for (String kit : kitsList) {
+                            if (kit != null) {
+                                Kits kitItems = Kits.load(kit);
+                                if (kitItems.get().getString("KitIcon") != null || kitItems.get().getString("KitIcon") != "AIR") {
+                                    String icon = kitItems.get().getString("KitIcon");
+                                    String name = kitItems.get().getString("KitName").replace("&", "§");
+                                    ItemButton kitItem = ItemButton.create(new ItemBuilder(Material.getMaterial(icon)).setName(name), event -> {
+                                        String selC = kitsList.get(event.getSlot());
+                                        if (event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
+                                            PlayerData.get().set("selected-kit", null);
+                                        } else {
+                                            PlayerData.get().set("selected-kit", selC);
+                                        }
+                                        PlayerData.save();
+                                        player.closeInventory();
+                                    });
+                                    ItemMeta kitMeta = kits.guiItemMeta(kitItem.getItem());
+                                    if (kitItem.getItem().getType() == Material.AIR) {
+                                        kitItem.getItem().setType(Material.BARRIER);
+                                    }
+                                    kitMeta.setLore(kitItems.get().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
+                                    if (PlayerData.get().getString("selected-kit") == null) {
+                                        PlayerData.get().set("selected-kit", kit);
+                                        PlayerData.save();
+                                    }
+                                    if (PlayerData.get().getString("selected-kit").equalsIgnoreCase(kit)) {
+                                        kitMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+                                        kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§") + " §8(§aSelected§8)");
+                                    } else {
+                                        kitMeta.removeEnchant(Enchantment.DURABILITY);
+                                        kitMeta.setDisplayName(kitMeta.getDisplayName().replace("&", "§").replace(" §8(§aSelected§8)", ""));
+                                    }
+                                    kitItem.getItem().setItemMeta(kitMeta);
+                                    kitsMenu.addButton(kitItem, kitsList.indexOf(kit));
+                                }
+                            }
+                        }
+                    }
                     kitsMenu.open(player);
                 }
             }
         }
     }
+
     @EventHandler
-    public void onPlayerItemDrop(PlayerDropItemEvent e){
+    public void onPlayerItemDrop(PlayerDropItemEvent e) {
         ItemStack item = e.getItemDrop().getItemStack();
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
-        e.setCancelled(true);
+        if (itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+            e.setCancelled(true);
         }
 
     }
+
     @EventHandler
-    public void onPlayerCloseInventory(InventoryCloseEvent e){
-        if (e.getView().getTitle().equals("Cosmetic Menu")||e.getView().getTitle().equals("Kits Menu")){
+    public void onPlayerCloseInventory(InventoryCloseEvent e) {
+        if (e.getView().getTitle().equals("Cosmetic Menu") || e.getView().getTitle().equals("Kits Menu")) {
             Player player = (Player) e.getPlayer();
-            KnockbackFFAAPI.playSound(player,"guiclose",1,1);
+            KnockbackFFAAPI.playSound(player, "guiclose", 1, 1);
         }
     }
+
     @EventHandler
     public void onPlayerOpenInventory(InventoryOpenEvent e) {
-        if (e.getView().getTitle().equals("Cosmetic Menu")||e.getView().getTitle().equals("Kits Menu")){
+        if (e.getView().getTitle().equals("Cosmetic Menu") || e.getView().getTitle().equals("Kits Menu")) {
             Player player = (Player) e.getPlayer();
             KnockbackFFAAPI.playSound(player, "guiopen", 1, 1);
         }

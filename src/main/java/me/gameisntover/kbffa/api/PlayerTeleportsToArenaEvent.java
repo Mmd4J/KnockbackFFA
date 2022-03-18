@@ -11,16 +11,20 @@ public final class PlayerTeleportsToArenaEvent extends Event implements Cancella
     private Arena arena;
     private Player player;
     private boolean isCancelled;
-    public PlayerTeleportsToArenaEvent(Player player , Arena arena){
+
+    public PlayerTeleportsToArenaEvent(Player player, Arena arena) {
         this.player = player;
         this.arena = arena;
     }
-    public Arena getArena(){
+
+    public Arena getArena() {
         return arena;
     }
-    public Player getPlayer(){
+
+    public Player getPlayer() {
         return player;
     }
+
     @Override
     public boolean isCancelled() {
         return this.isCancelled;

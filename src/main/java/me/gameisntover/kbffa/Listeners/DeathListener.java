@@ -24,8 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DeathListener implements Listener
-{
+public class DeathListener implements Listener {
     Map<Entity, Integer> killStreak = new HashMap<>();
     Map<Entity, Entity> killer = new HashMap<>();
 
@@ -85,18 +84,18 @@ public class DeathListener implements Listener
         Player player = e.getEntity();
         Entity damager = killer.get(player);
         killer.remove(player);
-        KnockbackFFAAPI.setInArenaPlayer(player,false);
+        KnockbackFFAAPI.setInArenaPlayer(player, false);
         if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
             new BukkitRunnable() {
                 @Override
-                        public void run() {
-                        player.spigot().respawn();
-                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                        kitManager.lobbyItems(player);
-                        Arena.teleportPlayerToArena(player);
-                        cancel();
+                public void run() {
+                    player.spigot().respawn();
+                    KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                    kitManager.lobbyItems(player);
+                    Arena.teleportPlayerToArena(player);
+                    cancel();
                 }
-            }.runTaskTimer(KnockbackFFA.getInstance(),0, 1);
+            }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);
             World world = player.getWorld();
             List<Entity> entList = world.getEntities();
             for (Entity current : entList) {

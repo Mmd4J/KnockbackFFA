@@ -8,8 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class ScoreboardConfiguration
-{
+public class ScoreboardConfiguration {
     private static File file;
 
     private static FileConfiguration messages;

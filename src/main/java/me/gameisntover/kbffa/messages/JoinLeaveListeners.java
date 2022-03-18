@@ -13,8 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class JoinLeaveListeners implements Listener
-{
+public class JoinLeaveListeners implements Listener {
     @EventHandler
     public void playerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
@@ -29,20 +28,20 @@ public class JoinLeaveListeners implements Listener
         if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound")) {
             KnockbackFFAAPI.playSound(player, "join", 1, 1);
         }
-        if (Arena.getEnabledArena()==null) {
-            KnockbackFFAAPI.setInGamePlayer(player,false);
+        if (Arena.getEnabledArena() == null) {
+            KnockbackFFAAPI.setInGamePlayer(player, false);
         } else {
             if (KnockbackFFAAPI.BungeeMode()) {
                 Arena.teleportPlayerToArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 player.getInventory().clear();
                 kitManager.lobbyItems(player);
-                KnockbackFFAAPI.setInGamePlayer(player,true);
+                KnockbackFFAAPI.setInGamePlayer(player, true);
 
             } else if (!KnockbackFFAAPI.BungeeMode()) {
                 if (!KnockbackFFAAPI.isInGame(player)) {
                     Arena.leaveArena(player);
-                    KnockbackFFAAPI.setInGamePlayer(player,false);
+                    KnockbackFFAAPI.setInGamePlayer(player, false);
                 }
             }
         }
@@ -56,9 +55,9 @@ public class JoinLeaveListeners implements Listener
             e.setQuitMessage(leaveText);
         }
         Player player = e.getPlayer();
-        MainScoreboard.toggleScoreboard(player,false);
+        MainScoreboard.toggleScoreboard(player, false);
         if (!KnockbackFFAAPI.BungeeMode()) {
-            KnockbackFFAAPI.setInGamePlayer(player,false);
+            KnockbackFFAAPI.setInGamePlayer(player, false);
         }
     }
 }

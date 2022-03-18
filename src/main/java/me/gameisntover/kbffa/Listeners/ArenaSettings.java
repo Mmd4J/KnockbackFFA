@@ -51,7 +51,8 @@ public class ArenaSettings implements Listener {
                 e.setCancelled(KnockbackFFAAPI.isInArena(player) && !arena.get().getBoolean("item-drop"));
             }
         }
-        }
+    }
+
     @EventHandler
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
@@ -61,9 +62,9 @@ public class ArenaSettings implements Listener {
                 String selectedTrails = PlayerData.get().getString("selected-trails");
                 Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
                 DataBlock db = KnockbackFFA.getInstance().getManager().getDataBlock(block);
-                if (db.getString("block-type")==""||db.getString("block-type")==null) {
+                if (db.getString("block-type") == "" || db.getString("block-type") == null) {
                     if (!KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString())) {
-    
+
                         db.set("material", block.getType().name());
                         List<String> materialString = CosmeticConfiguration.get().getStringList(selectedTrails + ".blocks");
                         List<Material> materialList = new ArrayList<>();
@@ -104,36 +105,36 @@ public class ArenaSettings implements Listener {
                         }
                     }
                 }
-        }
-            if (Arena.getEnabledArena()!=null) {
+            }
+            if (Arena.getEnabledArena() != null) {
                 Arena arena = Arena.load(Arena.getEnabledArena().getName());
-                    KnockbackFFAAPI.setInGamePlayer(player, true);
-                    KnockbackFFAAPI.setInArenaPlayer(player, true);
-                        if (arena.contains(player.getLocation())) {
-                            if (PlayerData.get().getString("selected-kit") == null) {
-                                List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
-                                if (ownedKits.contains("Default")) {
-                                    ownedKits.add("Default");
-                                    PlayerData.get().set("owned-kits", ownedKits);
-                                }
-                                PlayerData.get().set("selected-kit", "Default");
-                            }
-                            Kits kit = Kits.load(PlayerData.get().getString("selected-kit"));
-                            KnockbackFFAKit kits = new KnockbackFFAKit();
-                            for (ItemStack item : player.getInventory().getContents()) {
-                                if (item != null) {
-                                    ItemMeta itemMeta = item.getItemMeta();
-                                    if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
-                                        player.getInventory().clear();
-                                        kit.giveKit(player);
-                                        break;
-                                    }
-                                }
+                KnockbackFFAAPI.setInGamePlayer(player, true);
+                KnockbackFFAAPI.setInArenaPlayer(player, true);
+                if (arena.contains(player.getLocation())) {
+                    if (PlayerData.get().getString("selected-kit") == null) {
+                        List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
+                        if (ownedKits.contains("Default")) {
+                            ownedKits.add("Default");
+                            PlayerData.get().set("owned-kits", ownedKits);
+                        }
+                        PlayerData.get().set("selected-kit", "Default");
+                    }
+                    Kits kit = Kits.load(PlayerData.get().getString("selected-kit"));
+                    KnockbackFFAKit kits = new KnockbackFFAKit();
+                    for (ItemStack item : player.getInventory().getContents()) {
+                        if (item != null) {
+                            ItemMeta itemMeta = item.getItemMeta();
+                            if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                                player.getInventory().clear();
+                                kit.giveKit(player);
+                                break;
                             }
                         }
-                    }    else {
-                        KnockbackFFAAPI.setInArenaPlayer(player,false);
                     }
                 }
+            } else {
+                KnockbackFFAAPI.setInArenaPlayer(player, false);
+            }
         }
-        }
+    }
+}

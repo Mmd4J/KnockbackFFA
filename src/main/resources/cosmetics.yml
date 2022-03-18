@@ -19,7 +19,7 @@ FireKillEffect:
   price: 100
   lore:
     - '&7Drops cool flame particle when you kill someone!'
-  sound : 'ENTITY_BLAZE_SHOOT'
+  sound: 'ENTITY_BLAZE_SHOOT'
   pitch: 1
   volume: 1
 FrozenTrail:

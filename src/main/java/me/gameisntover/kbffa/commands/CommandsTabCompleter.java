@@ -10,17 +10,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandsTabCompleter implements TabCompleter
-{
+public class CommandsTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (command.getName().equalsIgnoreCase("resetarena")){
-            if (args.length == 1){
+        if (command.getName().equalsIgnoreCase("resetarena")) {
+            if (args.length == 1) {
                 List<String> arenaList = Arrays.asList(Arrays.stream(Arrays.stream(Arena.getfolder().list()).map(s -> {
                     return s.replace(".yml", "");
                 }).toArray()).toArray(String[]::new));
-                return arenaList;            }
+                return arenaList;
+            }
         }
         if (command.getName().equalsIgnoreCase("editarena")) {
             if (args.length == 1) {

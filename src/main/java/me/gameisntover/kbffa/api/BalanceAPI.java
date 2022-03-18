@@ -17,11 +17,11 @@ public class BalanceAPI {
     }
 
     public static void addBalance(Player p, float balance) {
-        setBalance(p,getBalance(p) + balance);
+        setBalance(p, getBalance(p) + balance);
     }
 
     public static void removeBalance(Player p, int balance) {
-        setBalance(p,getBalance(p) - balance);
+        setBalance(p, getBalance(p) - balance);
     }
 
 }

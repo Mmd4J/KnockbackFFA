@@ -9,7 +9,7 @@
     <version>2.9.5</version>
     <packaging>jar</packaging>
     <name>Knockbackffa</name>
-    <description>a fun minigame for 1.13-1.18 </description>
+    <description>a fun minigame for 1.13-1.18</description>
     <build>
         <plugins>
             <plugin>
@@ -92,11 +92,11 @@
         </dependency>
 
         <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.22</version>
-        <scope>provided</scope>
-    </dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 

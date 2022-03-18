@@ -9,8 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-public class PlayerData
-{
+public class PlayerData {
 
 
     public static File cfile;

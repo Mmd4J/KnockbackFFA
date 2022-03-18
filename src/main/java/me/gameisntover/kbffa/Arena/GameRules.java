@@ -1,4 +1,5 @@
 package me.gameisntover.kbffa.Arena;
+
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.customconfigs.ArenaConfiguration;
@@ -22,25 +23,25 @@ import org.bukkit.util.BoundingBox;
 
 import java.util.List;
 
-public class GameRules implements Listener
-{
+public class GameRules implements Listener {
     @EventHandler
-    public void onPlayerItemPickup(EntityPickupItemEvent e){
-        if (e.getEntity() instanceof Player){
+    public void onPlayerItemPickup(EntityPickupItemEvent e) {
+        if (e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
-            if (KnockbackFFAAPI.isInGame(player)||KnockbackFFAAPI.BungeeMode()){
+            if (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) {
                 e.setCancelled(true);
             }
         }
     }
+
     @EventHandler
-    public void onPlayerDamages(EntityDamageEvent e){
-        if (e.getEntity() instanceof Player){
+    public void onPlayerDamages(EntityDamageEvent e) {
+        if (e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
             for (String sz : ArenaConfiguration.get().getStringList("registered-safezones")) {
                 if (ArenaConfiguration.get().getString("Safezones." + sz + ".world") != null) {
-                    Location loc1= ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos1");
-                    Location loc2= ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos2");
+                    Location loc1 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos1");
+                    Location loc2 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos2");
                     BoundingBox s1box = new BoundingBox(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
                     World s1world = Bukkit.getWorld(ArenaConfiguration.get().getString("Safezones." + sz + ".world"));
                     Location location = player.getLocation();
@@ -56,34 +57,34 @@ public class GameRules implements Listener
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-            List<String> voids = ArenaConfiguration.get().getStringList("registered-voids");
-            for (String vd: voids){
-                    if (ArenaConfiguration.get().getLocation("voids." + vd + ".pos1") != null) {
-                        Location pos1 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos1");
-                        Location pos2 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos2");
-                        BoundingBox bb = new BoundingBox(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
-                        if (bb.contains(player.getLocation().toVector()) && player.getWorld() == pos1.getWorld()) {
-                            Integer damage = ArenaConfiguration.get().getInt("voids." + vd + ".damage");
-                            if (damage != null) {
-                              new BukkitRunnable(){
-                                  @Override
-                                  public void run() {
-                                      if (player.isDead() || !bb.contains(player.getLocation().toVector()) || player.getWorld() != pos1.getWorld()) {
-                                          cancel();
-                                      } else {
-                                          player.damage(damage);
-                                          player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, damage));
-                                      }
-                                  }
-                              }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
-
-                            } else {
-                                throw new NullPointerException("Void " + vd + " damage is null");
+        List<String> voids = ArenaConfiguration.get().getStringList("registered-voids");
+        for (String vd : voids) {
+            if (ArenaConfiguration.get().getLocation("voids." + vd + ".pos1") != null) {
+                Location pos1 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos1");
+                Location pos2 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos2");
+                BoundingBox bb = new BoundingBox(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
+                if (bb.contains(player.getLocation().toVector()) && player.getWorld() == pos1.getWorld()) {
+                    Integer damage = ArenaConfiguration.get().getInt("voids." + vd + ".damage");
+                    if (damage != null) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (player.isDead() || !bb.contains(player.getLocation().toVector()) || player.getWorld() != pos1.getWorld()) {
+                                    cancel();
+                                } else {
+                                    player.damage(damage);
+                                    player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, damage));
+                                }
                             }
-                        }
+                        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
+
+                    } else {
+                        throw new NullPointerException("Void " + vd + " damage is null");
                     }
                 }
             }
+        }
+    }
 
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
@@ -98,14 +99,14 @@ public class GameRules implements Listener
             Player player = (Player) e.getEntity().getShooter();
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
                 if (player.getInventory().getItemInMainHand().getType().equals(Material.BOW)) {
-                    new BukkitRunnable()
-                    {
+                    new BukkitRunnable() {
                         int timer = 10;
+
                         @Override
                         public void run() {
                             timer--;
                             if (timer == 10 || timer == 9 || timer == 8 || timer == 7 || timer == 6 || timer == 5 || timer == 4 || timer == 3 || timer == 2 || timer == 1) {
-                                if (player.getInventory().contains(Material.ARROW)|| !player.getInventory().contains(Material.BOW)) {
+                                if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
                                     cancel();
                                     timer = 10;
                                 } else {

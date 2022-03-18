@@ -26,35 +26,35 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Commands implements CommandExecutor
-{
+public class Commands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("createkit")).getName().equalsIgnoreCase(command.getName())) {
             if (p.hasPermission("kbffa.command.createkit")) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Usage: /createkit <kitname>");
-                } if (args.length == 1) {
+                }
+                if (args.length == 1) {
                     Kits kit = Kits.create(args[0]);
                     List<ItemStack> kitItems = Arrays.asList(Arrays.stream(p.getInventory().getContents()).filter(Objects::nonNull).toArray(ItemStack[]::new));
                     kit.get().set("KitContents", kitItems);
-                    kit.get().set("Price",100);
-                    kit.get().set("KitName",args[0]);
-                    if (p.getInventory().getItemInMainHand().getType()!=Material.AIR){
-                    kit.get().set("KitIcon",p.getInventory().getItemInMainHand().getType().toString());
-                    }else {
-                        kit.get().set("KitIcon","BARRIER");
+                    kit.get().set("Price", 100);
+                    kit.get().set("KitName", args[0]);
+                    if (p.getInventory().getItemInMainHand().getType() != Material.AIR) {
+                        kit.get().set("KitIcon", p.getInventory().getItemInMainHand().getType().toString());
+                    } else {
+                        kit.get().set("KitIcon", "BARRIER");
                     }
                     List<String> lore = new ArrayList<>();
                     lore.add("this is a kit");
                     List<String> defaultKitLore = new ArrayList<>();
                     defaultKitLore.add(ChatColor.GRAY + "Another cool kit!");
                     defaultKitLore.add(ChatColor.GRAY + "Must be configured in plugins/KnockbackFFA/kits !");
-                    kit.get().set("KitDescription",defaultKitLore);
+                    kit.get().set("KitDescription", defaultKitLore);
                     kit.save();
-                    p.sendMessage(ChatColor.GREEN + "I've created the kit " + args[0]+ "! now you need to configure it in the plugins plugins/KnockbackFFA/kits!");
+                    p.sendMessage(ChatColor.GREEN + "I've created the kit " + args[0] + "! now you need to configure it in the plugins plugins/KnockbackFFA/kits!");
                 }
-            }else {
+            } else {
                 p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
             }
         }
@@ -62,9 +62,9 @@ public class Commands implements CommandExecutor
             if (p.hasPermission("kbffa.command.delkit")) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Usage: /delkit <kitname>");
-                }else if (args.length == 1) {
+                } else if (args.length == 1) {
                     Kits.getfile().delete();
-                    p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0]+ "!");
+                    p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0] + "!");
                 }
             }
         }
@@ -86,9 +86,8 @@ public class Commands implements CommandExecutor
                     KnockbackFFAAPI.setInGamePlayer(p, true);
                 }
                 Arena.teleportPlayerToArena(p);
-            }
-            else {
-                sender.sendMessage(Objects.requireNonNull(ChatColor.translateAlternateColorCodes('&',MessageConfiguration.get().getString("alreadyingame"))));
+            } else {
+                sender.sendMessage(Objects.requireNonNull(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("alreadyingame"))));
             }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("leave")).getName().equalsIgnoreCase(command.getName())) {
@@ -110,7 +109,7 @@ public class Commands implements CommandExecutor
                     p.getInventory().setArmorContents(armor.toArray(new ItemStack[0]));
                 }
                 MainScoreboard.toggleScoreboard(p, false);
-                KnockbackFFAAPI.setInGamePlayer(p,false);
+                KnockbackFFAAPI.setInGamePlayer(p, false);
             } else {
                 p.sendMessage(Objects.requireNonNull(MessageConfiguration.get().getString("cannotuseleave")).replace("&", "§"));
             }
@@ -126,13 +125,13 @@ public class Commands implements CommandExecutor
             ArenaConfiguration.save();
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("resetarena")).getName().equalsIgnoreCase(command.getName())) {
-            if (args.length > 0){
+            if (args.length > 0) {
                 File file = new File(Arena.getfolder() + File.separator + args[0] + ".yml");
                 if (file.exists()) {
-                Arena arena = Arena.load(args[0]);
-                arena.resetArena();
-                 sender.sendMessage(ChatColor.GREEN + "Arena has been reset!");
-                }else{
+                    Arena arena = Arena.load(args[0]);
+                    arena.resetArena();
+                    sender.sendMessage(ChatColor.GREEN + "Arena has been reset!");
+                } else {
                     sender.sendMessage(ChatColor.RED + "Arena does not exist");
                 }
             }
@@ -174,11 +173,12 @@ public class Commands implements CommandExecutor
                 List<String> voids = ArenaConfiguration.get().getStringList("registered-voids");
                 if (voids.size() == 0) {
                     vd = 1;
-                }else{
-                    String szstring = voids.get(voids.size()-1);
+                } else {
+                    String szstring = voids.get(voids.size() - 1);
                     vd = Integer.parseInt(szstring);
-                    vd++;}
-                voids.add(vd+"");
+                    vd++;
+                }
+                voids.add(vd + "");
                 if (ArenaConfiguration.get().getString("voids." + vd) == null) {
                     ArenaConfiguration.get().set("voids." + vd + ".pos1", pos1);
                     ArenaConfiguration.get().set("voids." + vd + ".pos2", pos2);

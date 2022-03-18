@@ -15,8 +15,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import java.util.List;
 
 
-public class MainScoreboard implements Listener
-{
+public class MainScoreboard implements Listener {
     public static void toggleScoreboard(Player player, boolean toggle) {
         if (toggle) {
             BukkitScheduler scheduler = Bukkit.getScheduler();
