@@ -1,9 +1,9 @@
-package me.gameisntover.kbffa.placeholders;
+package me.gameisntover.kbffa.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.customconfigs.PlayerData;
+import me.gameisntover.kbffa.customconfig.PlayerData;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

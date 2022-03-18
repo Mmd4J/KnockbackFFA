@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.api;
 
-import me.gameisntover.kbffa.customconfigs.ItemConfiguration;
+import me.gameisntover.kbffa.customconfig.ItemConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class KnockbackFFAKit implements Listener {
+
     public ItemStack kbStick() {
         ItemStack kbstick = new ItemStack(Material.STICK, 1);
         ItemMeta meta = kbstick.getItemMeta();

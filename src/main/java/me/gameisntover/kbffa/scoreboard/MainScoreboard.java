@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.scoreboard;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
-import me.gameisntover.kbffa.customconfigs.ScoreboardConfiguration;
+import me.gameisntover.kbffa.customconfig.ScoreboardConfiguration;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

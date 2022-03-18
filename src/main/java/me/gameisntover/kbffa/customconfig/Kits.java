@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.customconfigs;
+package me.gameisntover.kbffa.customconfig;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.Bukkit;

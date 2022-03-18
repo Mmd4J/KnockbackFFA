@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.api;
+package me.gameisntover.kbffa.api.event;
 
 import me.gameisntover.kbffa.arena.Arena;
 import org.bukkit.entity.Player;

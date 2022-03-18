@@ -1,8 +1,7 @@
 package me.gameisntover.kbffa.api;
 
-import me.gameisntover.kbffa.customconfigs.CosmeticConfiguration;
-import me.gameisntover.kbffa.customconfigs.PlayerData;
-import me.gameisntover.kbffa.customconfigs.SoundConfiguration;
+import me.gameisntover.kbffa.customconfig.CosmeticConfiguration;
+import me.gameisntover.kbffa.customconfig.PlayerData;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -15,8 +14,8 @@ import java.util.UUID;
 
 public class KnockbackFFAAPI {
 
-    private static Map<UUID, Boolean> inGamePlayer = new HashMap<>();
-    private static Map<UUID, Boolean> inArenaPlayer = new HashMap<>();
+    private static final Map<UUID, Boolean> inGamePlayer = new HashMap<>();
+    private static final Map<UUID, Boolean> inArenaPlayer = new HashMap<>();
 
     public static boolean BungeeMode() {
         return KnockbackFFA.getInstance().getConfig().getBoolean("Bungee-Mode");
@@ -75,9 +74,4 @@ public class KnockbackFFAAPI {
                 }
     }
 
-
-    public static void playSound(Player player, String soundLocation, float volume, float pitch) {
-        player.playSound(player.getLocation(), Sound.valueOf(SoundConfiguration.get().getString(soundLocation)), volume, pitch);
-
-    }
 }

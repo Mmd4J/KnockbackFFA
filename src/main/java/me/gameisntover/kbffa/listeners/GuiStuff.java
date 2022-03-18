@@ -3,7 +3,8 @@ package me.gameisntover.kbffa.listeners;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.BalanceAPI;
-import me.gameisntover.kbffa.customconfigs.*;
+import me.gameisntover.kbffa.customconfig.*;
+import me.gameisntover.kbffa.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -243,13 +244,13 @@ public class GuiStuff implements Listener {
     public void onPlayerCloseInventory(InventoryCloseEvent e) {
         if (!e.getView().getTitle().equals("Cosmetic Menu") || !e.getView().getTitle().equals("Kits Menu")) return;
             Player player = (Player) e.getPlayer();
-            KnockbackFFAAPI.playSound(player, "guiclose", 1, 1);
+            PlayerUtil.playSound(player, "guiclose", 1, 1);
     }
 
     @EventHandler
     public void onPlayerOpenInventory(InventoryOpenEvent e) {
         if (!e.getView().getTitle().equals("Cosmetic Menu") || !e.getView().getTitle().equals("Kits Menu")) return;
             Player player = (Player) e.getPlayer();
-            KnockbackFFAAPI.playSound(player, "guiopen", 1, 1);
+            PlayerUtil.playSound(player, "guiopen", 1, 1);
     }
 }

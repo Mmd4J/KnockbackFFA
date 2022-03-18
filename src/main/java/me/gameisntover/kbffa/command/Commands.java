@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.commands;
+package me.gameisntover.kbffa.command;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
@@ -7,7 +7,7 @@ import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.VoidChunkGenerator;
 import me.gameisntover.kbffa.arena.WandListener;
-import me.gameisntover.kbffa.customconfigs.*;
+import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;

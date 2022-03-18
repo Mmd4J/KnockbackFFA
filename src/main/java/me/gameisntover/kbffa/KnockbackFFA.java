@@ -4,20 +4,21 @@ import lombok.Getter;
 import me.gameisntover.kbffa.listeners.ArenaSettings;
 import me.gameisntover.kbffa.listeners.DeathListener;
 import me.gameisntover.kbffa.listeners.GuiStuff;
-import me.gameisntover.kbffa.placeholders.Expansion;
+import me.gameisntover.kbffa.hook.Expansion;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.GameRules;
 import me.gameisntover.kbffa.arena.WandListener;
-import me.gameisntover.kbffa.customconfigs.*;
+import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.listeners.NoHunger;
-import me.gameisntover.kbffa.commands.ArenaCommands;
-import me.gameisntover.kbffa.commands.Commands;
-import me.gameisntover.kbffa.commands.CommandsTabCompleter;
-import me.gameisntover.kbffa.messages.ChatFormats;
-import me.gameisntover.kbffa.messages.JoinLeaveListeners;
+import me.gameisntover.kbffa.command.ArenaCommands;
+import me.gameisntover.kbffa.command.Commands;
+import me.gameisntover.kbffa.command.CommandsTabCompleter;
+import me.gameisntover.kbffa.message.ChatFormats;
+import me.gameisntover.kbffa.message.JoinLeaveListeners;
 import me.gameisntover.kbffa.scoreboard.MainScoreboard;
+import me.gameisntover.kbffa.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -134,7 +135,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                                 kitManager.lobbyItems(p);
                                 Arena.teleportPlayerToArena(p);
-                                KnockbackFFAAPI.playSound(p, "arenachange", 1, 1);
+                                PlayerUtil.playSound(p, "arenachange", 1, 1);
                                 MainScoreboard.toggleScoreboard(p, true);
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
                         cancel();
@@ -185,7 +186,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     for (Entity current : entList) {
                         if (!(current instanceof Item)) return;
                         current.remove();
-                        KnockbackFFAAPI.playSound(p, "itemremoved", 1, 1);
+                        PlayerUtil.playSound(p, "itemremoved", 1, 1);
                     }
                 }
             }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20L);
@@ -315,7 +316,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     Block block = e.getClickedBlock();
                     block.getDrops().clear();
                     player.setVelocity(player.getLocation().getDirection().setY(ItemConfiguration.get().getInt("SpecialItems.JumpPlate.jumpLevel")));
-                    KnockbackFFAAPI.playSound(player, "jumpplate", 1, 1);
+                    PlayerUtil.playSound(player, "jumpplate", 1, 1);
                 }
             }
         }

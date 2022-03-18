@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.api;
 
-import me.gameisntover.kbffa.customconfigs.PlayerData;
+import me.gameisntover.kbffa.customconfig.PlayerData;
 import org.bukkit.entity.Player;
 
 public class BalanceAPI {

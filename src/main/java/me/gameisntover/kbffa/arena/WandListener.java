@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.arena;
 
-import me.gameisntover.kbffa.customconfigs.ArenaConfiguration;
+import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
