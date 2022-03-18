@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class KnockbackFFAAPI {
+
     private static Map<UUID, Boolean> inGamePlayer = new HashMap<>();
     private static Map<UUID, Boolean> inArenaPlayer = new HashMap<>();
 

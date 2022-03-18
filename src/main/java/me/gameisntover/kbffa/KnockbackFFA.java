@@ -50,7 +50,7 @@ import java.util.Objects;
 
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
-    @Getter
+
     private int arenaID = 0;
     private Integer timer = 0;
     private BlockDataManager manager;
