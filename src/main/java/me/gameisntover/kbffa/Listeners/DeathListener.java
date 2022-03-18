@@ -30,28 +30,13 @@ public class DeathListener implements Listener {
 
     @EventHandler
     public void playerDamageCheck(EntityDamageEvent e) {
-        Entity player = e.getEntity();
+        if(!(e.getEntity() instanceof Player)) return;
+        Player player = (Player) e.getEntity();
         if (player.getType().equals(EntityType.PLAYER)) {
-            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame((Player) player)) {
-                if (e.getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
+            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
+                if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     e.setDamage(6);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.FIRE) || e.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.LAVA)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.DROWNING)) {
-                    e.setDamage(0);
-                } else if (e.getCause().equals(EntityDamageEvent.DamageCause.SUFFOCATION)) {
+                } else {
                     e.setDamage(0);
                 }
             }
@@ -85,7 +70,7 @@ public class DeathListener implements Listener {
         Entity damager = killer.get(player);
         killer.remove(player);
         KnockbackFFAAPI.setInArenaPlayer(player, false);
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
+        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -115,11 +100,7 @@ public class DeathListener implements Listener {
                 damager.sendMessage(MessageConfiguration.get().getString("prize").replace("%prize%", prize + "").replace("&", "§"));
                 BalanceAPI.addBalance((Player) damager, prize);
                 PlayerData.get().set("kills", PlayerData.get().getInt("kills") + 1);
-                if (killStreak.get(damager) == null) {
-                    killStreak.put(damager, 1);
-                } else {
-                    killStreak.put(damager, killStreak.get(damager).intValue() + 1);
-                }
+                killStreak.merge(damager, 1, Integer::sum);
                 if (killStreak.get(damager) > PlayerData.get().getInt("best-ks")) {
                     Player damagerP = (Player) damager;
                     String msg = MessageConfiguration.get().getString("killstreakrecord").replace("%killstreak%", PlayerData.get().getInt("best-ks") + "");
