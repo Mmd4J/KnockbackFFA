@@ -23,13 +23,11 @@ import redempt.redlib.blockdata.DataBlock;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.gameisntover.kbffa.KnockbackFFA.manager;
-
 public class ArenaSettings implements Listener {
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
-        if (KnockbackFFAAPI.isInArena(player.getPlayer())) {
+        if (KnockbackFFAAPI.isInArena(player)) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
                 String[] arenaList = Arena.getfolder().list();
                 for (String arenaName : arenaList) {
@@ -62,7 +60,7 @@ public class ArenaSettings implements Listener {
             if (PlayerData.get().getString("selected-trails") != null) {
                 String selectedTrails = PlayerData.get().getString("selected-trails");
                 Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
-                DataBlock db = manager.getDataBlock(block);
+                DataBlock db = KnockbackFFA.getInstance().getManager().getDataBlock(block);
                 if (db.getString("block-type")==""||db.getString("block-type")==null) {
                     if (!KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString())) {
     

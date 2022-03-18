@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa;
 
+import lombok.Getter;
 import me.gameisntover.kbffa.Listeners.ArenaSettings;
 import me.gameisntover.kbffa.Listeners.DeathListener;
 import me.gameisntover.kbffa.Listeners.GuiStuff;
@@ -47,19 +48,18 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener
 {
-    public static KnockbackFFA INSTANCE;
-    int ArenaID = 0;
-    public Integer timer = 0;
-    public static KnockbackFFA getInstance() {
-        return INSTANCE;
-    }
-    public static BlockDataManager manager;
+    @Getter
+    private static KnockbackFFA instance;
+    private int arenaID = 0;
+    private Integer timer = 0;
+    private BlockDataManager manager;
 
     @Override
     public void onEnable() {
-        INSTANCE = this;
+        instance = this;
         manager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
         if(!Bukkit.getOnlinePlayers().isEmpty()){
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -146,7 +146,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                             cancel();
                         }
                         if (arenaList.size() > 1) {
-                            ArenaID++;
+                            arenaID++;
                         }
                     }
                 }
@@ -160,11 +160,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                         //what should happen when timer is up
                         timer = getConfig().getInt("ArenaChangeTimer");
                         if (arenaList.size() > 1) { //checking if arenaList even has arenas
-                            ArenaID++;
-                            if (!(ArenaID <= arenaList.size())) {
-                                ArenaID = 1;
+                            arenaID++;
+                            if (!(arenaID <= arenaList.size())) {
+                                arenaID = 1;
                             }
-                            Arena.changeArena(arenaList.get(ArenaID - 1));
+                            Arena.changeArena(arenaList.get(arenaID - 1));
                         } else if (arenaList.size() == 1) {
                             Arena.setEnabledArena( arenaList.get(0).getName());
                             ArenaConfiguration.save();
@@ -202,7 +202,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 public void run() {
                     Bukkit.broadcastMessage(MessageConfiguration.get().getString("ItemRemoved").replace("&", "§"));
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p.getPlayer())) {
+                        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(p)) {
                             World world = p.getWorld();
                             List<Entity> entList = world.getEntities();
 
@@ -338,7 +338,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     @EventHandler
     public void onPressureButton(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer())) {
+        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
             if (e.getAction().equals(Action.PHYSICAL)) {
                 if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
                     Block block = e.getClickedBlock();

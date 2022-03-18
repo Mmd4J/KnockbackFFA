@@ -64,7 +64,7 @@ public class Expansion extends PlaceholderExpansion
             }
         }
         if (params.equalsIgnoreCase("timer_nextmap")){
-            int timer = KnockbackFFA.getInstance().timer;
+            int timer = KnockbackFFA.getInstance().getTimer();
             int seconds = timer % 60;
             int minutes = timer / 60;
             return minutes + ":" + seconds;

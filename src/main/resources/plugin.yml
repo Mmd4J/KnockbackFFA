@@ -1,6 +1,6 @@
 name: KnockbackFFA
 version: '${project.version}'
-main: me.gameisntover.kbffa.knockbackffa.KnockbackFFA
+main: me.gameisntover.kbffa.KnockbackFFA
 authors: [ GaMeIsNtOvEr ]
 api-version: 1.13
 softdepend:
