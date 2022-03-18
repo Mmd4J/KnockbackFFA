@@ -1,13 +1,13 @@
-package me.gameisntover.kbffa.Listeners;
+package me.gameisntover.kbffa.listeners;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.gameisntover.kbffa.Arena.Arena;
+import me.gameisntover.kbffa.KnockbackFFA;
+import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.api.BalanceAPI;
-import me.gameisntover.kbffa.Arena.Arena;
 import me.gameisntover.kbffa.customconfigs.MessageConfiguration;
 import me.gameisntover.kbffa.customconfigs.PlayerData;
-import me.gameisntover.kbffa.KnockbackFFA;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -20,8 +20,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DeathListener implements Listener {
     Map<Entity, Integer> killStreak = new HashMap<>();

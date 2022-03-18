@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.Listeners;
+package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import org.bukkit.entity.Player;

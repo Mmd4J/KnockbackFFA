@@ -1,9 +1,9 @@
 package me.gameisntover.kbffa;
 
 import lombok.Getter;
-import me.gameisntover.kbffa.Listeners.ArenaSettings;
-import me.gameisntover.kbffa.Listeners.DeathListener;
-import me.gameisntover.kbffa.Listeners.GuiStuff;
+import me.gameisntover.kbffa.listeners.ArenaSettings;
+import me.gameisntover.kbffa.listeners.DeathListener;
+import me.gameisntover.kbffa.listeners.GuiStuff;
 import me.gameisntover.kbffa.placeholders.Expansion;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
@@ -11,7 +11,7 @@ import me.gameisntover.kbffa.Arena.Arena;
 import me.gameisntover.kbffa.Arena.GameRules;
 import me.gameisntover.kbffa.Arena.WandListener;
 import me.gameisntover.kbffa.customconfigs.*;
-import me.gameisntover.kbffa.Listeners.NoHunger;
+import me.gameisntover.kbffa.listeners.NoHunger;
 import me.gameisntover.kbffa.commands.ArenaCommands;
 import me.gameisntover.kbffa.commands.Commands;
 import me.gameisntover.kbffa.commands.CommandsTabCompleter;
