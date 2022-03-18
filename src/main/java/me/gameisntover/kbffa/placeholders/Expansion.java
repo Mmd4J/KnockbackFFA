@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.api.BalanceAPI;
-import me.gameisntover.kbffa.Arena.Arena;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfigs.PlayerData;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;

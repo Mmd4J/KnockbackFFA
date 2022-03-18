@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.commands;
 
-import me.gameisntover.kbffa.Arena.Arena;
+import me.gameisntover.kbffa.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

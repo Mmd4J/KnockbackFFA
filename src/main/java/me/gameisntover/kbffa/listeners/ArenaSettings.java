@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.Arena.Arena;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfigs.CosmeticConfiguration;
 import me.gameisntover.kbffa.customconfigs.Kits;
 import me.gameisntover.kbffa.customconfigs.PlayerData;

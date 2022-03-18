@@ -1,9 +1,9 @@
 package me.gameisntover.kbffa.commands;
 
 import me.gameisntover.kbffa.api.ArenaCreateEvent;
-import me.gameisntover.kbffa.Arena.Arena;
-import me.gameisntover.kbffa.Arena.Cuboid;
-import me.gameisntover.kbffa.Arena.WandListener;
+import me.gameisntover.kbffa.arena.Arena;
+import me.gameisntover.kbffa.arena.Cuboid;
+import me.gameisntover.kbffa.arena.WandListener;
 import me.gameisntover.kbffa.customconfigs.ArenaConfiguration;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.*;

@@ -3,7 +3,7 @@ package me.gameisntover.kbffa.messages;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.Arena.Arena;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfigs.MessageConfiguration;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.scoreboard.MainScoreboard;

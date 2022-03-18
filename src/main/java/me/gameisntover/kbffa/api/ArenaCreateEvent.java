@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.api;
 
-import me.gameisntover.kbffa.Arena.Arena;
+import me.gameisntover.kbffa.arena.Arena;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

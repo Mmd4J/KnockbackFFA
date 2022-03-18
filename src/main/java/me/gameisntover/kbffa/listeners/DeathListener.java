@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.listeners;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.gameisntover.kbffa.Arena.Arena;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
