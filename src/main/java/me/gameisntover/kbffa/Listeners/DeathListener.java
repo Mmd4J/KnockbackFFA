@@ -20,9 +20,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class DeathListener implements Listener {
     Map<Entity, Integer> killStreak = new HashMap<>();
@@ -35,7 +34,7 @@ public class DeathListener implements Listener {
         if (player.getType().equals(EntityType.PLAYER)) {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
                 if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                    e.setDamage(6);
+                    e.setDamage(KnockbackFFA.getInstance().getConfig().getInt("default-void-damage"));
                 } else {
                     e.setDamage(0);
                 }
@@ -44,25 +43,23 @@ public class DeathListener implements Listener {
     }
 
     @EventHandler
-    public void checkdamagerFinalDamage(EntityDamageByEntityEvent e) {
+    public void checkDamagerFinalDamage(EntityDamageByEntityEvent e) {
         Entity player = e.getEntity();
         Entity damager = e.getDamager();
-        if (player.getType().equals(EntityType.PLAYER)) {
-            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame((Player) player)) {
-                if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) || e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) || e.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-                    if (damager instanceof Arrow) {
+        if (!player.getType().equals(EntityType.PLAYER)) return;
+            if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame((Player) player)) return;
+                List<EntityDamageEvent.DamageCause> damageCauses = Arrays.asList(EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+                        EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, EntityDamageEvent.DamageCause.PROJECTILE);
+                if (!damageCauses.contains(e.getCause())) return;
+                    if (damager.getType().equals((EntityType.ARROW))) {
                         Arrow arrow = (Arrow) damager;
-                        if (arrow.getShooter() instanceof Player) {
+                        if (!(arrow.getShooter() instanceof Player)) return;
                             Player shooter = (Player) arrow.getShooter();
                             killer.put(player, shooter);
-                        }
                     } else if (damager instanceof Player) {
                         killer.put(player, damager);
                     }
-                }
             }
-        }
-    }
 
     @EventHandler
     public void playerDeathByVoid(PlayerDeathEvent e) {
@@ -70,7 +67,7 @@ public class DeathListener implements Listener {
         Entity damager = killer.get(player);
         killer.remove(player);
         KnockbackFFAAPI.setInArenaPlayer(player, false);
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
+        if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(player)) return;
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -84,9 +81,8 @@ public class DeathListener implements Listener {
             World world = player.getWorld();
             List<Entity> entList = world.getEntities();
             for (Entity current : entList) {
-                if (current instanceof Item) {
+                if (!(current instanceof Item)) return;
                     current.remove();
-                }
             }
             killStreak.put(player, 0);
             PlayerData.load(player);
@@ -116,5 +112,4 @@ public class DeathListener implements Listener {
                 e.setDeathMessage(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("fellvoidmsg")).replace("%player_name%", player.getName()));
             }
         }
-    }
 }
