@@ -16,3 +16,9 @@ killprize: 10
 autoresetcheck-blocks: 10000
 #autoresetcheck-blocks is amount of blocks that will be checked in every second
 #Default is 10000 blocks or 10k blocks which means 10k blocks will be checked in each seconds
+no-trail-blocks:
+ - 'WATER'
+ - 'LAVA'
+ - 'SIGN'
+ - 'WALLSIGN'
+#Trails won't work in these blocks

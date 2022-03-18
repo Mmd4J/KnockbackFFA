@@ -32,7 +32,28 @@ FrozenTrail:
   lore:
     - '&4Freeze the arena while walking!'
   icon: "PACKED_ICE"
+Piano:
+  type: 'SOUND'
+  effect-type: 'DRAGON_BREATH'
+  amount: 20
+  icon: "NOTE_BLOCK"
+  name: "&5Piano Kill Music"
+  price: 100
+  lore:
+    - '&7Plays piano after killing someone!'
+  sounds:
+    - 'NOTE_PIANO:1.1,1.0'
+    - 'NOTE_PIANO:1.2,1.0'
+    - 'NOTE_PIANO:1.3,1.0'
+    - 'NOTE_PIANO:1.4,1.0'
+    - 'NOTE_PIANO:1.5,1.0'
+    - 'NOTE_PIANO:1.6,1.0'
+    - 'NOTE_PIANO:1.7,1.0'
+    - 'NOTE_PIANO:1.8,1.0'
+    - 'NOTE_PIANO:1.9,1.0'
+    - 'NOTE_PIANO:2.0,1.0'
 registered-cosmetics:
   - 'EndKillEffect'
   - 'FireKillEffect'
   - 'FrozenTrail'
+  - 'Piano'

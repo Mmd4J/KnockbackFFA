@@ -55,13 +55,12 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
     public static KnockbackFFA getInstance() {
         return INSTANCE;
     }
-    private BlockDataManager manager;
+    public static BlockDataManager manager;
 
     @Override
     public void onEnable() {
         INSTANCE = this;
             manager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
-            ArenaSettings.manager = BlockDataManager.createAuto(this,this.getDataFolder().toPath().resolve("blocks.db"),true,true);
         if(Bukkit.getOnlinePlayers().size() > 0){
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (KnockbackFFAAPI.BungeeMode()) {
@@ -88,6 +87,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener
                 }
             }
         }
+
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getPluginManager().registerEvents(this, this);

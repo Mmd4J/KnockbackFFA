@@ -24,8 +24,9 @@ import redempt.redlib.blockdata.DataBlock;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.gameisntover.kbffa.knockbackffa.KnockbackFFA.manager;
+
 public class ArenaSettings implements Listener {
-    public static BlockDataManager manager;
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
@@ -63,69 +64,73 @@ public class ArenaSettings implements Listener {
                 String selectedTrails = PlayerData.get().getString("selected-trails");
                 Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
                 DataBlock db = manager.getDataBlock(block);
-                if (block.getType()!=Material.AIR && db.getString("block-type")!="trail") {
-                   db.set("material", block.getType().name());
-                   List<String> materialString = CosmeticConfiguration.get().getStringList(selectedTrails + ".blocks");
-                   List<Material> materialList = new ArrayList<>();
-                   for (String material : materialString) {
-                       materialList.add(Material.getMaterial(material));
-                   }
-                   if (materialList.size() == 1) {
-                       block.setType(materialList.get(0));
-                       db.set("block-type", "trail");
-                       new BukkitRunnable(){
-                           @Override
-                           public void run() {
-                               block.setType(Material.getMaterial(db.getString("material")));
-                               db.set("block-type", "");
-                               cancel();
-                           }
-                       }.runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
-                   } else {
-                       block.setType(materialList.get(0));
-                       db.set("block-type", "trail");
-                       new BukkitRunnable() {
-                           int i = 0;
+                if (db.getString("block-type")==""||db.getString("block-type")==null) {
+                    if (!KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString())) {
+    
+                        db.set("material", block.getType().name());
+                        List<String> materialString = CosmeticConfiguration.get().getStringList(selectedTrails + ".blocks");
+                        List<Material> materialList = new ArrayList<>();
+                        for (String material : materialString) {
+                            materialList.add(Material.getMaterial(material));
+                        }
+                        if (materialList.size() == 1) {
+                            block.setType(materialList.get(0));
+                            db.set("block-type", "trail");
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    block.setType(Material.getMaterial(db.getString("material")));
+                                    db.set("block-type", "");
+                                    cancel();
+                                }
+                            }.runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
+                        } else {
+                            block.setType(materialList.get(0));
+                            db.set("block-type", "trail");
+                            new BukkitRunnable() {
+                                int i = 0;
 
-                           @Override
-                           public void run() {
-                               if (i < materialList.size() - 1) {
-                                   i++;
-                                   String material = materialList.get(i).name();
-                                   block.setType(Material.getMaterial(material));
-                               } else {
-                                   block.setType(Material.getMaterial(db.getString("material")));
-                                   db.set("block-type", "");
-                                   cancel();
-                               }
-                           }
-                       }.
-                               runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
-                   }
-               }
+                                @Override
+                                public void run() {
+                                    if (i < materialList.size() - 1) {
+                                        i++;
+                                        String material = materialList.get(i).name();
+                                        block.setType(Material.getMaterial(material));
+                                    } else {
+                                        block.setType(Material.getMaterial(db.getString("material")));
+                                        db.set("block-type", "");
+                                        cancel();
+                                    }
+                                }
+                            }.
+                                    runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
+                        }
+                    }
+                }
         }
             if (Arena.getEnabledArena()!=null) {
                 Arena arena = Arena.load(Arena.getEnabledArena().getName());
                     KnockbackFFAAPI.setInGamePlayer(player, true);
                     KnockbackFFAAPI.setInArenaPlayer(player, true);
-                        if (arena.contains(player.getLocation()))
-                        if (PlayerData.get().getString("selected-kit") == null) {
-                            List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
-                            if (ownedKits.contains("Default")) {
-                                ownedKits.add("Default");
-                                PlayerData.get().set("owned-kits", ownedKits);
+                        if (arena.contains(player.getLocation())) {
+                            if (PlayerData.get().getString("selected-kit") == null) {
+                                List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
+                                if (ownedKits.contains("Default")) {
+                                    ownedKits.add("Default");
+                                    PlayerData.get().set("owned-kits", ownedKits);
+                                }
+                                PlayerData.get().set("selected-kit", "Default");
                             }
-                            PlayerData.get().set("selected-kit", "Default");
-                        }
-                        Kits kit = Kits.load(PlayerData.get().getString("selected-kit"));
-                        KnockbackFFAKit kits = new KnockbackFFAKit();
-                        for (ItemStack item : player.getInventory().getContents()) {
-                            if (item != null) {
-                                ItemMeta itemMeta = item.getItemMeta();
-                                if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
-                                    player.getInventory().clear();
-                                    kit.giveKit(player);
-                                    break;
+                            Kits kit = Kits.load(PlayerData.get().getString("selected-kit"));
+                            KnockbackFFAKit kits = new KnockbackFFAKit();
+                            for (ItemStack item : player.getInventory().getContents()) {
+                                if (item != null) {
+                                    ItemMeta itemMeta = item.getItemMeta();
+                                    if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                                        player.getInventory().clear();
+                                        kit.giveKit(player);
+                                        break;
+                                    }
                                 }
                             }
                         }
