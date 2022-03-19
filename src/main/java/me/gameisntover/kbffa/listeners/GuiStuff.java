@@ -1,6 +1,5 @@
 package me.gameisntover.kbffa.listeners;
 
-import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.customconfig.*;
@@ -44,7 +43,7 @@ public class GuiStuff implements Listener {
                     InventoryGUI cosmeticMenu = new InventoryGUI(Bukkit.createInventory(null, 54, "Cosmetic Menu"));
                     PlayerData.load(player);
                     List<String> cList = PlayerData.get().getStringList("owned-cosmetics");
-                    if (cList != null) cList.forEach(cosmetic -> {
+                    cList.forEach(cosmetic -> {
                                 if (CosmeticConfiguration.get().getString(cosmetic + ".name") == null) {
                                     String displayName = ChatColor.translateAlternateColorCodes('&', CosmeticConfiguration.get().getString(cosmetic + ".name"));
                                     String icon = CosmeticConfiguration.get().getString(cosmetic + ".icon");
