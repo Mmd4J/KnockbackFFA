@@ -35,7 +35,7 @@ public class MainScoreboard implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player.getPlayer()))
+        if (KnockbackFFAAPI.isInGame(player))
             toggleScoreboard(player,ScoreboardConfiguration.get().getBoolean("enabled") );
 
     }

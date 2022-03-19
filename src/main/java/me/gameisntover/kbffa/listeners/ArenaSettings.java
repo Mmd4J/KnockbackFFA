@@ -5,6 +5,7 @@ import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.Arena;
+import me.gameisntover.kbffa.arena.ArenaManager;
 import me.gameisntover.kbffa.customconfig.CosmeticConfiguration;
 import me.gameisntover.kbffa.customconfig.Kits;
 import me.gameisntover.kbffa.customconfig.PlayerData;
@@ -25,15 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaSettings implements Listener {
-    
+    private final ArenaManager arenaManager = new ArenaManager();
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
         if (!KnockbackFFAAPI.isInArena(player)) return;
-        if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(player)) return;
-        String[] arenaList = Arena.getfolder().list();
+        String[] arenaList = arenaManager.getfolder().list();
         for (String arenaName : arenaList) {
-            Arena arena = Arena.load(arenaName.replace(".yml", ""));
+            Arena arena = arenaManager.load(arenaName.replace(".yml", ""));
             PlayerData.load(player);
             e.setCancelled(!arena.get().getBoolean("block-break"));
         }
@@ -42,11 +42,11 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
-        if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(player.getPlayer())) return;
-            String[] arenaList = Arena.getfolder().list();
+        if (!KnockbackFFAAPI.isInGame(player)) return;
+            String[] arenaList = arenaManager.getfolder().list();
             assert arenaList != null;
             for (String arenaName : arenaList) {
-                Arena arena = Arena.load(arenaName.replace(".yml", ""));
+                Arena arena = arenaManager.load(arenaName.replace(".yml", ""));
                 PlayerData.load(player);
                 e.setCancelled(KnockbackFFAAPI.isInArena(player) && !arena.get().getBoolean("item-drop"));
             }
@@ -55,7 +55,7 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        if (!KnockbackFFAAPI.isInGame(player) || !KnockbackFFAAPI.BungeeMode()) return;
+        if (!KnockbackFFAAPI.isInGame(player)) return;
             PlayerData.load(player);
             if (PlayerData.get().getString("selected-trails") != null) {
                 String selectedTrails = PlayerData.get().getString("selected-trails");
@@ -103,11 +103,11 @@ public class ArenaSettings implements Listener {
                                     runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
                         }
             }
-            if (Arena.getEnabledArena() != null) {
-                Arena arena = Arena.load(Arena.getEnabledArena().getName());
+            if (arenaManager.getEnabledArena() != null) {
+                Arena arena = arenaManager.load(arenaManager.getEnabledArena().getName());
                 KnockbackFFAAPI.setInGamePlayer(player, true);
                 KnockbackFFAAPI.setInArenaPlayer(player, true);
-                if (arena.contains(player.getLocation())) {
+                if (!arena.contains(player.getLocation())) return;
                     if (PlayerData.get().getString("selected-kit") == null) return;
                         List<String> ownedKits = PlayerData.get().getStringList("owned-kits");
                         if (ownedKits.contains("Default")) {
@@ -126,7 +126,6 @@ public class ArenaSettings implements Listener {
                                 break;
                         }
                     }
-                }
             } else KnockbackFFAAPI.setInArenaPlayer(player, false);
         }
     }
