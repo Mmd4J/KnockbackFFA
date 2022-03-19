@@ -143,7 +143,6 @@ public class Arena extends TempArenaManager {
     /**
      * Checks if the player is in arena region
      *
-     * @param @location
      * @return true if location is in the region
      */
     public boolean contains(Location location) {
