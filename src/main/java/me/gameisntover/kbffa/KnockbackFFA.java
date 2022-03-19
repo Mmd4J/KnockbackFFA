@@ -1,16 +1,13 @@
 package me.gameisntover.kbffa;
 
 import lombok.Getter;
-import me.gameisntover.kbffa.arena.ArenaManager;
+import me.gameisntover.kbffa.arena.*;
 import me.gameisntover.kbffa.listeners.ArenaSettings;
 import me.gameisntover.kbffa.listeners.DeathListener;
 import me.gameisntover.kbffa.listeners.GuiStuff;
 import me.gameisntover.kbffa.hook.Expansion;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.GameRules;
-import me.gameisntover.kbffa.arena.WandListener;
 import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.listeners.NoHunger;
 import me.gameisntover.kbffa.command.ArenaCommands;
@@ -51,7 +48,7 @@ import java.util.Objects;
 
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
-        private ArenaManager arenaManager;
+        
         private int arenaID = 0;
         private Integer timer = 0;
         private BlockDataManager manager;
@@ -143,9 +140,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }
 
         private void loadTasks() {
-            if (arenaManager.getfolder().listFiles() != null) {
-                List<Arena> arenaList = arenaManager.getArenaList();
-                arenaManager.setEnabledArena(arenaList.get(0));
+            if (ArenaManager.getfolder().listFiles() != null) {
+                List<Arena> arenaList = ArenaManager.getArenaList();
+                ArenaManager.setEnabledArena(arenaList.get(0));
                 timer = getConfig().getInt("ArenaChangeTimer");
 
                 new BukkitRunnable() {
@@ -153,11 +150,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     public void run() {
                         if (arenaList.size() > 0) {
                             String arenaName = arenaList.get(0).getName();
-                            arenaManager.setEnabledArena(arenaName);
+                            ArenaManager.setEnabledArena(arenaName);
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                 if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
-                                arenaManager.changeArena(arenaManager.load(arenaName.replace(".yml","")));
+                                ArenaManager.changeArena(ArenaManager.load(arenaName.replace(".yml","")));
                                 cancel();
                             }
                             if (arenaList.size() > 1) arenaID++;
@@ -176,8 +173,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                             if (arenaList.size() > 1) { //checking if arenaList even has arenas
                                 arenaID++;
                                 if (!(arenaID <= arenaList.size())) arenaID = 1;
-                                arenaManager.changeArena(arenaList.get(arenaID - 1));
-                            } else if (arenaList.size() == 1) arenaManager.setEnabledArena(arenaList.get(0).getName());
+                                ArenaManager.changeArena(arenaList.get(arenaID - 1));
+                            } else if (arenaList.size() == 1) ArenaManager.setEnabledArena(arenaList.get(0).getName());
 
                         }
                     }
@@ -262,11 +259,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     Block block = e.getBlockPlaced();
                     DataBlock db = manager.getDataBlock(block);
                     db.set("block-type", "BuildingBlock");
-                    String arenaName = arenaManager.getEnabledArena().getName();
+                    String arenaName = ArenaManager.getEnabledArena().getName();
                     BukkitRunnable runnable = new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (arenaManager.getEnabledArena().getName().equals(arenaName)) {
+                            if (ArenaManager.getEnabledArena().getName().equals(arenaName)) {
                                 switch (block.getType()) {
                                     case WHITE_WOOL:
                                         block.setType(Material.YELLOW_WOOL);

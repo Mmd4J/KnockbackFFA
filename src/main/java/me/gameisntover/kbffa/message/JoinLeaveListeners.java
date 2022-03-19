@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class JoinLeaveListeners implements Listener {
-    private ArenaManager arenaManager;
+    
     @EventHandler
     public void playerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
@@ -29,17 +29,17 @@ public class JoinLeaveListeners implements Listener {
         if (!KnockbackFFAAPI.BungeeMode()) KnockbackFFAAPI.setInGamePlayer(player, false);
         if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound"))
             player.playSound(player.getLocation(), Sound.valueOf(Sounds.PLAYER_JOIN.toString()), 1, 1);
-        if (arenaManager.getEnabledArena() == null) KnockbackFFAAPI.setInGamePlayer(player, false);
+        if (ArenaManager.getEnabledArena() == null) KnockbackFFAAPI.setInGamePlayer(player, false);
         else {
             if (KnockbackFFAAPI.BungeeMode()) {
-                arenaManager.teleportPlayerToArena(player);
+                ArenaManager.teleportPlayerToArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 player.getInventory().clear();
                 kitManager.lobbyItems(player);
                 KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
             } else {
                 if (!KnockbackFFAAPI.isInGame(player)) {
-                    arenaManager.teleportToMainLobby(player);
+                    ArenaManager.teleportToMainLobby(player);
                     KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
                 }
             }

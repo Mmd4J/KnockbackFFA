@@ -77,7 +77,7 @@ public class DeathListener implements Listener {
                     player.spigot().respawn();
                     KnockbackFFAKit kitManager = new KnockbackFFAKit();
                     kitManager.lobbyItems(player);
-                    arenaManager.teleportPlayerToArena(player);
+                    ArenaManager.teleportPlayerToArena(player);
                     cancel();
                 }
             }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);

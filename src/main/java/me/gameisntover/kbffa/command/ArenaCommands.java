@@ -1,10 +1,7 @@
 package me.gameisntover.kbffa.command;
 
 import me.gameisntover.kbffa.api.event.ArenaCreateEvent;
-import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.ArenaManager;
-import me.gameisntover.kbffa.arena.Cuboid;
-import me.gameisntover.kbffa.arena.WandListener;
+import me.gameisntover.kbffa.arena.*;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.*;
@@ -25,7 +22,7 @@ import redempt.redlib.itemutils.ItemBuilder;
 import java.util.*;
 
 public class ArenaCommands implements CommandExecutor {
-    private ArenaManager arenaManager;
+    
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -39,7 +36,7 @@ public class ArenaCommands implements CommandExecutor {
                     } else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                         Location loc1 = WandListener.pos1m.get(p);
                         Location loc2 = WandListener.pos2m.get(p);
-                        Arena arena = arenaManager.create(args[0], loc1, loc2, p.getLocation());
+                        Arena arena = ArenaManager.create(args[0], loc1, loc2, p.getLocation());
                         List<String> blocks = new ArrayList<>();
                         List<String> locations = new ArrayList<>();
                         Cuboid region = new Cuboid(loc1, loc2);
@@ -49,8 +46,8 @@ public class ArenaCommands implements CommandExecutor {
                         }
                         arena.get().set("blocks", blocks);
                         arena.save();
-                        if (arenaManager.getfolder().list().length == 1) {
-                            arenaManager.setEnabledArena(args[0]);
+                        if (ArenaManager.getfolder().list().length == 1) {
+                            ArenaManager.setEnabledArena(args[0]);
                             ArenaConfiguration.save();
                         }
                         ArenaCreateEvent event = new ArenaCreateEvent(p, arena);
@@ -61,12 +58,12 @@ public class ArenaCommands implements CommandExecutor {
             }
             if (KnockbackFFA.getInstance().getCommand("editarena").getName().equalsIgnoreCase(command.getName())) {
                 if (args.length == 1) {
-                    List<String> arenaList = Arrays.asList(arenaManager.getfolder().list());
+                    List<String> arenaList = Arrays.asList(ArenaManager.getfolder().list());
                     if (!arenaList.contains(args[0] + ".yml")) {
                         p.sendMessage(ChatColor.RED + "That arena name does not exist!");
                     } else if (arenaList.contains(args[0] + ".yml")) {
                         p.sendMessage(ChatColor.GREEN + "You are now editing " + args[0]);
-                        Arena arena = arenaManager.load(args[0]);
+                        Arena arena = ArenaManager.load(args[0]);
                         InventoryGUI arenaGUI = new InventoryGUI(Bukkit.createInventory(null, 54, "Arena Editor"));
                         ItemButton blockBreak = ItemButton.create(new ItemBuilder(Material.DIAMOND_PICKAXE).setName(ChatColor.GRAY + "Block Break"), e -> {
                             arena.get().set("block-break", !arena.get().getBoolean("block-break"));

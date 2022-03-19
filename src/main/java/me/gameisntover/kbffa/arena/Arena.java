@@ -106,21 +106,6 @@ public class Arena {
             player.teleport(getSpawnLocation());
         }
 
-    /**
-     * returns player to the main lobby
-     *
-     * needs @param @player
-     */
-
-    public void teleportToMainLobby(Player player) {
-        if (ArenaConfiguration.get().getString("mainlobby.world") == null) return;
-            Double x = ArenaConfiguration.get().getDouble("mainlobby.x");
-            Double y = ArenaConfiguration.get().getDouble("mainlobby.y");
-            Double z = ArenaConfiguration.get().getDouble("mainlobby.z");
-            World world = Bukkit.getWorld(ArenaConfiguration.get().getString("mainlobby.world"));
-            if (world != null && x != null) player.teleport(new Location(world, x, y, z));
-            else player.teleport(Bukkit.getWorld("world").getSpawnLocation());
-    }
 
     /**
      * Deletes the arena file and changes the enabled arena

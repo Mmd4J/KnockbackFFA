@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Commands implements CommandExecutor {
-    private ArenaManager arenaManager;
+    
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("createkit")).getName().equalsIgnoreCase(command.getName())) {
@@ -86,7 +86,7 @@ public class Commands implements CommandExecutor {
                     MainScoreboard.toggleScoreboard(p, true);
                     KnockbackFFAAPI.setInGamePlayer(p, true);
                 }
-                arenaManager.teleportPlayerToArena(p);
+                ArenaManager.teleportPlayerToArena(p);
             } else {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ALREADY_INGAME.toString()));
             }
@@ -96,7 +96,7 @@ public class Commands implements CommandExecutor {
                 String leaveText = Message.ARENA_LEAVE.toString().replace("&", "§");
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);
-                arenaManager.teleportToMainLobby(p.getPlayer());
+                ArenaManager.teleportToMainLobby(p.getPlayer());
                 p.getInventory().clear();
                 if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
                     PlayerData.load(p.getPlayer());
@@ -127,9 +127,9 @@ public class Commands implements CommandExecutor {
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("resetarena")).getName().equalsIgnoreCase(command.getName())) {
             if (args.length > 0) {
-                File file = new File(arenaManager.getfolder() + File.separator + args[0] + ".yml");
+                File file = new File(ArenaManager.getfolder() + File.separator + args[0] + ".yml");
                 if (file.exists()) {
-                    Arena arena = arenaManager.load(args[0]);
+                    Arena arena = ArenaManager.load(args[0]);
                     arena.resetArena();
                     sender.sendMessage(ChatColor.GREEN + "Arena has been reset!");
                 } else {

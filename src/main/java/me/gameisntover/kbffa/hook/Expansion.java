@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Expansion extends PlaceholderExpansion {
     private final KnockbackFFA plugin;
-    private ArenaManager arenaManager;
+    
     public Expansion(KnockbackFFA plugin) {
         this.plugin = plugin;
     }
@@ -56,7 +56,7 @@ public class Expansion extends PlaceholderExpansion {
             return BalanceAPI.getBalance(player.getPlayer()) + "";
         }
         if (params.equalsIgnoreCase("current_map")) {
-            String arenaName = arenaManager.getEnabledArena().getName();
+            String arenaName = ArenaManager.getEnabledArena().getName();
             if (arenaName == null) return "No Arena";
              else return arenaName;
         }
@@ -67,9 +67,9 @@ public class Expansion extends PlaceholderExpansion {
             return minutes + ":" + seconds;
         }
         if (params.equalsIgnoreCase("next_map")) {
-            if (arenaManager.getfolder().list() != null && arenaManager.getfolder().list().length > 1) {
-                String arenaName = arenaManager.getEnabledArena().getName();
-                List<String> arenaList = Arrays.asList(arenaManager.getfolder().list());
+            if (ArenaManager.getfolder().list() != null && ArenaManager.getfolder().list().length > 1) {
+                String arenaName = ArenaManager.getEnabledArena().getName();
+                List<String> arenaList = Arrays.asList(ArenaManager.getfolder().list());
                 int index = arenaList.indexOf(arenaName);
                 if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
                 else return arenaList.get(index + 2).replace(".yml", "");
