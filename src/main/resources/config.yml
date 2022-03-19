@@ -9,8 +9,6 @@ Bungee-Mode: false
 #Bungee-Mode would make players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
 save-inventory-on-join: true
 #stores player inventory before they join the game but you can set it to false so when a player leaves the game. They'll lose their previous inventory before they join the game(Bungee-Mode Only)
-joinmessage: true
-leavemessage: true
 joinsound: true
 killprize: 10
 default-void-damage: 6
