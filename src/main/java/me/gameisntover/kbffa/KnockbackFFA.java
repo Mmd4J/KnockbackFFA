@@ -45,7 +45,7 @@ import java.util.Objects;
 
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
-        private ArenaManager arenaManager = new ArenaManager();
+        private final TempArenaManager tempArenaManager = new TempArenaManager();
         private int arenaID = 0;
         private Integer timer = 0;
         private final FFAManager manager = new FFAManager();
@@ -138,9 +138,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }
 
         private void loadTasks() {
-            if (arenaManager.getfolder().listFiles() == null || arenaManager.getfolder().listFiles().length == 0) return;
-                List<Arena> arenaList = arenaManager.getArenaList();
-            arenaManager.setEnabledArena(arenaList.get(0));
+            if (tempArenaManager.getfolder().listFiles() == null || tempArenaManager.getfolder().listFiles().length == 0) return;
+                List<Arena> arenaList = tempArenaManager.getArenaList();
+            tempArenaManager.setEnabledArena(arenaList.get(0));
                 timer = getConfig().getInt("ArenaChangeTimer");
 
                 new BukkitRunnable() {
@@ -148,11 +148,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     public void run() {
                         if (arenaList.size() > 0) {
                             String arenaName = arenaList.get(0).getName();
-                            arenaManager.setEnabledArena(arenaName);
+                            tempArenaManager.setEnabledArena(arenaName);
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                 if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
-                                arenaManager.changeArena(arenaManager.load(arenaName.replace(".yml","")));
+                                tempArenaManager.changeArena(tempArenaManager.load(arenaName.replace(".yml","")));
                                 cancel();
                             }
                             if (arenaList.size() > 1) arenaID++;
@@ -171,8 +171,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                             if (arenaList.size() > 1) { //checking if arenaList even has arenas
                                 arenaID++;
                                 if (!(arenaID <= arenaList.size())) arenaID = 1;
-                                arenaManager.changeArena(arenaList.get(arenaID - 1));
-                            } else if (arenaList.size() == 1) arenaManager.setEnabledArena(arenaList.get(0).getName());
+                                tempArenaManager.changeArena(arenaList.get(arenaID - 1));
+                            } else if (arenaList.size() == 1) tempArenaManager.setEnabledArena(arenaList.get(0).getName());
 
                         }
                     }
@@ -239,11 +239,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     Block block = e.getBlockPlaced();
                     DataBlock db = blockManager.getDataBlock(block);
                     db.set("block-type", "BuildingBlock");
-                    String arenaName = arenaManager.getEnabledArena().getName();
+                    String arenaName = tempArenaManager.getEnabledArena().getName();
                     BukkitRunnable runnable = new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (arenaManager.getEnabledArena().getName().equals(arenaName)) {
+                            if (tempArenaManager.getEnabledArena().getName().equals(arenaName)) {
                                 switch (block.getType()) {
                                     case WHITE_WOOL:
                                         block.setType(Material.YELLOW_WOOL);

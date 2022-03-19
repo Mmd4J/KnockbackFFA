@@ -23,7 +23,7 @@ import redempt.redlib.itemutils.ItemBuilder;
 import java.util.*;
 
 public class ArenaCommands implements CommandExecutor {
-    private final ArenaManager arenaManager = new ArenaManager();
+    private final TempArenaManager tempArenaManager = new TempArenaManager();
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -37,7 +37,7 @@ public class ArenaCommands implements CommandExecutor {
                     } else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                         Location loc1 = WandListener.pos1m.get(p);
                         Location loc2 = WandListener.pos2m.get(p);
-                        Arena arena = arenaManager.create(args[0], loc1, loc2, p.getLocation());
+                        Arena arena = tempArenaManager.create(args[0], loc1, loc2, p.getLocation());
                         List<String> blocks = new ArrayList<>();
                         List<String> locations = new ArrayList<>();
                         Cuboid region = new Cuboid(loc1, loc2);
@@ -47,8 +47,8 @@ public class ArenaCommands implements CommandExecutor {
                         }
                         arena.get().set("blocks", blocks);
                         arena.save();
-                        if (arenaManager.getfolder().list().length == 1) {
-                            arenaManager.setEnabledArena(args[0]);
+                        if (tempArenaManager.getfolder().list().length == 1) {
+                            tempArenaManager.setEnabledArena(args[0]);
                         }
                         ArenaCreateEvent event = new ArenaCreateEvent(p, arena);
                         Bukkit.getPluginManager().callEvent(event);
@@ -58,12 +58,12 @@ public class ArenaCommands implements CommandExecutor {
             }
             if (KnockbackFFA.getInstance().getCommand("editarena").getName().equalsIgnoreCase(command.getName())) {
                 if (args.length == 1) {
-                    List<String> arenaList = Arrays.asList(arenaManager.getfolder().list());
+                    List<String> arenaList = Arrays.asList(tempArenaManager.getfolder().list());
                     if (!arenaList.contains(args[0] + ".yml")) {
                         p.sendMessage(ChatColor.RED + "That arena name does not exist!");
                     } else if (arenaList.contains(args[0] + ".yml")) {
                         p.sendMessage(ChatColor.GREEN + "You are now editing " + args[0]);
-                        Arena arena = arenaManager.load(args[0]);
+                        Arena arena = tempArenaManager.load(args[0]);
                         InventoryGUI arenaGUI = new InventoryGUI(Bukkit.createInventory(null, 54, "Arena Editor"));
                         ItemButton blockBreak = ItemButton.create(new ItemBuilder(Material.DIAMOND_PICKAXE).setName(ChatColor.GRAY + "Block Break"), e -> {
                             arena.get().set("block-break", !arena.get().getBoolean("block-break"));

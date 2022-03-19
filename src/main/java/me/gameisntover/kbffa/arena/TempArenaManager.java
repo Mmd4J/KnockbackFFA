@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ArenaManager {
+public class TempArenaManager {
     private Arena enabledArena = null;
     private File cfile;
     private FileConfiguration config;

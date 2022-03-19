@@ -4,8 +4,7 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.ArenaManager;
+import me.gameisntover.kbffa.arena.TempArenaManager;
 import me.gameisntover.kbffa.customconfig.CosmeticConfiguration;
 import me.gameisntover.kbffa.customconfig.Kits;
 import me.gameisntover.kbffa.customconfig.PlayerData;
@@ -26,14 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaSettings implements Listener {
-    private final ArenaManager arenaManager = new ArenaManager();
+    private final TempArenaManager tempArenaManager = new TempArenaManager();
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
         if (!KnockbackFFAAPI.isInArena(player)) return;
-        String[] arenaList = arenaManager.getfolder().list();
+        String[] arenaList = tempArenaManager.getfolder().list();
         for (String arenaName : arenaList) {
-            Arena arena = arenaManager.load(arenaName.replace(".yml", ""));
+            Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
             PlayerData.load(player);
             e.setCancelled(!arena.get().getBoolean("block-break"));
         }
@@ -43,10 +42,10 @@ public class ArenaSettings implements Listener {
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
         if (!KnockbackFFAAPI.isInGame(player)) return;
-            String[] arenaList = arenaManager.getfolder().list();
+            String[] arenaList = tempArenaManager.getfolder().list();
             assert arenaList != null;
             for (String arenaName : arenaList) {
-                Arena arena = arenaManager.load(arenaName.replace(".yml", ""));
+                Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
                 PlayerData.load(player);
                 e.setCancelled(KnockbackFFAAPI.isInArena(player) && !arena.get().getBoolean("item-drop"));
             }
@@ -103,8 +102,8 @@ public class ArenaSettings implements Listener {
                                     runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
                         }
             }
-            if (arenaManager.getEnabledArena() != null) {
-                Arena arena = arenaManager.load(arenaManager.getEnabledArena().getName());
+            if (tempArenaManager.getEnabledArena() != null) {
+                Arena arena = tempArenaManager.load(tempArenaManager.getEnabledArena().getName());
                 KnockbackFFAAPI.setInGamePlayer(player, true);
                 KnockbackFFAAPI.setInArenaPlayer(player, true);
                 if (!arena.contains(player.getLocation())) return;

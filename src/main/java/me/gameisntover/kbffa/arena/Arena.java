@@ -12,11 +12,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.util.*;
 
-public class Arena extends ArenaManager{
+public class Arena extends TempArenaManager {
 
-    ArenaManager arenaManager = new ArenaManager();
+    TempArenaManager tempArenaManager = new TempArenaManager();
     public File getfile() {
-        return new File(arenaManager.getfolder(), getName() + ".yml");
+        return new File(tempArenaManager.getfolder(), getName() + ".yml");
     }
 
     public FileConfiguration get() {
@@ -24,7 +24,7 @@ public class Arena extends ArenaManager{
     }
 
     public void save() {
-        File file = new File(arenaManager.getfolder(), getName() + ".yml");
+        File file = new File(tempArenaManager.getfolder(), getName() + ".yml");
         try {
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
             config.save(file);
@@ -75,7 +75,7 @@ public class Arena extends ArenaManager{
      * @return true if the arena is ready
      */
     public boolean isReady() {
-        List<String> arenaList = Arrays.asList(Objects.requireNonNull(arenaManager.getfolder().list()));
+        List<String> arenaList = Arrays.asList(Objects.requireNonNull(tempArenaManager.getfolder().list()));
         return arenaList.contains(getName());
     }
 
@@ -85,7 +85,7 @@ public class Arena extends ArenaManager{
      * @return true if the arena is the enabled arena
      */
     public boolean isEnabled() {
-        return arenaManager.getEnabledArena().getName().equals(getName());
+        return tempArenaManager.getEnabledArena().getName().equals(getName());
     }
 
 
@@ -97,8 +97,8 @@ public class Arena extends ArenaManager{
      * @param @player
      */
     public void teleportPlayer(Player player) {
-        if (!(getName().equalsIgnoreCase(arenaManager.getEnabledArena().getName()))) return;
-            Arena arena = arenaManager.load(getName());
+        if (!(getName().equalsIgnoreCase(tempArenaManager.getEnabledArena().getName()))) return;
+            Arena arena = tempArenaManager.load(getName());
             PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
             Bukkit.getPluginManager().callEvent(event);
             player.teleport(getSpawnLocation());
@@ -112,8 +112,8 @@ public class Arena extends ArenaManager{
     public void removeArena() {
         File cfile = getfile();
         cfile.delete();
-        while (arenaManager.getEnabledArena().equals(getName())) {
-            arenaManager.setEnabledArena(arenaManager.randomArena());
+        while (tempArenaManager.getEnabledArena().equals(getName())) {
+            tempArenaManager.setEnabledArena(tempArenaManager.randomArena());
         }
         save();
     }
