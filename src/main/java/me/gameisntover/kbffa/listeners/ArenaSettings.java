@@ -60,7 +60,7 @@ public class ArenaSettings implements Listener {
             if (PlayerData.get().getString("selected-trails") != null) {
                 String selectedTrails = PlayerData.get().getString("selected-trails");
                 Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
-                DataBlock db = KnockbackFFA.getInstance().getManager().getDataBlock(block);
+                DataBlock db = KnockbackFFA.getInstance().getBlockManager().getDataBlock(block);
                 if (!db.getString("block-type").equals("") || db.getString("block-type") != null) return;
                 if (KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
                     return;

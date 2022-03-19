@@ -10,6 +10,7 @@ import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.command.ArenaCommands;
 import me.gameisntover.kbffa.command.Commands;
 import me.gameisntover.kbffa.command.CommandsTabCompleter;
+import me.gameisntover.kbffa.manager.FFAManager;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import me.gameisntover.kbffa.scoreboard.MainScoreboard;
@@ -47,18 +48,17 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         
         private int arenaID = 0;
         private Integer timer = 0;
-        private BlockDataManager manager;
+        private final FFAManager manager = new FFAManager();
+        private BlockDataManager blockManager;
         private FileConfiguration messages;
         private FileConfiguration sounds;
         @Override
         public void onEnable() {
-            manager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
+            blockManager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
             if (!Bukkit.getOnlinePlayers().isEmpty()) {
                 for (Player player : Bukkit.getOnlinePlayers())
                     KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
             }
-
-
             getLogger().info("Loading Commands");
             loadCommands();
             getLogger().info("Loading Configuration Files");
@@ -102,7 +102,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 try {
                     file.createNewFile();
                     saveResource("sound.yml", true);
-                }catch (IOException ignored){}
+                } catch (IOException ignored){}
             }
             sounds = YamlConfiguration.loadConfiguration(file);
         }
@@ -249,7 +249,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
                 if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
                     Block block = e.getBlockPlaced();
-                    DataBlock db = manager.getDataBlock(block);
+                    DataBlock db = blockManager.getDataBlock(block);
                     db.set("block-type", "BuildingBlock");
                     String arenaName = Arena.getEnabledArena().getName();
                     BukkitRunnable runnable = new BukkitRunnable() {
