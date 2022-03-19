@@ -2,6 +2,7 @@ package me.gameisntover.kbffa.command;
 
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.Arena;
+import me.gameisntover.kbffa.arena.ArenaManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,7 +18,7 @@ public class CommandsTabCompleter implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equalsIgnoreCase("resetarena")) {
             if (args.length == 1) {
-                List<String> arenaList = Arrays.asList(Arrays.stream(Arrays.stream(Arena.getfolder().list()).map(s -> {
+                List<String> arenaList = Arrays.asList(Arrays.stream(Arrays.stream(new ArenaManager().getfolder().list()).map(s -> {
                     return s.replace(".yml", "");
                 }).toArray()).toArray(String[]::new));
                 return arenaList;
@@ -25,7 +26,7 @@ public class CommandsTabCompleter implements TabCompleter {
         }
         if (command.getName().equalsIgnoreCase("editarena")) {
             if (args.length == 1) {
-                List<String> arenaList = Arrays.asList(Arrays.stream(Arrays.stream(Arena.getfolder().list()).map(s -> {
+                List<String> arenaList = Arrays.asList(Arrays.stream(Arrays.stream(new ArenaManager().getfolder().list()).map(s -> {
                     return s.replace(".yml", "");
                 }).toArray()).toArray(String[]::new));
                 return arenaList;

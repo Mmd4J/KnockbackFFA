@@ -34,7 +34,7 @@ public class KnockbackFFAAPI {
     }
 
     public static boolean isInArena(Player player) {
-        if (inArenaPlayer.get(player.getUniqueId()) != null) return inArenaPlayer.get(player.getUniqueId());
+        if (inArenaPlayer.get(player.getUniqueId()) != null && KnockbackFFAAPI.isInGame(player)) return inArenaPlayer.get(player.getUniqueId());
         else return false;
 
     }
