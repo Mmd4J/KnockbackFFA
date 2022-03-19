@@ -1,9 +1,10 @@
 package me.gameisntover.kbffa.api;
 
+import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.customconfig.CosmeticConfiguration;
 import me.gameisntover.kbffa.customconfig.PlayerData;
-import me.gameisntover.kbffa.KnockbackFFA;
-import org.bukkit.*;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

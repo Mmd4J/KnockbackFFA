@@ -189,6 +189,15 @@ public class GuiStuff implements Listener {
                     kitMeta.setLore(ItemConfiguration.get().getStringList("ShopMenu.kit.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
                     kitItem.getItem().setItemMeta(kitMeta);
                     shopMenu.addButton(ItemConfiguration.get().getInt("ShopMenu.kit.slot"), kitItem);
+                    for (ItemButton itemButton : shopMenu.getButtons()) {
+                        if (itemButton.getItem().getType().equals(Material.AIR)) {
+                            itemButton.getItem().setType(Material.getMaterial(ItemConfiguration.get().getString("empty-item")));
+                            ItemMeta meta = itemButton.getItem().getItemMeta();
+                            meta.setDisplayName(ItemConfiguration.get().getString("empty-item.name").replace("&", "§"));
+                            meta.setLore(ItemConfiguration.get().getStringList("empty-item.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
+                            itemButton.getItem().setItemMeta(meta);
+                        }
+                    }
                     shopMenu.destroysOnClose();
                     shopMenu.open(player);
                 }

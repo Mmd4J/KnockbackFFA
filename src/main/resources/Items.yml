@@ -45,3 +45,8 @@ SpecialItems:
     jumpLevel: 3
   EnderPearl:
     name: "&aEnder Pearl"
+empty-item:
+  material: 'RED_STAINED_GLASS_PANE'
+  name: '&7Empty!'
+  lore:
+    - '&7Nothing to see here!'

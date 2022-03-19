@@ -49,7 +49,7 @@ public class JoinLeaveListeners implements Listener {
     @EventHandler
     public void playerLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-            KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
+            KnockbackFFAAPI.setInGamePlayer(player, false);
 
     }
 }

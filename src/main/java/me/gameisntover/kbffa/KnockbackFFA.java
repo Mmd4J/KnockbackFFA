@@ -106,7 +106,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             if (!file.exists()){
                 try {
                     file.createNewFile();
-                    saveResource("sounds.yml", true);
+                    saveResource("sound.yml", true);
                 }catch (IOException ignored){}
             }
             sounds = YamlConfiguration.loadConfiguration(file);
@@ -121,6 +121,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             if (!dataFolder.exists()) {
                 getLogger().info("Creating DataFolder");
                 dataFolder.mkdir();
+                File arenaDataFolder = new File(dataFolder+ File.separator + "ArenaData");
+                arenaDataFolder.mkdir();
             }
             File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
             if (!folder.exists()) {
