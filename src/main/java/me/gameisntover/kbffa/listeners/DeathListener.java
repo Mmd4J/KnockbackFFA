@@ -6,7 +6,7 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.arena.ArenaManager;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfig.PlayerData;
 import me.gameisntover.kbffa.message.Message;
 import net.md_5.bungee.api.ChatMessageType;
@@ -29,7 +29,7 @@ import java.util.Map;
 public class DeathListener implements Listener {
     Map<Entity, Integer> killStreak = new HashMap<>();
     Map<Entity, Entity> killer = new HashMap<>();
-    ArenaManager arenaManager;
+    Arena Arena;
     @EventHandler
     public void playerDamageCheck(EntityDamageEvent e) {
         if(!(e.getEntity() instanceof Player)) return;
@@ -77,7 +77,7 @@ public class DeathListener implements Listener {
                     player.spigot().respawn();
                     KnockbackFFAKit kitManager = new KnockbackFFAKit();
                     kitManager.lobbyItems(player);
-                    ArenaManager.teleportPlayerToArena(player);
+                    Arena.teleportPlayerToArena(player);
                     cancel();
                 }
             }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);

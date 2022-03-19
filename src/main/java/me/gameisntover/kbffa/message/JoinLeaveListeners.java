@@ -4,7 +4,7 @@ import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.arena.ArenaManager;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfig.PlayerData;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -29,17 +29,17 @@ public class JoinLeaveListeners implements Listener {
         if (!KnockbackFFAAPI.BungeeMode()) KnockbackFFAAPI.setInGamePlayer(player, false);
         if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound"))
             player.playSound(player.getLocation(), Sound.valueOf(Sounds.PLAYER_JOIN.toString()), 1, 1);
-        if (ArenaManager.getEnabledArena() == null) KnockbackFFAAPI.setInGamePlayer(player, false);
+        if (Arena.getEnabledArena() == null) KnockbackFFAAPI.setInGamePlayer(player, false);
         else {
             if (KnockbackFFAAPI.BungeeMode()) {
-                ArenaManager.teleportPlayerToArena(player);
+                Arena.teleportPlayerToArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 player.getInventory().clear();
                 kitManager.lobbyItems(player);
                 KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
             } else {
                 if (!KnockbackFFAAPI.isInGame(player)) {
-                    ArenaManager.teleportToMainLobby(player);
+                    Arena.teleportToMainLobby(player);
                     KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
                 }
             }

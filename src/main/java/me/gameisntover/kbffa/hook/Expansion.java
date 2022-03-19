@@ -3,7 +3,7 @@ package me.gameisntover.kbffa.hook;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.ArenaManager;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfig.PlayerData;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
@@ -56,7 +56,7 @@ public class Expansion extends PlaceholderExpansion {
             return BalanceAPI.getBalance(player.getPlayer()) + "";
         }
         if (params.equalsIgnoreCase("current_map")) {
-            String arenaName = ArenaManager.getEnabledArena().getName();
+            String arenaName = Arena.getEnabledArena().getName();
             if (arenaName == null) return "No Arena";
              else return arenaName;
         }
@@ -67,9 +67,9 @@ public class Expansion extends PlaceholderExpansion {
             return minutes + ":" + seconds;
         }
         if (params.equalsIgnoreCase("next_map")) {
-            if (ArenaManager.getfolder().list() != null && ArenaManager.getfolder().list().length > 1) {
-                String arenaName = ArenaManager.getEnabledArena().getName();
-                List<String> arenaList = Arrays.asList(ArenaManager.getfolder().list());
+            if (Arena.getfolder().list() != null && Arena.getfolder().list().length > 1) {
+                String arenaName = Arena.getEnabledArena().getName();
+                List<String> arenaList = Arrays.asList(Arena.getfolder().list());
                 int index = arenaList.indexOf(arenaName);
                 if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
                 else return arenaList.get(index + 2).replace(".yml", "");
