@@ -1,10 +1,6 @@
 package me.gameisntover.kbffa.arena;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -31,7 +27,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
      * @param l2 - The other corner
      */
     public Cuboid(Location l1, Location l2) {
-        if (!l1.getWorld().equals(l2.getWorld()))
+        if (!Objects.equals(l1.getWorld(), l2.getWorld()))
             throw new IllegalArgumentException("Locations must be on the same world");
         this.worldName = l1.getWorld().getName();
         this.x1 = Math.min(l1.getBlockX(), l2.getBlockX());
@@ -57,7 +53,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
      * @param other - The Cuboid to copy
      */
     public Cuboid(Cuboid other) {
-        this(other.getWorld().getName(), other.x1, other.y1, other.z1, other.x2, other.y2, other.z2);
+        this(other.worldName, other.x1, other.y1, other.z1, other.x2, other.y2, other.z2);
     }
 
     /**
@@ -592,10 +588,10 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
     }
 
     public class CuboidIterator implements Iterator<Block> {
-        private World w;
-        private int baseX, baseY, baseZ;
+        private final World w;
+        private final int baseX, baseY, baseZ;
         private int x, y, z;
-        private int sizeX, sizeY, sizeZ;
+        private final int sizeX, sizeY, sizeZ;
 
         public CuboidIterator(World w, int x1, int y1, int z1, int x2, int y2, int z2) {
             this.w = w;
