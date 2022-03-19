@@ -3,7 +3,6 @@ package me.gameisntover.kbffa.hook;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfig.PlayerData;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
@@ -13,11 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Expansion extends PlaceholderExpansion {
-    private final KnockbackFFA plugin;
-    
-    public Expansion(KnockbackFFA plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public String getAuthor() {
@@ -67,15 +61,13 @@ public class Expansion extends PlaceholderExpansion {
             return minutes + ":" + seconds;
         }
         if (params.equalsIgnoreCase("next_map")) {
-            if (Arena.getfolder().list() != null && Arena.getfolder().list().length > 1) {
-                String arenaName = Arena.getEnabledArena().getName();
-                List<String> arenaList = Arrays.asList(Arena.getfolder().list());
-                int index = arenaList.indexOf(arenaName);
-                if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
-                else return arenaList.get(index + 2).replace(".yml", "");
-            } else {
-                return "No Arena";
-            }
+            if (Arena.getfolder().list() == null || Arena.getfolder().list().length < 1) return "No Arena";
+            String arenaName = Arena.getEnabledArena().getName();
+            List<String> arenaList = Arrays.asList(Arena.getfolder().list());
+            int index = arenaList.indexOf(arenaName);
+            if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
+            else return arenaList.get(index + 2).replace(".yml", "");
+
         }
         return null;
     }
