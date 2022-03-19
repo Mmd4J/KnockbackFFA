@@ -43,6 +43,15 @@ public class GuiStuff implements Listener {
                     e.setCancelled(true);
                     InventoryGUI cosmeticMenu = new InventoryGUI(Bukkit.createInventory(null, 54, "Cosmetic Menu"));
                     PlayerData.load(player);
+                    for (ItemButton itemButton : cosmeticMenu.getButtons()) {
+                        if (itemButton.getItem().getType().equals(Material.AIR)) {
+                            itemButton.getItem().setType(Material.getMaterial(ItemConfiguration.get().getString("empty-item")));
+                            ItemMeta meta = itemButton.getItem().getItemMeta();
+                            meta.setDisplayName(ItemConfiguration.get().getString("empty-item.name").replace("&", "§"));
+                            meta.setLore(ItemConfiguration.get().getStringList("empty-item.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
+                            itemButton.getItem().setItemMeta(meta);
+                        }
+                    }
                     List<String> cList = PlayerData.get().getStringList("owned-cosmetics");
                     cList.forEach(cosmetic -> {
                                 if (CosmeticConfiguration.get().getString(cosmetic + ".name") == null) {
@@ -100,6 +109,15 @@ public class GuiStuff implements Listener {
                     InventoryGUI shopMenu = new InventoryGUI(Bukkit.createInventory(null, 54, "Shop Menu"));
                     String cIcon = ItemConfiguration.get().getString("ShopMenu.cosmetic.material");
                     String cName = ChatColor.translateAlternateColorCodes('&', ItemConfiguration.get().getString("ShopMenu.cosmetic.name"));
+                    for (ItemButton itemButton : shopMenu.getButtons()) {
+                        if (itemButton.getItem().getType().equals(Material.AIR)) {
+                            itemButton.getItem().setType(Material.getMaterial(ItemConfiguration.get().getString("empty-item")));
+                            ItemMeta meta = itemButton.getItem().getItemMeta();
+                            meta.setDisplayName(ItemConfiguration.get().getString("empty-item.name").replace("&", "§"));
+                            meta.setLore(ItemConfiguration.get().getStringList("empty-item.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
+                            itemButton.getItem().setItemMeta(meta);
+                        }
+                    }
                     ItemButton cosmeticItem = ItemButton.create(new ItemBuilder(Material.getMaterial(cIcon)).setName(cName), event -> {
                         InventoryGUI cosmeticShop = new InventoryGUI(Bukkit.createInventory(null, 54, "Cosmetic Shop"));
                         List<String> cosmetics = CosmeticConfiguration.get().getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
@@ -189,7 +207,14 @@ public class GuiStuff implements Listener {
                     kitMeta.setLore(ItemConfiguration.get().getStringList("ShopMenu.kit.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
                     kitItem.getItem().setItemMeta(kitMeta);
                     shopMenu.addButton(ItemConfiguration.get().getInt("ShopMenu.kit.slot"), kitItem);
-                    for (ItemButton itemButton : shopMenu.getButtons()) {
+                    shopMenu.destroysOnClose();
+                    shopMenu.open(player);
+                }
+                if (kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                    e.setCancelled(true);
+                    InventoryGUI kitsMenu = new InventoryGUI(Bukkit.createInventory(null, 54, "Kits Menu"));
+                    PlayerData.load(player);
+                    for (ItemButton itemButton : kitsMenu.getButtons()) {
                         if (itemButton.getItem().getType().equals(Material.AIR)) {
                             itemButton.getItem().setType(Material.getMaterial(ItemConfiguration.get().getString("empty-item")));
                             ItemMeta meta = itemButton.getItem().getItemMeta();
@@ -198,13 +223,6 @@ public class GuiStuff implements Listener {
                             itemButton.getItem().setItemMeta(meta);
                         }
                     }
-                    shopMenu.destroysOnClose();
-                    shopMenu.open(player);
-                }
-                if (kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
-                    e.setCancelled(true);
-                    InventoryGUI kitsMenu = new InventoryGUI(Bukkit.createInventory(null, 54, "Kits Menu"));
-                    PlayerData.load(player);
                     if (PlayerData.get().getList("owned-kits") != null && PlayerData.get().getList("owned-kits").size() > 0) {
                         if (PlayerData.get().getList("owned-kits") == null) PlayerData.get().set("owned-kits", new ArrayList<>());
 
