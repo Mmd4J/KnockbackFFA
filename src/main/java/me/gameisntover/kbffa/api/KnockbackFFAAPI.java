@@ -22,6 +22,7 @@ public class KnockbackFFAAPI {
     }
 
     public static boolean isInGame(Player player) {
+        if(BungeeMode()) return true;
         if (inGamePlayer.get(player.getUniqueId()) != null) return inGamePlayer.get(player.getUniqueId());
          else return false;
 

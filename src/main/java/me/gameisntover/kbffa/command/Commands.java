@@ -8,6 +8,7 @@ import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.VoidChunkGenerator;
 import me.gameisntover.kbffa.arena.WandListener;
 import me.gameisntover.kbffa.customconfig.*;
+import me.gameisntover.kbffa.message.Message;
 import me.gameisntover.kbffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -68,7 +69,7 @@ public class Commands implements CommandExecutor {
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("join")).getName().equalsIgnoreCase(command.getName())) {
             if (!KnockbackFFAAPI.BungeeMode() && !KnockbackFFAAPI.isInGame(p)) {
-                String joinText = Objects.requireNonNull(MessageConfiguration.get().getString("join-arena")).replace("&", "§");
+                String joinText = Message.ARENA_JOIN.toString().replace("&", "§");
                 joinText = PlaceholderAPI.setPlaceholders(p, joinText);
                 sender.sendMessage(joinText);
                 if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
@@ -85,12 +86,12 @@ public class Commands implements CommandExecutor {
                 }
                 Arena.teleportPlayerToArena(p);
             } else {
-                sender.sendMessage(Objects.requireNonNull(ChatColor.translateAlternateColorCodes('&', MessageConfiguration.get().getString("alreadyingame"))));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ALREADY_INGAME.toString()));
             }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("leave")).getName().equalsIgnoreCase(command.getName())) {
             if (!KnockbackFFAAPI.BungeeMode() && KnockbackFFAAPI.isInGame(Objects.requireNonNull(p.getPlayer()))) {
-                String leaveText = Objects.requireNonNull(MessageConfiguration.get().getString("leave-arena")).replace("&", "§");
+                String leaveText = Message.ARENA_LEAVE.toString().replace("&", "§");
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);
                 Arena.teleportToMainLobby(p.getPlayer());
@@ -109,7 +110,7 @@ public class Commands implements CommandExecutor {
                 MainScoreboard.toggleScoreboard(p, false);
                 KnockbackFFAAPI.setInGamePlayer(p, false);
             } else {
-                p.sendMessage(Objects.requireNonNull(MessageConfiguration.get().getString("cannotuseleave")).replace("&", "§"));
+                p.sendMessage(Message.CAN_NOT_LEAVE.toString().replace("&", "§"));
             }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("setmainlobby")).getName().equalsIgnoreCase(command.getName())) {
@@ -155,7 +156,7 @@ public class Commands implements CommandExecutor {
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("reload")).getName().equalsIgnoreCase(command.getName())) {
             KnockbackFFA.getInstance().reloadConfig();
-            MessageConfiguration.reload();
+            KnockbackFFA.getInstance().loadMessages();
             ArenaConfiguration.reload();
             SoundConfiguration.reload();
             ScoreboardConfiguration.reload();

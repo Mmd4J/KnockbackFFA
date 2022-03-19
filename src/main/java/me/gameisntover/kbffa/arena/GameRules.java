@@ -4,7 +4,7 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
-import me.gameisntover.kbffa.customconfig.MessageConfiguration;
+import me.gameisntover.kbffa.message.Message;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -94,7 +94,7 @@ public class GameRules implements Listener {
                             cancel();
                                     timer = 10;
                                 } else {
-                                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(MessageConfiguration.get().getString("bowuse").replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
+                                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message.BOW_COOLDOWN.toString().replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
                                 }
                             }
                             if (timer == 0) {

@@ -1,12 +1,9 @@
 package me.gameisntover.kbffa.message;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.customconfig.MessageConfiguration;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.scoreboard.MainScoreboard;
 import me.gameisntover.kbffa.util.PlayerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,12 +16,8 @@ public class JoinLeaveListeners implements Listener {
     public void playerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         if (!KnockbackFFAAPI.BungeeMode()) KnockbackFFAAPI.setInGamePlayer(player, false);
-        if (KnockbackFFA.getInstance().getConfig().getBoolean("joinmessage")) {
-            String joinText = MessageConfiguration.get().getString("joinmessage").replace("&", "§");
-            joinText = PlaceholderAPI.setPlaceholders(e.getPlayer(), joinText);
-            e.setJoinMessage(joinText);
-        }
-        if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound")) PlayerUtil.playSound(player, "join", 1, 1);
+        if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound"))
+            PlayerUtil.playSound(player, "join", 1, 1);
 
         if (Arena.getEnabledArena() == null) KnockbackFFAAPI.setInGamePlayer(player, false);
         else {
@@ -45,11 +38,6 @@ public class JoinLeaveListeners implements Listener {
 
     @EventHandler
     public void playerLeave(PlayerQuitEvent e) {
-        if (KnockbackFFA.getInstance().getConfig().getBoolean("leavemessage")) {
-            String leaveText = MessageConfiguration.get().getString("leavemessage").replace("&", "§");
-            leaveText = PlaceholderAPI.setPlaceholders(e.getPlayer(), leaveText);
-            e.setQuitMessage(leaveText);
-        }
         Player player = e.getPlayer();
             KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
 

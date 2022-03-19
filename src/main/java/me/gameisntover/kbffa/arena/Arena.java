@@ -5,7 +5,7 @@ import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
-import me.gameisntover.kbffa.customconfig.MessageConfiguration;
+import me.gameisntover.kbffa.message.Message;
 import me.gameisntover.kbffa.util.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -328,7 +328,7 @@ public class Arena {
                 kitManager.lobbyItems(p);
                 Arena.teleportPlayerToArena(p);
                 PlayerUtil.playSound(p, "arenachange", 1, 1);
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfiguration.get().getString("arenachangemsg")).replace("%arena%", arenaName)));
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ARENA_CHANGE.toString()).replace("%arena%", arenaName));
             }
             if (arena.get().getBoolean("auto-reset")) arena.resetArena();
     }

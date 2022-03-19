@@ -4,6 +4,7 @@ import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.customconfig.*;
+import me.gameisntover.kbffa.message.Message;
 import me.gameisntover.kbffa.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -113,9 +114,9 @@ public class GuiStuff implements Listener {
                                         ownedCosmetics.add(cosmetics.get(event1.getSlot()));
                                         PlayerData.get().set("owned-cosmetics", ownedCosmetics);
                                         PlayerData.save();
-                                        player.sendMessage(MessageConfiguration.get().getString("purchase-success").replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
-                                    } else player.sendMessage(MessageConfiguration.get().getString("already-owned").replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
-                                } else player.sendMessage(MessageConfiguration.get().getString("not-enough-money").replace("&", "§"));
+                                        player.sendMessage(Message.COSMETIC_PURCHASE_SUCCESS.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
+                                    } else player.sendMessage(Message.COSMETIC_ALREADY_OWNED.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
+                                } else player.sendMessage(Message.COSMETIC_NO_ENOUGH_MONEY.toString().replace("&", "§"));
                                 player.closeInventory();
                             });
                             ItemMeta cosmeticMeta = kits.guiItemMeta(cosmeticsItem.getItem());
@@ -160,9 +161,9 @@ public class GuiStuff implements Listener {
                                             PlayerData.get().set("owned-kits", ownedKits);
                                             PlayerData.save();
                                             player.closeInventory();
-                                            player.sendMessage(MessageConfiguration.get().getString("purchase-success").replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
-                                        } else player.sendMessage(MessageConfiguration.get().getString("already-owned").replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
-                                    } else player.sendMessage(MessageConfiguration.get().getString("not-enough-money").replace("&", "§"));
+                                            player.sendMessage(Message.COSMETIC_PURCHASE_SUCCESS.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
+                                        } else player.sendMessage(Message.COSMETIC_ALREADY_OWNED.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
+                                    } else player.sendMessage(Message.COSMETIC_NO_ENOUGH_MONEY.toString().replace("&", "§"));
 
                                     player.closeInventory();
                                 });
