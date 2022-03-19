@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.arena;
+package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
 import org.bukkit.Location;

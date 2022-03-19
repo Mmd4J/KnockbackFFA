@@ -2,21 +2,16 @@ package me.gameisntover.kbffa;
 
 import lombok.Getter;
 import me.gameisntover.kbffa.arena.*;
-import me.gameisntover.kbffa.listeners.ArenaSettings;
-import me.gameisntover.kbffa.listeners.DeathListener;
-import me.gameisntover.kbffa.listeners.GuiStuff;
+import me.gameisntover.kbffa.listeners.*;
 import me.gameisntover.kbffa.hook.Expansion;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.customconfig.*;
-import me.gameisntover.kbffa.listeners.NoHunger;
 import me.gameisntover.kbffa.command.ArenaCommands;
 import me.gameisntover.kbffa.command.Commands;
 import me.gameisntover.kbffa.command.CommandsTabCompleter;
-import me.gameisntover.kbffa.message.ChatFormat;
-import me.gameisntover.kbffa.message.JoinLeaveListeners;
-import me.gameisntover.kbffa.message.Message;
-import me.gameisntover.kbffa.message.Sounds;
+import me.gameisntover.kbffa.util.Message;
+import me.gameisntover.kbffa.util.Sounds;
 import me.gameisntover.kbffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -43,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -212,16 +208,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }
 
         private void loadListeners() {
-            getServer().getPluginManager().registerEvents(new NoHunger(), this);
-            getServer().getPluginManager().registerEvents(new JoinLeaveListeners(), this);
-            getServer().getPluginManager().registerEvents(new ChatFormat(), this);
-            getServer().getPluginManager().registerEvents(new DeathListener(), this);
-            getServer().getPluginManager().registerEvents(new WandListener(), this);
-            getServer().getPluginManager().registerEvents(new GameRules(), this);
-            getServer().getPluginManager().registerEvents(new MainScoreboard(), this);
-            getServer().getPluginManager().registerEvents(new GuiStuff(), this);
-            getServer().getPluginManager().registerEvents(new KnockbackFFAKit(), this);
-            getServer().getPluginManager().registerEvents(new ArenaSettings(), this);
+            Arrays.asList(new NoHunger(), new JoinLeaveListeners(), new ChatListener(),
+                    new DeathListener(), new WandListener(), new GameRules(), new MainScoreboard(),
+                    new GuiStuff(), new KnockbackFFAKit(), new ArenaSettings())
+                    .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
         }
 
         private void loadCommands() {

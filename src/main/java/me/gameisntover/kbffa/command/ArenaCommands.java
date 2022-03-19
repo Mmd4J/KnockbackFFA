@@ -4,6 +4,7 @@ import me.gameisntover.kbffa.api.event.ArenaCreateEvent;
 import me.gameisntover.kbffa.arena.*;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
 import me.gameisntover.kbffa.KnockbackFFA;
+import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;

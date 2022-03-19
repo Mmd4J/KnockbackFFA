@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.message;
+package me.gameisntover.kbffa.util;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 

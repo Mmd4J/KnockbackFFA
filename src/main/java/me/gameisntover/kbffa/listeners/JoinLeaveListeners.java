@@ -1,11 +1,11 @@
-package me.gameisntover.kbffa.message;
+package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfig.PlayerData;
+import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
