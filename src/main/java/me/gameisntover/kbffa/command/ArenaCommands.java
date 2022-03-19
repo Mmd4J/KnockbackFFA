@@ -27,6 +27,7 @@ public class ArenaCommands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
+
             if (KnockbackFFA.getInstance().getCommand("createarena").getName().equalsIgnoreCase(command.getName())) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "You must specify a name for the arena!");

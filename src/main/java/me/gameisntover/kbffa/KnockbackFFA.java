@@ -61,6 +61,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 for (Player player : Bukkit.getOnlinePlayers())
                     KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
             }
+
+
             getLogger().info("Loading Commands");
             loadCommands();
             getLogger().info("Loading Configuration Files");
@@ -140,7 +142,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }
 
         private void loadTasks() {
-            if (Arena.getfolder().listFiles() != null) {
+            if (Arena.getfolder().listFiles() == null || Arena.getfolder().listFiles().length == 0) return;
                 List<Arena> arenaList = Arena.getArenaList();
                 Arena.setEnabledArena(arenaList.get(0));
                 timer = getConfig().getInt("ArenaChangeTimer");
@@ -179,7 +181,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                         }
                     }
                 }.runTaskTimer(this, 0, 20);
-            }
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
