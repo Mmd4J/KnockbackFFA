@@ -215,23 +215,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }
 
         private void loadCommands() {
-            getCommand("join").setExecutor(new Commands());
-            getCommand("leave").setExecutor(new Commands());
-            getCommand("setmainLobby").setExecutor(new Commands());
-            getCommand("wand").setExecutor(new ArenaCommands());
-            getCommand("reload").setExecutor(new Commands());
-            getCommand("setsafezone").setExecutor(new ArenaCommands());
-            getCommand("gotoworld").setExecutor(new ArenaCommands());
-            getCommand("createarena").setExecutor(new ArenaCommands());
-            getCommand("createworld").setExecutor(new Commands());
+            getCommand(Arrays.asList("join","leave","reload","setmainLobby","createworld"
+                    ,"setvoid","createkit","delkit","specialitems","resetarena").toString()).setExecutor(new Commands());
+            getCommand(Arrays.asList("wand","setsafezone","gotoworld","createarena","editarena").toString()).setExecutor(new ArenaCommands());
             getCommand("gotoworld").setTabCompleter(new CommandsTabCompleter());
-            getCommand("editarena").setExecutor(new ArenaCommands());
-            getCommand("setvoid").setExecutor(new Commands());
-            getCommand("createkit").setExecutor(new Commands());
-            getCommand("delkit").setExecutor(new Commands());
             getCommand("editarena").setTabCompleter(new CommandsTabCompleter());
-            getCommand("specialitems").setExecutor(new Commands());
-            getCommand("resetarena").setExecutor(new Commands());
             getCommand("resetarena").setTabCompleter(new CommandsTabCompleter());
         }
 
