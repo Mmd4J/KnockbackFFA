@@ -4,10 +4,11 @@ import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.message.Message;
-import me.gameisntover.kbffa.util.PlayerUtil;
+import me.gameisntover.kbffa.message.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -244,13 +245,13 @@ public class GuiStuff implements Listener {
     public void onPlayerCloseInventory(InventoryCloseEvent e) {
         if (!e.getView().getTitle().equals("Cosmetic Menu") || !e.getView().getTitle().equals("Kits Menu")) return;
             Player player = (Player) e.getPlayer();
-            PlayerUtil.playSound(player, "guiclose", 1, 1);
+            player.playSound(player.getLocation(), Sound.valueOf(Sounds.GUI_CLOSE.toString()), 1, 1);
     }
 
     @EventHandler
     public void onPlayerOpenInventory(InventoryOpenEvent e) {
         if (!e.getView().getTitle().equals("Cosmetic Menu") || !e.getView().getTitle().equals("Kits Menu")) return;
             Player player = (Player) e.getPlayer();
-            PlayerUtil.playSound(player, "guiopen", 1, 1);
+            player.playSound(player.getLocation(), Sound.valueOf(Sounds.GUI_CLOSE.toString()), 1, 1);
     }
 }

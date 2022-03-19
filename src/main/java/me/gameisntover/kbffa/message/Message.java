@@ -29,7 +29,7 @@ public enum Message {
             "death.by-player-global"),
     DEATH_VOID("&bYou fell into the void.", "death.by-void"),
     DEATH_VOID_GLOBAL("&c %player_name% &e fell in to the void.", "death.by-void-global"),
-    KILLSTREA_RECORD("&c You've beaten your previous record of %killstreak% kills!"
+    KILLSTREAK_RECORD("&c You've beaten your previous record of %killstreak% kills!"
             , "killstreak-record"),
     BOW_COOLDOWN("&a You have used your bow! you need to wait %timer% seconds to use it again!",
             "cooldown.bow")

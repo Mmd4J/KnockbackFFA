@@ -1,26 +1,26 @@
 #You can configure your custom messages here!
 #Rewrite from here
-item-clear: '&aCleared &ball items on the ground'
-chat-format: '&7[&8%player%&7]&f: %message%'
-no-spawnpoint: '§cAsk an admin to create the spawnpoint so i can get you there!'
-no-arenas-ready: '&c&lSorry! &6but there is no arena ready to play ...'
-arena-change: '&eThe arena has changed to &b%arena%'
-join-arena: '&eYou have joined the arena!'
-leave-arena: '&cYou have left the arena!'
-kill: '&6You Killed &b %player%'
+item-clear: "&aCleared &ball items on the ground"
+chat-format: "&7[&8%player%&7]&f: %message%"
+no-spawnpoint: "&cAsk an admin to create the spawnpoint so i can get you there!"
+no-arenas-ready: "&c&lSorry! &6but there is no arena ready to play ..."
+arena-change: "&eThe arena has changed to &b%arena%"
+join-arena: "&eYou have joined the arena!"
+leave-arena: "&cYou have left the arena!"
+kill: "&6You Killed &b %player%"
 death:
-  by-player: '&c You were killed by &a %killer%'
-  by-player-global: '&c %player_name%&e was killed by &a %killer%'
-  by-void: '&bYou fell into the void.'
-  by-void-global: '&c %player_name% &e fell in to the void.'
+  by-player: "&c You were killed by &a %killer%"
+  by-player-global: "&c %player_name%&e was killed by &a %killer%"
+  by-void: "&bYou fell into the void."
+  by-void-global: "&c %player_name% &e fell in to the void."
 cooldown:
-  bow: '&a You have used your bow! you need to wait %timer% seconds to use it again!'
-already-ingame: '&cYou're already in-game aren't you?'
-kit-recieve: '&aSuccessfully recieved %kitname%'
-prize: '&a+ &f%prize%'
+  bow: "&a You have used your bow! you need to wait %timer% seconds to use it again!"
+already-ingame: "&cYou're already in-game aren't you?"
+kit-recieve: "&aSuccessfully recieved %kitname%"
+prize: "&a+ &f%prize%"
 cosmetics:
-  purchase-success: '&aYou have successfully purchased %cosmetic%'
-  no-enough-money: '&cYou don't have enough money to purchase this item!'
-  already-owned: '&cYou already own this item!'
-killstreak-record: '&c You've beaten your previous record of %killstreak% kills!'
-cannot-leave: '&cYou cannot use this command! maybe you are not in the game or bungeemode is on?'
+  purchase-success: "&aYou have successfully purchased %cosmetic%"
+  no-enough-money: "&cYou don't have enough money to purchase this item!"
+  already-owned: "&cYou already own this item!"
+killstreak-record: "&c You've beaten your previous record of %killstreak% kills!"
+cannot-leave: "&cYou cannot use this command! maybe you are not in the game or bungeemode is on?"

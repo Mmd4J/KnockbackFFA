@@ -6,6 +6,7 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
+import me.gameisntover.kbffa.arena.ArenaManager;
 import me.gameisntover.kbffa.customconfig.PlayerData;
 import me.gameisntover.kbffa.message.Message;
 import net.md_5.bungee.api.ChatMessageType;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class DeathListener implements Listener {
     Map<Entity, Integer> killStreak = new HashMap<>();
     Map<Entity, Entity> killer = new HashMap<>();
-
+    ArenaManager arenaManager;
     @EventHandler
     public void playerDamageCheck(EntityDamageEvent e) {
         if(!(e.getEntity() instanceof Player)) return;
@@ -76,7 +77,7 @@ public class DeathListener implements Listener {
                     player.spigot().respawn();
                     KnockbackFFAKit kitManager = new KnockbackFFAKit();
                     kitManager.lobbyItems(player);
-                    Arena.teleportPlayerToArena(player);
+                    arenaManager.teleportPlayerToArena(player);
                     cancel();
                 }
             }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);
@@ -101,7 +102,7 @@ public class DeathListener implements Listener {
                 killStreak.merge(damager, 1, Integer::sum);
                 if (killStreak.get(damager) > PlayerData.get().getInt("best-ks")) {
                     Player damagerP = (Player) damager;
-                    String msg = Message.KILLSTREA_RECORD.toString().replace("%killstreak%", PlayerData.get().getInt("best-ks") + "");
+                    String msg = Message.KILLSTREAK_RECORD.toString().replace("%killstreak%", PlayerData.get().getInt("best-ks") + "");
                     damagerP.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', msg)));
                     PlayerData.get().set("best-ks", killStreak.get(damager));
                 }
