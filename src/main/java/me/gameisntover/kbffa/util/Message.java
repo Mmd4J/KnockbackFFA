@@ -1,6 +1,7 @@
 package me.gameisntover.kbffa.util;
 
 import me.gameisntover.kbffa.KnockbackFFA;
+import org.bukkit.ChatColor;
 
 public enum Message {
     //System related
@@ -45,9 +46,9 @@ public enum Message {
     @Override
     public String toString() {
         if(KnockbackFFA.getInstance().getMessages().isSet(path)){
-            return KnockbackFFA.getInstance().getMessages().getString(path);
+            return KnockbackFFA.getInstance().getMessages().getString(ChatColor.translateAlternateColorCodes('&',path));
         }
-        return defaultMessage;
+        return ChatColor.translateAlternateColorCodes('&', defaultMessage);
     }
 
 }
