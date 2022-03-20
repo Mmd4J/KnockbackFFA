@@ -22,7 +22,8 @@ public class ArenaManager implements SubManager {
     private final FileConfiguration arenasFile = loadFile();
 
     private FileConfiguration loadFile(){
-        File file = new File("plugins/KnockbackFFA/zones.yml");
+        File file = new File("plugins/KnockbackFFA/arenas.yml"
+                .replace("/", File.separator));
         if (!file.exists()) {
             try {
                 if(!file.createNewFile()) return null;
@@ -33,11 +34,13 @@ public class ArenaManager implements SubManager {
 
     @Override
     public void onLoad() {
+        assert arenasFile != null;
         ConfigurationSection arenasSection = arenasFile.getConfigurationSection("arenas");
         if(arenasSection == null) return;
         for(String sectionName : arenasSection.getKeys(false)){
             ConfigurationSection section = arenasSection.getConfigurationSection(sectionName);
             WorldCreator creator = new WorldCreator(sectionName);
+            //settings to make the world a void one
             creator.generator("2;0;1");
             World world = creator.createWorld();
             Location spawn = toLocation(world, section.getString("spawn"));
