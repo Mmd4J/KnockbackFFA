@@ -24,11 +24,11 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import redempt.redlib.inventorygui.InventoryGUI;
-import redempt.redlib.inventorygui.ItemButton;
 import redempt.redlib.itemutils.ItemBuilder;
 
 import java.util.ArrayList;
@@ -91,15 +91,16 @@ public class GuiStuff implements Listener {
                 }
                 if (kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName())) {
                     e.setCancelled(true);
+
                     GUI shopMenu = new GUI("Shop Menu",(short) 5);
                     String cIcon = ItemConfiguration.get().getString("ShopMenu.cosmetic.material");
                     String cName = ChatColor.translateAlternateColorCodes('&', ItemConfiguration.get().getString("ShopMenu.cosmetic.name"));
                     Button cosmeticItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.getMaterial(cIcon)).setName(cName), event -> {
-                        InventoryGUI cosmeticShop = new InventoryGUI(Bukkit.createInventory(null, 54, "Cosmetic Shop"));
+                        GUI cosmeticShop = new GUI("Cosmetic Shop",(short) 5);
                         List<String> cosmetics = CosmeticConfiguration.get().getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
                         List<String> cList = PlayerData.get().getStringList("owned-cosmetics");
                         for (String cosmetic : cosmetics) {
-                            ItemButton cosmeticsItem = ItemButton.create(new ItemBuilder(Material.getMaterial(CosmeticConfiguration.get().getString(cosmetic + ".icon"))).setName(ChatColor.translateAlternateColorCodes('&', CosmeticConfiguration.get().getString(cosmetic + ".name"))), event1 -> {
+                            Button cosmeticsItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.getMaterial(CosmeticConfiguration.get().getString(cosmetic + ".icon"))).setName(ChatColor.translateAlternateColorCodes('&', CosmeticConfiguration.get().getString(cosmetic + ".name"))), event1 -> {
                                 float playerBal = KnockbackFFA.getInstance().getBalanceAPI().getBalance(player);
                                 if (playerBal >= CosmeticConfiguration.get().getInt(cosmetics.get(event1.getSlot()) + ".price")) {
                                     List<String> ownedCosmetics = PlayerData.get().getStringList("owned-cosmetics");
@@ -117,15 +118,9 @@ public class GuiStuff implements Listener {
                             List<String> lore = CosmeticConfiguration.get().getStringList(cosmetic + ".lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
                             lore.add("§7Cost: §a" + CosmeticConfiguration.get().getInt(cosmetic + ".price"));
                             cosmeticMeta.setLore(lore);
-                            if (cList.contains(cosmetic)) {
-                                cosmeticMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-                                cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&", "§") + " §8(§aOwned§8)");
-                            } else {
-                                cosmeticMeta.removeEnchant(Enchantment.DURABILITY);
-                                cosmeticMeta.setDisplayName(cosmeticMeta.getDisplayName().replace("&", "§").replace(" §8(§aOwned§8)", ""));
-                            }
+                            cosmeticsItem.setSelected(cList.contains(cosmetic),"§8(§aOwned§8)");
                             cosmeticsItem.getItem().setItemMeta(cosmeticMeta);
-                            cosmeticShop.addButton(cosmeticsItem, cosmetics.indexOf(cosmetic));
+                            cosmeticShop.add(cosmeticsItem, cosmetics.indexOf(cosmetic));
                         }
                         cosmeticShop.open(player);
                     });
@@ -158,7 +153,6 @@ public class GuiStuff implements Listener {
                                             player.sendMessage(Message.COSMETIC_PURCHASE_SUCCESS.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                                         } else player.sendMessage(Message.COSMETIC_ALREADY_OWNED.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                                     } else player.sendMessage(Message.COSMETIC_NO_ENOUGH_MONEY.toString().replace("&", "§"));
-
                                     player.closeInventory();
                                 });
                                 if (kitsItem.getItem().getType() == Material.AIR) kitsItem.getItem().setType(Material.BARRIER);
@@ -232,6 +226,7 @@ public class GuiStuff implements Listener {
             Player player = (Player) e.getPlayer();
             player.playSound(player.getLocation(), Sound.valueOf(Sounds.GUI_CLOSE.toString()), 1, 1);
     }
+
 
     @EventHandler
     public void onPlayerOpenInventory(InventoryOpenEvent e) {

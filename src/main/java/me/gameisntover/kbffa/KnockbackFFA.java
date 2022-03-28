@@ -214,7 +214,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }
 
         private void loadListeners() {
-            Arrays.asList(new NoHunger(), new JoinLeaveListeners(), new ChatListener(),
+            Arrays.asList(new GameEventsListener(), new JoinLeaveListeners(), new ChatListener(),
                     new DeathListener(), new WandListener(), new GameRules(), new MainScoreboard(),
                     new GuiStuff(), new KnockbackFFAKit(), new ArenaSettings())
                     .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
