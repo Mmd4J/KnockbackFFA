@@ -5,22 +5,22 @@ import org.bukkit.entity.Player;
 
 public class BalanceAPI {
 
-    public static void setBalance(Player p, float balance) {
+    public void setBalance(Player p, float balance) {
         PlayerData.load(p);
         PlayerData.get().set("balance", balance);
         PlayerData.save();
     }
 
-    public static float getBalance(Player p) {
+    public float getBalance(Player p) {
         PlayerData.load(p);
         return PlayerData.get().getInt("balance");
     }
 
-    public static void addBalance(Player p, float balance) {
+    public void addBalance(Player p, float balance) {
         setBalance(p, getBalance(p) + balance);
     }
 
-    public static void removeBalance(Player p, int balance) {
+    public void removeBalance(Player p, int balance) {
         setBalance(p, getBalance(p) - balance);
     }
 }

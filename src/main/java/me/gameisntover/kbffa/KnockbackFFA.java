@@ -1,7 +1,9 @@
 package me.gameisntover.kbffa;
 
 import lombok.Getter;
+import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.arena.*;
+import me.gameisntover.kbffa.gui.ButtonManager;
 import me.gameisntover.kbffa.listeners.*;
 import me.gameisntover.kbffa.hook.Expansion;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
@@ -52,6 +54,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         private BlockDataManager blockManager;
         private FileConfiguration messages;
         private FileConfiguration sounds;
+        private BalanceAPI balanceAPI;
+        private ButtonManager buttonManager;
         @Override
         public void onEnable() {
             blockManager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
@@ -59,6 +63,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 for (Player player : Bukkit.getOnlinePlayers())
                     KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
             }
+            balanceAPI = new BalanceAPI();
+            buttonManager= new ButtonManager();
             getLogger().info("Loading Commands");
             loadCommands();
             getLogger().info("Loading Configuration Files");

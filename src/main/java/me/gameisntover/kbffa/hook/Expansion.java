@@ -1,9 +1,7 @@
 package me.gameisntover.kbffa.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.gameisntover.kbffa.api.BalanceAPI;
-import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.ArenaManager;
+import me.gameisntover.kbffa.arena.TempArenaManager;
 import me.gameisntover.kbffa.customconfig.PlayerData;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
@@ -13,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Expansion extends PlaceholderExpansion {
-    private final ArenaManager arenaManager = new ArenaManager();
+    private final TempArenaManager arenaManager = new TempArenaManager();
     @Override
     public String getAuthor() {
         return "GaMeIsNtOvEr";
@@ -48,7 +46,7 @@ public class Expansion extends PlaceholderExpansion {
             return String.valueOf(PlayerData.get().getInt("deaths"));
         }
         if (params.equalsIgnoreCase("player_balance")) {
-            return BalanceAPI.getBalance(player.getPlayer()) + "";
+            return KnockbackFFA.getInstance().getBalanceAPI().getBalance(player.getPlayer()) + "";
         }
         if (params.equalsIgnoreCase("current_map")) {
             String arenaName = arenaManager.getEnabledArena().getName();

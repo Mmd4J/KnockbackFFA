@@ -34,7 +34,7 @@ public class ArenaSettings implements Listener {
         for (String arenaName : arenaList) {
             Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
             PlayerData.load(player);
-            e.setCancelled(!arena.get().getBoolean("block-break"));
+            e.setCancelled(!arena.getConfig().getBoolean("block-break"));
         }
     }
 
@@ -47,7 +47,7 @@ public class ArenaSettings implements Listener {
             for (String arenaName : arenaList) {
                 Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
                 PlayerData.load(player);
-                e.setCancelled(KnockbackFFAAPI.isInArena(player) && !arena.get().getBoolean("item-drop"));
+                e.setCancelled(KnockbackFFAAPI.isInArena(player) && !arena.getConfig().getBoolean("item-drop"));
             }
     }
 

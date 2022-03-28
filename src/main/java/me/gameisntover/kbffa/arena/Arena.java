@@ -1,5 +1,7 @@
 package me.gameisntover.kbffa.arena;
 
+import lombok.Data;
+import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import org.bukkit.*;
@@ -12,25 +14,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.util.*;
 
-public class Arena extends TempArenaManager {
-
-    TempArenaManager tempArenaManager = new TempArenaManager();
-    public File getfile() {
-        return new File(tempArenaManager.getfolder(), getName() + ".yml");
+@Data
+public class Arena  {
+    private String name;
+    private Cuboid region;
+    private File file;
+    private FileConfiguration config;
+    private File arenaFolder = new File(KnockbackFFA.getInstance().getDataFolder(), "arenas");
+    public Arena(String arenaName){
+        setName(arenaName);
+        setFile(new File(arenaFolder,arenaName+".yml"));
+        setConfig(YamlConfiguration.loadConfiguration(file));
+        setRegion(new Cuboid(getPos1(),getPos2()));
     }
-
-    public FileConfiguration get() {
-        return YamlConfiguration.loadConfiguration(getfile());
-    }
-
+    @SneakyThrows
     public void save() {
-        File file = new File(tempArenaManager.getfolder(), getName() + ".yml");
-        try {
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
             config.save(file);
-        } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error saving " + file.getName() + "!");
-        }
     }
 
     /**
@@ -42,7 +42,7 @@ public class Arena extends TempArenaManager {
         assert loc2 != null;
         assert loc1 != null;
         Cuboid region = new Cuboid(loc1, loc2);
-        List<String> materials = get().getStringList("blocks");
+        List<String> materials = getConfig().getStringList("blocks");
         List<Block> blocks = region.getBlocks();
         new BukkitRunnable() {
             private final int allBlocks = region.getBlocks().size();
@@ -75,7 +75,7 @@ public class Arena extends TempArenaManager {
      * @return true if the arena is ready
      */
     public boolean isReady() {
-        List<String> arenaList = Arrays.asList(Objects.requireNonNull(tempArenaManager.getfolder().list()));
+        List<String> arenaList = Arrays.asList(Objects.requireNonNull(getArenaFolder().list()));
         return arenaList.contains(getName());
     }
 
@@ -85,20 +85,16 @@ public class Arena extends TempArenaManager {
      * @return true if the arena is the enabled arena
      */
     public boolean isEnabled() {
-        return tempArenaManager.getEnabledArena().getName().equals(getName());
+        return KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena().getName().equals(getName());
     }
-
-
-
-
     /**
      * teleports player to the arena
      *
      * @param @player
      */
     public void teleportPlayer(Player player) {
-        if (!(getName().equalsIgnoreCase(tempArenaManager.getEnabledArena().getName()))) return;
-            Arena arena = tempArenaManager.load(getName());
+        if (!(getName().equalsIgnoreCase(KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena().getName()))) return;
+            Arena arena = KnockbackFFA.getInstance().getTempArenaManager().load(getName());
             PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
             Bukkit.getPluginManager().callEvent(event);
             player.teleport(getSpawnLocation());
@@ -110,10 +106,10 @@ public class Arena extends TempArenaManager {
      * if that arena is the enabled Arena.
      */
     public void removeArena() {
-        File cfile = getfile();
+        File cfile = getFile();
         cfile.delete();
-        while (tempArenaManager.getEnabledArena().equals(getName())) {
-            tempArenaManager.setEnabledArena(tempArenaManager.randomArena());
+        while (KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena().equals(getName())) {
+            KnockbackFFA.getInstance().getTempArenaManager().setEnabledArena(KnockbackFFA.getInstance().getTempArenaManager().randomArena());
         }
         save();
     }
@@ -127,17 +123,9 @@ public class Arena extends TempArenaManager {
      */
     public List getArenaPositions() {
         List<Location> positions = new ArrayList<>();
-        positions.add(get().getLocation("arena.pos1"));
-        positions.add(get().getLocation("arena.pos2"));
+        positions.add(getConfig().getLocation("arena.pos1"));
+        positions.add(getConfig().getLocation("arena.pos2"));
         return positions;
-    }
-    /**
-     * Returns the arena name
-     *
-     * @return String
-     */
-    public String getName() {
-        return arenaN;
     }
 
     /**
@@ -156,7 +144,7 @@ public class Arena extends TempArenaManager {
      * @return Region
      */
     public Location getSpawnLocation() {
-        return get().getLocation("arena.spawn");
+        return getConfig().getLocation("arena.spawn");
     }
 
     /**
@@ -165,7 +153,7 @@ public class Arena extends TempArenaManager {
      * @return First position of the arena
      */
     public Location getPos1() {
-        return get().getLocation("arena.pos1");
+        return getConfig().getLocation("arena.pos1");
     }
 
     /**
@@ -174,7 +162,7 @@ public class Arena extends TempArenaManager {
      * @return Second position of the arena
      */
     public Location getPos2() {
-        return get().getLocation("arena.pos2");
+        return getConfig().getLocation("arena.pos2");
     }
 
     /**

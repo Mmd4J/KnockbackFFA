@@ -1,6 +1,7 @@
 package me.gameisntover.kbffa.manager.sub;
 
 import lombok.Getter;
+import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.arena.ReworkedArena;
 import me.gameisntover.kbffa.manager.api.SubManager;
 import org.bukkit.Location;
@@ -20,7 +21,7 @@ public class ArenaManager implements SubManager {
     // Arena Name ---> Arena
     private final HashMap<String, ReworkedArena> arenas = new HashMap<>();
     private final FileConfiguration arenasFile = loadFile();
-
+    private final File arenaFolder = new File(KnockbackFFA.getInstance().getDataFolder(),"arenas");
     private FileConfiguration loadFile(){
         File file = new File("plugins/KnockbackFFA/arenas.yml"
                 .replace("/", File.separator));

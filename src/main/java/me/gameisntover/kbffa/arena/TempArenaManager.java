@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa.arena;
 
+import lombok.Data;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
@@ -13,18 +14,18 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
+@Data
 public class TempArenaManager {
     private Arena enabledArena = null;
     private File cfile;
     private FileConfiguration config;
     private File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData" + File.separator);
     private File df = KnockbackFFA.getInstance().getDataFolder();
-    public String arenaN;
+    public String name;
     private List<Arena> arenas = new ArrayList<>();
+    private Map<String , Arena> arenaHandler = new HashMap<>();
     public Arena create(String arenaName, Location spawn, Location pos1, Location pos2) {
         cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
         if (!df.exists()) df.mkdir();
@@ -37,26 +38,26 @@ public class TempArenaManager {
         }
         config = YamlConfiguration.loadConfiguration(cfile);
         Arena arena = load(arenaName);
-        arena.get().set("block-break", false);
-        arena.get().set("item-drop", true);
-        arena.get().set("world-border", false);
-        arena.get().set("block-break", false);
-        arena.get().set("item-drop", false);
-        arena.get().set("world-border", false);
-        arena.get().set("auto-reset", false);
-        arena.get().set("arena.pos1", pos1);
-        arena.get().set("arena.pos2", pos2);
-        arena.get().set("arena.spawn", spawn);
+        arena.getConfig().set("block-break", false);
+        arena.getConfig().set("item-drop", true);
+        arena.getConfig().set("world-border", false);
+        arena.getConfig().set("block-break", false);
+        arena.getConfig().set("item-drop", false);
+        arena.getConfig().set("world-border", false);
+        arena.getConfig().set("auto-reset", false);
+        arena.getConfig().set("arena.pos1", pos1);
+        arena.getConfig().set("arena.pos2", pos2);
+        arena.getConfig().set("arena.spawn", spawn);
         arena.save();
-        arenaN = arenaName;
-        return new Arena();
+        name = arenaName;
+        return new Arena(arenaName);
     }
 
     public Arena load(String arenaName) {
         cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
         config = YamlConfiguration.loadConfiguration(cfile);
-        arenaN = arenaName;
-        return new Arena();
+        name = arenaName;
+        return new Arena(arenaName);
     }
     /**
      * @return the enabledArena
@@ -98,7 +99,7 @@ public class TempArenaManager {
             if (event.isCancelled()) return;
             if (spawnLoc.getWorld() != null) player.teleport(spawnLoc);
             else {
-                WorldCreator wc = new WorldCreator(getEnabledArena().get().getString("arena.spawn.world"));
+                WorldCreator wc = new WorldCreator(getEnabledArena().getConfig().getString("arena.spawn.world"));
                 wc.generateStructures(false);
                 wc.generator(new VoidChunkGenerator());
                 World world1 = wc.createWorld();
@@ -166,7 +167,7 @@ public class TempArenaManager {
             p.playSound(p.getLocation(), Sound.valueOf(Sounds.ARENA_CHANGE.toString()), 1, 1);
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ARENA_CHANGE.toString()).replace("%arena%", arenaName));
         }
-        if (arena.get().getBoolean("auto-reset")) arena.resetArena();
+        if (arena.getConfig().getBoolean("auto-reset")) arena.resetArena();
     }
 
 }
