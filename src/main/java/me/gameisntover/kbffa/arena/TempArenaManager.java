@@ -96,18 +96,16 @@ public class TempArenaManager {
 
     public void teleportToMainLobby(Player player) {
         if (ArenaConfiguration.get().getString("mainlobby.world") == null) return;
-        Double x = ArenaConfiguration.get().getDouble("mainlobby.x");
-        Double y = ArenaConfiguration.get().getDouble("mainlobby.y");
-        Double z = ArenaConfiguration.get().getDouble("mainlobby.z");
+        double x = ArenaConfiguration.get().getDouble("mainlobby.x");
+        double y = ArenaConfiguration.get().getDouble("mainlobby.y");
+        double z = ArenaConfiguration.get().getDouble("mainlobby.z");
         World world = Bukkit.getWorld(ArenaConfiguration.get().getString("mainlobby.world"));
-        if (world != null && x != null) player.teleport(new Location(world, x, y, z));
+        if (world != null) player.teleport(new Location(world, x, y, z));
         else player.teleport(Bukkit.getWorld("world").getSpawnLocation());
     }
 
     /**
      * teleports player to the enabled arena
-     *
-     * @param @player
      */
     public void teleportPlayerToArena(Player player) {
         if (!(getfolder().list().length > 0)) {
@@ -152,15 +150,13 @@ public class TempArenaManager {
 
     /**
      * Changes the arena to another arena
-     *
-     * @param @arena
      */
     public void changeArena(Arena arena) {
         String arenaName = arena.getName();
         setEnabledArena(arenaName);
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(p);
-            if (!KnockbackFFA.getINSTANCE().BungeeMode() || !knocker.isInGame()) return;
+            if (!knocker.isInGame()) return;
             p.getInventory().clear();
             KnockbackFFAKit kitManager = new KnockbackFFAKit();
             kitManager.lobbyItems(p);

@@ -17,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.Objects;
 
 public class Commands implements CommandExecutor {
 
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         Player p = (Player) sender;
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(p);
         if (Objects.requireNonNull(KnockbackFFA.getINSTANCE().getCommand("createkit")).getName().equalsIgnoreCase(command.getName())) {

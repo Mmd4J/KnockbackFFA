@@ -42,6 +42,7 @@ public class ArenaManager implements SubManager {
         if (arenasSection == null) return;
         for (String sectionName : arenasSection.getKeys(false)) {
             ConfigurationSection section = arenasSection.getConfigurationSection(sectionName);
+            if(section == null) return;
             WorldCreator creator = new WorldCreator(sectionName);
             //settings to make the world a void one
             creator.generator("2;0;1");

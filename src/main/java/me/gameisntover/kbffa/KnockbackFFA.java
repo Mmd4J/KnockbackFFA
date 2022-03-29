@@ -1,8 +1,6 @@
 package me.gameisntover.kbffa;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.api.BalanceAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
@@ -46,12 +44,11 @@ import java.util.*;
 
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
-    @Getter @Setter
-    public static KnockbackFFA INSTANCE;
-    @Setter
+    @Getter
+    private static KnockbackFFA INSTANCE;
+    private final Map<Player, Knocker> knockerHandler = new HashMap<>();
     private TempArenaManager tempArenaManager;
     private FFAManager manager;
-    private final Map<Player, Knocker> knockerHandler = new HashMap<>();
     private int arenaID = 0;
     private Integer timer = 0;
     private FileConfiguration messages;
@@ -64,20 +61,20 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     public Knocker getKnocker(Player player) {
         if (knockerHandler.containsKey(player))
             return knockerHandler.get(player);
-        return new Knocker(player);
+        Knocker knocker = new Knocker(player);
+        knockerHandler.put(player, knocker);
+        return knocker;
     }
 
     public Knocker getKnocker(String name) {
         Player player = Bukkit.getPlayer(name);
-        if (knockerHandler.containsKey(player))
-            return knockerHandler.get(player);
-        return new Knocker(player);
+        return getKnocker(player);
     }
 
     @Override
     public void onEnable() {
-        setINSTANCE(this);
-        setTempArenaManager(new TempArenaManager());
+        INSTANCE = this;
+        tempArenaManager = new TempArenaManager();
         manager = new FFAManager();
         blockDataManager = new BlockDataManager();
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
@@ -101,13 +98,12 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getLogger().info("Enjoy using plugin :)");
         for (Player p : Bukkit.getOnlinePlayers()) {
             Knocker knocker = getKnocker(p);
-            if (!BungeeMode() || !knocker.isInGame()) return;
+            if (!knocker.isInGame()) return;
             if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 p.getInventory().addItem(kitManager.kbbowArrow());
             }
         }
-
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getPluginManager().registerEvents(this, this);
             new Expansion().register();
@@ -118,8 +114,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     public void loadMessages() {
         File file = new File("plugins/KnockbackFFA/messages.yml");
         if (!file.exists()) {
-                file.createNewFile();
-                saveResource("messages.yml", true);
+            file.createNewFile();
+            saveResource("messages.yml", true);
         }
         messages = YamlConfiguration.loadConfiguration(file);
     }
@@ -130,8 +126,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             try {
                 file.createNewFile();
                 saveResource("sound.yml", true);
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
         }
         sounds = YamlConfiguration.loadConfiguration(file);
     }
@@ -149,9 +144,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         if (!folder.exists()) {
             folder.mkdir();
             File file = new File("plugins/KnockbackFFA/Kits/Default.yml");
-                file.createNewFile();
-                Files.copy(Objects.requireNonNull(getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                getLogger().info("Default Kit Created");
+            file.createNewFile();
+            Files.copy(Objects.requireNonNull(getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            getLogger().info("Default Kit Created");
         }
         CosmeticConfiguration.setup();
         ArenaConfiguration.setup();
@@ -177,7 +172,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     ArenaConfiguration.save();
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Knocker knocker = getKnocker(p);
-                        if (!BungeeMode() || !knocker.isInGame()) return;
+                        if (!knocker.isInGame()) return;
                         tempArenaManager.changeArena(tempArenaManager.load(arenaName.replace(".yml", "")));
                         cancel();
                     }
@@ -244,9 +239,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                         new GuiStuff(), new KnockbackFFAKit(), new ArenaSettings())
                 .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
+
     public boolean BungeeMode() {
         return getConfig().getBoolean("Bungee-Mode");
     }
+
     private void loadCommands() {
         Commands commands = new Commands();
         for (String cmdName : Arrays.asList("join", "leave", "reload", "setmainlobby", "createworld"
@@ -254,8 +251,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             getCommand(cmdName).setExecutor(commands);
             System.out.println(cmdName);
         }
+        ArenaCommands arenaCommands = new ArenaCommands();
+        Arrays.asList("wand", "setsafezone", "gotoworld", "createarena", "editarena").forEach(s -> {
+            getCommand(s).setExecutor(arenaCommands);
+        });
 
-        getCommand(Arrays.asList("wand", "setsafezone", "gotoworld", "createarena", "editarena").toString()).setExecutor(new ArenaCommands());
         getCommand("gotoworld").setTabCompleter(new CommandsTabCompleter());
         getCommand("editarena").setTabCompleter(new CommandsTabCompleter());
         getCommand("resetarena").setTabCompleter(new CommandsTabCompleter());
@@ -273,54 +273,50 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     public void onBlockPlace(BlockPlaceEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = getKnocker(player);
-        if (BungeeMode() || knocker.isInGame()) {
-            if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
-                Block block = e.getBlockPlaced();
-                DataBlock db = blockDataManager.getBlockData(block);
-                db.setBlockType("BuildingBlock");
-                String arenaName = tempArenaManager.getEnabledArena().getName();
-                BukkitRunnable runnable = new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (tempArenaManager.getEnabledArena().getName().equals(arenaName)) {
-                            switch (block.getType()) {
-                                case WHITE_WOOL:
-                                    block.setType(Material.YELLOW_WOOL);
-                                    break;
-                                case YELLOW_WOOL:
-                                    block.setType(Material.ORANGE_WOOL);
-                                    break;
-                                case ORANGE_WOOL:
-                                    block.setType(Material.RED_WOOL);
-                                    break;
-                                case RED_WOOL:
-                                    block.setType(Material.AIR);
-                                    cancel();
-                                    break;
-                            }
-                        } else {
-                            block.setType(Material.AIR);
-                            db.setBlockType("");
+        if (!knocker.isInGame()) return;
+        if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
+            Block block = e.getBlockPlaced();
+            DataBlock db = blockDataManager.getBlockData(block);
+            db.setBlockType("BuildingBlock");
+            String arenaName = tempArenaManager.getEnabledArena().getName();
+            BukkitRunnable runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (tempArenaManager.getEnabledArena().getName().equals(arenaName)) {
+                        switch (block.getType()) {
+                            case WHITE_WOOL:
+                                block.setType(Material.YELLOW_WOOL);
+                                break;
+                            case YELLOW_WOOL:
+                                block.setType(Material.ORANGE_WOOL);
+                                break;
+                            case ORANGE_WOOL:
+                                block.setType(Material.RED_WOOL);
+                                break;
+                            case RED_WOOL:
+                                block.setType(Material.AIR);
+                                cancel();
+                                break;
                         }
+                    } else {
+                        block.setType(Material.AIR);
+                        db.setBlockType("");
                     }
-                };
-                runnable.runTaskTimer(this, 10L, 20L);
-                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                int i = scheduler.scheduleSyncDelayedTask(this, new Runnable() {
-                    @Override
-                    public void run() {
-                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                        player.getInventory().addItem(kitManager.BuildingBlock());
-                    }
-                }, 1);
-            }
-            if (e.getBlockPlaced().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
-                Block block = e.getBlockPlaced();
-                block.getDrops().clear();
-                BukkitScheduler blockTimer = Bukkit.getServer().getScheduler();
-                blockTimer.scheduleSyncDelayedTask(this,
-                        () -> e.getBlock().setType(Material.AIR), 100);
-            }
+                }
+            };
+            runnable.runTaskTimer(this, 10L, 20L);
+            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+            scheduler.scheduleSyncDelayedTask(this, () -> {
+                KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                player.getInventory().addItem(kitManager.BuildingBlock());
+            }, 1);
+        }
+        if (e.getBlockPlaced().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
+            Block block = e.getBlockPlaced();
+            block.getDrops().clear();
+            BukkitScheduler blockTimer = Bukkit.getServer().getScheduler();
+            blockTimer.scheduleSyncDelayedTask(this,
+                    () -> e.getBlock().setType(Material.AIR), 100);
         }
     }
 
@@ -328,14 +324,13 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     public void onPressureButton(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = getKnocker(player);
-        if (BungeeMode() || knocker.isInGame()) {
-            if (e.getAction().equals(Action.PHYSICAL)) {
-                if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
-                    Block block = e.getClickedBlock();
-                    block.getDrops().clear();
-                    player.setVelocity(player.getLocation().getDirection().setY(ItemConfiguration.get().getInt("SpecialItems.JumpPlate.jumpLevel")));
-                    player.playSound(player.getLocation(), Sound.valueOf(Sounds.JUMP_PLATE.toString()), 1, 1);
-                }
+        if (knocker.isInGame()) {
+            if (!e.getAction().equals(Action.PHYSICAL)) return;
+            if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
+                Block block = e.getClickedBlock();
+                block.getDrops().clear();
+                player.setVelocity(player.getLocation().getDirection().setY(ItemConfiguration.get().getInt("SpecialItems.JumpPlate.jumpLevel")));
+                player.playSound(player.getLocation(), Sound.valueOf(Sounds.JUMP_PLATE.toString()), 1, 1);
             }
         }
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {

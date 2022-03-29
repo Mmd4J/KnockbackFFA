@@ -80,7 +80,7 @@ public class DeathListener implements Listener {
                     Arena.teleportPlayer(player);
                     cancel();
                 }
-            }.runTaskTimer(KnockbackFFA.INSTANCE, 0, 1);
+            }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 1);
             World world = player.getWorld();
             List<Entity> entList = world.getEntities();
             for (Entity current : entList) {

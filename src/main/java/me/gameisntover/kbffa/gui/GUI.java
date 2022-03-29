@@ -27,7 +27,7 @@ public class GUI implements Listener {
         setInventory(Bukkit.createInventory(null, guiLayers * 9, name));
         setName(name);
         setLayers(guiLayers);
-        Bukkit.getPluginManager().registerEvents(this, KnockbackFFA.INSTANCE);
+        Bukkit.getPluginManager().registerEvents(this, KnockbackFFA.getINSTANCE());
     }
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {

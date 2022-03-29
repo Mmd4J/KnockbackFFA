@@ -10,7 +10,7 @@ public class Config extends YamlConfiguration {
     private final File file;
 
     public Config(File parent, String name) {
-        this.plugin = KnockbackFFA.INSTANCE;
+        this.plugin = KnockbackFFA.getINSTANCE();
         this.file = new File(parent, name);
 
         if (!file.exists()) {

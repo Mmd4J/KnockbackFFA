@@ -47,7 +47,7 @@ public class Knocker {
             public void run() {
                 List<String> scoreboardLines = ScoreboardConfiguration.get().getStringList("lines");
                 SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
-                if (player.getScoreboard() != null) player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+                player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                 for (String string : scoreboardLines) {
                     string = PlaceholderAPI.setPlaceholders(player, string);
                     sidebar.add(string.replaceAll("&", "§"));
@@ -58,7 +58,7 @@ public class Knocker {
                 }
                 sidebar.apply(player);
             }
-        }.runTaskTimer(KnockbackFFA.INSTANCE,0,20);
+        }.runTaskTimer(KnockbackFFA.getINSTANCE(),0,20);
     }
     public void hideScoreBoard(){
     scoreboard = false;
@@ -90,7 +90,7 @@ public class Knocker {
                         if (i == soundList.size() - 1) cancel();
                     }
                 }
-            }.runTaskTimer(KnockbackFFA.INSTANCE, 0, CosmeticConfiguration.get().getInt(cosmeticName + ".delay"));
+            }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, CosmeticConfiguration.get().getInt(cosmeticName + ".delay"));
         }
     }
 

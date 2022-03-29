@@ -72,7 +72,7 @@ public class Arena {
                     cancel();
                 }
             }
-        }.runTaskTimer(KnockbackFFA.INSTANCE, 0, 20);
+        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
     }
 
 

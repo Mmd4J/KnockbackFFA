@@ -32,6 +32,7 @@ public class ArenaSettings implements Listener {
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (knocker.isInArena()) return;
         String[] arenaList = tempArenaManager.getfolder().list();
+        if(arenaList == null) return;
         for (String arenaName : arenaList) {
             Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
             e.setCancelled(!arena.getConfig().getBoolean("block-break"));
@@ -79,7 +80,7 @@ public class ArenaSettings implements Listener {
                         db.setBlockType("");
                         cancel();
                     }
-                }.runTaskTimer(KnockbackFFA.INSTANCE, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
+                }.runTaskTimer(KnockbackFFA.getINSTANCE(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
             } else {
                 block.setType(materialList.get(0));
                 db.setBlockType("trail");
@@ -99,7 +100,7 @@ public class ArenaSettings implements Listener {
                         }
                     }
                 }.
-                        runTaskTimer(KnockbackFFA.INSTANCE, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
+                        runTaskTimer(KnockbackFFA.getINSTANCE(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
             }
         }
         if (tempArenaManager.getEnabledArena() != null) {

@@ -71,7 +71,7 @@ public class GameRules implements Listener {
                         player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, damage));
                     }
                 }
-            }.runTaskTimer(KnockbackFFA.INSTANCE, 0, 20);
+            }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
         }
     }
 
@@ -110,6 +110,6 @@ public class GameRules implements Listener {
                     timer = 10;
                 }
             }
-        }.runTaskTimer(KnockbackFFA.INSTANCE, 0, 20);
+        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
     }
 }
