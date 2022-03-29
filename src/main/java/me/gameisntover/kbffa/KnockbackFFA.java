@@ -126,7 +126,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             try {
                 file.createNewFile();
                 saveResource("sound.yml", true);
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
         sounds = YamlConfiguration.loadConfiguration(file);
     }

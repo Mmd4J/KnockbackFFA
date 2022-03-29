@@ -89,7 +89,8 @@ public class GuiStuff implements Listener {
             cosmeticMenu.setCloseEventConsumer(inventoryCloseEvent -> {
                 Player player1 = (Player) inventoryCloseEvent.getPlayer();
                 player1.playSound(player1.getLocation(), Sound.valueOf(Sounds.GUI_CLOSE.toString()), 1, 1);
-            });            cosmeticMenu.open(player);
+            });
+            cosmeticMenu.open(player);
         }
         if (kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName())) {
             e.setCancelled(true);
@@ -226,6 +227,7 @@ public class GuiStuff implements Listener {
             kitsMenu.open(player);
         }
     }
+
     @EventHandler
     public void onPlayerItemDrop(PlayerDropItemEvent e) {
         ItemStack item = e.getItemDrop().getItemStack();

@@ -99,7 +99,8 @@ public class GameRules implements Listener {
                     if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
                         cancel();
                         timer = 10;
-                    } else player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message.BOW_COOLDOWN.toString().replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
+                    } else
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message.BOW_COOLDOWN.toString().replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
                 }
                 if (timer == 0) {
                     if (!player.getInventory().contains(Material.ARROW) && player.getInventory().contains(Material.BOW)) {

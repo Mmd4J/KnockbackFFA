@@ -18,28 +18,31 @@ import java.util.List;
 
 @Data
 public class Knocker {
+    private final File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private File file;
     private Player player;
     private String name;
-    private File folder = new File(getDf(), "players"+ File.separator);
+    private File folder = new File(getDf(), "players" + File.separator);
     private FileConfiguration config;
-    private final File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private boolean inGame = KnockbackFFA.getINSTANCE().BungeeMode();
     private boolean inArena;
     private boolean scoreboard;
+
     @SneakyThrows
-    public Knocker(Player player){
+    public Knocker(Player player) {
         setPlayer(player);
-        setFile(new File(df,  player.getUniqueId() + ".yml"));
+        setFile(new File(df, player.getUniqueId() + ".yml"));
         if (!df.exists()) df.mkdir();
         if (!file.exists()) file.createNewFile();
         setConfig(YamlConfiguration.loadConfiguration(file));
         setName(player.getDisplayName());
     }
+
     @SneakyThrows
     public void saveConfig() {
-            config.save(file);
+        config.save(file);
     }
+
     public void showScoreBoard() {
         scoreboard = true;
         new BukkitRunnable() {
@@ -58,17 +61,21 @@ public class Knocker {
                 }
                 sidebar.apply(player);
             }
-        }.runTaskTimer(KnockbackFFA.getINSTANCE(),0,20);
+        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
     }
-    public void hideScoreBoard(){
-    scoreboard = false;
+
+    public void hideScoreBoard() {
+        scoreboard = false;
     }
+
     public String selectedCosmetic() {
         return getConfig().getString("selected-cosmetic");
     }
-    public String selectedKit(){
+
+    public String selectedKit() {
         return getConfig().getString("selected-kit");
     }
+
     public void loadCosmetic(String cosmeticName) {
         if (cosmeticName == null) return;
         String cosmeticType = CosmeticConfiguration.get().getString(cosmeticName + ".type");

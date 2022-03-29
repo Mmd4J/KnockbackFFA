@@ -69,7 +69,7 @@ public class Commands implements CommandExecutor {
                 }
             }
         }
-        if ("join".equalsIgnoreCase(command.getName())){
+        if ("join".equalsIgnoreCase(command.getName())) {
             if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) {
                 String joinText = Message.ARENA_JOIN.toString().replace("&", "§");
                 joinText = PlaceholderAPI.setPlaceholders(p, joinText);

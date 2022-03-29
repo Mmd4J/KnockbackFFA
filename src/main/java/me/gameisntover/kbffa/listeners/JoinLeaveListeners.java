@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.listeners;
 
-import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.KnockbackFFA;
+import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.Sound;
@@ -46,6 +46,6 @@ public class JoinLeaveListeners implements Listener {
     public void playerLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
-            knocker.setInGame(false);
+        knocker.setInGame(false);
     }
 }

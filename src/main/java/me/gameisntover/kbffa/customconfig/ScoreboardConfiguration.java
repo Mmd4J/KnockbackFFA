@@ -14,12 +14,13 @@ public class ScoreboardConfiguration {
     private static File file;
 
     private static FileConfiguration messages;
+
     @SneakyThrows
     public static void setup() {
-        file = new File("plugins","scoreboard.yml");
+        file = new File("plugins", "scoreboard.yml");
         if (!file.exists()) {
-                  file.createNewFile();
-                Files.copy(KnockbackFFA.getINSTANCE().getResource("scoreboard.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            file.createNewFile();
+            Files.copy(KnockbackFFA.getINSTANCE().getResource("scoreboard.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
         messages = YamlConfiguration.loadConfiguration(file);
     }

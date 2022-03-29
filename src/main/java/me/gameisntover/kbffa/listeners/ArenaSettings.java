@@ -32,7 +32,7 @@ public class ArenaSettings implements Listener {
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (knocker.isInArena()) return;
         String[] arenaList = tempArenaManager.getfolder().list();
-        if(arenaList == null) return;
+        if (arenaList == null) return;
         for (String arenaName : arenaList) {
             Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
             e.setCancelled(!arena.getConfig().getBoolean("block-break"));
