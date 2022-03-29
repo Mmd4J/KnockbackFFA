@@ -34,16 +34,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
-import redempt.redlib.blockdata.BlockDataManager;
-import redempt.redlib.blockdata.DataBlock;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
@@ -51,20 +47,33 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         private int arenaID = 0;
         private Integer timer = 0;
         private final FFAManager manager = new FFAManager();
-        private BlockDataManager blockManager;
         private FileConfiguration messages;
         private FileConfiguration sounds;
         private BalanceAPI balanceAPI;
         private ButtonManager buttonManager;
+        private KnockbackFFAAPI api;
+        private BlockDataManager blockDataManager;
+        private Map<Player,Knocker> knockerHandler = new HashMap<>();
+        public Knocker getKnocker(Player player){
+        if (knockerHandler.containsKey(player)) return knockerHandler.get(player);
+        else return new Knocker(player);
+        }
+        public Knocker getKnocker(String name){
+            Player player = Bukkit.getPlayer(name);
+        if (knockerHandler.containsKey(player)) return knockerHandler.get(player);
+        else return new Knocker(player);
+        }
+
         @Override
         public void onEnable() {
-            blockManager = BlockDataManager.createAuto(this, this.getDataFolder().toPath().resolve("blocks.db"), true, true);
+            blockDataManager = new BlockDataManager();
             if (!Bukkit.getOnlinePlayers().isEmpty()) {
                 for (Player player : Bukkit.getOnlinePlayers())
-                    KnockbackFFAAPI.setInGamePlayer(player, KnockbackFFAAPI.BungeeMode());
+                    KnockbackFFA.getInstance().getApi().setInGamePlayer(player, KnockbackFFA.getInstance().getApi().BungeeMode());
             }
             balanceAPI = new BalanceAPI();
             buttonManager= new ButtonManager();
+            api = new KnockbackFFAAPI();
             getLogger().info("Loading Commands");
             loadCommands();
             getLogger().info("Loading Configuration Files");
@@ -78,7 +87,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             getLogger().info("Enjoy using plugin :)");
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
+                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
                     if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
                         KnockbackFFAKit kitManager = new KnockbackFFAKit();
                         p.getInventory().addItem(kitManager.kbbowArrow());
@@ -157,7 +166,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                             tempArenaManager.setEnabledArena(arenaName);
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
+                                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
                                 tempArenaManager.changeArena(tempArenaManager.load(arenaName.replace(".yml","")));
                                 cancel();
                             }
@@ -188,7 +197,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 @Override
                 public void run() {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
+                        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
                             World world = p.getWorld();
                             List<Entity> entList = world.getEntities();
                             for (Entity current : entList) if (current instanceof Item) if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) current.remove();
@@ -201,7 +210,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             scheduler.scheduleSyncRepeatingTask(this, () -> {
             Bukkit.broadcastMessage(Message.ITEM_CLEAR.toString().replace("&", "§"));
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
+                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
                     World world = p.getWorld();
                     List<Entity> entList = world.getEntities();
                     for (Entity current : entList) {
@@ -240,11 +249,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         @EventHandler
         public void onBlockPlace(BlockPlaceEvent e) {
             Player player = e.getPlayer();
-            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
+            if (KnockbackFFA.getInstance().getApi().BungeeMode() || KnockbackFFA.getInstance().getApi().isInGame(player)) {
                 if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
                     Block block = e.getBlockPlaced();
-                    DataBlock db = blockManager.getDataBlock(block);
-                    db.set("block-type", "BuildingBlock");
+                    DataBlock db = blockDataManager.getBlockData(block);
+                    db.setBlockType("BuildingBlock");
                     String arenaName = tempArenaManager.getEnabledArena().getName();
                     BukkitRunnable runnable = new BukkitRunnable() {
                         @Override
@@ -267,7 +276,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                                 }
                             } else {
                                 block.setType(Material.AIR);
-                                db.set("block-type", "");
+                                db.setBlockType("");
                             }
                         }
                     };
@@ -294,7 +303,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         @EventHandler
         public void onPressureButton(PlayerInteractEvent e) {
             Player player = e.getPlayer();
-            if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(player)) {
+            if (KnockbackFFA.getInstance().getApi().BungeeMode() || KnockbackFFA.getInstance().getApi().isInGame(player)) {
                 if (e.getAction().equals(Action.PHYSICAL)) {
                     if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
                         Block block = e.getClickedBlock();
@@ -309,7 +318,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     Sign sign = (Sign) e.getClickedBlock().getState();
                     if (!(ChatColor.YELLOW + "[A]KnockbackFFA").equalsIgnoreCase(sign.getLine(0))) return;
                     if (!(ChatColor.GREEN + "Join").equalsIgnoreCase(sign.getLine(1))) return;
-                    if (KnockbackFFAAPI.isInGame(player))
+                    if (KnockbackFFA.getInstance().getApi().isInGame(player))
                         player.sendMessage(ChatColor.RED + "You are already in the game!");
                     else player.chat("/join");
                 }

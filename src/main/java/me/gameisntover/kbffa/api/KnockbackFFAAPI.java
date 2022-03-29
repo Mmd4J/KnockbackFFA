@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.api;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.customconfig.CosmeticConfiguration;
-import me.gameisntover.kbffa.customconfig.PlayerData;
+import me.gameisntover.kbffa.customconfig.Knocker;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -15,45 +15,43 @@ import java.util.UUID;
 
 public class KnockbackFFAAPI {
 
-    private static final Map<UUID, Boolean> inGamePlayer = new HashMap<>();
-    private static final Map<UUID, Boolean> inArenaPlayer = new HashMap<>();
+    private final Map<UUID, Boolean> inGamePlayer = new HashMap<>();
+    private final Map<UUID, Boolean> inArenaPlayer = new HashMap<>();
 
-    public static boolean BungeeMode() {
+    public boolean BungeeMode() {
         return KnockbackFFA.getInstance().getConfig().getBoolean("Bungee-Mode");
     }
 
-    public static boolean isInGame(Player player) {
+    public boolean isInGame(Player player) {
         if(BungeeMode()) return true;
         if (inGamePlayer.get(player.getUniqueId()) != null) return inGamePlayer.get(player.getUniqueId());
          else return false;
 
     }
 
-    public static void setInGamePlayer(Player player, boolean value) {
+    public void setInGamePlayer(Player player, boolean value) {
         inGamePlayer.put(player.getUniqueId(), value);
     }
 
-    public static boolean isInArena(Player player) {
-        if (inArenaPlayer.get(player.getUniqueId()) != null && KnockbackFFAAPI.isInGame(player)) return inArenaPlayer.get(player.getUniqueId());
+    public boolean isInArena(Player player) {
+        if (inArenaPlayer.get(player.getUniqueId()) != null && KnockbackFFA.getInstance().getApi().isInGame(player)) return inArenaPlayer.get(player.getUniqueId());
         else return false;
 
     }
 
-    public static void setInArenaPlayer(Player player, boolean value) {
+    public void setInArenaPlayer(Player player, boolean value) {
         inArenaPlayer.put(player.getUniqueId(), value);
     }
 
-    public static String selectedCosmetic(Player player) {
-        PlayerData.load(player);
-        return PlayerData.get().getString("selected-cosmetic");
+    public String selectedCosmetic(Knocker knocker) {
+        return knocker.getConfig().getString("selected-cosmetic");
     }
 
-    public static String selectedKit(Player player) {
-        PlayerData.load(player);
-        return PlayerData.get().getString("selected-kit");
+    public String selectedKit(Knocker knocker) {
+        return knocker.getConfig().getString("selected-kit");
     }
 
-    public static void loadCosmetic(Player player, String cosmeticName) {
+    public void loadCosmetic(Player player, String cosmeticName) {
         if (cosmeticName == null) return;
             String cosmeticType = CosmeticConfiguration.get().getString(cosmeticName + ".type");
             if (cosmeticType == null) return;

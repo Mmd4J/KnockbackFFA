@@ -78,9 +78,9 @@ public class Kits {
                     }
                 }
             } else {
-                PlayerData.load(player);
-                PlayerData.get().set("owned-kits", PlayerData.get().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
-                PlayerData.save();
+                Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+                knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
+                knocker.save();
             }
         }
     }

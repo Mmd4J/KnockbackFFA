@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.arena.TempArenaManager;
-import me.gameisntover.kbffa.customconfig.PlayerData;
+import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -36,17 +36,17 @@ public class Expansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String params) {
         if (params.equalsIgnoreCase("player_kills")) {
             Player player1 = player.getPlayer();
-            PlayerData.load(player1);
-            return String.valueOf(PlayerData.get().getInt("kills"));
+            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player1);
+            return String.valueOf(knocker.getConfig().getInt("kills"));
         }
 
         if (params.equalsIgnoreCase("player_deaths")) {
             Player player1 = player.getPlayer();
-            PlayerData.load(player1);
-            return String.valueOf(PlayerData.get().getInt("deaths"));
+            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player1);
+            return String.valueOf(knocker.getConfig().getInt("deaths"));
         }
         if (params.equalsIgnoreCase("player_balance")) {
-            return KnockbackFFA.getInstance().getBalanceAPI().getBalance(player.getPlayer()) + "";
+            return KnockbackFFA.getInstance().getBalanceAPI().getBalance(KnockbackFFA.getInstance().getKnocker(player.getPlayer())) + "";
         }
         if (params.equalsIgnoreCase("current_map")) {
             String arenaName = arenaManager.getEnabledArena().getName();

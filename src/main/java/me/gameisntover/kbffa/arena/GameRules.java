@@ -26,7 +26,7 @@ public class GameRules implements Listener {
     public void onPlayerItemPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
             Player player = (Player) e.getEntity();
-            if (KnockbackFFAAPI.isInGame(player) || KnockbackFFAAPI.BungeeMode()) e.setCancelled(true);
+            if (KnockbackFFA.getInstance().getApi().isInGame(player) || KnockbackFFA.getInstance().getApi().BungeeMode()) e.setCancelled(true);
     }
 
     @EventHandler
@@ -74,7 +74,7 @@ public class GameRules implements Listener {
 
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
-        if (KnockbackFFAAPI.BungeeMode() || KnockbackFFAAPI.isInGame(e.getPlayer())) e.setCancelled(true);
+        if (KnockbackFFA.getInstance().getApi().BungeeMode() || KnockbackFFA.getInstance().getApi().isInGame(e.getPlayer())) e.setCancelled(true);
 
     }
 
@@ -82,7 +82,7 @@ public class GameRules implements Listener {
     public void onBowUse(ProjectileLaunchEvent e) {
         if (!(e.getEntity().getShooter() instanceof Player)) return;
             Player player = (Player) e.getEntity().getShooter();
-        if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(player)) return;
+        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(player)) return;
         if (!player.getInventory().getItemInMainHand().getType().equals(Material.BOW)) return;
             new BukkitRunnable() {
                 int timer = 10;

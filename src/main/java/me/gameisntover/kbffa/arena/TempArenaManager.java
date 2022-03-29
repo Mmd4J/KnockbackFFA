@@ -1,8 +1,8 @@
 package me.gameisntover.kbffa.arena;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
@@ -25,17 +25,14 @@ public class TempArenaManager {
     private File df = KnockbackFFA.getInstance().getDataFolder();
     public String name;
     private List<Arena> arenas = new ArrayList<>();
-    private Map<String , Arena> arenaHandler = new HashMap<>();
+    private Map<String, Arena> arenaHandler = new HashMap<>();
+    @SneakyThrows
     public Arena create(String arenaName, Location spawn, Location pos1, Location pos2) {
         cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
         if (!df.exists()) df.mkdir();
         if (!cfile.exists()) {
-            try {
                 cfile.createNewFile();
-            } catch (Exception e) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error creating " + cfile.getName() + "!");
             }
-        }
         config = YamlConfiguration.loadConfiguration(cfile);
         Arena arena = load(arenaName);
         arena.getConfig().set("block-break", false);
@@ -159,7 +156,7 @@ public class TempArenaManager {
         String arenaName = arena.getName();
         setEnabledArena(arenaName);
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            if (!KnockbackFFAAPI.BungeeMode() || !KnockbackFFAAPI.isInGame(p)) return;
+            if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
             p.getInventory().clear();
             KnockbackFFAKit kitManager = new KnockbackFFAKit();
             kitManager.lobbyItems(p);

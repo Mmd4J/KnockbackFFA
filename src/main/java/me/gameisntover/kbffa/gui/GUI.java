@@ -28,7 +28,9 @@ public class GUI implements Listener {
     public void onInventoryClick(InventoryClickEvent e){
         if (e.getInventory() == inventory){
             e.setCancelled(true);
-        buttons.get(e.getSlot()).onClick(e);
+            Button button = buttons.get(e.getSlot());
+            if (button == null) return;
+            button.onClick(e);
         }
     }
     @EventHandler
