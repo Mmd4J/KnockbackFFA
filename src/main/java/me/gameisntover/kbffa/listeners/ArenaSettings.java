@@ -28,7 +28,8 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
-        if (!KnockbackFFA.getInstance().getApi().isInArena(player)) return;
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (knocker.isInArena()) return;
         String[] arenaList = tempArenaManager.getfolder().list();
         for (String arenaName : arenaList) {
             Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
@@ -39,20 +40,21 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
-        if (!KnockbackFFA.getInstance().getApi().isInGame(player)) return;
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (!knocker.isInGame()) return;
             String[] arenaList = tempArenaManager.getfolder().list();
             assert arenaList != null;
             for (String arenaName : arenaList) {
                 Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
-                e.setCancelled(KnockbackFFA.getInstance().getApi().isInArena(player) && !arena.getConfig().getBoolean("item-drop"));
+                e.setCancelled(knocker.isInArena() && !arena.getConfig().getBoolean("item-drop"));
             }
     }
 
     @EventHandler
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        if (!KnockbackFFA.getInstance().getApi().isInGame(player)) return;
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (!knocker.isInGame()) return;
             if (knocker.getConfig().getString("selected-trails") != null) {
                 String selectedTrails = knocker.getConfig().getString("selected-trails");
                 Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
@@ -101,8 +103,8 @@ public class ArenaSettings implements Listener {
             }
             if (tempArenaManager.getEnabledArena() != null) {
                 Arena arena = tempArenaManager.load(tempArenaManager.getEnabledArena().getName());
-                KnockbackFFA.getInstance().getApi().setInGamePlayer(player, true);
-                KnockbackFFA.getInstance().getApi().setInArenaPlayer(player, true);
+                knocker.setInGame(true);
+                knocker.setInArena(true);
                 if (!arena.contains(player.getLocation())) return;
                     if (knocker.getConfig().getString("selected-kit") == null) return;
                         List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
@@ -122,6 +124,6 @@ public class ArenaSettings implements Listener {
                                 break;
                         }
                     }
-            } else KnockbackFFA.getInstance().getApi().setInArenaPlayer(player, false);
+            } else knocker.setInArena(false);
         }
     }

@@ -4,6 +4,7 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
+import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -26,7 +27,8 @@ public class GameRules implements Listener {
     public void onPlayerItemPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
             Player player = (Player) e.getEntity();
-            if (KnockbackFFA.getInstance().getApi().isInGame(player) || KnockbackFFA.getInstance().getApi().BungeeMode()) e.setCancelled(true);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+            if (knocker.isInGame() || KnockbackFFA.getInstance().getApi().BungeeMode()) e.setCancelled(true);
     }
 
     @EventHandler
@@ -74,7 +76,8 @@ public class GameRules implements Listener {
 
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
-        if (KnockbackFFA.getInstance().getApi().BungeeMode() || KnockbackFFA.getInstance().getApi().isInGame(e.getPlayer())) e.setCancelled(true);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
+        if (KnockbackFFA.getInstance().getApi().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
 
     }
 
@@ -82,7 +85,8 @@ public class GameRules implements Listener {
     public void onBowUse(ProjectileLaunchEvent e) {
         if (!(e.getEntity().getShooter() instanceof Player)) return;
             Player player = (Player) e.getEntity().getShooter();
-        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(player)) return;
+            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
         if (!player.getInventory().getItemInMainHand().getType().equals(Material.BOW)) return;
             new BukkitRunnable() {
                 int timer = 10;

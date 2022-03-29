@@ -6,6 +6,7 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
+import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.*;
@@ -156,7 +157,8 @@ public class TempArenaManager {
         String arenaName = arena.getName();
         setEnabledArena(arenaName);
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
+            Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
+            if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
             p.getInventory().clear();
             KnockbackFFAKit kitManager = new KnockbackFFAKit();
             kitManager.lobbyItems(p);

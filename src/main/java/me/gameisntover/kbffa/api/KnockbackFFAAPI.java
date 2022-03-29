@@ -15,32 +15,9 @@ import java.util.UUID;
 
 public class KnockbackFFAAPI {
 
-    private final Map<UUID, Boolean> inGamePlayer = new HashMap<>();
-    private final Map<UUID, Boolean> inArenaPlayer = new HashMap<>();
 
     public boolean BungeeMode() {
         return KnockbackFFA.getInstance().getConfig().getBoolean("Bungee-Mode");
-    }
-
-    public boolean isInGame(Player player) {
-        if(BungeeMode()) return true;
-        if (inGamePlayer.get(player.getUniqueId()) != null) return inGamePlayer.get(player.getUniqueId());
-         else return false;
-
-    }
-
-    public void setInGamePlayer(Player player, boolean value) {
-        inGamePlayer.put(player.getUniqueId(), value);
-    }
-
-    public boolean isInArena(Player player) {
-        if (inArenaPlayer.get(player.getUniqueId()) != null && KnockbackFFA.getInstance().getApi().isInGame(player)) return inArenaPlayer.get(player.getUniqueId());
-        else return false;
-
-    }
-
-    public void setInArenaPlayer(Player player, boolean value) {
-        inArenaPlayer.put(player.getUniqueId(), value);
     }
 
     public String selectedCosmetic(Knocker knocker) {

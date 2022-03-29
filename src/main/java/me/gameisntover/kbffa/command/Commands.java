@@ -9,7 +9,6 @@ import me.gameisntover.kbffa.arena.VoidChunkGenerator;
 import me.gameisntover.kbffa.listeners.WandListener;
 import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.util.Message;
-import me.gameisntover.kbffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -29,6 +28,7 @@ public class Commands implements CommandExecutor {
    private final TempArenaManager tempArenaManager = new TempArenaManager();
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("createkit")).getName().equalsIgnoreCase(command.getName())) {
             if (p.hasPermission("kbffa.command.createkit")) {
                 if (args.length == 0) {
@@ -69,21 +69,20 @@ public class Commands implements CommandExecutor {
             }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("join")).getName().equalsIgnoreCase(command.getName())) {
-            if (!KnockbackFFA.getInstance().getApi().BungeeMode() && !KnockbackFFA.getInstance().getApi().isInGame(p)) {
+            if (!KnockbackFFA.getInstance().getApi().BungeeMode() && !knocker.isInGame()) {
                 String joinText = Message.ARENA_JOIN.toString().replace("&", "§");
                 joinText = PlaceholderAPI.setPlaceholders(p, joinText);
                 sender.sendMessage(joinText);
                 if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
-                    Knocker knocker = KnockbackFFA.getInstance().getKnocker(p.getPlayer());
                     knocker.getConfig().set("inventory", p.getPlayer().getInventory().getContents());
                     knocker.getConfig().set("armor", p.getPlayer().getInventory().getArmorContents());
-                    knocker.save();
+                    knocker.saveConfig();
                     p.getPlayer().getInventory().clear();
                     p.setFoodLevel(20);
                     KnockbackFFAKit kit = new KnockbackFFAKit();
                     kit.lobbyItems(p);
-                    MainScoreboard.toggleScoreboard(p, true);
-                    KnockbackFFA.getInstance().getApi().setInGamePlayer(p, true);
+                    knocker.showScoreBoard();
+                    knocker.setInGame(true);
                 }
                 tempArenaManager.teleportPlayerToArena(p);
             } else {
@@ -91,14 +90,13 @@ public class Commands implements CommandExecutor {
             }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("leave")).getName().equalsIgnoreCase(command.getName())) {
-            if (!KnockbackFFA.getInstance().getApi().BungeeMode() && KnockbackFFA.getInstance().getApi().isInGame(Objects.requireNonNull(p.getPlayer()))) {
+            if (!KnockbackFFA.getInstance().getApi().BungeeMode() && knocker.isInGame()) {
                 String leaveText = Message.ARENA_LEAVE.toString().replace("&", "§");
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);
                 tempArenaManager.teleportToMainLobby(p);
                 p.getInventory().clear();
                 if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
-                    Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
                     List<ItemStack> items = (List<ItemStack>) knocker.getConfig().get("inventory");
                     Objects.requireNonNull(items).stream().filter(Objects::nonNull);
                     List<ItemStack> armor = (List<ItemStack>) knocker.getConfig().get("armor");
@@ -108,8 +106,8 @@ public class Commands implements CommandExecutor {
                     p.getInventory().setContents(items.toArray(new ItemStack[0]));
                     p.getInventory().setArmorContents(armor.toArray(new ItemStack[0]));
                 }
-                MainScoreboard.toggleScoreboard(p, false);
-                KnockbackFFA.getInstance().getApi().setInGamePlayer(p, false);
+                knocker.hideScoreBoard();
+                knocker.setInGame(false);
             } else {
                 p.sendMessage(Message.CAN_NOT_LEAVE.toString().replace("&", "§"));
             }

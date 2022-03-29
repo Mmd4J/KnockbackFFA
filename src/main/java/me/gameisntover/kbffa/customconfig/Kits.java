@@ -80,7 +80,7 @@ public class Kits {
             } else {
                 Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
                 knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
-                knocker.save();
+                knocker.saveConfig();
             }
         }
     }

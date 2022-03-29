@@ -1,14 +1,12 @@
 package me.gameisntover.kbffa.api;
 
-import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.customconfig.Knocker;
-import org.bukkit.entity.Player;
 
 public class BalanceAPI {
 
     public void setBalance(Knocker knocker, float balance) {
         knocker.getConfig().set("balance", balance);
-        knocker.save();
+        knocker.saveConfig();
     }
 
     public float getBalance(Knocker knocker) {

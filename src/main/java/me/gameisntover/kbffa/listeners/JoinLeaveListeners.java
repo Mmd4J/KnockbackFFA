@@ -21,22 +21,22 @@ public class JoinLeaveListeners implements Listener {
         knocker.getConfig().set("kills", 0);
         knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").add("Default"));
         knocker.getConfig().set("selected-kit", "Default");
-        knocker.save();
-        if (!KnockbackFFA.getInstance().getApi().BungeeMode()) KnockbackFFA.getInstance().getApi().setInGamePlayer(player, false);
+        knocker.saveConfig();
+        if (!KnockbackFFA.getInstance().getApi().BungeeMode()) knocker.setInGame(false);
         if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound"))
             player.playSound(player.getLocation(), Sound.valueOf(Sounds.PLAYER_JOIN.toString()), 1, 1);
-        if (KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena() == null) KnockbackFFA.getInstance().getApi().setInGamePlayer(player, false);
+        if (KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena() == null) knocker.setInGame(false);
         else {
             if (KnockbackFFA.getInstance().getApi().BungeeMode()) {
                 KnockbackFFA.getInstance().getTempArenaManager().teleportPlayerToArena(player);
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 player.getInventory().clear();
                 kitManager.lobbyItems(player);
-                KnockbackFFA.getInstance().getApi().setInGamePlayer(player, KnockbackFFA.getInstance().getApi().BungeeMode());
+                knocker.setInGame(KnockbackFFA.getInstance().getApi().BungeeMode());
             } else {
-                if (!KnockbackFFA.getInstance().getApi().isInGame(player)) {
+                if (!knocker.isInGame()) {
                     KnockbackFFA.getInstance().getTempArenaManager().teleportToMainLobby(player);
-                    KnockbackFFA.getInstance().getApi().setInGamePlayer(player, KnockbackFFA.getInstance().getApi().BungeeMode());
+                    knocker.setInGame(KnockbackFFA.getInstance().getApi().BungeeMode());
                 }
             }
         }
@@ -45,6 +45,7 @@ public class JoinLeaveListeners implements Listener {
     @EventHandler
     public void playerLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-            KnockbackFFA.getInstance().getApi().setInGamePlayer(player, false);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+            knocker.setInGame(false);
     }
 }

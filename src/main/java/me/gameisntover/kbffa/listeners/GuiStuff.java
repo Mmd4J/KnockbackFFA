@@ -62,7 +62,7 @@ public class GuiStuff implements Listener {
 
                                         else if (CosmeticConfiguration.get().getString(selC + ".type") == "TRAIL")
                                             knocker.getConfig().set("selected-trails", event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
-                                        knocker.save();
+                                        knocker.saveConfig();
                                         player.closeInventory();
                                     });
                                     ItemMeta meta = kits.guiItemMeta(cosmeticItem.getItem());
@@ -79,7 +79,7 @@ public class GuiStuff implements Listener {
                                 } else {
                                     cList.remove(cosmetic);
                                     knocker.getConfig().set("owned-cosmetics", cList);
-                                    knocker.save();
+                                    knocker.saveConfig();
                                 }
                             }
                     );
@@ -104,7 +104,7 @@ public class GuiStuff implements Listener {
                                         KnockbackFFA.getInstance().getBalanceAPI().removeBalance(knocker, ItemConfiguration.get().getInt(cosmetics.get(event1.getSlot()) + ".price"));
                                         ownedCosmetics.add(cosmetics.get(event1.getSlot()));
                                         knocker.getConfig().set("owned-cosmetics", ownedCosmetics);
-                                        knocker.save();
+                                        knocker.saveConfig();
                                         player.sendMessage(Message.COSMETIC_PURCHASE_SUCCESS.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                                     } else player.sendMessage(Message.COSMETIC_ALREADY_OWNED.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                                 } else player.sendMessage(Message.COSMETIC_NO_ENOUGH_MONEY.toString().replace("&", "§"));
@@ -144,7 +144,7 @@ public class GuiStuff implements Listener {
                                             KnockbackFFA.getInstance().getBalanceAPI().removeBalance(knocker, kit.get().getInt("Price"));
                                             ownedKits.add(cosmetics.get(event1.getSlot()));
                                             knocker.getConfig().set("owned-kits", ownedKits);
-                                            knocker.save();
+                                            knocker.saveConfig();
                                             player.closeInventory();
                                             player.sendMessage(Message.COSMETIC_PURCHASE_SUCCESS.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                                         } else player.sendMessage(Message.COSMETIC_ALREADY_OWNED.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
@@ -190,7 +190,7 @@ public class GuiStuff implements Listener {
                                     Button kitItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.getMaterial(icon),1,name,Arrays.asList("")).create(), event -> {
                                         String selC = kitsList.get(event.getSlot());
                                         knocker.getConfig().set("selected-kit" , event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
-                                        knocker.save();
+                                        knocker.saveConfig();
                                         player.closeInventory();
                                     });
                                     ItemMeta kitMeta = kits.guiItemMeta(kitItem.getItem());
@@ -202,7 +202,7 @@ public class GuiStuff implements Listener {
                                     kitItem.getItem().setItemMeta(kitMeta);
                                     kitsMenu.add(kitItem, kitsList.indexOf(kit));
                                 }
-                        knocker.save();
+                        knocker.saveConfig();
                     }
                     kitsMenu.open(player);
                 }

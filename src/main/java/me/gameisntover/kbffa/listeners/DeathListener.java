@@ -31,8 +31,9 @@ public class DeathListener implements Listener {
     public void playerDamageCheck(EntityDamageEvent e) {
         if(!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (player.getType().equals(EntityType.PLAYER)) {
-            if (KnockbackFFA.getInstance().getApi().BungeeMode() || KnockbackFFA.getInstance().getApi().isInGame(player)) {
+            if (KnockbackFFA.getInstance().getApi().BungeeMode() || knocker.isInGame()) {
                 if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     e.setDamage(KnockbackFFA.getInstance().getConfig().getInt("default-void-damage"));
                 } else {
@@ -46,8 +47,9 @@ public class DeathListener implements Listener {
     public void checkDamagerFinalDamage(EntityDamageByEntityEvent e) {
         Entity player = e.getEntity();
         Entity damager = e.getDamager();
+        Knocker knockerPlayer = KnockbackFFA.getInstance().getKnocker((Player) player);
         if (!player.getType().equals(EntityType.PLAYER)) return;
-            if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame((Player) player)) return;
+            if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knockerPlayer.isInGame()) return;
                 List<EntityDamageEvent.DamageCause> damageCauses = Arrays.asList(EntityDamageEvent.DamageCause.ENTITY_ATTACK,
                         EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, EntityDamageEvent.DamageCause.PROJECTILE);
                 if (!damageCauses.contains(e.getCause())) return;
@@ -65,9 +67,10 @@ public class DeathListener implements Listener {
     public void playerDeathByVoid(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Entity damager = killer.get(player);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         killer.remove(player);
-        KnockbackFFA.getInstance().getApi().setInArenaPlayer(player, false);
-        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(player)) return;
+        knocker.setInArena(false);
+        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -85,9 +88,8 @@ public class DeathListener implements Listener {
                     current.remove();
             }
             killStreak.put(player, 0);
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
             knocker.getConfig().set("deaths", knocker.getConfig().getInt("deaths") + 1);
-            knocker.save();
+            knocker.saveConfig();
             if (damager != null && damager != player) {
                 KnockbackFFA.getInstance().getApi().loadCosmetic((Player) damager, KnockbackFFA.getInstance().getApi().selectedCosmetic(KnockbackFFA.getInstance().getKnocker((Player) damager)));
 
@@ -103,7 +105,7 @@ public class DeathListener implements Listener {
                     damagerP.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', msg)));
                     damageKnocker.getConfig().set("best-ks", killStreak.get(damager));
                 }
-                damageKnocker.save();
+                damageKnocker.saveConfig();
                 String deathText = Message.DEATH_KNOCKED_GOBAL.toString().replace("%killer%", damager.getName());
                 deathText = PlaceholderAPI.setPlaceholders(e.getEntity(), deathText);
                 e.setDeathMessage(ChatColor.translateAlternateColorCodes('&', deathText));

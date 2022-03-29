@@ -15,7 +15,6 @@ import me.gameisntover.kbffa.command.CommandsTabCompleter;
 import me.gameisntover.kbffa.manager.FFAManager;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
-import me.gameisntover.kbffa.scoreboard.MainScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -68,8 +67,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         public void onEnable() {
             blockDataManager = new BlockDataManager();
             if (!Bukkit.getOnlinePlayers().isEmpty()) {
-                for (Player player : Bukkit.getOnlinePlayers())
-                    KnockbackFFA.getInstance().getApi().setInGamePlayer(player, KnockbackFFA.getInstance().getApi().BungeeMode());
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                Knocker knocker = getKnocker(player);
+                    knocker.setInGame(KnockbackFFA.getInstance().getApi().BungeeMode());
+                }
             }
             balanceAPI = new BalanceAPI();
             buttonManager= new ButtonManager();
@@ -87,7 +88,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             getLogger().info("Enjoy using plugin :)");
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
+                Knocker knocker = getKnocker(p);
+                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
                     if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
                         KnockbackFFAKit kitManager = new KnockbackFFAKit();
                         p.getInventory().addItem(kitManager.kbbowArrow());
@@ -166,7 +168,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                             tempArenaManager.setEnabledArena(arenaName);
                             ArenaConfiguration.save();
                             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
+                                Knocker knocker = getKnocker(p);
+                                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
                                 tempArenaManager.changeArena(tempArenaManager.load(arenaName.replace(".yml","")));
                                 cancel();
                             }
@@ -197,7 +200,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 @Override
                 public void run() {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
+                        Knocker knocker = getKnocker(p);
+                        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
                             World world = p.getWorld();
                             List<Entity> entList = world.getEntities();
                             for (Entity current : entList) if (current instanceof Item) if (((Item) current).getItemStack().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) current.remove();
@@ -210,7 +214,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             scheduler.scheduleSyncRepeatingTask(this, () -> {
             Bukkit.broadcastMessage(Message.ITEM_CLEAR.toString().replace("&", "§"));
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !KnockbackFFA.getInstance().getApi().isInGame(p)) return;
+                Knocker knocker = getKnocker(p);
+                if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
                     World world = p.getWorld();
                     List<Entity> entList = world.getEntities();
                     for (Entity current : entList) {
@@ -223,8 +228,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }
 
         private void loadListeners() {
-            Arrays.asList(new GameEventsListener(), new JoinLeaveListeners(), new ChatListener(),
-                    new DeathListener(), new WandListener(), new GameRules(), new MainScoreboard(),
+            Arrays.asList(new GameEventsListener(), new JoinLeaveListeners(),
+                    new DeathListener(), new WandListener(), new GameRules(),
                     new GuiStuff(), new KnockbackFFAKit(), new ArenaSettings())
                     .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
         }
@@ -249,7 +254,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         @EventHandler
         public void onBlockPlace(BlockPlaceEvent e) {
             Player player = e.getPlayer();
-            if (KnockbackFFA.getInstance().getApi().BungeeMode() || KnockbackFFA.getInstance().getApi().isInGame(player)) {
+            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+            if (KnockbackFFA.getInstance().getApi().BungeeMode() || knocker.isInGame()) {
                 if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
                     Block block = e.getBlockPlaced();
                     DataBlock db = blockDataManager.getBlockData(block);
@@ -303,7 +309,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         @EventHandler
         public void onPressureButton(PlayerInteractEvent e) {
             Player player = e.getPlayer();
-            if (KnockbackFFA.getInstance().getApi().BungeeMode() || KnockbackFFA.getInstance().getApi().isInGame(player)) {
+            Knocker knocker = getKnocker(player);
+            if (KnockbackFFA.getInstance().getApi().BungeeMode() || knocker.isInGame()) {
                 if (e.getAction().equals(Action.PHYSICAL)) {
                     if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
                         Block block = e.getClickedBlock();
@@ -318,7 +325,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     Sign sign = (Sign) e.getClickedBlock().getState();
                     if (!(ChatColor.YELLOW + "[A]KnockbackFFA").equalsIgnoreCase(sign.getLine(0))) return;
                     if (!(ChatColor.GREEN + "Join").equalsIgnoreCase(sign.getLine(1))) return;
-                    if (KnockbackFFA.getInstance().getApi().isInGame(player))
+                    if (knocker.isInGame())
                         player.sendMessage(ChatColor.RED + "You are already in the game!");
                     else player.chat("/join");
                 }
