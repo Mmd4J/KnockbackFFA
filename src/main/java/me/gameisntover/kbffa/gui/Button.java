@@ -11,23 +11,26 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Data
 public abstract class Button {
     protected ItemStack item;
+    protected int slot;
     private ItemMeta meta;
     private Inventory inventory;
-    protected int slot;
+
     public Button(ItemStack item) {
         setItem(item);
         setMeta(item.getItemMeta());
         setSelected(false);
     }
-    public void setSelected(boolean toggle){
-        if (toggle) meta.addEnchant(Enchantment.DURABILITY,1,true);
+
+    public void setSelected(boolean toggle) {
+        if (toggle) meta.addEnchant(Enchantment.DURABILITY, 1, true);
         else meta.removeEnchant(Enchantment.DURABILITY);
         item.setItemMeta(meta);
     }
-    public void setSelected(boolean toggle,String prefix){
-        if (toggle) meta.addEnchant(Enchantment.DURABILITY,1,true);
+
+    public void setSelected(boolean toggle, String prefix) {
+        if (toggle) meta.addEnchant(Enchantment.DURABILITY, 1, true);
         else meta.removeEnchant(Enchantment.DURABILITY);
-        meta.setDisplayName(toggle ? ChatColor.translateAlternateColorCodes('&',meta.getDisplayName() + prefix): meta.getDisplayName());
+        meta.setDisplayName(toggle ? ChatColor.translateAlternateColorCodes('&', meta.getDisplayName() + prefix) : meta.getDisplayName());
         item.setItemMeta(meta);
 
     }

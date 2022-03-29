@@ -15,11 +15,12 @@ public class GameEventsListener implements Listener {
         e.setCancelled(true);
         if (e.getFoodLevel() < 20) e.setFoodLevel(20);
     }
+
     @EventHandler
     public void playerChatFormat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getInstance().getApi().BungeeMode() || knocker.isInGame())
+        if (KnockbackFFA.getInstance().getAPI().BungeeMode() || knocker.isInGame())
             e.setFormat(Message.CHATFORMAT.toString().replace("%player%", player.getName()).replace("%message%", e.getMessage()));
     }
 }

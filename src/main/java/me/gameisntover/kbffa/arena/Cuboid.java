@@ -1,13 +1,13 @@
 package me.gameisntover.kbffa.arena;
 
-import java.util.*;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+
+import java.util.*;
 
 /**
  * This class is a region/cuboid from one location to another. It can be used for blocks protection and things like WorldEdit.
@@ -584,44 +584,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 
     @Override
     public String toString() {
-        return new String("Cuboid: " + this.worldName + "," + this.x1 + "," + this.y1 + "," + this.z1 + "=>" + this.x2 + "," + this.y2 + "," + this.z2);
-    }
-
-    public class CuboidIterator implements Iterator<Block> {
-        private final World w;
-        private final int baseX, baseY, baseZ;
-        private int x, y, z;
-        private final int sizeX, sizeY, sizeZ;
-
-        public CuboidIterator(World w, int x1, int y1, int z1, int x2, int y2, int z2) {
-            this.w = w;
-            this.baseX = x1;
-            this.baseY = y1;
-            this.baseZ = z1;
-            this.sizeX = Math.abs(x2 - x1) + 1;
-            this.sizeY = Math.abs(y2 - y1) + 1;
-            this.sizeZ = Math.abs(z2 - z1) + 1;
-            this.x = this.y = this.z = 0;
-        }
-
-        public boolean hasNext() {
-            return this.x < this.sizeX && this.y < this.sizeY && this.z < this.sizeZ;
-        }
-
-        public Block next() {
-            Block b = this.w.getBlockAt(this.baseX + this.x, this.baseY + this.y, this.baseZ + this.z);
-            if (++x >= this.sizeX) {
-                this.x = 0;
-                if (++this.y >= this.sizeY) {
-                    this.y = 0;
-                    ++this.z;
-                }
-            }
-            return b;
-        }
-
-        public void remove() {
-        }
+        return "Cuboid: " + this.worldName + "," + this.x1 + "," + this.y1 + "," + this.z1 + "=>" + this.x2 + "," + this.y2 + "," + this.z2;
     }
 
     public enum CuboidDirection {
@@ -652,6 +615,43 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
             }
         }
 
+    }
+
+    public class CuboidIterator implements Iterator<Block> {
+        private final World w;
+        private final int baseX, baseY, baseZ;
+        private final int sizeX, sizeY, sizeZ;
+        private int x, y, z;
+
+        public CuboidIterator(World w, int x1, int y1, int z1, int x2, int y2, int z2) {
+            this.w = w;
+            this.baseX = x1;
+            this.baseY = y1;
+            this.baseZ = z1;
+            this.sizeX = Math.abs(x2 - x1) + 1;
+            this.sizeY = Math.abs(y2 - y1) + 1;
+            this.sizeZ = Math.abs(z2 - z1) + 1;
+            this.x = this.y = this.z = 0;
+        }
+
+        public boolean hasNext() {
+            return this.x < this.sizeX && this.y < this.sizeY && this.z < this.sizeZ;
+        }
+
+        public Block next() {
+            Block b = this.w.getBlockAt(this.baseX + this.x, this.baseY + this.y, this.baseZ + this.z);
+            if (++x >= this.sizeX) {
+                this.x = 0;
+                if (++this.y >= this.sizeY) {
+                    this.y = 0;
+                    ++this.z;
+                }
+            }
+            return b;
+        }
+
+        public void remove() {
+        }
     }
 
 }

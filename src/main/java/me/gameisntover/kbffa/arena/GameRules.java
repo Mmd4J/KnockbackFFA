@@ -1,7 +1,6 @@
 package me.gameisntover.kbffa.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
 import me.gameisntover.kbffa.customconfig.Knocker;
@@ -26,28 +25,28 @@ public class GameRules implements Listener {
     @EventHandler
     public void onPlayerItemPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
-            Player player = (Player) e.getEntity();
+        Player player = (Player) e.getEntity();
         Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-            if (knocker.isInGame() || KnockbackFFA.getInstance().getApi().BungeeMode()) e.setCancelled(true);
+        if (knocker.isInGame() || KnockbackFFA.getInstance().getAPI().BungeeMode()) e.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerDamages(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
-            Player player = (Player) e.getEntity();
-            for (String sz : ArenaConfiguration.get().getStringList("registered-safezones")) {
-                if (ArenaConfiguration.get().getString("Safezones." + sz + ".world") != null) {
-                    Location loc1 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos1");
-                    Location loc2 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos2");
-                    Cuboid s1box = new Cuboid(loc1, loc2);
-                    Location location = player.getLocation();
-                    if (s1box.contains(location)) {
-                        e.setCancelled(true);
-                        break;
-                    }
+        Player player = (Player) e.getEntity();
+        for (String sz : ArenaConfiguration.get().getStringList("registered-safezones")) {
+            if (ArenaConfiguration.get().getString("Safezones." + sz + ".world") != null) {
+                Location loc1 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos1");
+                Location loc2 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos2");
+                Cuboid s1box = new Cuboid(loc1, loc2);
+                Location location = player.getLocation();
+                if (s1box.contains(location)) {
+                    e.setCancelled(true);
+                    break;
                 }
             }
         }
+    }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
@@ -70,49 +69,50 @@ public class GameRules implements Listener {
                         player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, damage));
                     }
                 }
-                        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
-                }
+            }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
         }
+    }
 
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
         Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getInstance().getApi().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
+        if (KnockbackFFA.getInstance().getAPI().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
 
     }
 
     @EventHandler
     public void onBowUse(ProjectileLaunchEvent e) {
         if (!(e.getEntity().getShooter() instanceof Player)) return;
-            Player player = (Player) e.getEntity().getShooter();
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
+        Player player = (Player) e.getEntity().getShooter();
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (!KnockbackFFA.getInstance().getAPI().BungeeMode() || !knocker.isInGame()) return;
         if (!player.getInventory().getItemInMainHand().getType().equals(Material.BOW)) return;
-            new BukkitRunnable() {
-                int timer = 10;
-                @Override
-                public void run() {
-                    timer--;
-                    if (timer == 10 || timer == 9 || timer == 8 || timer == 7 || timer == 6 || timer == 5 || timer == 4 || timer == 3 || timer == 2 || timer == 1) {
-                        if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
-                            cancel();
-                                    timer = 10;
-                                } else {
-                                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message.BOW_COOLDOWN.toString().replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
-                                }
-                            }
-                            if (timer == 0) {
-                                if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
-                                    cancel();
-                                    timer = 10;
-                                } else {
-                                    KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                                    player.getInventory().addItem(kitManager.kbbowArrow());
-                                    cancel();
-                                    timer = 10;
-                                }
-                            }
-                        }
-                    }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
+        new BukkitRunnable() {
+            int timer = 10;
+
+            @Override
+            public void run() {
+                timer--;
+                if (timer == 10 || timer == 9 || timer == 8 || timer == 7 || timer == 6 || timer == 5 || timer == 4 || timer == 3 || timer == 2 || timer == 1) {
+                    if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
+                        cancel();
+                        timer = 10;
+                    } else {
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message.BOW_COOLDOWN.toString().replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
+                    }
+                }
+                if (timer == 0) {
+                    if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
+                        cancel();
+                        timer = 10;
+                    } else {
+                        KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                        player.getInventory().addItem(kitManager.kbbowArrow());
+                        cancel();
+                        timer = 10;
+                    }
                 }
             }
+        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
+    }
+}

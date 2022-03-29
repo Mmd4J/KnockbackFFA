@@ -21,14 +21,16 @@ public class ArenaManager implements SubManager {
     // Arena Name ---> Arena
     private final HashMap<String, ReworkedArena> arenas = new HashMap<>();
     private final FileConfiguration arenasFile = loadFile();
-    private final File arenaFolder = new File(KnockbackFFA.getInstance().getDataFolder(),"arenas");
-    private FileConfiguration loadFile(){
+    private final File arenaFolder = new File(KnockbackFFA.getInstance().getDataFolder(), "arenas");
+
+    private FileConfiguration loadFile() {
         File file = new File("plugins/KnockbackFFA/arenas.yml"
                 .replace("/", File.separator));
         if (!file.exists()) {
             try {
-                if(!file.createNewFile()) return null;
-            } catch (IOException ignored) {}
+                if (!file.createNewFile()) return null;
+            } catch (IOException ignored) {
+            }
         }
         return YamlConfiguration.loadConfiguration(file);
     }
@@ -37,8 +39,8 @@ public class ArenaManager implements SubManager {
     public void onLoad() {
         assert arenasFile != null;
         ConfigurationSection arenasSection = arenasFile.getConfigurationSection("arenas");
-        if(arenasSection == null) return;
-        for(String sectionName : arenasSection.getKeys(false)){
+        if (arenasSection == null) return;
+        for (String sectionName : arenasSection.getKeys(false)) {
             ConfigurationSection section = arenasSection.getConfigurationSection(sectionName);
             WorldCreator creator = new WorldCreator(sectionName);
             //settings to make the world a void one
@@ -53,7 +55,7 @@ public class ArenaManager implements SubManager {
         }
     }
 
-    private Location toLocation(World world, String string){
+    private Location toLocation(World world, String string) {
         String[] parts = string.split(",");
         return new Location(world, Double.parseDouble(parts[0]), Double.parseDouble(parts[1])
                 , Double.parseDouble(parts[2]), Float.parseFloat(parts[3]), Float.parseFloat(parts[4]));

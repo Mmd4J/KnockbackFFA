@@ -4,10 +4,10 @@ public interface SubManager {
 
     void onLoad();
 
-    default void onReload(){
+    default void onReload() {
         onUnload();
         onLoad();
-    };
+    }
 
     void onUnload();
 }

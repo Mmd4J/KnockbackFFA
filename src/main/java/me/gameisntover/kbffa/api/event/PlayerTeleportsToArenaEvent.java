@@ -8,13 +8,17 @@ import org.bukkit.event.HandlerList;
 
 public final class PlayerTeleportsToArenaEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private Arena arena;
-    private Player player;
+    private final Arena arena;
+    private final Player player;
     private boolean isCancelled;
 
     public PlayerTeleportsToArenaEvent(Player player, Arena arena) {
         this.player = player;
         this.arena = arena;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public Arena getArena() {
@@ -36,10 +40,6 @@ public final class PlayerTeleportsToArenaEvent extends Event implements Cancella
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

@@ -33,20 +33,19 @@ public enum Message {
     KILLSTREAK_RECORD("&c You've beaten your previous record of %killstreak% kills!"
             , "killstreak-record"),
     BOW_COOLDOWN("&a You have used your bow! you need to wait %timer% seconds to use it again!",
-            "cooldown.bow")
-    ;
+            "cooldown.bow");
 
     private final String defaultMessage, path;
 
-    Message(String defaultMessage, String path){
+    Message(String defaultMessage, String path) {
         this.defaultMessage = defaultMessage;
         this.path = path;
     }
 
     @Override
     public String toString() {
-        if(KnockbackFFA.getInstance().getMessages().isSet(path)){
-            return KnockbackFFA.getInstance().getMessages().getString(ChatColor.translateAlternateColorCodes('&',path));
+        if (KnockbackFFA.getInstance().getMessages().isSet(path)) {
+            return KnockbackFFA.getInstance().getMessages().getString(ChatColor.translateAlternateColorCodes('&', path));
         }
         return ChatColor.translateAlternateColorCodes('&', defaultMessage);
     }

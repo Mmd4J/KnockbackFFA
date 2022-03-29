@@ -19,21 +19,22 @@ import java.util.*;
 
 @Data
 public class TempArenaManager {
+    public String name;
     private Arena enabledArena = null;
     private File cfile;
     private FileConfiguration config;
     private File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData" + File.separator);
     private File df = KnockbackFFA.getInstance().getDataFolder();
-    public String name;
     private List<Arena> arenas = new ArrayList<>();
     private Map<String, Arena> arenaHandler = new HashMap<>();
+
     @SneakyThrows
     public Arena create(String arenaName, Location spawn, Location pos1, Location pos2) {
         cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
         if (!df.exists()) df.mkdir();
         if (!cfile.exists()) {
-                cfile.createNewFile();
-            }
+            cfile.createNewFile();
+        }
         config = YamlConfiguration.loadConfiguration(cfile);
         Arena arena = load(arenaName);
         arena.getConfig().set("block-break", false);
@@ -57,6 +58,7 @@ public class TempArenaManager {
         name = arenaName;
         return new Arena(arenaName);
     }
+
     /**
      * @return the enabledArena
      */
@@ -64,13 +66,31 @@ public class TempArenaManager {
         return enabledArena;
     }
 
+    /**
+     * sets the arena enabled
+     *
+     * @param @arenaName
+     */
+    public void setEnabledArena(String arenaName) {
+        enabledArena = load(arenaName);
+    }
+
+    /**
+     * sets the arena enabled
+     *
+     * @param @arena
+     */
+    public void setEnabledArena(Arena arena) {
+        enabledArena = arena;
+    }
 
     public File getfolder() {
         return new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData");
     }
+
     /**
      * returns player to the main lobby
-     *
+     * <p>
      * needs @param @player
      */
 
@@ -112,24 +132,6 @@ public class TempArenaManager {
     }
 
     /**
-     * sets the arena enabled
-     *
-     * @param @arenaName
-     */
-    public void setEnabledArena(String arenaName) {
-        enabledArena = load(arenaName);
-    }
-
-    /**
-     * sets the arena enabled
-     *
-     * @param @arena
-     */
-    public void setEnabledArena(Arena arena) {
-        enabledArena = arena;
-    }
-
-    /**
      * Returns a random arena name
      *
      * @return String
@@ -158,7 +160,7 @@ public class TempArenaManager {
         setEnabledArena(arenaName);
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
-            if (!KnockbackFFA.getInstance().getApi().BungeeMode() || !knocker.isInGame()) return;
+            if (!KnockbackFFA.getInstance().getAPI().BungeeMode() || !knocker.isInGame()) return;
             p.getInventory().clear();
             KnockbackFFAKit kitManager = new KnockbackFFAKit();
             kitManager.lobbyItems(p);

@@ -10,19 +10,19 @@ public class FFAManager {
 
     private final ArenaManager arenaManager = new ArenaManager();
 
-    public void load(){
+    public void load() {
         subManagers().forEach(SubManager::onLoad);
     }
 
-    public void unload(){
+    public void unload() {
         subManagers().forEach(SubManager::onUnload);
     }
 
-    public void reload(){
+    public void reload() {
         subManagers().forEach(SubManager::onReload);
     }
 
-    private List<SubManager> subManagers(){
+    private List<SubManager> subManagers() {
         return Arrays.asList(arenaManager);
     }
 

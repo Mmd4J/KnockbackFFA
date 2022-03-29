@@ -9,7 +9,8 @@ public class DataBlock {
     private String blockType;
     private Block block;
     private Material prevMaterial;
-    public DataBlock(Block block){
-    setBlock(block);
+
+    public DataBlock(Block block) {
+        setBlock(block);
     }
 }

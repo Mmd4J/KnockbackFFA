@@ -6,12 +6,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class ButtonManager{
-    public Button create(ItemStack item, BiConsumer<InventoryClickEvent, Button> listener){
-        return new Button(item){
+public class ButtonManager {
+    public Button create(ItemStack item, BiConsumer<InventoryClickEvent, Button> listener) {
+        return new Button(item) {
             @Override
-            public void onClick(InventoryClickEvent e){
-                listener.accept(e,this);
+            public void onClick(InventoryClickEvent e) {
+                listener.accept(e, this);
             }
         };
     }

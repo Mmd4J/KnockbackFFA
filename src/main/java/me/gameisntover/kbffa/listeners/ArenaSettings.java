@@ -25,6 +25,7 @@ import java.util.List;
 
 public class ArenaSettings implements Listener {
     private final TempArenaManager tempArenaManager = new TempArenaManager();
+
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
@@ -42,12 +43,12 @@ public class ArenaSettings implements Listener {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (!knocker.isInGame()) return;
-            String[] arenaList = tempArenaManager.getfolder().list();
-            assert arenaList != null;
-            for (String arenaName : arenaList) {
-                Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
-                e.setCancelled(knocker.isInArena() && !arena.getConfig().getBoolean("item-drop"));
-            }
+        String[] arenaList = tempArenaManager.getfolder().list();
+        assert arenaList != null;
+        for (String arenaName : arenaList) {
+            Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
+            e.setCancelled(knocker.isInArena() && !arena.getConfig().getBoolean("item-drop"));
+        }
     }
 
     @EventHandler
@@ -55,75 +56,75 @@ public class ArenaSettings implements Listener {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (!knocker.isInGame()) return;
-            if (knocker.getConfig().getString("selected-trails") != null) {
-                String selectedTrails = knocker.getConfig().getString("selected-trails");
-                Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
-                DataBlock db = KnockbackFFA.getInstance().getBlockDataManager().getBlockData(block);
-                if (!db.getBlockType().equals("") || db.getBlockType() != null) return;
-                if (KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
-                    return;
-                db.setPrevMaterial(block.getType());
-                List<String> materialString = CosmeticConfiguration.get().getStringList(selectedTrails + ".blocks");
-                List<Material> materialList = new ArrayList<>();
-                for (String material : materialString) {
-                    materialList.add(Material.getMaterial(material));
-                }
-                if (materialList.size() == 1) {
-                    block.setType(materialList.get(0));
-                    db.setBlockType("trail");
-                    new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    block.setType(db.getPrevMaterial());
-                                    db.setBlockType("");
-                                    cancel();
-                                }
-                            }.runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
-                        } else {
-                            block.setType(materialList.get(0));
-                            db.setBlockType("trail");
-                            new BukkitRunnable() {
-                                int i = 0;
-
-                                @Override
-                                public void run() {
-                                    if (i < materialList.size() - 1) {
-                                        i++;
-                                        String material = materialList.get(i).name();
-                                        block.setType(Material.getMaterial(material));
-                                    } else {
-                                        block.setType(db.getPrevMaterial());
-                                        db.setBlockType("");
-                                        cancel();
-                                    }
-                                }
-                            }.
-                                    runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
-                        }
+        if (knocker.getConfig().getString("selected-trails") != null) {
+            String selectedTrails = knocker.getConfig().getString("selected-trails");
+            Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
+            DataBlock db = KnockbackFFA.getInstance().getBlockDataManager().getBlockData(block);
+            if (!db.getBlockType().equals("") || db.getBlockType() != null) return;
+            if (KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
+                return;
+            db.setPrevMaterial(block.getType());
+            List<String> materialString = CosmeticConfiguration.get().getStringList(selectedTrails + ".blocks");
+            List<Material> materialList = new ArrayList<>();
+            for (String material : materialString) {
+                materialList.add(Material.getMaterial(material));
             }
-            if (tempArenaManager.getEnabledArena() != null) {
-                Arena arena = tempArenaManager.load(tempArenaManager.getEnabledArena().getName());
-                knocker.setInGame(true);
-                knocker.setInArena(true);
-                if (!arena.contains(player.getLocation())) return;
-                    if (knocker.getConfig().getString("selected-kit") == null) return;
-                        List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
-                        if (ownedKits.contains("Default")) {
-                            ownedKits.add("Default");
-                            knocker.getConfig().set("owned-kits", ownedKits);
-                        }
-                        knocker.getConfig().set("selected-kit", "Default");
-                    Kits kit = Kits.load(knocker.getConfig().getString("selected-kit"));
-                    KnockbackFFAKit kits = new KnockbackFFAKit();
-                    for (ItemStack item : player.getInventory().getContents()) {
-                        if (item == null) return;
-                            ItemMeta itemMeta = item.getItemMeta();
-                            if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
-                                player.getInventory().clear();
-                                kit.giveKit(player);
-                                break;
+            if (materialList.size() == 1) {
+                block.setType(materialList.get(0));
+                db.setBlockType("trail");
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        block.setType(db.getPrevMaterial());
+                        db.setBlockType("");
+                        cancel();
+                    }
+                }.runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
+            } else {
+                block.setType(materialList.get(0));
+                db.setBlockType("trail");
+                new BukkitRunnable() {
+                    int i = 0;
+
+                    @Override
+                    public void run() {
+                        if (i < materialList.size() - 1) {
+                            i++;
+                            String material = materialList.get(i).name();
+                            block.setType(Material.getMaterial(material));
+                        } else {
+                            block.setType(db.getPrevMaterial());
+                            db.setBlockType("");
+                            cancel();
                         }
                     }
-            } else knocker.setInArena(false);
+                }.
+                        runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
+            }
         }
+        if (tempArenaManager.getEnabledArena() != null) {
+            Arena arena = tempArenaManager.load(tempArenaManager.getEnabledArena().getName());
+            knocker.setInGame(true);
+            knocker.setInArena(true);
+            if (!arena.contains(player.getLocation())) return;
+            if (knocker.getConfig().getString("selected-kit") == null) return;
+            List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
+            if (ownedKits.contains("Default")) {
+                ownedKits.add("Default");
+                knocker.getConfig().set("owned-kits", ownedKits);
+            }
+            knocker.getConfig().set("selected-kit", "Default");
+            Kits kit = Kits.load(knocker.getConfig().getString("selected-kit"));
+            KnockbackFFAKit kits = new KnockbackFFAKit();
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item == null) return;
+                ItemMeta itemMeta = item.getItemMeta();
+                if (kits.cosmeticMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.shopMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || kits.kitsMeta().getDisplayName().contains(itemMeta.getDisplayName()) && itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                    player.getInventory().clear();
+                    kit.giveKit(player);
+                    break;
+                }
+            }
+        } else knocker.setInArena(false);
     }
+}

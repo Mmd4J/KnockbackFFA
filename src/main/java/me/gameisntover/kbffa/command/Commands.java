@@ -6,8 +6,8 @@ import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.TempArenaManager;
 import me.gameisntover.kbffa.arena.VoidChunkGenerator;
-import me.gameisntover.kbffa.listeners.WandListener;
 import me.gameisntover.kbffa.customconfig.*;
+import me.gameisntover.kbffa.listeners.WandListener;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Commands implements CommandExecutor {
-   private final TempArenaManager tempArenaManager = new TempArenaManager();
+    private final TempArenaManager tempArenaManager = new TempArenaManager();
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
         Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
@@ -69,7 +70,7 @@ public class Commands implements CommandExecutor {
             }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("join")).getName().equalsIgnoreCase(command.getName())) {
-            if (!KnockbackFFA.getInstance().getApi().BungeeMode() && !knocker.isInGame()) {
+            if (!KnockbackFFA.getInstance().getAPI().BungeeMode() && !knocker.isInGame()) {
                 String joinText = Message.ARENA_JOIN.toString().replace("&", "§");
                 joinText = PlaceholderAPI.setPlaceholders(p, joinText);
                 sender.sendMessage(joinText);
@@ -90,7 +91,7 @@ public class Commands implements CommandExecutor {
             }
         }
         if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("leave")).getName().equalsIgnoreCase(command.getName())) {
-            if (!KnockbackFFA.getInstance().getApi().BungeeMode() && knocker.isInGame()) {
+            if (!KnockbackFFA.getInstance().getAPI().BungeeMode() && knocker.isInGame()) {
                 String leaveText = Message.ARENA_LEAVE.toString().replace("&", "§");
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);

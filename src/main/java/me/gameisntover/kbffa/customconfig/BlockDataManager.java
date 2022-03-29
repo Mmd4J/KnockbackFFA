@@ -8,12 +8,13 @@ import java.util.Map;
 
 @Data
 public class BlockDataManager {
-    private Map<Block,DataBlock> blocks = new HashMap<>();
-    public DataBlock getBlockData(Block block){
+    private Map<Block, DataBlock> blocks = new HashMap<>();
+
+    public DataBlock getBlockData(Block block) {
         if (blocks.containsKey(block)) return blocks.get(block);
-        else{
+        else {
             DataBlock db = new DataBlock(block);
-            blocks.put(block,db);
+            blocks.put(block, db);
             return db;
         }
     }

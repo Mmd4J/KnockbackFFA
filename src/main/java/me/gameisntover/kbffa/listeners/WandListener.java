@@ -19,8 +19,9 @@ public class WandListener implements Listener {
     @EventHandler
     public void wandSelectionEvent(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD) && !player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.MENDING)) return;
-        switch(e.getAction()){
+        if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD) && !player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.MENDING))
+            return;
+        switch (e.getAction()) {
             case LEFT_CLICK_BLOCK:
                 player.sendMessage("§a Position 1 has been set!");
                 e.setCancelled(true);

@@ -1,6 +1,5 @@
 package me.gameisntover.kbffa.util;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,43 +15,45 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 public class ItemBuilder {
-    private ItemStack item;
-    private ItemMeta meta;
     private final Material material;
     private final int amount;
     private final String name;
     private final List<String> lore;
+    private ItemStack item;
+    private ItemMeta meta;
 
-
-    public ItemStack create(){
-        item = new ItemStack(material,amount);
+    public ItemStack create() {
+        item = new ItemStack(material, amount);
         meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
-    public ItemStack create(Enchantment enchantment, int level){
-        item = new ItemStack(material,amount);
+
+    public ItemStack create(Enchantment enchantment, int level) {
+        item = new ItemStack(material, amount);
         meta = item.getItemMeta();
         meta.setDisplayName(name);
-        meta.addEnchant(enchantment,level,true);
+        meta.addEnchant(enchantment, level, true);
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
-    public ItemStack create(Enchantment enchantment,int level,ItemFlag itemFlag){
-        item = new ItemStack(material,amount);
+
+    public ItemStack create(Enchantment enchantment, int level, ItemFlag itemFlag) {
+        item = new ItemStack(material, amount);
         meta = item.getItemMeta();
         meta.setDisplayName(name);
-        meta.addEnchant(enchantment,level,true);
+        meta.addEnchant(enchantment, level, true);
         meta.addItemFlags(itemFlag);
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
-    public ItemStack create(ItemFlag itemFlag){
-        item = new ItemStack(material,amount);
+
+    public ItemStack create(ItemFlag itemFlag) {
+        item = new ItemStack(material, amount);
         meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.addItemFlags(itemFlag);
@@ -60,11 +61,13 @@ public class ItemBuilder {
         item.setItemMeta(meta);
         return item;
     }
-    public void addEnchant(Enchantment enchant, int level){
-        meta.addEnchant(enchant,level,true);
+
+    public void addEnchant(Enchantment enchant, int level) {
+        meta.addEnchant(enchant, level, true);
         item.setItemMeta(meta);
     }
-    public void addItemFlag(ItemFlag itemFlag){
+
+    public void addItemFlag(ItemFlag itemFlag) {
         meta.addItemFlags(itemFlag);
         item.setItemMeta(meta);
     }

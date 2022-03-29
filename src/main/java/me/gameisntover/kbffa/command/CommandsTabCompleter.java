@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandsTabCompleter implements TabCompleter {
-    
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equalsIgnoreCase("resetarena")) {

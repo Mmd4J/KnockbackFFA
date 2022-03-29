@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,25 +14,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @Data
-public class Arena  {
+public class Arena {
     private String name;
     private Cuboid region;
     private File file;
     private FileConfiguration config;
     private File arenaFolder = new File(KnockbackFFA.getInstance().getDataFolder(), "arenas");
-    public Arena(String arenaName){
+
+    public Arena(String arenaName) {
         setName(arenaName);
-        setFile(new File(arenaFolder,arenaName+".yml"));
+        setFile(new File(arenaFolder, arenaName + ".yml"));
         setConfig(YamlConfiguration.loadConfiguration(file));
-        setRegion(new Cuboid(getPos1(),getPos2()));
+        setRegion(new Cuboid(getPos1(), getPos2()));
     }
+
     @SneakyThrows
     public void save() {
-            FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-            config.save(file);
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        config.save(file);
     }
 
     /**
@@ -54,7 +61,7 @@ public class Arena  {
                 int startPoint = allBlocks - remainBlocks;
                 while (startPoint < blocks.size() && amountBlocksEachSec > 0 && remainBlocks > 0) {
                     Material material = Material.getMaterial(materials.get(startPoint));
-                    if (material==null && !material.equals(Material.AIR)) return;
+                    if (material == null && !material.equals(Material.AIR)) return;
                     Block block = blocks.get(startPoint);
                     block.setType(material);
                     amountBlocksEachSec--;
@@ -87,18 +94,20 @@ public class Arena  {
     public boolean isEnabled() {
         return KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena().getName().equals(getName());
     }
+
     /**
      * teleports player to the arena
      *
      * @param @player
      */
     public void teleportPlayer(Player player) {
-        if (!(getName().equalsIgnoreCase(KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena().getName()))) return;
-            Arena arena = KnockbackFFA.getInstance().getTempArenaManager().load(getName());
-            PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
-            Bukkit.getPluginManager().callEvent(event);
-            player.teleport(getSpawnLocation());
-        }
+        if (!(getName().equalsIgnoreCase(KnockbackFFA.getInstance().getTempArenaManager().getEnabledArena().getName())))
+            return;
+        Arena arena = KnockbackFFA.getInstance().getTempArenaManager().load(getName());
+        PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
+        Bukkit.getPluginManager().callEvent(event);
+        player.teleport(getSpawnLocation());
+    }
 
 
     /**
