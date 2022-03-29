@@ -1,8 +1,10 @@
 package me.gameisntover.kbffa;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import me.gameisntover.kbffa.api.BalanceAPI;
-import me.gameisntover.kbffa.api.KnockbackFFAAPI;
 import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.GameRules;
@@ -44,9 +46,11 @@ import java.util.*;
 
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
-
-    private final TempArenaManager tempArenaManager = new TempArenaManager();
-    private final FFAManager manager = new FFAManager();
+    @Getter @Setter
+    public static KnockbackFFA INSTANCE;
+    @Setter
+    private TempArenaManager tempArenaManager;
+    private FFAManager manager;
     private final Map<Player, Knocker> knockerHandler = new HashMap<>();
     private int arenaID = 0;
     private Integer timer = 0;
@@ -54,12 +58,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     private FileConfiguration sounds;
     private BalanceAPI balanceAPI;
     private ButtonManager buttonManager;
-    private KnockbackFFAAPI API;
     private BlockDataManager blockDataManager;
 
-    public static KnockbackFFA getInstance() {
-        return getPlugin(KnockbackFFA.class);
-    }
 
     public Knocker getKnocker(Player player) {
         if (knockerHandler.containsKey(player))
@@ -76,16 +76,18 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        setINSTANCE(this);
+        setTempArenaManager(new TempArenaManager());
+        manager = new FFAManager();
         blockDataManager = new BlockDataManager();
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Knocker knocker = getKnocker(player);
-                knocker.setInGame(KnockbackFFA.getInstance().getAPI().BungeeMode());
+                knocker.setInGame(BungeeMode());
             }
         }
         balanceAPI = new BalanceAPI();
         buttonManager = new ButtonManager();
-        API = new KnockbackFFAAPI();
         getLogger().info("Loading Commands");
         loadCommands();
         getLogger().info("Loading Configuration Files");
@@ -97,10 +99,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getLogger().info("Loading Tasks");
         loadTasks();
         getLogger().info("Enjoy using plugin :)");
-
         for (Player p : Bukkit.getOnlinePlayers()) {
             Knocker knocker = getKnocker(p);
-            if (!KnockbackFFA.getInstance().getAPI().BungeeMode() || !knocker.isInGame()) return;
+            if (!BungeeMode() || !knocker.isInGame()) return;
             if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 p.getInventory().addItem(kitManager.kbbowArrow());
@@ -110,18 +111,15 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getPluginManager().registerEvents(this, this);
             new Expansion().register();
-        } else getLogger().warning("Could not find placeholder API. This plugin is needed!");
-
+        } else getLogger().warning("Could not find placeholder API. This plugin is needed for better configuration!");
     }
 
+    @SneakyThrows
     public void loadMessages() {
         File file = new File("plugins/KnockbackFFA/messages.yml");
         if (!file.exists()) {
-            try {
                 file.createNewFile();
                 saveResource("messages.yml", true);
-            } catch (IOException ignored) {
-            }
         }
         messages = YamlConfiguration.loadConfiguration(file);
     }
@@ -138,6 +136,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         sounds = YamlConfiguration.loadConfiguration(file);
     }
 
+    @SneakyThrows
     private void loadConfig() {
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
@@ -146,16 +145,13 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             File arenaDataFolder = new File(dataFolder + File.separator + "ArenaData");
             arenaDataFolder.mkdir();
         }
-        File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
+        File folder = new File(getDataFolder(), "Kits" + File.separator);
         if (!folder.exists()) {
             folder.mkdir();
             File file = new File("plugins/KnockbackFFA/Kits/Default.yml");
-            try {
                 file.createNewFile();
-                Files.copy(Objects.requireNonNull(KnockbackFFA.getInstance().getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(Objects.requireNonNull(getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 getLogger().info("Default Kit Created");
-            } catch (IOException ignored) {
-            }
         }
         CosmeticConfiguration.setup();
         ArenaConfiguration.setup();
@@ -181,7 +177,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     ArenaConfiguration.save();
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Knocker knocker = getKnocker(p);
-                        if (!KnockbackFFA.getInstance().getAPI().BungeeMode() || !knocker.isInGame()) return;
+                        if (!BungeeMode() || !knocker.isInGame()) return;
                         tempArenaManager.changeArena(tempArenaManager.load(arenaName.replace(".yml", "")));
                         cancel();
                     }
@@ -248,10 +244,17 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                         new GuiStuff(), new KnockbackFFAKit(), new ArenaSettings())
                 .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
-
+    public boolean BungeeMode() {
+        return getConfig().getBoolean("Bungee-Mode");
+    }
     private void loadCommands() {
-        getCommand(Arrays.asList("join", "leave", "reload", "setmainLobby", "createworld"
-                , "setvoid", "createkit", "delkit", "specialitems", "resetarena").toString()).setExecutor(new Commands());
+        Commands commands = new Commands();
+        for (String cmdName : Arrays.asList("join", "leave", "reload", "setmainlobby", "createworld"
+                , "setvoid", "createkit", "delkit", "specialitems", "resetarena")) {
+            getCommand(cmdName).setExecutor(commands);
+            System.out.println(cmdName);
+        }
+
         getCommand(Arrays.asList("wand", "setsafezone", "gotoworld", "createarena", "editarena").toString()).setExecutor(new ArenaCommands());
         getCommand("gotoworld").setTabCompleter(new CommandsTabCompleter());
         getCommand("editarena").setTabCompleter(new CommandsTabCompleter());
@@ -269,8 +272,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (KnockbackFFA.getInstance().getAPI().BungeeMode() || knocker.isInGame()) {
+        Knocker knocker = getKnocker(player);
+        if (BungeeMode() || knocker.isInGame()) {
             if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
                 Block block = e.getBlockPlaced();
                 DataBlock db = blockDataManager.getBlockData(block);
@@ -325,7 +328,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     public void onPressureButton(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = getKnocker(player);
-        if (KnockbackFFA.getInstance().getAPI().BungeeMode() || knocker.isInGame()) {
+        if (BungeeMode() || knocker.isInGame()) {
             if (e.getAction().equals(Action.PHYSICAL)) {
                 if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
                     Block block = e.getClickedBlock();

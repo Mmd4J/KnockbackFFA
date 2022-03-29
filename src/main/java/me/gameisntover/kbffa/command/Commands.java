@@ -25,12 +25,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Commands implements CommandExecutor {
-    private final TempArenaManager tempArenaManager = new TempArenaManager();
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("createkit")).getName().equalsIgnoreCase(command.getName())) {
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(p);
+        if (Objects.requireNonNull(KnockbackFFA.getINSTANCE().getCommand("createkit")).getName().equalsIgnoreCase(command.getName())) {
             if (p.hasPermission("kbffa.command.createkit")) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Usage: /createkit <kitname>");
@@ -59,7 +58,7 @@ public class Commands implements CommandExecutor {
                 p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
             }
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("delkit")).getName().equalsIgnoreCase(command.getName())) {
+        if (Objects.requireNonNull(KnockbackFFA.getINSTANCE().getCommand("delkit")).getName().equalsIgnoreCase(command.getName())) {
             if (p.hasPermission("kbffa.command.delkit")) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Usage: /delkit <kitname>");
@@ -69,12 +68,12 @@ public class Commands implements CommandExecutor {
                 }
             }
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("join")).getName().equalsIgnoreCase(command.getName())) {
-            if (!KnockbackFFA.getInstance().getAPI().BungeeMode() && !knocker.isInGame()) {
+        if (command.getName().equals("join")){
+            if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) {
                 String joinText = Message.ARENA_JOIN.toString().replace("&", "§");
                 joinText = PlaceholderAPI.setPlaceholders(p, joinText);
                 sender.sendMessage(joinText);
-                if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
+                if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("save-inventory-on-join")) {
                     knocker.getConfig().set("inventory", p.getPlayer().getInventory().getContents());
                     knocker.getConfig().set("armor", p.getPlayer().getInventory().getArmorContents());
                     knocker.saveConfig();
@@ -85,19 +84,19 @@ public class Commands implements CommandExecutor {
                     knocker.showScoreBoard();
                     knocker.setInGame(true);
                 }
-                tempArenaManager.teleportPlayerToArena(p);
+                KnockbackFFA.getINSTANCE().getTempArenaManager().teleportPlayerToArena(p);
             } else {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ALREADY_INGAME.toString()));
             }
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("leave")).getName().equalsIgnoreCase(command.getName())) {
-            if (!KnockbackFFA.getInstance().getAPI().BungeeMode() && knocker.isInGame()) {
+        if (command.getName().equals("leave")) {
+            if (!KnockbackFFA.getINSTANCE().BungeeMode() && knocker.isInGame()) {
                 String leaveText = Message.ARENA_LEAVE.toString().replace("&", "§");
                 leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
                 sender.sendMessage(leaveText);
-                tempArenaManager.teleportToMainLobby(p);
+                KnockbackFFA.getINSTANCE().getTempArenaManager().teleportToMainLobby(p);
                 p.getInventory().clear();
-                if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")) {
+                if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("save-inventory-on-join")) {
                     List<ItemStack> items = (List<ItemStack>) knocker.getConfig().get("inventory");
                     Objects.requireNonNull(items).stream().filter(Objects::nonNull);
                     List<ItemStack> armor = (List<ItemStack>) knocker.getConfig().get("armor");
@@ -113,7 +112,7 @@ public class Commands implements CommandExecutor {
                 p.sendMessage(Message.CAN_NOT_LEAVE.toString().replace("&", "§"));
             }
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("setmainlobby")).getName().equalsIgnoreCase(command.getName())) {
+        if (command.getName().equals("setmainlobby")) {
             sender.sendMessage(ChatColor.GREEN + "Main lobby spawn has been set");
             Location loc = p.getLocation();
             ArenaConfiguration.get().set("mainlobby.x", loc.getX());
@@ -123,9 +122,9 @@ public class Commands implements CommandExecutor {
             ArenaConfiguration.get().set("mainlobby.world", world);
             ArenaConfiguration.save();
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("resetarena")).getName().equalsIgnoreCase(command.getName())) {
+        if (command.getName().equals("resetarena")) {
             if (args.length > 0) {
-                File file = new File(tempArenaManager.getfolder() + File.separator + args[0] + ".yml");
+                File file = new File(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder() + File.separator + args[0] + ".yml");
                 if (file.exists()) {
                     Arena arena = new TempArenaManager().load(args[0]);
                     arena.resetArena();
@@ -135,7 +134,7 @@ public class Commands implements CommandExecutor {
                 }
             }
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("createworld")).getName().equalsIgnoreCase(command.getName())) {
+        if (Objects.requireNonNull(KnockbackFFA.getINSTANCE().getCommand("createworld")).getName().equalsIgnoreCase(command.getName())) {
             if (args.length > 0) {
                 WorldCreator wc = new WorldCreator(args[0]);
                 wc.generateStructures(false);
@@ -154,17 +153,17 @@ public class Commands implements CommandExecutor {
                 sender.sendMessage(ChatColor.GREEN + "World " + args[0] + " has been loaded");
             }
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("reload")).getName().equalsIgnoreCase(command.getName())) {
-            KnockbackFFA.getInstance().reloadConfig();
-            KnockbackFFA.getInstance().loadMessages();
-            KnockbackFFA.getInstance().loadSounds();
+        if (Objects.requireNonNull(KnockbackFFA.getINSTANCE().getCommand("reload")).getName().equalsIgnoreCase(command.getName())) {
+            KnockbackFFA.getINSTANCE().reloadConfig();
+            KnockbackFFA.getINSTANCE().loadMessages();
+            KnockbackFFA.getINSTANCE().loadSounds();
             ArenaConfiguration.reload();
             ScoreboardConfiguration.reload();
             ItemConfiguration.reload();
             CosmeticConfiguration.reload();
             sender.sendMessage(ChatColor.AQUA + "Configs are reloaded!");
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("setvoid")).getName().equalsIgnoreCase(command.getName())) {
+        if (Objects.requireNonNull(KnockbackFFA.getINSTANCE().getCommand("setvoid")).getName().equalsIgnoreCase(command.getName())) {
             if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                 Location pos1 = WandListener.pos1m.get(p);
                 Location pos2 = WandListener.pos2m.get(p);
@@ -190,7 +189,7 @@ public class Commands implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "You have to set two positions first!");
             }
         }
-        if (Objects.requireNonNull(KnockbackFFA.getInstance().getCommand("specialitems")).getName().equalsIgnoreCase(command.getName())) {
+        if (Objects.requireNonNull(KnockbackFFA.getINSTANCE().getCommand("specialitems")).getName().equalsIgnoreCase(command.getName())) {
             Inventory specialItems = Bukkit.createInventory(null, 9, "Special Items");
             KnockbackFFAKit kits = new KnockbackFFAKit();
             specialItems.addItem(kits.kbStick());

@@ -23,8 +23,8 @@ public class TempArenaManager {
     private Arena enabledArena = null;
     private File cfile;
     private FileConfiguration config;
-    private File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData" + File.separator);
-    private File df = KnockbackFFA.getInstance().getDataFolder();
+    private File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData" + File.separator);
+    private File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private List<Arena> arenas = new ArrayList<>();
     private Map<String, Arena> arenaHandler = new HashMap<>();
 
@@ -85,7 +85,7 @@ public class TempArenaManager {
     }
 
     public File getfolder() {
-        return new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData");
+        return new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData");
     }
 
     /**
@@ -159,8 +159,8 @@ public class TempArenaManager {
         String arenaName = arena.getName();
         setEnabledArena(arenaName);
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
-            if (!KnockbackFFA.getInstance().getAPI().BungeeMode() || !knocker.isInGame()) return;
+            Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(p);
+            if (!KnockbackFFA.getINSTANCE().BungeeMode() || !knocker.isInGame()) return;
             p.getInventory().clear();
             KnockbackFFAKit kitManager = new KnockbackFFAKit();
             kitManager.lobbyItems(p);

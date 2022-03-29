@@ -37,17 +37,17 @@ public class Expansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String params) {
         if (params.equalsIgnoreCase("player_kills")) {
             Player player1 = player.getPlayer();
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player1);
+            Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player1);
             return String.valueOf(knocker.getConfig().getInt("kills"));
         }
 
         if (params.equalsIgnoreCase("player_deaths")) {
             Player player1 = player.getPlayer();
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player1);
+            Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player1);
             return String.valueOf(knocker.getConfig().getInt("deaths"));
         }
         if (params.equalsIgnoreCase("player_balance")) {
-            return KnockbackFFA.getInstance().getBalanceAPI().getBalance(KnockbackFFA.getInstance().getKnocker(player.getPlayer())) + "";
+            return KnockbackFFA.getINSTANCE().getBalanceAPI().getBalance(KnockbackFFA.getINSTANCE().getKnocker(player.getPlayer())) + "";
         }
         if (params.equalsIgnoreCase("current_map")) {
             String arenaName = arenaManager.getEnabledArena().getName();
@@ -55,7 +55,7 @@ public class Expansion extends PlaceholderExpansion {
             else return arenaName;
         }
         if (params.equalsIgnoreCase("timer_nextmap")) {
-            int timer = KnockbackFFA.getInstance().getTimer();
+            int timer = KnockbackFFA.getINSTANCE().getTimer();
             int seconds = timer % 60;
             int minutes = timer / 60;
             return minutes + ":" + seconds;

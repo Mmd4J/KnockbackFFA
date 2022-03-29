@@ -19,8 +19,8 @@ public class GameEventsListener implements Listener {
     @EventHandler
     public void playerChatFormat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getInstance().getAPI().BungeeMode() || knocker.isInGame())
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(e.getPlayer());
+        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame())
             e.setFormat(Message.CHATFORMAT.toString().replace("%player%", player.getName()).replace("%message%", e.getMessage()));
     }
 }

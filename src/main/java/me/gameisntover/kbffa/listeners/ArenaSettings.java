@@ -29,7 +29,7 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (knocker.isInArena()) return;
         String[] arenaList = tempArenaManager.getfolder().list();
         for (String arenaName : arenaList) {
@@ -41,7 +41,7 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (!knocker.isInGame()) return;
         String[] arenaList = tempArenaManager.getfolder().list();
         assert arenaList != null;
@@ -54,14 +54,14 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (!knocker.isInGame()) return;
         if (knocker.getConfig().getString("selected-trails") != null) {
             String selectedTrails = knocker.getConfig().getString("selected-trails");
             Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
-            DataBlock db = KnockbackFFA.getInstance().getBlockDataManager().getBlockData(block);
+            DataBlock db = KnockbackFFA.getINSTANCE().getBlockDataManager().getBlockData(block);
             if (!db.getBlockType().equals("") || db.getBlockType() != null) return;
-            if (KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
+            if (KnockbackFFA.getINSTANCE().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
                 return;
             db.setPrevMaterial(block.getType());
             List<String> materialString = CosmeticConfiguration.get().getStringList(selectedTrails + ".blocks");
@@ -79,7 +79,7 @@ public class ArenaSettings implements Listener {
                         db.setBlockType("");
                         cancel();
                     }
-                }.runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
+                }.runTaskTimer(KnockbackFFA.INSTANCE, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, 1);
             } else {
                 block.setType(materialList.get(0));
                 db.setBlockType("trail");
@@ -99,7 +99,7 @@ public class ArenaSettings implements Listener {
                         }
                     }
                 }.
-                        runTaskTimer(KnockbackFFA.getInstance(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
+                        runTaskTimer(KnockbackFFA.INSTANCE, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
             }
         }
         if (tempArenaManager.getEnabledArena() != null) {

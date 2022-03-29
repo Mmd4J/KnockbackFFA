@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa.customconfig;
 
+import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -7,21 +8,18 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class ScoreboardConfiguration {
     private static File file;
 
     private static FileConfiguration messages;
-
+    @SneakyThrows
     public static void setup() {
-        file = new File("plugins/KnockbackFFA/scoreboard.yml");
+        file = new File("plugins","scoreboard.yml");
         if (!file.exists()) {
-            try {
-                file.createNewFile();
-                Files.copy(KnockbackFFA.getInstance().getResource("scoreboard.yml"), file.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-
-            }
+                  file.createNewFile();
+                Files.copy(KnockbackFFA.getINSTANCE().getResource("scoreboard.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
         messages = YamlConfiguration.loadConfiguration(file);
     }

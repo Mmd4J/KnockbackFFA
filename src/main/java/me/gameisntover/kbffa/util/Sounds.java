@@ -19,7 +19,7 @@ public enum Sounds {
 
     @Override
     public String toString() {
-        if (KnockbackFFA.getInstance().getSounds().isSet(path)) {
+        if (KnockbackFFA.getINSTANCE().getSounds().isSet(path)) {
             return path;
         }
         return soundname;

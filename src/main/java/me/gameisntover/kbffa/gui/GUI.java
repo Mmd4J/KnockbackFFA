@@ -7,10 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 @Data
 public class GUI implements Listener {
@@ -18,14 +21,14 @@ public class GUI implements Listener {
     private String name;
     private short layers;
     private Map<Integer, Button> buttons;
-
+    private Consumer<InventoryOpenEvent> openEventConsumer;
+    private Consumer<InventoryCloseEvent> closeEventConsumer;
     public GUI(String name, short guiLayers) {
         setInventory(Bukkit.createInventory(null, guiLayers * 9, name));
         setName(name);
         setLayers(guiLayers);
-        Bukkit.getPluginManager().registerEvents(this, KnockbackFFA.getInstance());
+        Bukkit.getPluginManager().registerEvents(this, KnockbackFFA.INSTANCE);
     }
-
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getInventory() == inventory) {
@@ -46,7 +49,14 @@ public class GUI implements Listener {
         getInventory().addItem(button.getItem());
         buttons.put(button.getSlot(), button);
     }
-
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent e){
+        if (e.getInventory().equals(inventory)) openEventConsumer.accept(e);
+    }
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e){
+        if (e.getInventory().equals(inventory)) closeEventConsumer.accept(e);
+    }
     public void add(Button button, int slot) {
         getInventory().setItem(slot, button.getItem());
         buttons.put(slot, button);
@@ -55,4 +65,5 @@ public class GUI implements Listener {
     public void open(Player player) {
         player.openInventory(getInventory());
     }
+
 }

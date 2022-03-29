@@ -18,8 +18,8 @@ public class Kits {
 
     public static File cfile;
     public static FileConfiguration config;
-    public static File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
-    public static File df = KnockbackFFA.getInstance().getDataFolder();
+    public static File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "Kits" + File.separator);
+    public static File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private static String kitName;
 
     public static Kits load(String kitsName) {
@@ -78,7 +78,7 @@ public class Kits {
                     }
                 }
             } else {
-                Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+                Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
                 knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
                 knocker.saveConfig();
             }

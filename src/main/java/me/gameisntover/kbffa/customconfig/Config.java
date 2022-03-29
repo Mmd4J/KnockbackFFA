@@ -10,7 +10,7 @@ public class Config extends YamlConfiguration {
     private final File file;
 
     public Config(File parent, String name) {
-        this.plugin = KnockbackFFA.getInstance();
+        this.plugin = KnockbackFFA.INSTANCE;
         this.file = new File(parent, name);
 
         if (!file.exists()) {
@@ -21,7 +21,7 @@ public class Config extends YamlConfiguration {
     }
 
     public Config(String name) {
-        this(KnockbackFFA.getInstance().getDataFolder(), name);
+        this(KnockbackFFA.getINSTANCE().getDataFolder(), name);
     }
 
     public void load() {

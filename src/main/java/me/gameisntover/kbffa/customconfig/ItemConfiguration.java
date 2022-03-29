@@ -20,7 +20,7 @@ public class ItemConfiguration {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                Files.copy(KnockbackFFA.getInstance().getResource("Items.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(KnockbackFFA.getINSTANCE().getResource("Items.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
             }
         }

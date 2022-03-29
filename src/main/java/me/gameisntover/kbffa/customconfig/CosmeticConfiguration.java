@@ -20,7 +20,7 @@ public class CosmeticConfiguration {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                Files.copy(KnockbackFFA.getInstance().getResource("cosmetics.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(KnockbackFFA.getINSTANCE().getResource("cosmetics.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
             }
         }

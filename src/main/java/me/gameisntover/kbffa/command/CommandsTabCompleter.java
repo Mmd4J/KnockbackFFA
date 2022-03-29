@@ -16,7 +16,7 @@ public class CommandsTabCompleter implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equalsIgnoreCase("resetarena")) {
             if (args.length == 1) {
-                List<String> arenaList = Arrays.asList(Arrays.stream(KnockbackFFA.getInstance().getTempArenaManager().getDf().list()).map(s -> {
+                List<String> arenaList = Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getDf().list()).map(s -> {
                     return s.replace(".yml", "");
                 }).toArray(String[]::new));
                 return arenaList;
@@ -24,7 +24,7 @@ public class CommandsTabCompleter implements TabCompleter {
         }
         if (command.getName().equalsIgnoreCase("editarena")) {
             if (args.length == 1) {
-                List<String> arenaList = Arrays.asList(Arrays.stream(KnockbackFFA.getInstance().getTempArenaManager().getDf().list()).map(s -> {
+                List<String> arenaList = Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getDf().list()).map(s -> {
                     return s.replace(".yml", "");
                 }).toArray(String[]::new));
                 return arenaList;

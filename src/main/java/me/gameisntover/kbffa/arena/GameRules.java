@@ -26,8 +26,8 @@ public class GameRules implements Listener {
     public void onPlayerItemPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (knocker.isInGame() || KnockbackFFA.getInstance().getAPI().BungeeMode()) e.setCancelled(true);
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        if (knocker.isInGame() || KnockbackFFA.getINSTANCE().BungeeMode()) e.setCancelled(true);
     }
 
     @EventHandler
@@ -36,6 +36,7 @@ public class GameRules implements Listener {
         Player player = (Player) e.getEntity();
         for (String sz : ArenaConfiguration.get().getStringList("registered-safezones")) {
             if (ArenaConfiguration.get().getString("Safezones." + sz + ".world") != null) {
+
                 Location loc1 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos1");
                 Location loc2 = ArenaConfiguration.get().getLocation("Safezones." + sz + ".pos2");
                 Cuboid s1box = new Cuboid(loc1, loc2);
@@ -56,6 +57,7 @@ public class GameRules implements Listener {
             if (ArenaConfiguration.get().getLocation("voids." + vd + ".pos1") == null) return;
             Location pos1 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos1");
             Location pos2 = ArenaConfiguration.get().getLocation("voids." + vd + ".pos2");
+
             Cuboid bb = new Cuboid(pos1, pos2);
             if (!bb.contains(player.getLocation())) return;
             Integer damage = ArenaConfiguration.get().getInt("voids." + vd + ".damage");
@@ -69,14 +71,14 @@ public class GameRules implements Listener {
                         player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, damage));
                     }
                 }
-            }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
+            }.runTaskTimer(KnockbackFFA.INSTANCE, 0, 20);
         }
     }
 
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getInstance().getAPI().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(e.getPlayer());
+        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
 
     }
 
@@ -84,8 +86,8 @@ public class GameRules implements Listener {
     public void onBowUse(ProjectileLaunchEvent e) {
         if (!(e.getEntity().getShooter() instanceof Player)) return;
         Player player = (Player) e.getEntity().getShooter();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (!KnockbackFFA.getInstance().getAPI().BungeeMode() || !knocker.isInGame()) return;
+        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        if (!KnockbackFFA.getINSTANCE().BungeeMode() || !knocker.isInGame()) return;
         if (!player.getInventory().getItemInMainHand().getType().equals(Material.BOW)) return;
         new BukkitRunnable() {
             int timer = 10;
@@ -97,22 +99,17 @@ public class GameRules implements Listener {
                     if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
                         cancel();
                         timer = 10;
-                    } else {
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message.BOW_COOLDOWN.toString().replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
-                    }
+                    } else player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message.BOW_COOLDOWN.toString().replace("%timer%", String.valueOf(timer)).replace("%player%", player.getName()).replace("&", "§")));
                 }
                 if (timer == 0) {
-                    if (player.getInventory().contains(Material.ARROW) || !player.getInventory().contains(Material.BOW)) {
-                        cancel();
-                        timer = 10;
-                    } else {
+                    if (!player.getInventory().contains(Material.ARROW) && player.getInventory().contains(Material.BOW)) {
                         KnockbackFFAKit kitManager = new KnockbackFFAKit();
                         player.getInventory().addItem(kitManager.kbbowArrow());
-                        cancel();
-                        timer = 10;
                     }
+                    cancel();
+                    timer = 10;
                 }
             }
-        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
+        }.runTaskTimer(KnockbackFFA.INSTANCE, 0, 20);
     }
 }
