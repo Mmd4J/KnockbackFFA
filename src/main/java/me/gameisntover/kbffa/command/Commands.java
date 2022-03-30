@@ -70,24 +70,27 @@ public class Commands implements CommandExecutor {
             }
         }
         if ("join".equalsIgnoreCase(command.getName())) {
-            if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) {
-                String joinText = Message.ARENA_JOIN.toString().replace("&", "§");
-                joinText = PlaceholderAPI.setPlaceholders(p, joinText);
-                sender.sendMessage(joinText);
-                if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("save-inventory-on-join")) {
-                    knocker.getConfig().set("inventory", p.getPlayer().getInventory().getContents());
-                    knocker.getConfig().set("armor", p.getPlayer().getInventory().getArmorContents());
-                    knocker.saveConfig();
-                    p.getPlayer().getInventory().clear();
-                    p.setFoodLevel(20);
-                    KnockbackFFAKit kit = new KnockbackFFAKit();
-                    kit.lobbyItems(p);
-                    knocker.showScoreBoard();
-                    knocker.setInGame(true);
+            if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame()) sender.sendMessage(Message.ALREADY_INGAME.toString());
+            else {
+                if (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena() == null)
+                    sender.sendMessage(Message.NO_READY_ARENA.toString());
+                else {
+                    String joinText = Message.ARENA_JOIN.toString();
+                    joinText = PlaceholderAPI.setPlaceholders(p, joinText);
+                    sender.sendMessage(joinText);
+                    if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("save-inventory-on-join")) {
+                        knocker.getConfig().set("inventory", p.getPlayer().getInventory().getContents());
+                        knocker.getConfig().set("armor", p.getPlayer().getInventory().getArmorContents());
+                        knocker.saveConfig();
+                        p.getInventory().clear();
+                        p.setFoodLevel(20);
+                        KnockbackFFAKit kit = new KnockbackFFAKit();
+                        kit.lobbyItems(p);
+                        knocker.showScoreBoard();
+                        knocker.setInGame(true);
+                    }
+                    KnockbackFFA.getINSTANCE().getTempArenaManager().teleportPlayerToArena(p);
                 }
-                KnockbackFFA.getINSTANCE().getTempArenaManager().teleportPlayerToArena(p);
-            } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ALREADY_INGAME.toString()));
             }
         }
         if ("leave".equalsIgnoreCase(command.getName())) {
@@ -127,7 +130,7 @@ public class Commands implements CommandExecutor {
             if (args.length > 0) {
                 File file = new File(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder() + File.separator + args[0] + ".yml");
                 if (file.exists()) {
-                    Arena arena = new TempArenaManager().load(args[0]);
+                    Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(args[0]);
                     arena.resetArena();
                     sender.sendMessage(ChatColor.GREEN + "Arena has been reset!");
                 } else {

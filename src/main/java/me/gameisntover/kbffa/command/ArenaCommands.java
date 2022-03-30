@@ -42,10 +42,20 @@ public class ArenaCommands implements CommandExecutor {
                         else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                             Location loc1 = WandListener.pos1m.get(p);
                             Location loc2 = WandListener.pos2m.get(p);
-                            Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().create(args[0], loc1, loc2, p.getLocation());
+                            Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().create(args[0], loc1, loc2);
                             List<String> blocks = new ArrayList<>();
                             Cuboid region = new Cuboid(loc1, loc2);
                             for (Block block : region.getBlocks()) blocks.add(block.getType().name());
+                            arena.getConfig().set("block-break", false);
+                            arena.getConfig().set("item-drop", true);
+                            arena.getConfig().set("world-border", false);
+                            arena.getConfig().set("block-break", false);
+                            arena.getConfig().set("item-drop", false);
+                            arena.getConfig().set("world-border", false);
+                            arena.getConfig().set("auto-reset", false);
+                            arena.getConfig().set("arena.pos1", loc1);
+                            arena.getConfig().set("arena.pos2", loc2);
+                            arena.getConfig().set("arena.spawn", p.getLocation());
                             arena.getConfig().set("blocks", blocks);
                             arena.save();
                             if (KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list().length == 1)

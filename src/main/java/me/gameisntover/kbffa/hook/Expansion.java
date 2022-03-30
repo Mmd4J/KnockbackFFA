@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Expansion extends PlaceholderExpansion {
-    private final TempArenaManager arenaManager = new TempArenaManager();
 
     @Override
     public @NotNull String getAuthor() {
@@ -26,7 +25,7 @@ public class Expansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "2.9";
+        return "2.9.6";
     }
 
     @Override
@@ -36,34 +35,31 @@ public class Expansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String placeholder) {
-
         Player player1 = player.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player1);
-
-        switch (placeholder) {
-            case "player_kills":
-                return String.valueOf(knocker.getConfig().getInt("kills"));
-            case "player_deaths":
-                return String.valueOf(knocker.getConfig().getInt("deaths"));
-            case "player_balance":
-                return KnockbackFFA.getINSTANCE().getBalanceAPI().getBalance(knocker) + "";
-            case "current_map":
-                String arenaName = arenaManager.getEnabledArena().getName();
-                if (arenaName == null) return "No Arena";
-                else return arenaName;
-            case "timer_nextmap":
-                int timer = KnockbackFFA.getINSTANCE().getTimer();
-                int seconds = timer % 60;
-                int minutes = timer / 60;
-                return minutes + ":" + seconds;
-            case "next_map":
-                if (arenaManager.getfolder().list() == null || arenaManager.getfolder().list().length < 1)
-                    return "No Arena";
-                String currentArenaName = arenaManager.getEnabledArena().getName();
-                List<String> arenaList = Arrays.asList(arenaManager.getfolder().list());
-                int index = arenaList.indexOf(currentArenaName);
-                if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
-                else return arenaList.get(index + 2).replace(".yml", "");
+        if (placeholder.equalsIgnoreCase("player_kills")) return knocker.getConfig().getInt("kills") + "";
+        if (placeholder.equalsIgnoreCase("player_deaths")) return knocker.getConfig().getInt("deaths") + "";
+        if (placeholder.equalsIgnoreCase("player_balance"))
+            return KnockbackFFA.getINSTANCE().getBalanceAPI().getBalance(knocker) + "";
+        if (placeholder.equalsIgnoreCase("current_map")) {
+            String arenaName = KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName();
+            if (arenaName == null) return "No Arena";
+            else return arenaName;
+        }
+        if (placeholder.equalsIgnoreCase("timer_nextmap")) {
+            int timer = KnockbackFFA.getINSTANCE().getTimer();
+            int seconds = timer % 60;
+            int minutes = timer / 60;
+            return minutes + ":" + seconds;
+        }
+        if (placeholder.equalsIgnoreCase("next_map")) {
+            if (KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list() == null || KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list().length <= 1)
+                return "No Arena";
+            String currentArenaName = KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName();
+            List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list());
+            int index = arenaList.indexOf(currentArenaName);
+            if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
+            else return arenaList.get(index + 2).replace(".yml", "");
         }
         return null;
     }

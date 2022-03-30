@@ -17,7 +17,7 @@ public class ScoreboardConfiguration {
 
     @SneakyThrows
     public static void setup() {
-        file = new File("plugins", "scoreboard.yml");
+        file = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "scoreboard.yml");
         if (!file.exists()) {
             file.createNewFile();
             Files.copy(KnockbackFFA.getINSTANCE().getResource("scoreboard.yml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);

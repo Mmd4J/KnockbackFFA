@@ -19,7 +19,7 @@ import java.util.*;
 
 @Data
 public class TempArenaManager {
-    public String name;
+    private String name;
     private Arena enabledArena = null;
     private File cfile;
     private FileConfiguration config;
@@ -27,36 +27,24 @@ public class TempArenaManager {
     private File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private List<Arena> arenas = new ArrayList<>();
     private Map<String, Arena> arenaHandler = new HashMap<>();
-
     @SneakyThrows
-    public Arena create(String arenaName, Location spawn, Location pos1, Location pos2) {
+    public Arena create(String arenaName, Location pos1, Location pos2) {
         cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
         if (!df.exists()) df.mkdir();
-        if (!cfile.exists()) {
-            cfile.createNewFile();
-        }
+        if (!cfile.exists()) cfile.createNewFile();
         config = YamlConfiguration.loadConfiguration(cfile);
-        Arena arena = load(arenaName);
-        arena.getConfig().set("block-break", false);
-        arena.getConfig().set("item-drop", true);
-        arena.getConfig().set("world-border", false);
-        arena.getConfig().set("block-break", false);
-        arena.getConfig().set("item-drop", false);
-        arena.getConfig().set("world-border", false);
-        arena.getConfig().set("auto-reset", false);
-        arena.getConfig().set("arena.pos1", pos1);
-        arena.getConfig().set("arena.pos2", pos2);
-        arena.getConfig().set("arena.spawn", spawn);
-        arena.save();
+        Arena arena = new Arena(arenaName,pos1,pos2);
+        arenaHandler.put(arenaName,arena);
         name = arenaName;
-        return new Arena(arenaName);
+        return arena;
     }
-
     public Arena load(String arenaName) {
-        cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
-        config = YamlConfiguration.loadConfiguration(cfile);
-        name = arenaName;
-        return new Arena(arenaName);
+        if (arenaHandler.containsKey(arenaName)) return arenaHandler.get(arenaName);
+        else{
+            Arena arena = new Arena(arenaName);
+            arenaHandler.put(arenaName,arena);
+            return arena;
+        }
     }
 
     /**

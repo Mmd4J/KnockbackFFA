@@ -2,6 +2,7 @@ package me.gameisntover.kbffa.arena;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+import lombok.With;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import org.bukkit.Bukkit;
@@ -23,20 +24,23 @@ import java.util.Objects;
 public class Arena {
     private String name;
     private Cuboid region;
-    private File file;
+    private File file,arenaFolder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData");
     private FileConfiguration config;
-    private File arenaFolder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "arenas");
 
+    public Arena(String arenaName,Location pos1,Location pos2) {
+        setName(arenaName);
+        setFile(new File(arenaFolder, arenaName + ".yml"));
+        setConfig(YamlConfiguration.loadConfiguration(file));
+        setRegion(new Cuboid(pos1,pos2));
+    }
     public Arena(String arenaName) {
         setName(arenaName);
         setFile(new File(arenaFolder, arenaName + ".yml"));
         setConfig(YamlConfiguration.loadConfiguration(file));
-        setRegion(new Cuboid(getPos1(), getPos2()));
+        setRegion(new Cuboid(getPos1(),getPos2()));
     }
-
     @SneakyThrows
     public void save() {
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         config.save(file);
     }
 
@@ -61,7 +65,7 @@ public class Arena {
                 int startPoint = allBlocks - remainBlocks;
                 while (startPoint < blocks.size() && amountBlocksEachSec > 0 && remainBlocks > 0) {
                     Material material = Material.getMaterial(materials.get(startPoint));
-                    if (material == null && !material.equals(Material.AIR)) return;
+                    if (material==null || !material.equals(Material.AIR)) return;
                     Block block = blocks.get(startPoint);
                     block.setType(material);
                     amountBlocksEachSec--;
@@ -116,8 +120,9 @@ public class Arena {
      */
     public void removeArena() {
         File cfile = getFile();
-        cfile.delete();
-        while (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().equals(getName())) {
+       boolean result = cfile.delete();
+        System.out.println(result);
+        while (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName().equals(getName())) {
             KnockbackFFA.getINSTANCE().getTempArenaManager().setEnabledArena(KnockbackFFA.getINSTANCE().getTempArenaManager().randomArena());
         }
         save();

@@ -24,17 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaSettings implements Listener {
-    private final TempArenaManager tempArenaManager = new TempArenaManager();
 
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (knocker.isInArena()) return;
-        String[] arenaList = tempArenaManager.getfolder().list();
+        String[] arenaList = KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list();
         if (arenaList == null) return;
         for (String arenaName : arenaList) {
-            Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
+            Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(arenaName.replace(".yml", ""));
             e.setCancelled(!arena.getConfig().getBoolean("block-break"));
         }
     }
@@ -44,10 +43,10 @@ public class ArenaSettings implements Listener {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (!knocker.isInGame()) return;
-        String[] arenaList = tempArenaManager.getfolder().list();
+        String[] arenaList = KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list();
         assert arenaList != null;
         for (String arenaName : arenaList) {
-            Arena arena = tempArenaManager.load(arenaName.replace(".yml", ""));
+            Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(arenaName.replace(".yml", ""));
             e.setCancelled(knocker.isInArena() && !arena.getConfig().getBoolean("item-drop"));
         }
     }
@@ -103,8 +102,8 @@ public class ArenaSettings implements Listener {
                         runTaskTimer(KnockbackFFA.getINSTANCE(), CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20, CosmeticConfiguration.get().getInt(selectedTrails + ".speed") * 20);
             }
         }
-        if (tempArenaManager.getEnabledArena() != null) {
-            Arena arena = tempArenaManager.load(tempArenaManager.getEnabledArena().getName());
+        if (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena() != null) {
+            Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName());
             knocker.setInGame(true);
             knocker.setInArena(true);
             if (!arena.contains(player.getLocation())) return;

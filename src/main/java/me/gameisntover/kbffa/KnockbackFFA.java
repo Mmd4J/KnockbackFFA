@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.api.BalanceAPI;
@@ -17,21 +18,16 @@ import me.gameisntover.kbffa.listeners.*;
 import me.gameisntover.kbffa.manager.FFAManager;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.WallSign;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -43,7 +39,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 @Getter
-public final class KnockbackFFA extends JavaPlugin implements Listener {
+public final class KnockbackFFA extends JavaPlugin implements Listener{
     @Getter
     private static KnockbackFFA INSTANCE;
     private final Map<Player, Knocker> knockerHandler = new HashMap<>();
@@ -96,20 +92,25 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getLogger().info("Loading Tasks");
         loadTasks();
         getLogger().info("Enjoy using plugin :)");
+        registerPlaceholders();
         for (Player p : Bukkit.getOnlinePlayers()) {
             Knocker knocker = getKnocker(p);
             if (!knocker.isInGame()) return;
-            if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) {
+            if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)){
                 KnockbackFFAKit kitManager = new KnockbackFFAKit();
                 p.getInventory().addItem(kitManager.kbbowArrow());
             }
         }
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            Bukkit.getPluginManager().registerEvents(this, this);
-            new Expansion().register();
-        } else getLogger().warning("Could not find placeholder API. This plugin is needed for better configuration!");
     }
+    private void registerPlaceholders(){
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            Bukkit.getPluginManager().registerEvents(this,this);
+            new Expansion().register();
+            getLogger().info("Successfully registered placeholders");
+        }
+        else getLogger().info("Could not find placeholder API. This plugin is needed for better configuration!");
 
+    }
     @SneakyThrows
     public void loadMessages() {
         File file = new File("plugins/KnockbackFFA/messages.yml");
@@ -250,7 +251,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         for (String cmdName : Arrays.asList("join", "leave", "reload", "setmainlobby", "createworld"
                 , "setvoid", "createkit", "delkit", "specialitems", "resetarena")) {
             getCommand(cmdName).setExecutor(commands);
-            System.out.println(cmdName);
         }
         ArenaCommands arenaCommands = new ArenaCommands();
         Arrays.asList("wand", "setsafezone", "gotoworld", "createarena", "editarena").forEach(s -> {
@@ -262,88 +262,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         getCommand("resetarena").setTabCompleter(new CommandsTabCompleter());
     }
 
-    @EventHandler
-    public void onSign(SignChangeEvent event) {
-        if ("[KnockbackFFA]".equalsIgnoreCase(event.getLine(0)) && "Join".equalsIgnoreCase(event.getLine(1))) {
-            event.setLine(0, ChatColor.YELLOW + "[A]KnockbackFFA");
-            event.setLine(1, ChatColor.GREEN + "Join");
-        }
-    }
 
-    @EventHandler
-    public void onBlockPlace(BlockPlaceEvent e) {
-        Player player = e.getPlayer();
-        Knocker knocker = getKnocker(player);
-        if (!knocker.isInGame()) return;
-        if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
-            Block block = e.getBlockPlaced();
-            DataBlock db = blockDataManager.getBlockData(block);
-            db.setBlockType("BuildingBlock");
-            String arenaName = tempArenaManager.getEnabledArena().getName();
-            BukkitRunnable runnable = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (tempArenaManager.getEnabledArena().getName().equals(arenaName)) {
-                        switch (block.getType()) {
-                            case WHITE_WOOL:
-                                block.setType(Material.YELLOW_WOOL);
-                                break;
-                            case YELLOW_WOOL:
-                                block.setType(Material.ORANGE_WOOL);
-                                break;
-                            case ORANGE_WOOL:
-                                block.setType(Material.RED_WOOL);
-                                break;
-                            case RED_WOOL:
-                                block.setType(Material.AIR);
-                                cancel();
-                                break;
-                        }
-                    } else {
-                        block.setType(Material.AIR);
-                        db.setBlockType("");
-                    }
-                }
-            };
-            runnable.runTaskTimer(this, 10L, 20L);
-            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(this, () -> {
-                KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                player.getInventory().addItem(kitManager.BuildingBlock());
-            }, 1);
-        }
-        if (e.getBlockPlaced().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
-            Block block = e.getBlockPlaced();
-            block.getDrops().clear();
-            BukkitScheduler blockTimer = Bukkit.getServer().getScheduler();
-            blockTimer.scheduleSyncDelayedTask(this,
-                    () -> e.getBlock().setType(Material.AIR), 100);
-        }
-    }
 
-    @EventHandler
-    public void onPressureButton(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
-        Knocker knocker = getKnocker(player);
-        if (knocker.isInGame()) {
-            if (!e.getAction().equals(Action.PHYSICAL)) return;
-            if (e.getClickedBlock().getType().equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)) {
-                Block block = e.getClickedBlock();
-                block.getDrops().clear();
-                player.setVelocity(player.getLocation().getDirection().setY(ItemConfiguration.get().getInt("SpecialItems.JumpPlate.jumpLevel")));
-                player.playSound(player.getLocation(), Sound.valueOf(Sounds.JUMP_PLATE.toString()), 1, 1);
-            }
-        }
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (e.getClickedBlock().getState() instanceof Sign || e.getClickedBlock().getState() instanceof WallSign) {
-                Sign sign = (Sign) e.getClickedBlock().getState();
-                if (!(ChatColor.YELLOW + "[A]KnockbackFFA").equalsIgnoreCase(sign.getLine(0))) return;
-                if (!(ChatColor.GREEN + "Join").equalsIgnoreCase(sign.getLine(1))) return;
-                if (knocker.isInGame())
-                    player.sendMessage(ChatColor.RED + "You are already in the game!");
-                else player.chat("/join");
-            }
-        }
-    }
+
 
 }

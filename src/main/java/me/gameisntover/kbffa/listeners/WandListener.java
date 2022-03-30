@@ -23,14 +23,16 @@ public class WandListener implements Listener {
             return;
         switch (e.getAction()) {
             case LEFT_CLICK_BLOCK:
-                player.sendMessage("§a Position 1 has been set!");
                 e.setCancelled(true);
+                if (e.getClickedBlock().getLocation().equals(pos1m.get(player))|| e.getClickedBlock().getLocation().equals(pos2m.get(player))) return;
+                player.sendMessage("§6 Position 1 has been set!");
                 pos1m.put(player, e.getClickedBlock().getLocation());
                 ArenaConfiguration.save();
                 break;
             case RIGHT_CLICK_BLOCK:
                 e.setCancelled(true);
-                player.sendMessage("§a Position 2 has been set!");
+                if (e.getClickedBlock().getLocation().equals(pos1m.get(player))|| e.getClickedBlock().getLocation().equals(pos2m.get(player))) return;
+                player.sendMessage("§6 Position 2 has been set!");
                 pos2m.put(player, e.getClickedBlock().getLocation());
                 ArenaConfiguration.save();
                 break;

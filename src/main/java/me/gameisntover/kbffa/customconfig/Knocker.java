@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.scoreboard.SideBar;
+import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -22,7 +23,7 @@ public class Knocker {
     private File file;
     private Player player;
     private String name;
-    private File folder = new File(getDf(), "players" + File.separator);
+    private File folder = new File(getDf(), "player data" + File.separator);
     private FileConfiguration config;
     private boolean inGame = KnockbackFFA.getINSTANCE().BungeeMode();
     private boolean inArena;
@@ -31,7 +32,7 @@ public class Knocker {
     @SneakyThrows
     public Knocker(Player player) {
         setPlayer(player);
-        setFile(new File(df, player.getUniqueId() + ".yml"));
+        setFile(new File(getFolder(), player.getUniqueId() + ".yml"));
         if (!df.exists()) df.mkdir();
         if (!file.exists()) file.createNewFile();
         setConfig(YamlConfiguration.loadConfiguration(file));
@@ -52,9 +53,10 @@ public class Knocker {
                 SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
                 player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                 for (String string : scoreboardLines) {
-                    string = PlaceholderAPI.setPlaceholders(player, string);
-                    sidebar.add(string.replaceAll("&", "§"));
+                    string  =   PlaceholderAPI.setPlaceholders(player,string);
+                    sidebar.add(ChatColor.translateAlternateColorCodes('&',string));
                 }
+
                 if (!scoreboard) {
                     cancel();
                     player.getScoreboard().getObjectives().clear();
