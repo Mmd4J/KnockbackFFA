@@ -24,3 +24,4 @@ cosmetics:
   already-owned: "&cYou already own this item!"
 killstreak-record: "&c You've beaten your previous record of %killstreak% kills!"
 cannot-leave: "&cYou cannot use this command! maybe you are not in the game or bungeemode is on?"
+notenoughperms: "&cYou don't have enough permissions to use this command!"

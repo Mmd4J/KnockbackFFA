@@ -1,6 +1,5 @@
 package me.gameisntover.kbffa;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.api.BalanceAPI;
@@ -8,9 +7,7 @@ import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.GameRules;
 import me.gameisntover.kbffa.arena.TempArenaManager;
-import me.gameisntover.kbffa.command.ArenaCommands;
-import me.gameisntover.kbffa.command.Commands;
-import me.gameisntover.kbffa.command.CommandsTabCompleter;
+import me.gameisntover.kbffa.command.CommandManager;
 import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.gui.ButtonManager;
 import me.gameisntover.kbffa.hook.Expansion;
@@ -52,7 +49,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     private BalanceAPI balanceAPI;
     private ButtonManager buttonManager;
     private BlockDataManager blockDataManager;
-
+    private CommandManager commandManager;
 
     public Knocker getKnocker(Player player) {
         if (knockerHandler.containsKey(player))
@@ -73,16 +70,15 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         tempArenaManager = new TempArenaManager();
         manager = new FFAManager();
         blockDataManager = new BlockDataManager();
-        if (!Bukkit.getOnlinePlayers().isEmpty()) {
+        if (!Bukkit.getOnlinePlayers().isEmpty())
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Knocker knocker = getKnocker(player);
                 knocker.setInGame(BungeeMode());
             }
-        }
         balanceAPI = new BalanceAPI();
         buttonManager = new ButtonManager();
         getLogger().info("Loading Commands");
-        loadCommands();
+        commandManager = new CommandManager();
         getLogger().info("Loading Configuration Files");
         loadMessages();
         loadSounds();
@@ -246,21 +242,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         return getConfig().getBoolean("Bungee-Mode");
     }
 
-    private void loadCommands() {
-        Commands commands = new Commands();
-        for (String cmdName : Arrays.asList("join", "leave", "reload", "setmainlobby", "createworld"
-                , "setvoid", "createkit", "delkit", "specialitems", "resetarena")) {
-            getCommand(cmdName).setExecutor(commands);
-        }
-        ArenaCommands arenaCommands = new ArenaCommands();
-        Arrays.asList("wand", "setsafezone", "gotoworld", "createarena", "editarena").forEach(s -> {
-            getCommand(s).setExecutor(arenaCommands);
-        });
-
-        getCommand("gotoworld").setTabCompleter(new CommandsTabCompleter());
-        getCommand("editarena").setTabCompleter(new CommandsTabCompleter());
-        getCommand("resetarena").setTabCompleter(new CommandsTabCompleter());
-    }
 
 
 

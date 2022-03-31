@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -26,7 +27,7 @@ import java.util.List;
 public class ArenaSettings implements Listener {
 
     @EventHandler
-    public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
+    public void onBlockBreak(BlockBreakEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (knocker.isInArena()) return;

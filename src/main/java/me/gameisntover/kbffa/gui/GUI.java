@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -20,8 +21,8 @@ public class GUI implements Listener {
     private Inventory inventory;
     private String name;
     private short layers;
-    private Map<Integer, Button> buttons;
-    private Consumer<InventoryOpenEvent> openEventConsumer;
+    private Map<Integer, Button> buttons = new HashMap<>();
+    private Consumer<InventoryOpenEvent> openEventConsumer ;
     private Consumer<InventoryCloseEvent> closeEventConsumer;
 
     public GUI(String name, short guiLayers) {

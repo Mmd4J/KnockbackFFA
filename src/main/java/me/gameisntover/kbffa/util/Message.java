@@ -12,6 +12,7 @@ public enum Message {
     CAN_NOT_LEAVE("&cYou cannot use this command! maybe you are not in the game or bungeemode is on?"
             , "cannot-leave"),
     ALREADY_INGAME("&cYou're already in-game aren't you?", "already-ingame"),
+    NO_PERMISSION("&cYou don't have enough permissions to use this command!","notenoughperms"),
     //Arena related
     ARENA_JOIN("&eYou have joined the arena!", "join-arena"),
     ARENA_LEAVE("&cYou have joined the arena!", "leave-arena"),

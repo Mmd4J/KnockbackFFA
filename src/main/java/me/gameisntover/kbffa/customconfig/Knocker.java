@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 
@@ -28,7 +29,7 @@ public class Knocker {
     private boolean inGame = KnockbackFFA.getINSTANCE().BungeeMode();
     private boolean inArena;
     private boolean scoreboard;
-
+    private Inventory inventory;
     @SneakyThrows
     public Knocker(Player player) {
         setPlayer(player);
@@ -37,6 +38,7 @@ public class Knocker {
         if (!file.exists()) file.createNewFile();
         setConfig(YamlConfiguration.loadConfiguration(file));
         setName(player.getDisplayName());
+        setInventory(player.getInventory());
     }
 
     @SneakyThrows
@@ -46,20 +48,19 @@ public class Knocker {
 
     public void showScoreBoard() {
         scoreboard = true;
+        SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
         new BukkitRunnable() {
             @Override
             public void run() {
                 List<String> scoreboardLines = ScoreboardConfiguration.get().getStringList("lines");
-                SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
                 player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                 for (String string : scoreboardLines) {
-                    string  =   PlaceholderAPI.setPlaceholders(player,string);
+                    string = PlaceholderAPI.setPlaceholders(player,string);
                     sidebar.add(ChatColor.translateAlternateColorCodes('&',string));
                 }
-
                 if (!scoreboard) {
-                    cancel();
                     player.getScoreboard().getObjectives().clear();
+                    cancel();
                 }
                 sidebar.apply(player);
             }
