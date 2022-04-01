@@ -1,23 +1,36 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
+import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class SetSafeZoneCommand extends SubCommand {
+    public SetSafeZoneCommand(String name) {
+        super(name);
+    }
+
     @Override
-    public String getName() {
+    public @NotNull String getSubName() {
         return "setsafezone";
     }
 
     @Override
-    public String getDescription() {
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
+    }
+
+    @Override
+    public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5Setups a new safezone with the selected positions (from wand)");
     }
 
@@ -26,10 +39,6 @@ public class SetSafeZoneCommand extends SubCommand {
         return "/setsafezone";
     }
 
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.setsafezone";
-    }
 
     @Override
     public void perform(Knocker knocker, String[] args) {
@@ -59,7 +68,7 @@ public class SetSafeZoneCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 }

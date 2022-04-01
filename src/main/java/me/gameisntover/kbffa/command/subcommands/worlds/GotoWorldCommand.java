@@ -6,29 +6,35 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GotoWorldCommand extends SubCommand {
+    public GotoWorldCommand(String name) {
+        super(name);
+    }
+
     @Override
-    public String getName() {
+    public @NotNull String getSubName() {
         return "gotoworld";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5Teleports player to the specified world");
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
     public String getSyntax() {
         return "/gotoworld <worldname>";
-    }
-
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.gotoworld";
     }
 
     @Override
@@ -45,7 +51,7 @@ public class GotoWorldCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return Bukkit.getWorlds().stream().map(world -> world.getName()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 }

@@ -34,8 +34,8 @@ public class GuiStuff implements Listener {
     @EventHandler
     public void onPlayerItemInteract(PlayerInteractEvent e) {
         KnockbackFFAKit kits = new KnockbackFFAKit();
-        if (e.getItem() == null) return;
         ItemStack item = e.getItem();
+        if (item == null || item.getItemMeta()==null) return;
         ItemMeta itemMeta = item.getItemMeta();
         Player player = e.getPlayer();
         if (e.getAction() != Action.RIGHT_CLICK_AIR || e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
@@ -138,7 +138,7 @@ public class GuiStuff implements Listener {
             String kName = ChatColor.translateAlternateColorCodes('&', ItemConfiguration.get().getString("ShopMenu.kit.name"));
             Button kitItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.getMaterial(kIcon), 1, kName, Arrays.asList("")).create(), event -> {
                 GUI kitShop = new GUI("Kit Shop", (short) 5);
-                List<String> cosmetics = Arrays.asList(Kits.getfolder().list()).stream().map(s -> s.replace(".yml", "")).collect(Collectors.toList());
+                List<String> cosmetics = Arrays.asList(Kits.getFolder().list()).stream().map(s -> s.replace(".yml", "")).collect(Collectors.toList());
                 List<String> cList = knocker.getConfig().getStringList("owned-kits");
                 for (String cosmetic : cosmetics) {
                     if (cosmetic == null) return;

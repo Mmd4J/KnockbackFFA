@@ -8,6 +8,7 @@ import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,7 +27,6 @@ public class Arena {
     private Cuboid region;
     private File file,arenaFolder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData");
     private FileConfiguration config;
-
     public Arena(String arenaName,Location pos1,Location pos2) {
         setName(arenaName);
         setFile(new File(arenaFolder, arenaName + ".yml"));

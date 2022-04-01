@@ -53,10 +53,10 @@ public class Expansion extends PlaceholderExpansion {
             return minutes + ":" + seconds;
         }
         if (placeholder.equalsIgnoreCase("next_map")) {
-            if (KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list() == null || KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list().length <= 1)
+            if (KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list() == null || KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list().length <= 1)
                 return "No Arena";
             String currentArenaName = KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName();
-            List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list());
+            List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list());
             int index = arenaList.indexOf(currentArenaName);
             if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
             else return arenaList.get(index + 2).replace(".yml", "");

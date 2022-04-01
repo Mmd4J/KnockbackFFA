@@ -45,9 +45,7 @@ public enum Message {
 
     @Override
     public String toString() {
-        if (KnockbackFFA.getINSTANCE().getMessages().isSet(path)) {
-            return KnockbackFFA.getINSTANCE().getMessages().getString(ChatColor.translateAlternateColorCodes('&', path));
-        }
+        if (KnockbackFFA.getINSTANCE().getMessages().isSet(path)) return ChatColor.translateAlternateColorCodes('&',KnockbackFFA.getINSTANCE().getMessages().getString( path));
         return ChatColor.translateAlternateColorCodes('&', defaultMessage);
     }
 

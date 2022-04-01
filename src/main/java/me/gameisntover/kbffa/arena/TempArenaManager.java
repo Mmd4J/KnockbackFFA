@@ -20,7 +20,7 @@ import java.util.*;
 @Data
 public class TempArenaManager {
     private String name;
-    private Arena enabledArena = null;
+    private Arena enabledArena;
     private File cfile;
     private FileConfiguration config;
     private File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData" + File.separator);
@@ -47,12 +47,6 @@ public class TempArenaManager {
         }
     }
 
-    /**
-     * @return the enabledArena
-     */
-    public Arena getEnabledArena() {
-        return enabledArena;
-    }
 
     /**
      * sets the arena enabled
@@ -72,16 +66,11 @@ public class TempArenaManager {
         enabledArena = arena;
     }
 
-    public File getfolder() {
-        return new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData");
-    }
-
     /**
      * returns player to the main lobby
      * <p>
      * needs @param @player
      */
-
     public void teleportToMainLobby(Player player) {
         if (ArenaConfiguration.get().getString("mainlobby.world") == null) return;
         double x = ArenaConfiguration.get().getDouble("mainlobby.x");
@@ -96,7 +85,7 @@ public class TempArenaManager {
      * teleports player to the enabled arena
      */
     public void teleportPlayerToArena(Player player) {
-        if (!(getfolder().list().length > 0)) {
+        if (getFolder().list().length > 0) {
             PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, getEnabledArena());
             Bukkit.getPluginManager().callEvent(event);
             Location spawnLoc = getEnabledArena().getSpawnLocation();
@@ -123,14 +112,14 @@ public class TempArenaManager {
      * @return String
      */
     public String randomArena() {
-        String[] arenas = getfolder().list();
+        String[] arenas = getFolder().list();
         int random = new Random().nextInt(arenas.length);
         return arenas[random];
     }
 
     public List<Arena> getArenaList() {
         List<Arena> arenas = new ArrayList<>();
-        for (String arena : getfolder().list()) {
+        for (String arena : getFolder().list()) {
             arenas.add(load(arena.replace(".yml", "")));
         }
         return arenas;

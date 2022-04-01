@@ -4,28 +4,35 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
 import me.gameisntover.kbffa.customconfig.*;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class ReloadCommand extends SubCommand {
+    public ReloadCommand(String name) {
+        super(name);
+    }
+
     @Override
-    public String getName() {
+    public @NotNull String getSubName() {
         return "reload";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return ChatColor.AQUA + "reloads the kbffa configuration files";
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
     public String getSyntax() {
         return "/reload";
-    }
-
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.reload";
     }
 
     @Override
@@ -41,7 +48,8 @@ public class ReloadCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
+
 }

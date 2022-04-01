@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa.scoreboard;
 
+import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -7,6 +8,7 @@ import org.bukkit.scoreboard.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class SideBar {
     private static final ScoreboardManager manager = Bukkit.getScoreboardManager();
 
@@ -31,11 +33,4 @@ public class SideBar {
         Score score = obj.getScore(s);
         scores.add(0, score);
     }
-
-    public void apply(Player player) {
-        for (int i = 0; i < scores.size(); i++)
-            scores.get(i).setScore(i);
-        player.setScoreboard(board);
-    }
-
 }

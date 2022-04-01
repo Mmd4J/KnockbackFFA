@@ -6,29 +6,38 @@ import me.gameisntover.kbffa.command.SubCommand;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class LeaveCommand extends SubCommand {
-    @Override
-    public String getName() {
-        return "leave";
+    private String name;
+    public LeaveCommand(String name) {
+        super(name);
+        this.name = name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubName() {
+        return name;
+    }
+
+    @Override
+    public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5leaves the game if the player is already in game");
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.TRUE;
     }
 
     @Override
     public String getSyntax() {
         return "/leave";
-    }
-
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.leave";
     }
 
     @Override
@@ -48,7 +57,7 @@ public class LeaveCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 }

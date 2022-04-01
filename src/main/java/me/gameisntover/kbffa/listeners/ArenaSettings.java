@@ -31,7 +31,7 @@ public class ArenaSettings implements Listener {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (knocker.isInArena()) return;
-        String[] arenaList = KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list();
+        String[] arenaList = KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list();
         if (arenaList == null) return;
         for (String arenaName : arenaList) {
             Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(arenaName.replace(".yml", ""));
@@ -44,7 +44,7 @@ public class ArenaSettings implements Listener {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (!knocker.isInGame()) return;
-        String[] arenaList = KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list();
+        String[] arenaList = KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list();
         assert arenaList != null;
         for (String arenaName : arenaList) {
             Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(arenaName.replace(".yml", ""));

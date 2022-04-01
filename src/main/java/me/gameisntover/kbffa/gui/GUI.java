@@ -22,7 +22,7 @@ public class GUI implements Listener {
     private String name;
     private short layers;
     private Map<Integer, Button> buttons = new HashMap<>();
-    private Consumer<InventoryOpenEvent> openEventConsumer ;
+    private Consumer<InventoryOpenEvent> openEventConsumer;
     private Consumer<InventoryCloseEvent> closeEventConsumer;
 
     public GUI(String name, short guiLayers) {
@@ -55,12 +55,12 @@ public class GUI implements Listener {
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
-        if (e.getInventory().equals(inventory)) openEventConsumer.accept(e);
+      if (openEventConsumer!=null)  if (e.getInventory().equals(inventory)) openEventConsumer.accept(e);
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if (e.getInventory().equals(inventory)) closeEventConsumer.accept(e);
+        if (closeEventConsumer!=null)  if (e.getInventory().equals(inventory)) closeEventConsumer.accept(e);
     }
 
     public void add(Button button, int slot) {

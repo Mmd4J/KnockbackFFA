@@ -6,9 +6,6 @@ import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.util.Message;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -24,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DeathListener implements Listener {
-    Map<Entity, Integer> killStreak = new HashMap<>();
     Map<Entity, Entity> killer = new HashMap<>();
     Arena Arena;
 
@@ -33,15 +29,10 @@ public class DeathListener implements Listener {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
-        if (player.getType().equals(EntityType.PLAYER)) {
-            if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame()) {
-                if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                    e.setDamage(KnockbackFFA.getINSTANCE().getConfig().getInt("default-void-damage"));
-                } else {
-                    e.setDamage(0);
-                }
-            }
-        }
+        if (!player.getType().equals(EntityType.PLAYER)) return;
+            if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) return;
+                if (e.getCause() == EntityDamageEvent.DamageCause.VOID) e.setDamage(KnockbackFFA.getINSTANCE().getConfig().getInt("default-void-damage"));
+                 else e.setDamage(0);
     }
 
     @EventHandler
@@ -88,7 +79,7 @@ public class DeathListener implements Listener {
             if (!(current instanceof Item)) return;
             current.remove();
         }
-        killStreak.put(player, 0);
+        knocker.setKillStreak(0);
         knocker.getConfig().set("deaths", knocker.getConfig().getInt("deaths") + 1);
         knocker.saveConfig();
         if (damager != null && damager != player) {
@@ -96,15 +87,14 @@ public class DeathListener implements Listener {
 
             Knocker damageKnocker = KnockbackFFA.getINSTANCE().getKnocker((Player) damager);
             float prize = KnockbackFFA.getINSTANCE().getConfig().getInt("killprize");
-            damager.sendMessage(Message.PRIZE.toString().replace("%prize%", prize + "").replace("&", "§"));
+            damageKnocker.sendMessage(Message.PRIZE.toString().replace("%prize%", prize + "").replace("&", "§"));
             KnockbackFFA.getINSTANCE().getBalanceAPI().addBalance(KnockbackFFA.getINSTANCE().getKnocker((Player) damager), prize);
             damageKnocker.getConfig().set("kills", damageKnocker.getConfig().getInt("kills") + 1);
-            killStreak.merge(damager, 1, Integer::sum);
-            if (killStreak.get(damager) > damageKnocker.getConfig().getInt("best-ks")) {
-                Player damagerP = (Player) damager;
+            damageKnocker.setKillStreak(damageKnocker.getKillStreak()+1);
+            if (damageKnocker.getKillStreak() > damageKnocker.getConfig().getInt("best-ks")) {
                 String msg = Message.KILLSTREAK_RECORD.toString().replace("%killstreak%", damageKnocker.getConfig().getInt("best-ks") + "");
-                damagerP.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', msg)));
-                damageKnocker.getConfig().set("best-ks", killStreak.get(damager));
+                damageKnocker.sendActionBar(msg);
+                damageKnocker.getConfig().set("best-ks", damageKnocker.getKillStreak());
             }
             damageKnocker.saveConfig();
             String deathText = Message.DEATH_KNOCKED_GOBAL.toString().replace("%killer%", damager.getName());

@@ -8,28 +8,34 @@ import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class JoinCommand extends SubCommand {
+    public JoinCommand(String name) {
+        super(name);
+    }
 
     @Override
-    public String getName() {
+    public @NotNull String getSubName() {
         return "join";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&6Players can use this command to join the game");
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.TRUE;
     }
 
     @Override
     public String getSyntax() {
         return "/join";
-    }
-    @Override
-    public String getPermission(){
-        return "knockbackffa.command.join";
     }
 
     @Override
@@ -56,7 +62,7 @@ public class JoinCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 }

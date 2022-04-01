@@ -1,36 +1,45 @@
 package me.gameisntover.kbffa.command.subcommands.kit;
 
+import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
 import me.gameisntover.kbffa.customconfig.Kits;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class CreateKitCommand extends SubCommand {
+    public CreateKitCommand(String name) {
+        super(name);
+    }
+
     @Override
-    public String getName() {
+    public @NotNull String getSubName() {
         return "createkit";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return ChatColor.AQUA + "Creates kit with the specified name";
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
     public String getSyntax() {
         return "/createkit <kitname>";
-    }
-
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.createkit";
     }
 
     @Override
@@ -54,7 +63,7 @@ public class CreateKitCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 }

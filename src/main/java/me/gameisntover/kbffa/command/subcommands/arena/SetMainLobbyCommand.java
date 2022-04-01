@@ -6,29 +6,36 @@ import me.gameisntover.kbffa.customconfig.Knocker;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
 
 public class SetMainLobbyCommand extends SubCommand {
+    private String name;
+    public SetMainLobbyCommand(String name) {
+        super(name);
+        this.name = name;
+    }
     @Override
-    public String getName() {
-        return "setmainlobby";
+    public @NotNull String getSubName() {
+        return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return "&5Sets mainlobby location to the player's location";
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
     public String getSyntax() {
         return "/setmainlobby";
-    }
-
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.setmainlobby";
     }
 
     @Override
@@ -45,7 +52,7 @@ public class SetMainLobbyCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 }

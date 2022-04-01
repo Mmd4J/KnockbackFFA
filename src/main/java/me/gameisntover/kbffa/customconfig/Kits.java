@@ -45,7 +45,7 @@ public class Kits {
         return new Kits();
     }
 
-    public static File getfolder() {
+    public static File getFolder() {
         return folder;
     }
 

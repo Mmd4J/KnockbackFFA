@@ -2,9 +2,15 @@ package me.gameisntover.kbffa.customconfig;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+import lombok.With;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
+import me.gameisntover.kbffa.gameevents.GameEvent;
+import me.gameisntover.kbffa.gui.GUI;
 import me.gameisntover.kbffa.scoreboard.SideBar;
+import me.gameisntover.kbffa.util.Sounds;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -30,6 +36,7 @@ public class Knocker {
     private boolean inArena;
     private boolean scoreboard;
     private Inventory inventory;
+    private int killStreak = 0;
     @SneakyThrows
     public Knocker(Player player) {
         setPlayer(player);
@@ -48,25 +55,28 @@ public class Knocker {
 
     public void showScoreBoard() {
         scoreboard = true;
-        SideBar sidebar = new SideBar(ScoreboardConfiguration.get().getString("Title").replace("&", "§"), "mainScoreboard");
         new BukkitRunnable() {
             @Override
             public void run() {
+                SideBar sidebar = new SideBar(ChatColor.translateAlternateColorCodes('&',ScoreboardConfiguration.get().getString("Title")), "mainScoreboard");
+                if (!scoreboard) {
+                    cancel();
+                sidebar.getBoard().clearSlot(DisplaySlot.SIDEBAR);
+                }
                 List<String> scoreboardLines = ScoreboardConfiguration.get().getStringList("lines");
-                player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                 for (String string : scoreboardLines) {
                     string = PlaceholderAPI.setPlaceholders(player,string);
                     sidebar.add(ChatColor.translateAlternateColorCodes('&',string));
                 }
-                if (!scoreboard) {
-                    player.getScoreboard().getObjectives().clear();
-                    cancel();
-                }
-                sidebar.apply(player);
+                    applySideBar(sidebar);
             }
         }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
     }
-
+    public void applySideBar(SideBar sideBar){
+        for (int i = 0; i < sideBar.getScores().size(); i++)
+            sideBar.getScores().get(i).setScore(i);
+        player.setScoreboard(sideBar.getBoard());
+    }
     public void hideScoreBoard() {
         scoreboard = false;
     }
@@ -103,5 +113,16 @@ public class Knocker {
             }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, CosmeticConfiguration.get().getInt(cosmeticName + ".delay"));
         }
     }
-
+    public void playSound(Sounds sound){
+        getPlayer().playSound(getPlayer().getLocation(),Sound.valueOf(sound.toString()),1,1);
+    }
+    public void openGUI(GUI gui){
+        getPlayer().openInventory(gui.getInventory());
+    }
+    public void sendMessage(String message){
+        getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',message));
+    }
+    public void sendActionBar(String message){
+        getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+    }
 }

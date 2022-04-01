@@ -19,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -31,6 +32,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
@@ -50,7 +52,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     private ButtonManager buttonManager;
     private BlockDataManager blockDataManager;
     private CommandManager commandManager;
-
+    private CommandMap commandMap;
     public Knocker getKnocker(Player player) {
         if (knockerHandler.containsKey(player))
             return knockerHandler.get(player);
@@ -63,7 +65,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         Player player = Bukkit.getPlayer(name);
         return getKnocker(player);
     }
-
+    @SneakyThrows
     @Override
     public void onEnable() {
         INSTANCE = this;
@@ -77,12 +79,15 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
             }
         balanceAPI = new BalanceAPI();
         buttonManager = new ButtonManager();
-        getLogger().info("Loading Commands");
-        commandManager = new CommandManager();
+        Field f = getServer().getClass().getDeclaredField("commandMap");
+        f.setAccessible(true);
+        commandMap = (CommandMap) f.get(getServer());
         getLogger().info("Loading Configuration Files");
         loadMessages();
         loadSounds();
         loadConfig();
+        getLogger().info("Loading Commands");
+        commandManager = new CommandManager();
         getLogger().info("Loading Java Classes");
         loadListeners();
         getLogger().info("Loading Tasks");
@@ -155,7 +160,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     }
 
     private void loadTasks() {
-        if (tempArenaManager.getfolder().listFiles() == null || tempArenaManager.getfolder().listFiles().length == 0)
+        if (tempArenaManager.getFolder().listFiles() == null || tempArenaManager.getFolder().listFiles().length == 0)
             return;
         List<Arena> arenaList = tempArenaManager.getArenaList();
         tempArenaManager.setEnabledArena(arenaList.get(0));

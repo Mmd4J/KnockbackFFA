@@ -14,35 +14,49 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class EditArenaCommand extends SubCommand {
+    public EditArenaCommand(String name) {
+        super(name);
+    }
+
     @Override
-    public String getName() {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender),args);
+        return false;
+    }
+
+    @Override
+    public @NotNull String getSubName() {
         return "editarena";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return ChatColor.AQUA+ "shows the sender a gui to edit arena details.";
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
     public String getSyntax() {
         return "/editarena <arenaname>";
-    }
-
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.editarena";
     }
 
     @Override
@@ -52,7 +66,7 @@ public class EditArenaCommand extends SubCommand {
             p.sendMessage(ChatColor.RED + "Command Arguements missing or is invalid /editarena arenaname");
             return;
         }
-        List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list());
+        List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list());
         if (!arenaList.contains(args[0] + ".yml")) {
             p.sendMessage(ChatColor.RED + "That arena name does not exist!");
             return;
@@ -169,11 +183,11 @@ public class EditArenaCommand extends SubCommand {
         arenaGUI.add(setpos, 13);
         arenaGUI.add(worldBorder, 14);
         arenaGUI.add(autoReset, 15);
-        arenaGUI.open(p);
+        knocker.openGUI(arenaGUI);
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
+    public List<String> performTab(Knocker knocker, String[] args) {
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
     }
 }

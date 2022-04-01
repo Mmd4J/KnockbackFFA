@@ -5,19 +5,33 @@ import me.gameisntover.kbffa.command.SubCommand;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateWorldCommand extends SubCommand {
-    @Override
-    public String getName() {
-        return "createworld";
+    private String name;
+
+    public CreateWorldCommand(String name) {
+        super(name);
+        this.name = name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubName() {
+        return name;
+    }
+
+    @Override
+    public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"Generates / load a custom world which is useful for creating arenas!");
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
@@ -25,10 +39,6 @@ public class CreateWorldCommand extends SubCommand {
         return "/createworld <worldname>";
     }
 
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.createworld";
-    }
 
     @Override
     public void perform(Knocker knocker, String[] args) {
@@ -49,7 +59,7 @@ public class CreateWorldCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return Bukkit.getWorlds().stream().map(world -> world.getName()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 }

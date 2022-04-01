@@ -5,21 +5,42 @@ import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.command.SubCommand;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 public class ResetArenaCommand extends SubCommand {
-    @Override
-    public String getName() {
-        return "resetarena";
+    private String name;
+    public ResetArenaCommand(String name) {
+        super(name);
+        this.name = name;
     }
 
     @Override
-    public String getDescription() {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender),args);
+        return false;
+    }
+
+    @Override
+    public @NotNull String getSubName() {
+        return name;
+    }
+
+    @Override
+    public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5Resets arena blocks to the saved blocks from arena data files");
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
@@ -28,15 +49,10 @@ public class ResetArenaCommand extends SubCommand {
     }
 
     @Override
-    public String getPermission() {
-        return "knockbackffa.command.resetarena";
-    }
-
-    @Override
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length > 0) {
-            File file = new File(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder() + File.separator + args[0] + ".yml");
+            File file = new File(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder() + File.separator + args[0] + ".yml");
             if (file.exists()) {
                 Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(args[0]);
                 arena.resetArena();
@@ -45,7 +61,7 @@ public class ResetArenaCommand extends SubCommand {
         } else p.sendMessage(ChatColor.RED + "Wrong usage "+ getSyntax());
     }
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
+    public List<String> performTab(Knocker knocker, String[] args) {
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
     }
 }

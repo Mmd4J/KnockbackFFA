@@ -1,5 +1,6 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
+import lombok.Getter;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.event.ArenaCreateEvent;
 import me.gameisntover.kbffa.arena.Arena;
@@ -11,30 +12,44 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateArenaCommand extends SubCommand {
+    public CreateArenaCommand(String name) {
+        super(name);
+    }
+
     @Override
-    public String getName() {
+    public @NotNull String getSubName() {
         return "createarena";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return ChatColor.AQUA + "Creates a new arena for the game";
     }
 
     @Override
-    public String getSyntax() {
-        return "/createarena <arenaname>";
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
-    public String getPermission() {
-        return "knockbackffa.command.createarena";
+    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender),args);
+        return false;
+    }
+
+
+    @Override
+    public String getSyntax() {
+        return "/createarena <arenaname>";
     }
 
     @Override
@@ -67,7 +82,7 @@ public class CreateArenaCommand extends SubCommand {
                 arena.getConfig().set("arena.spawn", p.getLocation());
                 arena.getConfig().set("blocks", blocks);
                 arena.save();
-                if (KnockbackFFA.getINSTANCE().getTempArenaManager().getfolder().list().length == 1)
+                if (KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list().length == 1)
                     KnockbackFFA.getINSTANCE().getTempArenaManager().setEnabledArena(args[0]);
                 ArenaCreateEvent event = new ArenaCreateEvent(p, arena);
                 Bukkit.getPluginManager().callEvent(event);
@@ -76,7 +91,7 @@ public class CreateArenaCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 }

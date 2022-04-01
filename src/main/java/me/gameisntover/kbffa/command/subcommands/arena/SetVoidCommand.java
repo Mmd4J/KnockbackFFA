@@ -1,24 +1,38 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
+import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
 import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
 import me.gameisntover.kbffa.customconfig.Knocker;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class SetVoidCommand extends SubCommand {
+    public SetVoidCommand(String name) {
+        super(name);
+    }
+
     @Override
-    public String getName() {
+    public @NotNull String getSubName() {
         return "setvoid";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getSubDescription() {
         return ChatColor.AQUA+ "sets a damage zone which must be selected with wand before using the command!";
+    }
+
+    @Override
+    public PermissionDefault getPermissionDefault() {
+        return PermissionDefault.OP;
     }
 
     @Override
@@ -26,10 +40,6 @@ public class SetVoidCommand extends SubCommand {
         return "/setvoid";
     }
 
-    @Override
-    public String getPermission() {
-        return "knockbackffa.command.setvoid";
-    }
 
     @Override
     public void perform(Knocker knocker, String[] args) {
@@ -59,7 +69,7 @@ public class SetVoidCommand extends SubCommand {
     }
 
     @Override
-    public List<String> tabComplete(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 }
