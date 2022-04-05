@@ -2,13 +2,12 @@ package me.gameisntover.kbffa.arena;
 
 import lombok.Data;
 import lombok.SneakyThrows;
-import lombok.With;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
+import me.gameisntover.kbffa.arena.regions.Cuboid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -96,7 +95,7 @@ public class Arena {
      * @return true if the arena is the enabled arena
      */
     public boolean isEnabled() {
-        return KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName().equals(getName());
+        return KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equals(getName());
     }
 
     /**
@@ -105,9 +104,9 @@ public class Arena {
      * @param @player
      */
     public void teleportPlayer(Player player) {
-        if (!(getName().equalsIgnoreCase(KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName())))
+        if (!(getName().equalsIgnoreCase(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName())))
             return;
-        Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(getName());
+        Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(getName());
         PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
         Bukkit.getPluginManager().callEvent(event);
         player.teleport(getSpawnLocation());
@@ -122,8 +121,8 @@ public class Arena {
         File cfile = getFile();
        boolean result = cfile.delete();
         System.out.println(result);
-        while (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName().equals(getName())) {
-            KnockbackFFA.getINSTANCE().getTempArenaManager().setEnabledArena(KnockbackFFA.getINSTANCE().getTempArenaManager().randomArena());
+        while (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equals(getName())) {
+            KnockbackFFA.getINSTANCE().getArenaManager().setEnabledArena(KnockbackFFA.getINSTANCE().getArenaManager().randomArena());
         }
         save();
     }

@@ -2,9 +2,8 @@ package me.gameisntover.kbffa.command.subcommands.game;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -43,7 +42,7 @@ public class JoinCommand extends SubCommand {
         Player p = knocker.getPlayer();
         if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame()) p.sendMessage(Message.ALREADY_INGAME.toString());
         else {
-            if (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena() == null)
+            if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null)
                 knocker.getPlayer().sendMessage(Message.NO_READY_ARENA.toString());
             else {
                 String joinText = Message.ARENA_JOIN.toString();
@@ -52,12 +51,11 @@ public class JoinCommand extends SubCommand {
                 knocker.setInventory(p.getInventory());
                 p.getInventory().clear();
                 p.setFoodLevel(20);
-                KnockbackFFAKit kit = new KnockbackFFAKit();
-                kit.lobbyItems(p);
+                knocker.giveLobbyItems();
                 knocker.showScoreBoard();
                 knocker.setInGame(true);
             }
-            KnockbackFFA.getINSTANCE().getTempArenaManager().teleportPlayerToArena(p);
+            KnockbackFFA.getINSTANCE().getArenaManager().teleportPlayerToArena(p);
         }
     }
 

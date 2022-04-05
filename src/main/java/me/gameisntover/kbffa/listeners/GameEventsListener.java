@@ -1,10 +1,8 @@
 package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.customconfig.DataBlock;
-import me.gameisntover.kbffa.customconfig.ItemConfiguration;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.arena.regions.DataBlock;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.Bukkit;
@@ -49,7 +47,7 @@ public class GameEventsListener implements Listener {
             if (e.getClickedBlock().getType()== Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
                 Block block = e.getClickedBlock();
                 block.getDrops().clear();
-                player.setVelocity(player.getLocation().getDirection().setY(ItemConfiguration.get().getInt("SpecialItems.JumpPlate.jumpLevel")));
+                player.setVelocity(player.getLocation().getDirection().setY(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
                 player.playSound(player.getLocation(), Sound.valueOf(Sounds.JUMP_PLATE.toString()), 1, 1);
             }
         }
@@ -74,11 +72,11 @@ public class GameEventsListener implements Listener {
             Block block = e.getBlockPlaced();
             DataBlock db = KnockbackFFA.getINSTANCE().getBlockDataManager().getBlockData(block);
             db.setBlockType("BuildingBlock");
-            String arenaName = KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName();
+            String arenaName = KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName();
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName().equalsIgnoreCase(arenaName)) {
+                    if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equalsIgnoreCase(arenaName)) {
                         switch (block.getType()) {
                             case WHITE_WOOL:
                                 block.setType(Material.YELLOW_WOOL);
@@ -102,10 +100,7 @@ public class GameEventsListener implements Listener {
             };
             runnable.runTaskTimer(KnockbackFFA.getINSTANCE(), 10L, 20L);
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getINSTANCE(), () -> {
-                KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                player.getInventory().addItem(kitManager.BuildingBlock());
-            }, 1);
+            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getINSTANCE(), () -> player.getInventory().addItem(me.gameisntover.kbffa.util.Items.BUILDING_BLOCK.getItem()), 1);
         }
         if (e.getBlockPlaced().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
             Block block = e.getBlockPlaced();

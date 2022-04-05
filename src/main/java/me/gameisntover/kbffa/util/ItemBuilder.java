@@ -40,6 +40,17 @@ public class ItemBuilder {
         item.setItemMeta(meta);
         return item;
     }
+    public ItemStack create(ItemFlag flag , ItemFlag flag2,Enchantment enchant , int level) {
+        item = new ItemStack(material, amount);
+        meta = item.getItemMeta();
+        meta.setDisplayName(name);
+        meta.addItemFlags(flag,flag2);
+        if (flag2.equals(ItemFlag.HIDE_UNBREAKABLE)) meta.setUnbreakable(true);
+        meta.addEnchant(enchant,level,true);
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
+    }
 
     public ItemStack create(Enchantment enchantment, int level, ItemFlag itemFlag) {
         item = new ItemStack(material, amount);

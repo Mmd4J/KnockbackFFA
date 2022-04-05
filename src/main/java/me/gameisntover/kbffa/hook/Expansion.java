@@ -2,8 +2,7 @@ package me.gameisntover.kbffa.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.arena.TempArenaManager;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -40,9 +39,9 @@ public class Expansion extends PlaceholderExpansion {
         if (placeholder.equalsIgnoreCase("player_kills")) return knocker.getConfig().getInt("kills") + "";
         if (placeholder.equalsIgnoreCase("player_deaths")) return knocker.getConfig().getInt("deaths") + "";
         if (placeholder.equalsIgnoreCase("player_balance"))
-            return KnockbackFFA.getINSTANCE().getBalanceAPI().getBalance(knocker) + "";
+            return knocker.getBalance() + "";
         if (placeholder.equalsIgnoreCase("current_map")) {
-            String arenaName = KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName();
+            String arenaName = KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName();
             if (arenaName == null) return "No Arena";
             else return arenaName;
         }
@@ -53,10 +52,10 @@ public class Expansion extends PlaceholderExpansion {
             return minutes + ":" + seconds;
         }
         if (placeholder.equalsIgnoreCase("next_map")) {
-            if (KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list() == null || KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list().length <= 1)
+            if (KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list() == null || KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list().length <= 1)
                 return "No Arena";
-            String currentArenaName = KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena().getName();
-            List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list());
+            String currentArenaName = KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName();
+            List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list());
             int index = arenaList.indexOf(currentArenaName);
             if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
             else return arenaList.get(index + 2).replace(".yml", "");

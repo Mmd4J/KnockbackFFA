@@ -2,14 +2,11 @@ package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +45,7 @@ public class SetVoidCommand extends SubCommand {
             Location pos1 = WandListener.pos1m.get(p);
             Location pos2 = WandListener.pos2m.get(p);
             int vd;
-            List<String> voids = ArenaConfiguration.get().getStringList("registered-voids");
+            List<String> voids = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getStringList("registered-voids");
             if (voids.size() == 0) vd = 1;
             else {
                 String szstring = voids.get(voids.size() - 1);
@@ -56,12 +53,12 @@ public class SetVoidCommand extends SubCommand {
                 vd++;
             }
             voids.add(vd + "");
-            if (ArenaConfiguration.get().getString("voids." + vd) == null) {
-                ArenaConfiguration.get().set("voids." + vd + ".pos1", pos1);
-                ArenaConfiguration.get().set("voids." + vd + ".pos2", pos2);
-                ArenaConfiguration.get().set("voids." + vd + ".damage", 8);
-                ArenaConfiguration.get().set("registered-voids", voids);
-                ArenaConfiguration.save();
+            if (KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getString("voids." + vd) == null) {
+                KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("voids." + vd + ".pos1", pos1);
+                KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("voids." + vd + ".pos2", pos2);
+                KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("voids." + vd + ".damage", 8);
+                KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("registered-voids", voids);
+                KnockbackFFA.getINSTANCE().getArenaConfiguration().save();
                 p.sendMessage(ChatColor.GREEN + "Void " + vd + " has been set and now players will get damage if they go there");
             }
         } else p.sendMessage(ChatColor.RED + "You have to set two positions first!");

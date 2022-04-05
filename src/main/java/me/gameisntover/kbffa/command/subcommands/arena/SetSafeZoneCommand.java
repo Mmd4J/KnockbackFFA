@@ -2,12 +2,10 @@ package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +45,7 @@ public class SetSafeZoneCommand extends SubCommand {
             p.sendMessage(ChatColor.RED + "You must choose some positions before using this command use /wand");
             return;
         }
-        List<String> safezones = ArenaConfiguration.get().getStringList("registered-safezones");
+        List<String> safezones = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getStringList("registered-safezones");
         int sz;
         if (safezones.size() == 0) sz = 1;
         else {
@@ -58,12 +56,12 @@ public class SetSafeZoneCommand extends SubCommand {
         String world = p.getWorld().getName();
         Location loc1 = WandListener.pos1m.get(p);
         Location loc2 = WandListener.pos2m.get(p);
-        ArenaConfiguration.get().set("Safezones." + sz + ".world", world);
-        ArenaConfiguration.get().set("Safezones." + sz + ".pos1", loc1);
-        ArenaConfiguration.get().set("Safezones." + sz + ".pos2", loc2);
+        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("Safezones." + sz + ".world", world);
+        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("Safezones." + sz + ".pos1", loc1);
+        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("Safezones." + sz + ".pos2", loc2);
         safezones.add(sz + "");
-        ArenaConfiguration.get().set("registered-safezones", safezones);
-        ArenaConfiguration.save();
+        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("registered-safezones", safezones);
+        KnockbackFFA.getINSTANCE().getArenaConfiguration().save();
         p.sendMessage(ChatColor.GREEN + "Safezone " + sz + " has been saved in the arena config file!");
     }
 

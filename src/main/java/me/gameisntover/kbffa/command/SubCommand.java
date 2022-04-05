@@ -1,7 +1,8 @@
 package me.gameisntover.kbffa.command;
 
+import lombok.Getter;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-
+@Getter
 public abstract class SubCommand extends Command {
     public SubCommand(String name) {
         super(name);

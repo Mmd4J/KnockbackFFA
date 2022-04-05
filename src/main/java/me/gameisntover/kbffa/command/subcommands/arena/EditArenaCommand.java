@@ -2,9 +2,9 @@ package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.Cuboid;
+import me.gameisntover.kbffa.arena.regions.Cuboid;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.gui.Button;
 import me.gameisntover.kbffa.gui.GUI;
 import me.gameisntover.kbffa.listeners.WandListener;
@@ -19,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -66,13 +65,13 @@ public class EditArenaCommand extends SubCommand {
             p.sendMessage(ChatColor.RED + "Command Arguements missing or is invalid /editarena arenaname");
             return;
         }
-        List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list());
+        List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list());
         if (!arenaList.contains(args[0] + ".yml")) {
             p.sendMessage(ChatColor.RED + "That arena name does not exist!");
             return;
         }
         p.sendMessage(ChatColor.GREEN + "You are now editing " + args[0]);
-        Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(args[0]);
+        Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(args[0]);
         GUI arenaGUI = new GUI("Arena Editor", (short) 5);
         List<String> blockbreaklore = new ArrayList<>();
         blockbreaklore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
@@ -188,6 +187,6 @@ public class EditArenaCommand extends SubCommand {
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
     }
 }

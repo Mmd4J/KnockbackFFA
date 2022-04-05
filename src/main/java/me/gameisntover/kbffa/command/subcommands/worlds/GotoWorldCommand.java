@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.worlds;
 
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

@@ -2,9 +2,8 @@ package me.gameisntover.kbffa.command.subcommands.util;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.*;
+import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,15 +39,15 @@ public class ReloadCommand extends SubCommand {
         KnockbackFFA.getINSTANCE().reloadConfig();
         KnockbackFFA.getINSTANCE().loadMessages();
         KnockbackFFA.getINSTANCE().loadSounds();
-        ArenaConfiguration.reload();
-        ScoreboardConfiguration.reload();
-        ItemConfiguration.reload();
-        CosmeticConfiguration.reload();
+        KnockbackFFA.getINSTANCE().getArenaConfiguration().reload();
+        KnockbackFFA.getINSTANCE().getKnockScoreboard().reload();
+        KnockbackFFA.getINSTANCE().getItems().reload();
+        KnockbackFFA.getINSTANCE().getCosmeticConfiguration().reload();
         knocker.getPlayer().sendMessage(ChatColor.AQUA + "Configs are reloaded!");
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(Knocker knocker, String[] args)   {
         return null;
     }
 

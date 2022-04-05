@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.command.subcommands.worlds;
 
 import me.gameisntover.kbffa.arena.VoidChunkGenerator;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.permissions.PermissionDefault;

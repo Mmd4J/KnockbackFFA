@@ -1,4 +1,4 @@
-package me.gameisntover.kbffa.customconfig;
+package me.gameisntover.kbffa.arena.regions;
 
 import lombok.Data;
 import org.bukkit.block.Block;

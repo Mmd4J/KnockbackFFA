@@ -2,19 +2,16 @@ package me.gameisntover.kbffa;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import me.gameisntover.kbffa.api.BalanceAPI;
-import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.GameRules;
-import me.gameisntover.kbffa.arena.TempArenaManager;
+import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.arena.*;
+import me.gameisntover.kbffa.arena.regions.BlockDataManager;
 import me.gameisntover.kbffa.command.CommandManager;
-import me.gameisntover.kbffa.customconfig.*;
 import me.gameisntover.kbffa.gui.ButtonManager;
 import me.gameisntover.kbffa.hook.Expansion;
+import me.gameisntover.kbffa.kit.KitManager;
 import me.gameisntover.kbffa.listeners.*;
-import me.gameisntover.kbffa.manager.FFAManager;
-import me.gameisntover.kbffa.util.Message;
-import me.gameisntover.kbffa.util.Sounds;
+import me.gameisntover.kbffa.scoreboard.ScoreboardConfiguration;
+import me.gameisntover.kbffa.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -31,7 +28,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -42,17 +38,20 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     @Getter
     private static KnockbackFFA INSTANCE;
     private final Map<Player, Knocker> knockerHandler = new HashMap<>();
-    private TempArenaManager tempArenaManager;
-    private FFAManager manager;
-    private int arenaID = 0;
-    private Integer timer = 0;
     private FileConfiguration messages;
     private FileConfiguration sounds;
-    private BalanceAPI balanceAPI;
+    private int arenaID = 0;
+    private int timer = 0;
+    private ArenaManager arenaManager;
+    private CommandMap commandMap;
+    private KitManager kitManager;
     private ButtonManager buttonManager;
     private BlockDataManager blockDataManager;
     private CommandManager commandManager;
-    private CommandMap commandMap;
+    private ItemConfig items;
+    private ScoreboardConfiguration knockScoreboard;
+    private CosmeticConfiguration cosmeticConfiguration;
+    private ArenaConfiguration arenaConfiguration;
     public Knocker getKnocker(Player player) {
         if (knockerHandler.containsKey(player))
             return knockerHandler.get(player);
@@ -69,20 +68,20 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     @Override
     public void onEnable() {
         INSTANCE = this;
-        tempArenaManager = new TempArenaManager();
-        manager = new FFAManager();
+        arenaManager = new ArenaManager();
+        kitManager = new KitManager();
         blockDataManager = new BlockDataManager();
         if (!Bukkit.getOnlinePlayers().isEmpty())
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Knocker knocker = getKnocker(player);
                 knocker.setInGame(BungeeMode());
             }
-        balanceAPI = new BalanceAPI();
         buttonManager = new ButtonManager();
         Field f = getServer().getClass().getDeclaredField("commandMap");
         f.setAccessible(true);
         commandMap = (CommandMap) f.get(getServer());
         getLogger().info("Loading Configuration Files");
+        getDataFolder().mkdir();
         loadMessages();
         loadSounds();
         loadConfig();
@@ -97,45 +96,40 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         for (Player p : Bukkit.getOnlinePlayers()) {
             Knocker knocker = getKnocker(p);
             if (!knocker.isInGame()) return;
-            if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)){
-                KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                p.getInventory().addItem(kitManager.kbbowArrow());
-            }
+            if (p.getInventory().contains(Material.BOW) && !p.getInventory().contains(Material.ARROW)) p.getInventory().addItem(me.gameisntover.kbffa.util.Items.ARROW.getItem());
+
         }
     }
     private void registerPlaceholders(){
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;
             Bukkit.getPluginManager().registerEvents(this,this);
             new Expansion().register();
             getLogger().info("Successfully registered placeholders");
-        }
-        else getLogger().info("Could not find placeholder API. This plugin is needed for better configuration!");
-
     }
     @SneakyThrows
     public void loadMessages() {
-        File file = new File("plugins/KnockbackFFA/messages.yml");
+        File file = new File(getDataFolder(),"messages.yml");
         if (!file.exists()) {
             file.createNewFile();
             saveResource("messages.yml", true);
         }
         messages = YamlConfiguration.loadConfiguration(file);
     }
-
+    @SneakyThrows
     public void loadSounds() {
-        File file = new File("plugins/KnockbackFFA/sounds.yml");
+        File file = new File(getDataFolder(),"sound.yml");
         if (!file.exists()) {
-            try {
                 file.createNewFile();
                 saveResource("sound.yml", true);
-            } catch (IOException ignored) {
             }
-        }
         sounds = YamlConfiguration.loadConfiguration(file);
     }
 
     @SneakyThrows
     private void loadConfig() {
+        items = new ItemConfig();
+        knockScoreboard = new ScoreboardConfiguration();
+        cosmeticConfiguration = new CosmeticConfiguration();
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
             getLogger().info("Creating DataFolder");
@@ -146,24 +140,21 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         File folder = new File(getDataFolder(), "Kits" + File.separator);
         if (!folder.exists()) {
             folder.mkdir();
-            File file = new File("plugins/KnockbackFFA/Kits/Default.yml");
+            File file = new File(getKitManager().getFolder(),"Default.yml");
             file.createNewFile();
             Files.copy(Objects.requireNonNull(getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             getLogger().info("Default Kit Created");
         }
-        CosmeticConfiguration.setup();
-        ArenaConfiguration.setup();
-        ScoreboardConfiguration.setup();
-        ItemConfiguration.setup();
+        arenaConfiguration = new ArenaConfiguration();
         saveDefaultConfig();
 
     }
 
     private void loadTasks() {
-        if (tempArenaManager.getFolder().listFiles() == null || tempArenaManager.getFolder().listFiles().length == 0)
+        if (arenaManager.getFolder().listFiles() == null || arenaManager.getFolder().listFiles().length == 0)
             return;
-        List<Arena> arenaList = tempArenaManager.getArenaList();
-        tempArenaManager.setEnabledArena(arenaList.get(0));
+        List<Arena> arenaList = arenaManager.getArenaList();
+        arenaManager.setEnabledArena(arenaList.get(0));
         timer = getConfig().getInt("ArenaChangeTimer");
 
         new BukkitRunnable() {
@@ -171,16 +162,15 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
             public void run() {
                 if (arenaList.size() > 0) {
                     String arenaName = arenaList.get(0).getName();
-                    tempArenaManager.setEnabledArena(arenaName);
-                    ArenaConfiguration.save();
+                    arenaManager.setEnabledArena(arenaName);
+                    arenaConfiguration.save();
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Knocker knocker = getKnocker(p);
                         if (!knocker.isInGame()) return;
-                        tempArenaManager.changeArena(tempArenaManager.load(arenaName.replace(".yml", "")));
+                        arenaManager.changeArena(arenaManager.load(arenaName.replace(".yml", "")));
                         cancel();
                     }
                     if (arenaList.size() > 1) arenaID++;
-
                 }
             }
         }.runTaskTimer(this, 0, 1);
@@ -195,8 +185,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
                     if (arenaList.size() > 1) { //checking if arenaList even has arenas
                         arenaID++;
                         if (!(arenaID <= arenaList.size())) arenaID = 1;
-                        tempArenaManager.changeArena(arenaList.get(arenaID - 1));
-                    } else if (arenaList.size() == 1) tempArenaManager.setEnabledArena(arenaList.get(0).getName());
+                        arenaManager.changeArena(arenaList.get(arenaID - 1));
+                    } else if (arenaList.size() == 1) arenaManager.setEnabledArena(arenaList.get(0).getName());
 
                 }
             }
@@ -239,7 +229,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     private void loadListeners() {
         Arrays.asList(new GameEventsListener(), new JoinLeaveListeners(),
                         new DeathListener(), new WandListener(), new GameRules(),
-                        new GuiStuff(), new KnockbackFFAKit(), new ArenaSettings())
+                        new GuiStuff(), new ArenaSettings())
                 .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

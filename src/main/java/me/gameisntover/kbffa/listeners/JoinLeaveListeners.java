@@ -1,8 +1,7 @@
 package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.KnockbackFFAKit;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -25,17 +24,16 @@ public class JoinLeaveListeners implements Listener {
         if (!KnockbackFFA.getINSTANCE().BungeeMode()) knocker.setInGame(false);
         if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("joinsound"))
             player.playSound(player.getLocation(), Sound.valueOf(Sounds.PLAYER_JOIN.toString()), 1, 1);
-        if (KnockbackFFA.getINSTANCE().getTempArenaManager().getEnabledArena() == null) knocker.setInGame(false);
+        if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null) knocker.setInGame(false);
         else {
             if (KnockbackFFA.getINSTANCE().BungeeMode()) {
-                KnockbackFFA.getINSTANCE().getTempArenaManager().teleportPlayerToArena(player);
-                KnockbackFFAKit kitManager = new KnockbackFFAKit();
+                KnockbackFFA.getINSTANCE().getArenaManager().teleportPlayerToArena(player);
                 player.getInventory().clear();
-                kitManager.lobbyItems(player);
+                knocker.giveLobbyItems();
                 knocker.setInGame(KnockbackFFA.getINSTANCE().BungeeMode());
             } else {
                 if (!knocker.isInGame()) {
-                    KnockbackFFA.getINSTANCE().getTempArenaManager().teleportToMainLobby(player);
+                    KnockbackFFA.getINSTANCE().getArenaManager().teleportToMainLobby(player);
                     knocker.setInGame(KnockbackFFA.getINSTANCE().BungeeMode());
                 }
             }

@@ -2,11 +2,10 @@ package me.gameisntover.kbffa.command.subcommands.kit;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.*;
+import me.gameisntover.kbffa.kit.Kit;
+import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +47,8 @@ public class DelKitCommand extends SubCommand {
         return;
         }
         else{
-            Kits.getfile().delete();
+            Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(args[0]);
+            kit.getFile().delete();
             p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0] + "!");
         }
     }

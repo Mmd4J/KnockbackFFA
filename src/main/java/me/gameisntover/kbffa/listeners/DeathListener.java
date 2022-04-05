@@ -2,9 +2,8 @@ package me.gameisntover.kbffa.listeners;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -67,8 +66,7 @@ public class DeathListener implements Listener {
             @Override
             public void run() {
                 player.spigot().respawn();
-                KnockbackFFAKit kitManager = new KnockbackFFAKit();
-                kitManager.lobbyItems(player);
+                knocker.giveLobbyItems();
                 Arena.teleportPlayer(player);
                 cancel();
             }
@@ -88,7 +86,7 @@ public class DeathListener implements Listener {
             Knocker damageKnocker = KnockbackFFA.getINSTANCE().getKnocker((Player) damager);
             float prize = KnockbackFFA.getINSTANCE().getConfig().getInt("killprize");
             damageKnocker.sendMessage(Message.PRIZE.toString().replace("%prize%", prize + "").replace("&", "§"));
-            KnockbackFFA.getINSTANCE().getBalanceAPI().addBalance(KnockbackFFA.getINSTANCE().getKnocker((Player) damager), prize);
+            damageKnocker.addBalance(prize);
             damageKnocker.getConfig().set("kills", damageKnocker.getConfig().getInt("kills") + 1);
             damageKnocker.setKillStreak(damageKnocker.getKillStreak()+1);
             if (damageKnocker.getKillStreak() > damageKnocker.getConfig().getInt("best-ks")) {

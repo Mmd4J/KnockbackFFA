@@ -3,10 +3,9 @@ package me.gameisntover.kbffa.arena;
 import lombok.Data;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.KnockbackFFAKit;
 import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
-import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.KnockData;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.*;
@@ -18,7 +17,7 @@ import java.io.File;
 import java.util.*;
 
 @Data
-public class TempArenaManager {
+public class ArenaManager extends KnockData {
     private String name;
     private Arena enabledArena;
     private File cfile;
@@ -29,7 +28,7 @@ public class TempArenaManager {
     private Map<String, Arena> arenaHandler = new HashMap<>();
     @SneakyThrows
     public Arena create(String arenaName, Location pos1, Location pos2) {
-        cfile = new File(df, "ArenaData" + File.separator + arenaName + ".yml");
+        cfile = loadDataFile(folder,arenaName);
         if (!df.exists()) df.mkdir();
         if (!cfile.exists()) cfile.createNewFile();
         config = YamlConfiguration.loadConfiguration(cfile);
@@ -72,11 +71,11 @@ public class TempArenaManager {
      * needs @param @player
      */
     public void teleportToMainLobby(Player player) {
-        if (ArenaConfiguration.get().getString("mainlobby.world") == null) return;
-        double x = ArenaConfiguration.get().getDouble("mainlobby.x");
-        double y = ArenaConfiguration.get().getDouble("mainlobby.y");
-        double z = ArenaConfiguration.get().getDouble("mainlobby.z");
-        World world = Bukkit.getWorld(ArenaConfiguration.get().getString("mainlobby.world"));
+        if (KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getString("mainlobby.world") == null) return;
+        double x = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getDouble("mainlobby.x");
+        double y = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getDouble("mainlobby.y");
+        double z = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getDouble("mainlobby.z");
+        World world = Bukkit.getWorld(KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getString("mainlobby.world"));
         if (world != null) player.teleport(new Location(world, x, y, z));
         else player.teleport(Bukkit.getWorld("world").getSpawnLocation());
     }
@@ -135,8 +134,7 @@ public class TempArenaManager {
             Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(p);
             if (!knocker.isInGame()) return;
             p.getInventory().clear();
-            KnockbackFFAKit kitManager = new KnockbackFFAKit();
-            kitManager.lobbyItems(p);
+            knocker.giveLobbyItems();
             teleportPlayerToArena(p);
             p.playSound(p.getLocation(), Sound.valueOf(Sounds.ARENA_CHANGE.toString()), 1, 1);
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ARENA_CHANGE.toString()).replace("%arena%", arenaName));

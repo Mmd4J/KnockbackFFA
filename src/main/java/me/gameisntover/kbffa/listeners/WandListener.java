@@ -1,9 +1,7 @@
 package me.gameisntover.kbffa.listeners;
 
-import me.gameisntover.kbffa.customconfig.ArenaConfiguration;
+import me.gameisntover.kbffa.util.Items;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,22 +17,20 @@ public class WandListener implements Listener {
     @EventHandler
     public void wandSelectionEvent(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD) && player.getInventory().getItemInMainHand().getItemMeta()==null || !player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.MENDING))
-            return;
+        if (!player.getInventory().getItemInMainHand().equals(Items.POSITION_SELECTOR_WAND.getItem())) return;
+        Location clickedLocation = e.getClickedBlock().getLocation();
         switch (e.getAction()) {
             case LEFT_CLICK_BLOCK:
                 e.setCancelled(true);
-                if (e.getClickedBlock().getLocation().equals(pos1m.get(player))|| e.getClickedBlock().getLocation().equals(pos2m.get(player))) return;
-                player.sendMessage("§6 Position 1 has been set!");
-                pos1m.put(player, e.getClickedBlock().getLocation());
-                ArenaConfiguration.save();
+                if (clickedLocation.equals(pos1m.get(player))|| clickedLocation.equals(pos2m.get(player))) return;
+                player.sendMessage("§6 Position 1 has been set to " + clickedLocation.getX()+","+clickedLocation.getY()+","+clickedLocation.getZ());
+                pos1m.put(player, clickedLocation);
                 break;
             case RIGHT_CLICK_BLOCK:
                 e.setCancelled(true);
-                if (e.getClickedBlock().getLocation().equals(pos1m.get(player))|| e.getClickedBlock().getLocation().equals(pos2m.get(player))) return;
-                player.sendMessage("§6 Position 2 has been set!");
-                pos2m.put(player, e.getClickedBlock().getLocation());
-                ArenaConfiguration.save();
+                if (clickedLocation.equals(pos1m.get(player))|| clickedLocation.equals(pos2m.get(player))) return;
+                player.sendMessage("§6 Position 2 has been set to " + clickedLocation.getX()+","+clickedLocation.getY()+","+clickedLocation.getZ());
+                pos2m.put(player, clickedLocation);
                 break;
         }
     }

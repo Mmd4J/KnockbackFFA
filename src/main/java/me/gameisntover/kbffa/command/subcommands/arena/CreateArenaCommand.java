@@ -1,12 +1,11 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
-import lombok.Getter;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.event.ArenaCreateEvent;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.Cuboid;
+import me.gameisntover.kbffa.arena.regions.Cuboid;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -66,7 +65,7 @@ public class CreateArenaCommand extends SubCommand {
             else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
                 Location loc1 = WandListener.pos1m.get(p);
                 Location loc2 = WandListener.pos2m.get(p);
-                Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().create(args[0], loc1, loc2);
+                Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().create(args[0], loc1, loc2);
                 List<String> blocks = new ArrayList<>();
                 Cuboid region = new Cuboid(loc1, loc2);
                 for (Block block : region.getBlocks()) blocks.add(block.getType().name());
@@ -82,8 +81,8 @@ public class CreateArenaCommand extends SubCommand {
                 arena.getConfig().set("arena.spawn", p.getLocation());
                 arena.getConfig().set("blocks", blocks);
                 arena.save();
-                if (KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list().length == 1)
-                    KnockbackFFA.getINSTANCE().getTempArenaManager().setEnabledArena(args[0]);
+                if (KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list().length == 1)
+                    KnockbackFFA.getINSTANCE().getArenaManager().setEnabledArena(args[0]);
                 ArenaCreateEvent event = new ArenaCreateEvent(p, arena);
                 Bukkit.getPluginManager().callEvent(event);
                 p.sendMessage(ChatColor.GREEN + "Arena " + args[0] + " has been created!");

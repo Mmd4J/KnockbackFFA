@@ -3,11 +3,10 @@ package me.gameisntover.kbffa.command.subcommands.arena;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.command.SubCommand;
-import me.gameisntover.kbffa.customconfig.Knocker;
+import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,9 +51,9 @@ public class ResetArenaCommand extends SubCommand {
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length > 0) {
-            File file = new File(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder() + File.separator + args[0] + ".yml");
+            File file = new File(KnockbackFFA.getINSTANCE().getArenaManager().getFolder() + File.separator + args[0] + ".yml");
             if (file.exists()) {
-                Arena arena = KnockbackFFA.getINSTANCE().getTempArenaManager().load(args[0]);
+                Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(args[0]);
                 arena.resetArena();
                 p.sendMessage(ChatColor.GREEN + "Arena has been reset!");
             } else p.sendMessage(ChatColor.RED + "Arena does not exist");
@@ -62,6 +61,6 @@ public class ResetArenaCommand extends SubCommand {
     }
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getTempArenaManager().getFolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
     }
 }
