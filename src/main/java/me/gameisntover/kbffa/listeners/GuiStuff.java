@@ -81,11 +81,11 @@ public class GuiStuff implements Listener {
             );
             cosmeticMenu.setOpenEventConsumer(event -> {
                 Player player1 = (Player) event.getPlayer();
-                player1.playSound(player1.getLocation(), Sound.valueOf(Sounds.GUI_OPEN.toString()), 1, 1);
+                player1.playSound(player1.getLocation(), Sounds.GUI_OPEN.toSound(), 1, 1);
             });
             cosmeticMenu.setCloseEventConsumer(inventoryCloseEvent -> {
                 Player player1 = (Player) inventoryCloseEvent.getPlayer();
-                player1.playSound(player1.getLocation(), Sound.valueOf(Sounds.GUI_CLOSE.toString()), 1, 1);
+                player1.playSound(player1.getLocation(), Sounds.GUI_CLOSE.toSound(), 1, 1);
             });
             cosmeticMenu.open(player);
         }
@@ -184,11 +184,11 @@ public class GuiStuff implements Listener {
             GUI kitsMenu = new GUI("Kits Menu", (short) 5);
             kitsMenu.setOpenEventConsumer(event -> {
                 Player player1 = (Player) event.getPlayer();
-                player1.playSound(player1.getLocation(), Sound.valueOf(Sounds.GUI_OPEN.toString()), 1, 1);
+                player1.playSound(player1.getLocation(), Sounds.GUI_OPEN.toSound(), 1, 1);
             });
             kitsMenu.setCloseEventConsumer(inventoryCloseEvent -> {
                 Player player1 = (Player) inventoryCloseEvent.getPlayer();
-                player1.playSound(player1.getLocation(), Sound.valueOf(Sounds.GUI_CLOSE.toString()), 1, 1);
+                player1.playSound(player1.getLocation(), Sounds.GUI_CLOSE.toSound(), 1, 1);
             });
             if (knocker.getConfig().getList("owned-kits") != null && knocker.getConfig().getList("owned-kits").size() > 0) {
                 if (knocker.getConfig().getList("owned-kits") == null)
@@ -217,11 +217,11 @@ public class GuiStuff implements Listener {
                 knocker.saveConfig();
                 kitsMenu.setOpenEventConsumer(event -> {
                     Player player1 = (Player) event.getPlayer();
-                    player1.playSound(player1.getLocation(), Sound.valueOf(Sounds.GUI_OPEN.toString()), 1, 1);
+                    player1.playSound(player1.getLocation(), Sounds.GUI_OPEN.toSound(), 1, 1);
                 });
                 kitsMenu.setCloseEventConsumer(inventoryCloseEvent -> {
                     Player player1 = (Player) inventoryCloseEvent.getPlayer();
-                    player1.playSound(player1.getLocation(), Sound.valueOf(Sounds.GUI_CLOSE.toString()), 1, 1);
+                    player1.playSound(player1.getLocation(), Sounds.GUI_CLOSE.toSound(), 1, 1);
                 });
             }
             knocker.openGUI(kitsMenu);

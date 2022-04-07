@@ -48,7 +48,7 @@ public class GameEventsListener implements Listener {
                 Block block = e.getClickedBlock();
                 block.getDrops().clear();
                 player.setVelocity(player.getLocation().getDirection().setY(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
-                player.playSound(player.getLocation(), Sound.valueOf(Sounds.JUMP_PLATE.toString()), 1, 1);
+                player.playSound(player.getLocation(), Sounds.JUMP_PLATE.toSound(), 1, 1);
             }
         }
         if (e.getAction()==Action.RIGHT_CLICK_BLOCK) {

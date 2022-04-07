@@ -1,6 +1,5 @@
 package me.gameisntover.kbffa.api;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,10 +12,9 @@ public abstract class KnockConfiguration {
     public abstract String getName();
     public abstract String getResourceName();
     public File getFile;
-   @NonNull
    public FileConfiguration getConfig;
     @SneakyThrows
-    public void onSetup() {
+    public KnockConfiguration(){
         getFile = new File(KnockbackFFA.getINSTANCE().getDataFolder(), getName()+".yml");
         if (!KnockbackFFA.getINSTANCE().getDataFolder().exists()) KnockbackFFA.getINSTANCE().getDataFolder().mkdir();
         if (!getFile.exists()) {
@@ -24,9 +22,7 @@ public abstract class KnockConfiguration {
             if (getResourceName()!=null) KnockbackFFA.getINSTANCE().saveResource(getResourceName(), true);
         }
         getConfig = YamlConfiguration.loadConfiguration(getFile);
-    }
-    public KnockConfiguration(){
-    onSetup();
+
     }
 
     public void reload(){

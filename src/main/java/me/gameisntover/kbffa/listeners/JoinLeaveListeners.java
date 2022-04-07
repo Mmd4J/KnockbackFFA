@@ -23,7 +23,7 @@ public class JoinLeaveListeners implements Listener {
         knocker.saveConfig();
         if (!KnockbackFFA.getINSTANCE().BungeeMode()) knocker.setInGame(false);
         if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("joinsound"))
-            player.playSound(player.getLocation(), Sound.valueOf(Sounds.PLAYER_JOIN.toString()), 1, 1);
+            player.playSound(player.getLocation(), Sounds.PLAYER_JOIN.toSound(), 1, 1);
         if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null) knocker.setInGame(false);
         else {
             if (KnockbackFFA.getINSTANCE().BungeeMode()) {

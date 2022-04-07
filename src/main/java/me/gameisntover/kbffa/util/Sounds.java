@@ -2,6 +2,7 @@ package me.gameisntover.kbffa.util;
 
 
 import me.gameisntover.kbffa.KnockbackFFA;
+import org.bukkit.Sound;
 
 public enum Sounds {
     ARENA_CHANGE("BLOCK_NOTE_BLOCK_HAT", "arenachange"),
@@ -17,11 +18,10 @@ public enum Sounds {
         this.path = path;
     }
 
-    @Override
-    public String toString() {
-        if (KnockbackFFA.getINSTANCE().getSounds().isSet(path)) {
-            return path;
-        }
-        return soundname;
+    public Sound toSound() {
+        if (KnockbackFFA.getINSTANCE().getSounds().isSet(path))
+            return Sound.valueOf(KnockbackFFA.getINSTANCE().getSounds().getString(path));
+            else return Sound.valueOf(soundname);
+
     }
 }

@@ -136,7 +136,7 @@ public class ArenaManager extends KnockData {
             p.getInventory().clear();
             knocker.giveLobbyItems();
             teleportPlayerToArena(p);
-            p.playSound(p.getLocation(), Sound.valueOf(Sounds.ARENA_CHANGE.toString()), 1, 1);
+            p.playSound(p.getLocation(), Sounds.ARENA_CHANGE.toSound(), 1, 1);
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ARENA_CHANGE.toString()).replace("%arena%", arenaName));
         }
         if (arena.getConfig().getBoolean("auto-reset")) arena.resetArena();
