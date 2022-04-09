@@ -24,7 +24,6 @@ public class ArenaManager extends KnockData {
     private FileConfiguration config;
     private File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData" + File.separator);
     private File df = KnockbackFFA.getINSTANCE().getDataFolder();
-    private List<Arena> arenas = new ArrayList<>();
     private Map<String, Arena> arenaHandler = new HashMap<>();
     @SneakyThrows
     public Arena create(String arenaName, Location pos1, Location pos2) {
@@ -50,7 +49,7 @@ public class ArenaManager extends KnockData {
     /**
      * sets the arena enabled
      *
-     * @param @arenaName
+     * @param arenaName name of the arena
      */
     public void setEnabledArena(String arenaName) {
         enabledArena = load(arenaName);
@@ -59,7 +58,7 @@ public class ArenaManager extends KnockData {
     /**
      * sets the arena enabled
      *
-     * @param @arena
+     * @param arena the specified arena
      */
     public void setEnabledArena(Arena arena) {
         enabledArena = arena;

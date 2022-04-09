@@ -9,16 +9,19 @@ import me.gameisntover.kbffa.util.ItemBuilder;
 import me.gameisntover.kbffa.util.Items;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntity;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -234,6 +237,8 @@ public class GuiStuff implements Listener {
         ItemStack item = e.getItemDrop().getItemStack();
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) e.setCancelled(true);
+
     }
+
 
 }

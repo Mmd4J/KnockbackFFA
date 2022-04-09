@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-public class SetMainLobbyCommand extends SubCommand {
+public class SetMainLobbyCommand extends KnockCommand {
     private final String name;
     public SetMainLobbyCommand(String name) {
         super(name);

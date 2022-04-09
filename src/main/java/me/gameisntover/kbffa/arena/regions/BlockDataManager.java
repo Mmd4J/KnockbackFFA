@@ -1,6 +1,7 @@
 package me.gameisntover.kbffa.arena.regions;
 
 import lombok.Data;
+import me.gameisntover.kbffa.arena.Arena;
 import org.bukkit.block.Block;
 
 import java.util.HashMap;

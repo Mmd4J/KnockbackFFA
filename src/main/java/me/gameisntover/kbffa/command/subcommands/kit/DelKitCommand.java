@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.kit;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.kit.Kit;
 import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class DelKitCommand extends SubCommand {
+public class DelKitCommand extends KnockCommand {
     public DelKitCommand(String name) {
         super(name);
     }

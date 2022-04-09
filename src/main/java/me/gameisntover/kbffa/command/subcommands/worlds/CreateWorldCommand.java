@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.worlds;
 
 import me.gameisntover.kbffa.arena.VoidChunkGenerator;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -9,9 +9,8 @@ import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CreateWorldCommand extends SubCommand {
+public class CreateWorldCommand extends KnockCommand {
     private String name;
 
     public CreateWorldCommand(String name) {

@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.command.subcommands.worlds;
 
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,9 +10,8 @@ import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class GotoWorldCommand extends SubCommand {
+public class GotoWorldCommand extends KnockCommand {
     public GotoWorldCommand(String name) {
         super(name);
     }

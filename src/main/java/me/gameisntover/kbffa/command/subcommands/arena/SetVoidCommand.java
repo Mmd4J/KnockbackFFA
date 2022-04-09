@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.ChatColor;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class SetVoidCommand extends SubCommand {
+public class SetVoidCommand extends KnockCommand {
     public SetVoidCommand(String name) {
         super(name);
     }

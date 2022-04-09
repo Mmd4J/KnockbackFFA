@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Items;
 import org.bukkit.ChatColor;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class WandCommand extends SubCommand {
+public class WandCommand extends KnockCommand {
     public WandCommand(String name) {
         super(name);
     }

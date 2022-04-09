@@ -3,7 +3,7 @@ package me.gameisntover.kbffa.command.subcommands.arena;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.regions.Cuboid;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.gui.Button;
 import me.gameisntover.kbffa.gui.GUI;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EditArenaCommand extends SubCommand {
+public class EditArenaCommand extends KnockCommand {
     public EditArenaCommand(String name) {
         super(name);
     }

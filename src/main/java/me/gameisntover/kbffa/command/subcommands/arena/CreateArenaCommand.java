@@ -4,7 +4,7 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.event.ArenaCreateEvent;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.regions.Cuboid;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.Bukkit;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateArenaCommand extends SubCommand {
+public class CreateArenaCommand extends KnockCommand {
     public CreateArenaCommand(String name) {
         super(name);
     }

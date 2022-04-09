@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 
-public class ResetArenaCommand extends SubCommand {
+public class ResetArenaCommand extends KnockCommand {
     private String name;
     public ResetArenaCommand(String name) {
         super(name);

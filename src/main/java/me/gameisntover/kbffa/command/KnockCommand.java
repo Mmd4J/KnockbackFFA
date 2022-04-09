@@ -12,8 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 @Getter
-public abstract class SubCommand extends Command {
-    public SubCommand(String name) {
+public abstract class KnockCommand extends Command {
+
+
+    protected KnockCommand(@NotNull String name) {
         super(name);
     }
 

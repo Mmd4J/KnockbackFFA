@@ -1,15 +1,13 @@
 package me.gameisntover.kbffa.command.subcommands.util;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class ReloadCommand extends SubCommand {
+public class ReloadCommand extends KnockCommand {
     public ReloadCommand(String name) {
         super(name);
     }

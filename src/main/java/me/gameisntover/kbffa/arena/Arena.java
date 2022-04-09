@@ -16,9 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Data
 public class Arena {
@@ -26,17 +24,23 @@ public class Arena {
     private Cuboid region;
     private File file,arenaFolder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData");
     private FileConfiguration config;
+    private boolean ready;
     public Arena(String arenaName,Location pos1,Location pos2) {
         setName(arenaName);
         setFile(new File(arenaFolder, arenaName + ".yml"));
         setConfig(YamlConfiguration.loadConfiguration(file));
         setRegion(new Cuboid(pos1,pos2));
+        setReady(true);
+
     }
     public Arena(String arenaName) {
         setName(arenaName);
         setFile(new File(arenaFolder, arenaName + ".yml"));
-        setConfig(YamlConfiguration.loadConfiguration(file));
-        setRegion(new Cuboid(getPos1(),getPos2()));
+        if (getFile().exists()) {
+            setConfig(YamlConfiguration.loadConfiguration(file));
+            setRegion(new Cuboid(getPos1(), getPos2()));
+            setReady(true);
+        }
     }
     @SneakyThrows
     public void save() {
@@ -47,11 +51,6 @@ public class Arena {
      * resets arena blocks to the original state
      */
     public void resetArena() {
-        Location loc1 = getPos1();
-        Location loc2 = getPos2();
-        assert loc2 != null;
-        assert loc1 != null;
-        Cuboid region = new Cuboid(loc1, loc2);
         List<String> materials = getConfig().getStringList("blocks");
         List<Block> blocks = region.getBlocks();
         new BukkitRunnable() {
@@ -71,22 +70,9 @@ public class Arena {
                     remainBlocks--;
                     startPoint = allBlocks - remainBlocks;
                 }
-                if (remainBlocks <= 0) {
-                    cancel();
-                }
+                if (remainBlocks <= 0) cancel();
             }
         }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
-    }
-
-
-    /**
-     * checks if the arena is ready and its able to use
-     *
-     * @return true if the arena is ready
-     */
-    public boolean isReady() {
-        List<String> arenaList = Arrays.asList(Objects.requireNonNull(getArenaFolder().list()));
-        return arenaList.contains(getName());
     }
 
     /**
@@ -101,7 +87,7 @@ public class Arena {
     /**
      * teleports player to the arena
      *
-     * @param @player
+     *@param player player
      */
     public void teleportPlayer(Player player) {
         if (!(getName().equalsIgnoreCase(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName())))
@@ -118,29 +104,11 @@ public class Arena {
      * if that arena is the enabled Arena.
      */
     public void removeArena() {
-        File cfile = getFile();
-       boolean result = cfile.delete();
-        System.out.println(result);
-        while (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equals(getName())) {
+        getFile().delete();
+        while (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equals(getName()))
             KnockbackFFA.getINSTANCE().getArenaManager().setEnabledArena(KnockbackFFA.getINSTANCE().getArenaManager().randomArena());
-        }
         save();
     }
-
-    /**
-     * Returns a list of arena positions.
-     * 0 Index is always the first position
-     * and the 1 Index is always the second position
-     *
-     * @return List<Location>
-     */
-    public List getArenaPositions() {
-        List<Location> positions = new ArrayList<>();
-        positions.add(getConfig().getLocation("arena.pos1"));
-        positions.add(getConfig().getLocation("arena.pos2"));
-        return positions;
-    }
-
     /**
      * Checks if the player is in arena region
      *

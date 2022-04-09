@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.kit;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.kit.Kit;
 import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
@@ -9,9 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class CreateKitCommand extends SubCommand {
+public class CreateKitCommand extends KnockCommand {
     public CreateKitCommand(String name) {
         super(name);
     }

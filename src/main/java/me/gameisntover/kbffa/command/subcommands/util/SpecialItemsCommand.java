@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.command.subcommands.util;
 
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Items;
 import org.bukkit.Bukkit;
@@ -9,9 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class SpecialItemsCommand extends SubCommand {
+public class SpecialItemsCommand extends KnockCommand {
     public SpecialItemsCommand(String name) {
         super(name);
     }

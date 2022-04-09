@@ -7,6 +7,7 @@ import me.gameisntover.kbffa.command.subcommands.game.JoinCommand;
 import me.gameisntover.kbffa.command.subcommands.game.LeaveCommand;
 import me.gameisntover.kbffa.command.subcommands.kit.CreateKitCommand;
 import me.gameisntover.kbffa.command.subcommands.kit.DelKitCommand;
+import me.gameisntover.kbffa.command.subcommands.util.HelpCommand;
 import me.gameisntover.kbffa.command.subcommands.util.ReloadCommand;
 import me.gameisntover.kbffa.command.subcommands.util.SpecialItemsCommand;
 import me.gameisntover.kbffa.command.subcommands.worlds.CreateWorldCommand;
@@ -21,13 +22,14 @@ import java.util.List;
 
 @Getter
 public class CommandManager  {
-    private List<SubCommand> subCommands;
+    private List<KnockCommand> subCommands;
     public CommandManager() {
         subCommands = Arrays.asList(new JoinCommand("join"),new LeaveCommand("leave"),new SetMainLobbyCommand("setmainlobby"), new ResetArenaCommand("resetarena")
                 ,new CreateWorldCommand("createworld"), new GotoWorldCommand("gotoworld"),new SetVoidCommand("setvoid")
                 ,new SpecialItemsCommand("specialitems"),new ReloadCommand("reload"),new DelKitCommand("delkit"),
-                new CreateKitCommand("createkit"), new SetSafeZoneCommand("setsafezone"),new WandCommand("wand"),new EditArenaCommand("editarena"),new CreateArenaCommand("createarena"));
-        for (SubCommand sb : subCommands){
+                new CreateKitCommand("createkit"), new SetSafeZoneCommand("setsafezone"),new WandCommand("wand"),new EditArenaCommand("editarena"),new CreateArenaCommand("createarena"),
+                new DelArenaCommand("delarena"),new HelpCommand("help"));
+        for (KnockCommand sb : subCommands){
             sb.setName(sb.getSubDescription());
             sb.setName(sb.getSubName());
             Permission permission = new Permission("knockbackffa.command."+sb.getSubName(),sb.getSubDescription(),sb.getPermissionDefault());

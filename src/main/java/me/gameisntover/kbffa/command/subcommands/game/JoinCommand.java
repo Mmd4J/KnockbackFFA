@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.command.subcommands.game;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.SubCommand;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.ChatColor;
@@ -10,9 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class JoinCommand extends SubCommand {
+public class JoinCommand extends KnockCommand {
     public JoinCommand(String name) {
         super(name);
     }
