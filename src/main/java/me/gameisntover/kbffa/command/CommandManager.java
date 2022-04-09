@@ -30,13 +30,13 @@ public class CommandManager  {
                 new CreateKitCommand("createkit"), new SetSafeZoneCommand("setsafezone"),new WandCommand("wand"),new EditArenaCommand("editarena"),new CreateArenaCommand("createarena"),
                 new DelArenaCommand("delarena"),new HelpCommand("help"));
         for (KnockCommand sb : subCommands){
-            sb.setName(sb.getSubDescription());
-            sb.setName(sb.getSubName);
-            Permission permission = new Permission("knockbackffa.command." + sb.getSubName, sb.getSubDescription(), sb.getPermissionDefault());
+            sb.setName(sb.getKnockDescription());
+            sb.setName(sb.getKnockName);
+            Permission permission = new Permission("knockbackffa.command." + sb.getKnockName, sb.getKnockDescription(), sb.getPermissionDefault());
             Bukkit.getPluginManager().addPermission(permission);
             sb.setPermission(permission.getName());
             sb.setPermissionMessage(Message.NO_PERMISSION.toString());
-            sb.setLabel(sb.getSubName);
+            sb.setLabel(sb.getKnockName);
             KnockbackFFA.getINSTANCE().getCommandMap().register("knockbackffa", sb);
         }
     }

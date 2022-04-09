@@ -15,7 +15,7 @@ public class CreateKitCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubDescription() {
+    public @NotNull String getKnockDescription() {
         return ChatColor.AQUA + "Creates kit with the specified name";
     }
 

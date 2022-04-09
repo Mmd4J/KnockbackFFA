@@ -13,14 +13,14 @@ import java.util.List;
 
 @Getter
 public abstract class KnockCommand extends Command {
-    public String getSubName;
+    public String getKnockName;
 
     protected KnockCommand(@NotNull String name) {
         super(name);
-        getSubName = name;
+        getKnockName = name;
     }
 
-    public abstract @NotNull String getSubDescription();
+    public abstract @NotNull String getKnockDescription();
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {

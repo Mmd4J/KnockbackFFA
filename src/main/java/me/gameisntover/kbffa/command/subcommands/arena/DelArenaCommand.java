@@ -17,7 +17,7 @@ public class DelArenaCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubDescription() {
+    public @NotNull String getKnockDescription() {
         return "Removes an specified arena";
     }
 

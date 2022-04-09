@@ -18,7 +18,7 @@ public class SetVoidCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubDescription() {
+    public @NotNull String getKnockDescription() {
         return ChatColor.AQUA+ "sets a damage zone which must be selected with wand before using the command!";
     }
 

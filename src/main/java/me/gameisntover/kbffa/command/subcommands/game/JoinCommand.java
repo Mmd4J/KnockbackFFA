@@ -16,7 +16,7 @@ public class JoinCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubDescription() {
+    public @NotNull String getKnockDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&6Players can use this command to join the game");
     }
 

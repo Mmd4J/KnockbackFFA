@@ -20,7 +20,7 @@ public class SetMainLobbyCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubDescription() {
+    public @NotNull String getKnockDescription() {
         return "&5Sets mainlobby location to the player's location";
     }
 

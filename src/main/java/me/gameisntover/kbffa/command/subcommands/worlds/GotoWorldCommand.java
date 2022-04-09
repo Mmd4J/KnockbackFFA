@@ -17,7 +17,7 @@ public class GotoWorldCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubDescription() {
+    public @NotNull String getKnockDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5Teleports player to the specified world");
     }
 

@@ -13,7 +13,7 @@ public class HelpCommand extends KnockCommand {
         super(name);
     }
     @Override
-    public @NotNull String getSubDescription() {
+    public @NotNull String getKnockDescription() {
         return "shows a list of commands that the knockbackffa plugin have";
     }
 
@@ -32,7 +32,7 @@ public class HelpCommand extends KnockCommand {
         knocker.sendMessage("&8==================================");
         knocker.sendMessage("&3[Advanced] KnockbackFFA help");
         for (KnockCommand cmd : KnockbackFFA.getINSTANCE().getCommandManager().getSubCommands())
-            knocker.sendMessage(cmd.getSyntax() + " : &3" + cmd.getSubDescription());
+            knocker.sendMessage(cmd.getSyntax() + " : &3" + cmd.getKnockDescription());
         knocker.sendMessage("&3[Advanced] KnockbackFFA version : " + KnockbackFFA.getINSTANCE().getDescription().getVersion());
         knocker.sendMessage("&8==================================");
     }
