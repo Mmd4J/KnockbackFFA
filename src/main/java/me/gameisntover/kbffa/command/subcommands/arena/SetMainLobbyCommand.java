@@ -18,10 +18,6 @@ public class SetMainLobbyCommand extends KnockCommand {
         super(name);
         this.name = name;
     }
-    @Override
-    public @NotNull String getSubName() {
-        return name;
-    }
 
     @Override
     public @NotNull String getSubDescription() {

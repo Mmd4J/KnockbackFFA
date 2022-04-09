@@ -27,11 +27,6 @@ public class ResetArenaCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return name;
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5Resets arena blocks to the saved blocks from arena data files");
     }

@@ -25,11 +25,6 @@ public class CreateArenaCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "createarena";
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.AQUA + "Creates a new arena for the game";
     }

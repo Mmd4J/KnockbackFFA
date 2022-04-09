@@ -13,13 +13,12 @@ import java.util.List;
 
 @Getter
 public abstract class KnockCommand extends Command {
-
+    public String getSubName;
 
     protected KnockCommand(@NotNull String name) {
         super(name);
+        getSubName = name;
     }
-
-    public abstract @NotNull String getSubName();
 
     public abstract @NotNull String getSubDescription();
 

@@ -17,11 +17,6 @@ public class DelArenaCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "delarena";
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return "Removes an specified arena";
     }

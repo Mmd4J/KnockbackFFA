@@ -31,13 +31,13 @@ public class CommandManager  {
                 new DelArenaCommand("delarena"),new HelpCommand("help"));
         for (KnockCommand sb : subCommands){
             sb.setName(sb.getSubDescription());
-            sb.setName(sb.getSubName());
-            Permission permission = new Permission("knockbackffa.command."+sb.getSubName(),sb.getSubDescription(),sb.getPermissionDefault());
+            sb.setName(sb.getSubName);
+            Permission permission = new Permission("knockbackffa.command." + sb.getSubName, sb.getSubDescription(), sb.getPermissionDefault());
             Bukkit.getPluginManager().addPermission(permission);
             sb.setPermission(permission.getName());
             sb.setPermissionMessage(Message.NO_PERMISSION.toString());
-            sb.setLabel(sb.getSubName());
-            KnockbackFFA.getINSTANCE().getCommandMap().register("knockbackffa",sb);
+            sb.setLabel(sb.getSubName);
+            KnockbackFFA.getINSTANCE().getCommandMap().register("knockbackffa", sb);
         }
     }
 
