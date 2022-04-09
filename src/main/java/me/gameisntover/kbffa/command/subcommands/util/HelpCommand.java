@@ -12,12 +12,6 @@ public class HelpCommand extends KnockCommand {
     public HelpCommand(@NotNull String name) {
         super(name);
     }
-
-    @Override
-    public @NotNull String getSubName() {
-        return "help";
-    }
-
     @Override
     public @NotNull String getSubDescription() {
         return "shows a list of commands that the knockbackffa plugin have";

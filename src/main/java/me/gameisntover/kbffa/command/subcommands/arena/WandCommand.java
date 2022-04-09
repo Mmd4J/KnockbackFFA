@@ -16,11 +16,6 @@ public class WandCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "wand";
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.AQUA +"gives player position selector wand";
     }

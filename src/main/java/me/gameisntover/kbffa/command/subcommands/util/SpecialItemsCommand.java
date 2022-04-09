@@ -15,11 +15,6 @@ public class SpecialItemsCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "specialitems";
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5a basic gui for giving some special items good for creating kits.");
     }

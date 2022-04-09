@@ -39,11 +39,6 @@ public class EditArenaCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "editarena";
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.AQUA+ "shows the sender a gui to edit arena details.";
     }

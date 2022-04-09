@@ -13,11 +13,6 @@ public class ReloadCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "reload";
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.AQUA + "reloads the kbffa configuration files";
     }

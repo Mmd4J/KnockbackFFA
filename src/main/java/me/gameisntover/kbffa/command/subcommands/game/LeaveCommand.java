@@ -18,11 +18,6 @@ public class LeaveCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return name;
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"&5leaves the game if the player is already in game");
     }

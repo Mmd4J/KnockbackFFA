@@ -19,11 +19,6 @@ public class CreateWorldCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return name;
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.translateAlternateColorCodes('&',"Generates / load a custom world which is useful for creating arenas!");
     }

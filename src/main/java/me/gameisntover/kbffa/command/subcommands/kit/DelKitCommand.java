@@ -19,11 +19,6 @@ public class DelKitCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "delkit";
-    }
-
-    @Override
     public @NotNull String getSubDescription() {
         return ChatColor.AQUA + "Deletes the specified kit";
     }

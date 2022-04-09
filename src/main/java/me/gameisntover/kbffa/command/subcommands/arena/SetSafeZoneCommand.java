@@ -18,11 +18,6 @@ public class SetSafeZoneCommand extends KnockCommand {
     }
 
     @Override
-    public @NotNull String getSubName() {
-        return "setsafezone";
-    }
-
-    @Override
     public PermissionDefault getPermissionDefault() {
         return PermissionDefault.OP;
     }
