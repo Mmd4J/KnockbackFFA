@@ -2,8 +2,8 @@ package me.gameisntover.kbffa.listeners;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -29,9 +29,10 @@ public class DeathListener implements Listener {
         Player player = (Player) e.getEntity();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (!player.getType().equals(EntityType.PLAYER)) return;
-            if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) return;
-                if (e.getCause() == EntityDamageEvent.DamageCause.VOID) e.setDamage(KnockbackFFA.getINSTANCE().getConfig().getInt("default-void-damage"));
-                 else e.setDamage(0);
+        if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) return;
+        if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
+            e.setDamage(KnockbackFFA.getINSTANCE().getConfig().getInt("default-void-damage"));
+        else e.setDamage(0);
     }
 
     @EventHandler
@@ -61,7 +62,7 @@ public class DeathListener implements Listener {
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         killer.remove(player);
         knocker.setInArena(false);
-        if (!KnockbackFFA.getINSTANCE().BungeeMode() || !knocker.isInGame()) return;
+        if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) return;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -88,7 +89,7 @@ public class DeathListener implements Listener {
             damageKnocker.sendMessage(Message.PRIZE.toString().replace("%prize%", prize + "").replace("&", "§"));
             damageKnocker.addBalance(prize);
             damageKnocker.getConfig().set("kills", damageKnocker.getConfig().getInt("kills") + 1);
-            damageKnocker.setKillStreak(damageKnocker.getKillStreak()+1);
+            damageKnocker.setKillStreak(damageKnocker.getKillStreak() + 1);
             if (damageKnocker.getKillStreak() > damageKnocker.getConfig().getInt("best-ks")) {
                 String msg = Message.KILLSTREAK_RECORD.toString().replace("%killstreak%", damageKnocker.getConfig().getInt("best-ks") + "");
                 damageKnocker.sendActionBar(msg);

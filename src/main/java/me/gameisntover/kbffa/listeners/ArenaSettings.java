@@ -1,10 +1,10 @@
 package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.KnockbackFFA;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.regions.DataBlock;
 import me.gameisntover.kbffa.kit.Kit;
-import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Items;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -52,6 +52,28 @@ public class ArenaSettings implements Listener {
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() != null) {
+            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName());
+            knocker.setInGame(true);
+            knocker.setInArena(true);
+            if (!arena.contains(player.getLocation())) return;
+            if (knocker.getConfig().getString("selected-kit") == null)
+                knocker.getConfig().set("selected-kit", "Default");
+            List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
+            if (!ownedKits.contains("Default")) {
+                ownedKits.add("Default");
+                knocker.getConfig().set("owned-kits", ownedKits);
+            }
+            Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(knocker.getConfig().getString("selected-kit"));
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item == null) return;
+                if (Items.COSMETIC_ITEM.getItem().equals(item) || Items.SHOP_ITEM.getItem().equals(item) || Items.KIT_ITEM.getItem().equals(item)) {
+                    player.getInventory().clear();
+                    kit.giveKit(player);
+                    break;
+                }
+            }
+        } else knocker.setInArena(false);
         if (!knocker.isInGame()) return;
         if (knocker.getConfig().getString("selected-trails") != null) {
             String selectedTrails = knocker.getConfig().getString("selected-trails");
@@ -63,9 +85,7 @@ public class ArenaSettings implements Listener {
             db.setPrevMaterial(block.getType());
             List<String> materialString = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getStringList(selectedTrails + ".blocks");
             List<Material> materialList = new ArrayList<>();
-            for (String material : materialString) {
-                materialList.add(Material.getMaterial(material));
-            }
+            for (String material : materialString) materialList.add(Material.getMaterial(material));
             if (materialList.size() == 1) {
                 block.setType(materialList.get(0));
                 db.setBlockType("trail");
@@ -99,27 +119,5 @@ public class ArenaSettings implements Listener {
                         runTaskTimer(KnockbackFFA.getINSTANCE(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20, KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20);
             }
         }
-        if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() != null) {
-            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName());
-            knocker.setInGame(true);
-            knocker.setInArena(true);
-            if (!arena.contains(player.getLocation())) return;
-            if (knocker.getConfig().getString("selected-kit") == null) return;
-            List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
-            if (ownedKits.contains("Default")) {
-                ownedKits.add("Default");
-                knocker.getConfig().set("owned-kits", ownedKits);
-            }
-            knocker.getConfig().set("selected-kit", "Default");
-            Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(knocker.getConfig().getString("selected-kit"));
-            for (ItemStack item : player.getInventory().getContents()) {
-                if (item == null) return;
-                if (Items.COSMETIC_ITEM.getItem().equals(item) || Items.SHOP_ITEM.getItem().equals(item) || Items.KIT_ITEM.getItem().equals(item)) {
-                    player.getInventory().clear();
-                    kit.giveKit(player);
-                    break;
-                }
-            }
-        } else knocker.setInArena(false);
     }
 }

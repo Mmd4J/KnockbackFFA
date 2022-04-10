@@ -1,27 +1,23 @@
 package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.kit.Kit;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.gui.Button;
 import me.gameisntover.kbffa.gui.GUI;
+import me.gameisntover.kbffa.kit.Kit;
 import me.gameisntover.kbffa.util.ItemBuilder;
 import me.gameisntover.kbffa.util.Items;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntity;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,18 +32,19 @@ public class GuiStuff implements Listener {
     @EventHandler
     public void onPlayerItemInteract(PlayerInteractEvent e) {
         ItemStack item = e.getItem();
-        if (item == null || item.getItemMeta()==null) return;
+        if (item == null || item.getItemMeta() == null) return;
         ItemMeta itemMeta = item.getItemMeta();
         Player player = e.getPlayer();
         if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         assert itemMeta != null;
+        assert Items.COSMETIC_ITEM.getItem() != null;
         if (Items.COSMETIC_ITEM.getItem().equals(item)) {
             e.setCancelled(true);
             GUI cosmeticMenu = new GUI("Cosmetic Menu", (short) 5);
             List<String> cList = knocker.getConfig().getStringList("owned-cosmetics");
             cList.forEach(cosmetic -> {
-                        if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name") == null) {
+                        if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name") != null) {
                             String displayName = ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name"));
                             String icon = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".icon");
                             List<String> lore = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getStringList(cosmetic + ".lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
@@ -55,10 +52,11 @@ public class GuiStuff implements Listener {
                             Button cosmeticItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.getMaterial(icon), 1, displayName, Collections.singletonList("")).create(), event -> {
                                 List<String> ownedCosmetics = knocker.getConfig().getStringList("owned-cosmetics");
                                 String selC = ownedCosmetics.get(event.getSlot());
-                                if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(selC + ".type") == "KILL_PARTICLE")
+                                assert event.getCurrentItem() != null;
+                                assert event.getCurrentItem().getItemMeta() != null;
+                                if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(selC + ".type").equals("KILL_PARTICLE"))
                                     knocker.getConfig().set("selected-trails", event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
-
-                                else if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(selC + ".type") == "TRAIL")
+                                else if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(selC + ".type").equals("TRAIL"))
                                     knocker.getConfig().set("selected-trails", event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
                                 knocker.saveConfig();
                                 player.closeInventory();
@@ -103,7 +101,7 @@ public class GuiStuff implements Listener {
                 List<String> cosmetics = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
                 List<String> cList = knocker.getConfig().getStringList("owned-cosmetics");
                 for (String cosmetic : cosmetics) {
-                    Button cosmeticsItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.getMaterial(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".icon")), 1, ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name")), Arrays.asList("")).create(), event1 -> {
+                    Button cosmeticsItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.getMaterial(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".icon")), 1, ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name")), Collections.singletonList("")).create(), event1 -> {
                         float playerBal = knocker.getBalance();
                         if (playerBal >= KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmetics.get(event1.getSlot()) + ".price")) {
                             List<String> ownedCosmetics = knocker.getConfig().getStringList("owned-cosmetics");
@@ -142,7 +140,7 @@ public class GuiStuff implements Listener {
                 for (String cosmetic : cosmetics) {
                     if (cosmetic == null) return;
                     Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(cosmetic);
-                    Button kitsItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(kit.getIcon(), 1, kit.getKitName(), Arrays.asList("")).create(), event1 -> {
+                    Button kitsItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(kit.getIcon(), 1, kit.getKitName(), Collections.singletonList("")).create(), event1 -> {
                         float playerBal = knocker.getBalance();
                         if (playerBal >= kit.getPrice()) {
                             List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
@@ -182,6 +180,7 @@ public class GuiStuff implements Listener {
             shopMenu.add(kitItem, KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("ShopMenu.kit.slot"));
             knocker.openGUI(shopMenu);
         }
+        assert Items.KIT_ITEM.getItem() != null;
         if (Items.KIT_ITEM.getItem().equals(item)) {
             e.setCancelled(true);
             GUI kitsMenu = new GUI("Kits Menu", (short) 5);
@@ -196,13 +195,16 @@ public class GuiStuff implements Listener {
             if (knocker.getConfig().getList("owned-kits") != null && knocker.getConfig().getList("owned-kits").size() > 0) {
                 if (knocker.getConfig().getList("owned-kits") == null)
                     knocker.getConfig().set("owned-kits", new ArrayList<>());
-                List<String> kitsList = knocker.getConfig().getList("owned-kits").stream().map(s -> s.toString()).collect(Collectors.toList());
+                List<String> kitsList = knocker.getConfig().getList("owned-kits").stream().map(Object::toString).collect(Collectors.toList());
+                ;
                 for (String kit : kitsList) {
                     if (kit == null) return;
                     Kit kitItems = KnockbackFFA.getINSTANCE().getKitManager().load(kit);
                     if (kitItems.getIcon() == null) return;
-                    Button kitItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(kitItems.getIcon(), 1, kitItems.getKitName(), Arrays.asList("")).create(), event -> {
+                    Button kitItem = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(kitItems.getIcon(), 1, kitItems.getKitName(), Collections.singletonList("")).create(), event -> {
                         String selC = kitsList.get(event.getSlot());
+                        assert event.getCurrentItem() != null;
+                        assert event.getCurrentItem().getItemMeta() != null;
                         knocker.getConfig().set("selected-kit", event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
                         knocker.saveConfig();
                         player.closeInventory();
@@ -210,6 +212,7 @@ public class GuiStuff implements Listener {
                     ItemMeta kitMeta = kitItem.getItem().getItemMeta();
                     if (kitItem.getItem().getType() == Material.AIR) kitItem.getItem().setType(Material.BARRIER);
 
+                    assert kitMeta != null;
                     kitMeta.setLore(kitItems.getConfig().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
                     if (knocker.getConfig().getString("selected-kit") == null)
                         knocker.getConfig().set("selected-kit", kit);
@@ -236,6 +239,7 @@ public class GuiStuff implements Listener {
     public void onPlayerItemDrop(PlayerDropItemEvent e) {
         ItemStack item = e.getItemDrop().getItemStack();
         ItemMeta itemMeta = item.getItemMeta();
+        assert itemMeta != null;
         if (itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) e.setCancelled(true);
 
     }

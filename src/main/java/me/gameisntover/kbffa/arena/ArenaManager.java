@@ -3,9 +3,9 @@ package me.gameisntover.kbffa.arena;
 import lombok.Data;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import me.gameisntover.kbffa.api.KnockData;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.*;
@@ -25,24 +25,31 @@ public class ArenaManager extends KnockData {
     private File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData" + File.separator);
     private File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private Map<String, Arena> arenaHandler = new HashMap<>();
+
     @SneakyThrows
     public Arena create(String arenaName, Location pos1, Location pos2) {
-        cfile = loadDataFile(folder,arenaName);
+        cfile = loadDataFile(folder, arenaName);
         if (!df.exists()) df.mkdir();
         if (!cfile.exists()) cfile.createNewFile();
         config = YamlConfiguration.loadConfiguration(cfile);
-        Arena arena = new Arena(arenaName,pos1,pos2);
-        arenaHandler.put(arenaName,arena);
+        Arena arena = new Arena(arenaName, pos1, pos2);
+        arenaHandler.put(arenaName, arena);
         name = arenaName;
         return arena;
     }
+
     public Arena load(String arenaName) {
         if (arenaHandler.containsKey(arenaName)) return arenaHandler.get(arenaName);
-        else{
+        else {
             Arena arena = new Arena(arenaName);
-            arenaHandler.put(arenaName,arena);
+            arenaHandler.put(arenaName, arena);
             return arena;
         }
+    }
+
+    public ArenaManager() {
+        folder.mkdir();
+        
     }
 
 

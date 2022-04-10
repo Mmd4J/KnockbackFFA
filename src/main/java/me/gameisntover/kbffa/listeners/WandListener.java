@@ -18,18 +18,19 @@ public class WandListener implements Listener {
     public void wandSelectionEvent(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if (!player.getInventory().getItemInMainHand().equals(Items.POSITION_SELECTOR_WAND.getItem())) return;
+        if (e.getClickedBlock() == null) return;
         Location clickedLocation = e.getClickedBlock().getLocation();
         switch (e.getAction()) {
             case LEFT_CLICK_BLOCK:
                 e.setCancelled(true);
-                if (clickedLocation.equals(pos1m.get(player))|| clickedLocation.equals(pos2m.get(player))) return;
-                player.sendMessage("§6 Position 1 has been set to " + clickedLocation.getX()+","+clickedLocation.getY()+","+clickedLocation.getZ());
+                if (clickedLocation.equals(pos1m.get(player)) || clickedLocation.equals(pos2m.get(player))) return;
+                player.sendMessage("§6 Position 1 has been set to " + clickedLocation.getX() + "," + clickedLocation.getY() + "," + clickedLocation.getZ());
                 pos1m.put(player, clickedLocation);
                 break;
             case RIGHT_CLICK_BLOCK:
                 e.setCancelled(true);
-                if (clickedLocation.equals(pos1m.get(player))|| clickedLocation.equals(pos2m.get(player))) return;
-                player.sendMessage("§6 Position 2 has been set to " + clickedLocation.getX()+","+clickedLocation.getY()+","+clickedLocation.getZ());
+                if (clickedLocation.equals(pos1m.get(player)) || clickedLocation.equals(pos2m.get(player))) return;
+                player.sendMessage("§6 Position 2 has been set to " + clickedLocation.getX() + "," + clickedLocation.getY() + "," + clickedLocation.getZ());
                 pos2m.put(player, clickedLocation);
                 break;
         }

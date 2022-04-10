@@ -18,26 +18,28 @@ public abstract class KnockCommand extends Command {
     protected KnockCommand(@NotNull String name) {
         super(name);
         getKnockName = name;
+
     }
 
     public abstract @NotNull String getKnockDescription();
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender),args);
+        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
         return false;
     }
+
     public abstract PermissionDefault getPermissionDefault();
 
     public abstract String getSyntax();
 
-    public abstract void perform(Knocker knocker , String[] args);
+    public abstract void perform(Knocker knocker, String[] args);
 
     public abstract List<String> performTab(Knocker knocker, String[] args);
 
     @NotNull
     @Override
     public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-        return performTab(KnockbackFFA.getINSTANCE().getKnocker((Player) sender),args);
+        return performTab(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
     }
 }

@@ -1,11 +1,13 @@
 package me.gameisntover.kbffa.command.subcommands.util;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.command.KnockCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class ReloadCommand extends KnockCommand {
     public ReloadCommand(String name) {
@@ -40,7 +42,7 @@ public class ReloadCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args)   {
+    public List<String> performTab(Knocker knocker, String[] args) {
         return null;
     }
 

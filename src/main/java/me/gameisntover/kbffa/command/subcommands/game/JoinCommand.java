@@ -2,13 +2,15 @@ package me.gameisntover.kbffa.command.subcommands.game;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class JoinCommand extends KnockCommand {
     public JoinCommand(String name) {
@@ -17,7 +19,7 @@ public class JoinCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.translateAlternateColorCodes('&',"&6Players can use this command to join the game");
+        return ChatColor.translateAlternateColorCodes('&', "&6Players can use this command to join the game");
     }
 
     @Override
@@ -33,7 +35,8 @@ public class JoinCommand extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
-        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame()) p.sendMessage(Message.ALREADY_INGAME.toString());
+        if (KnockbackFFA.getINSTANCE().BungeeMode() && knocker.isInGame())
+            p.sendMessage(Message.ALREADY_INGAME.toString());
         else {
             if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null)
                 knocker.getPlayer().sendMessage(Message.NO_READY_ARENA.toString());
