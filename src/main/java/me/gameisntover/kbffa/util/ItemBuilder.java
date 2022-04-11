@@ -1,7 +1,6 @@
 package me.gameisntover.kbffa.util;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -13,20 +12,32 @@ import java.util.List;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class ItemBuilder {
-    private final Material material;
-    private final int amount;
-    private final String name;
-    private final List<String> lore;
+    private Material material;
+    private int amount;
+    private String name;
+    private List<String> lore;
     private ItemStack item;
     private ItemMeta meta;
+
+    public ItemBuilder(Material material, int amount, String name, List<String> lore) {
+        this.material = material;
+        this.amount = amount;
+        this.name = name;
+        this.lore = lore;
+    }
+
+    public ItemBuilder(Material material, int amount, String name) {
+        this.material = material;
+        this.amount = amount;
+        this.name = name;
+    }
 
     public ItemStack create() {
         item = new ItemStack(material, amount);
         meta = item.getItemMeta();
         meta.setDisplayName(name);
-        meta.setLore(lore);
+        if (lore != null) meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -40,13 +51,14 @@ public class ItemBuilder {
         item.setItemMeta(meta);
         return item;
     }
-    public ItemStack create(ItemFlag flag , ItemFlag flag2,Enchantment enchant , int level) {
+
+    public ItemStack create(ItemFlag flag, ItemFlag flag2, Enchantment enchant, int level) {
         item = new ItemStack(material, amount);
         meta = item.getItemMeta();
         meta.setDisplayName(name);
-        meta.addItemFlags(flag,flag2);
+        meta.addItemFlags(flag, flag2);
         if (flag2.equals(ItemFlag.HIDE_UNBREAKABLE)) meta.setUnbreakable(true);
-        meta.addEnchant(enchant,level,true);
+        meta.addEnchant(enchant, level, true);
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;

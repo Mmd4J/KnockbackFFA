@@ -3,7 +3,9 @@ package me.gameisntover.kbffa.command;
 import lombok.Getter;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.command.subcommands.arena.*;
-import me.gameisntover.kbffa.command.subcommands.botsjoin;
+import me.gameisntover.kbffa.command.subcommands.bots.AddBotCommand;
+import me.gameisntover.kbffa.command.subcommands.bots.CreateAIPath;
+import me.gameisntover.kbffa.command.subcommands.bots.RemoveBotCommand;
 import me.gameisntover.kbffa.command.subcommands.game.JoinCommand;
 import me.gameisntover.kbffa.command.subcommands.game.LeaveCommand;
 import me.gameisntover.kbffa.command.subcommands.kit.CreateKitCommand;
@@ -30,7 +32,8 @@ public class CommandManager {
                 , new CreateWorldCommand("createworld"), new GotoWorldCommand("gotoworld"), new SetVoidCommand("setvoid")
                 , new SpecialItemsCommand("specialitems"), new ReloadCommand("reload"), new DelKitCommand("delkit"),
                 new CreateKitCommand("createkit"), new WandCommand("wand"), new EditArenaCommand("editarena"), new CreateArenaCommand("createarena"),
-                new DelArenaCommand("delarena"), new HelpCommand("help"), new botsjoin("bottoggle"));
+                new DelArenaCommand("delarena"), new HelpCommand("help"), new AddBotCommand("addbot"), new RemoveBotCommand("removebot"),
+                new CreateAIPath("createaipath"));
         for (KnockCommand sb : subCommands) {
             sb.setName(sb.getKnockDescription());
             sb.setName(sb.getKnockName);

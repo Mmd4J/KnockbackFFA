@@ -13,11 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class LeaveCommand extends KnockCommand {
-    private String name;
 
     public LeaveCommand(String name) {
         super(name);
-        this.name = name;
     }
 
     @Override
@@ -38,14 +36,14 @@ public class LeaveCommand extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
-        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame()) {
+        if (!KnockbackFFA.getINSTANCE().BungeeMode() && knocker.isInGame()) {
             String leaveText = Message.ARENA_LEAVE.toString();
             leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
             p.sendMessage(leaveText);
             KnockbackFFA.getINSTANCE().getArenaManager().teleportToMainLobby(p);
             p.getInventory().clear();
             if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("save-inventory-on-join"))
-                p.getInventory().equals(knocker.getInventory());
+                p.getInventory().setContents(knocker.getInventory().getContents());
             knocker.hideScoreBoard();
             knocker.setInGame(false);
         } else p.sendMessage(Message.CAN_NOT_LEAVE.toString());

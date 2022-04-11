@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -194,9 +193,8 @@ public class GuiStuff implements Listener {
             });
             if (knocker.getConfig().getList("owned-kits") != null && knocker.getConfig().getList("owned-kits").size() > 0) {
                 if (knocker.getConfig().getList("owned-kits") == null)
-                    knocker.getConfig().set("owned-kits", new ArrayList<>());
+                    knocker.getConfig().set("owned-kits", Collections.singletonList("Default"));
                 List<String> kitsList = knocker.getConfig().getList("owned-kits").stream().map(Object::toString).collect(Collectors.toList());
-                ;
                 for (String kit : kitsList) {
                     if (kit == null) return;
                     Kit kitItems = KnockbackFFA.getINSTANCE().getKitManager().load(kit);
@@ -205,18 +203,24 @@ public class GuiStuff implements Listener {
                         String selC = kitsList.get(event.getSlot());
                         assert event.getCurrentItem() != null;
                         assert event.getCurrentItem().getItemMeta() != null;
-                        knocker.getConfig().set("selected-kit", event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
+                        if (!event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
+                            knocker.getConfig().set("selected-kit", selC);
+                            player.sendMessage(Message.SUCCESSFULLY_SELECTED_COSMETIC.toString().replace("%cosmetic%", selC));
+                        } else {
+                            knocker.getConfig().set("selected-kit", "");
+                            player.sendMessage(Message.SUCCESSFULLY_DESELECTED_COSMETIC.toString().replace("%cosmetic%", selC));
+                        }
                         knocker.saveConfig();
                         player.closeInventory();
                     });
+                    kitItem.setSelected(knocker.getConfig().getString("selected-kit").equalsIgnoreCase(kit));
                     ItemMeta kitMeta = kitItem.getItem().getItemMeta();
                     if (kitItem.getItem().getType() == Material.AIR) kitItem.getItem().setType(Material.BARRIER);
 
                     assert kitMeta != null;
                     kitMeta.setLore(kitItems.getConfig().getStringList("KitDescription").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
-                    if (knocker.getConfig().getString("selected-kit") == null)
-                        knocker.getConfig().set("selected-kit", kit);
-                    kitItem.setSelected(knocker.getConfig().getString("selected-kit").equalsIgnoreCase(kit));
+
+
                     kitItem.getItem().setItemMeta(kitMeta);
                     kitsMenu.add(kitItem, kitsList.indexOf(kit));
                 }

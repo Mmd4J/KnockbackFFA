@@ -22,6 +22,8 @@ cosmetics:
   purchase-success: "&aYou have successfully purchased %cosmetic%"
   no-enough-money: "&cYou don't have enough money to purchase this item!"
   already-owned: "&cYou already own this item!"
+  success-select: "&eYou've selected &6%cosmetic%"
+  success-deselect: "&eYou've deselected &6%cosmetic%"
 killstreak-record: "&c You've beaten your previous record of %killstreak% kills!"
 cannot-leave: "&cYou cannot use this command! maybe you are not in the game or bungeemode is on?"
 notenoughperms: "&cYou don't have enough permissions to use this command!"

@@ -3,8 +3,12 @@ package me.gameisntover.kbffa;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.api.Knocker;
-import me.gameisntover.kbffa.arena.*;
+import me.gameisntover.kbffa.arena.Arena;
+import me.gameisntover.kbffa.arena.ArenaConfiguration;
+import me.gameisntover.kbffa.arena.ArenaManager;
+import me.gameisntover.kbffa.arena.GameRules;
 import me.gameisntover.kbffa.arena.regions.BlockDataManager;
+import me.gameisntover.kbffa.bots.BotManager;
 import me.gameisntover.kbffa.command.CommandManager;
 import me.gameisntover.kbffa.gui.ButtonManager;
 import me.gameisntover.kbffa.hook.Expansion;
@@ -14,7 +18,6 @@ import me.gameisntover.kbffa.scoreboard.ScoreboardConfiguration;
 import me.gameisntover.kbffa.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -34,7 +37,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 @Getter
-public final class KnockbackFFA extends JavaPlugin implements Listener{
+public final class KnockbackFFA extends JavaPlugin implements Listener {
     @Getter
     private static KnockbackFFA INSTANCE;
     private final Map<Player, Knocker> knockerHandler = new HashMap<>();
@@ -52,6 +55,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     private ScoreboardConfiguration knockScoreboard;
     private CosmeticConfiguration cosmeticConfiguration;
     private ArenaConfiguration arenaConfiguration;
+    BotManager botManager;
+
     public Knocker getKnocker(Player player) {
         if (knockerHandler.containsKey(player))
             return knockerHandler.get(player);
@@ -64,6 +69,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         Player player = Bukkit.getPlayer(name);
         return getKnocker(player);
     }
+
     @SneakyThrows
     @Override
     public void onEnable() {
@@ -71,6 +77,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         arenaManager = new ArenaManager();
         kitManager = new KitManager();
         blockDataManager = new BlockDataManager();
+        botManager = new BotManager();
         if (!Bukkit.getOnlinePlayers().isEmpty())
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Knocker knocker = getKnocker(player);
@@ -81,7 +88,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         f.setAccessible(true);
         commandMap = (CommandMap) f.get(getServer());
         getLogger().info("Loading Configuration Files");
-        getDataFolder().mkdir();
+        if (!getDataFolder().exists()) getDataFolder().mkdir();
         loadMessages();
         loadSounds();
         loadConfig();
@@ -93,15 +100,19 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         loadTasks();
         getLogger().info("Enjoy using plugin :)");
         registerPlaceholders();
-        for (Knocker p : getInGamePlayers())if (p.getPlayer().getInventory().contains(Material.BOW) && !p.getPlayer().getInventory().contains(Material.ARROW)) p.getInventory().addItem(Items.ARROW.getItem());
+        for (Knocker p : getInGamePlayers())
+            if (p.getPlayer().getInventory().contains(Material.BOW) && !p.getPlayer().getInventory().contains(Material.ARROW))
+                p.getInventory().addItem(Items.ARROW.getItem());
     }
-    private void registerPlaceholders(){
+
+    private void registerPlaceholders() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;
-            Bukkit.getPluginManager().registerEvents(this,this);
-            new Expansion().register();
-            getLogger().info("Successfully registered placeholders");
+        Bukkit.getPluginManager().registerEvents(this, this);
+        new Expansion().register();
+        getLogger().info("Successfully registered placeholders");
     }
-    public List<Knocker> getInGamePlayers(){
+
+    public List<Knocker> getInGamePlayers() {
         List<Knocker> knockers = new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
             Knocker knocker = getKnocker(p);
@@ -109,22 +120,24 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         }
         return knockers;
     }
+
     @SneakyThrows
     public void loadMessages() {
-        File file = new File(getDataFolder(),"messages.yml");
+        File file = new File(getDataFolder(), "messages.yml");
         if (!file.exists()) {
             file.createNewFile();
             saveResource("messages.yml", true);
         }
         messages = YamlConfiguration.loadConfiguration(file);
     }
+
     @SneakyThrows
     public void loadSounds() {
-        File file = new File(getDataFolder(),"sound.yml");
+        File file = new File(getDataFolder(), "sound.yml");
         if (!file.exists()) {
-                file.createNewFile();
-                saveResource("sound.yml", true);
-            }
+            file.createNewFile();
+            saveResource("sound.yml", true);
+        }
         sounds = YamlConfiguration.loadConfiguration(file);
     }
 
@@ -144,7 +157,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
         File folder = new File(getDataFolder(), "Kits" + File.separator);
         if (!folder.exists()) {
             folder.mkdir();
-            File file = new File(getKitManager().getFolder(),"Default.yml");
+            File file = new File(getKitManager().getFolder(), "Default.yml");
             file.createNewFile();
             Files.copy(Objects.requireNonNull(getResource("Default.yml")), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             getLogger().info("Default Kit Created");
@@ -239,10 +252,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener{
     public boolean BungeeMode() {
         return getConfig().getBoolean("Bungee-Mode");
     }
-
-
-
-
 
 
 }

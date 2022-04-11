@@ -1,0 +1,21 @@
+#Bot configuration settings
+bot-death-messages:
+  - "LOL"
+  - "Oh no :("
+  - "XDDD"
+  - "God DAMMIT!"
+  - "You gonna pay for that >:("
+  - "Ahhhhh"
+bot-add-messages:
+  - "Yo, everyone!"
+  - "I'm going to knock everyone down!"
+  - "Hi everyone :d"
+  - "Hello guys!"
+  - "Hey!"
+auto-bot-join-on-1-player: true
+random-names-auto-join:
+  - "Jack"
+  - "Notch"
+  - "Dream"
+  - "Technoblade"
+  - "Gamerboy"

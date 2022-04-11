@@ -35,7 +35,7 @@ public class JoinCommand extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
-        if (KnockbackFFA.getINSTANCE().BungeeMode() && knocker.isInGame())
+        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame())
             p.sendMessage(Message.ALREADY_INGAME.toString());
         else {
             if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null)

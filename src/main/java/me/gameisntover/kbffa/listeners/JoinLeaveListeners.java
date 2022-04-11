@@ -2,13 +2,18 @@ package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.bots.Bot;
+import me.gameisntover.kbffa.bots.BotA;
 import me.gameisntover.kbffa.util.Sounds;
-import org.bukkit.Sound;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.List;
+import java.util.Random;
 
 public class JoinLeaveListeners implements Listener {
     @EventHandler
@@ -37,6 +42,14 @@ public class JoinLeaveListeners implements Listener {
                     knocker.setInGame(KnockbackFFA.getINSTANCE().BungeeMode());
                 }
             }
+        }
+        //bot autojoin
+        if (Bukkit.getOnlinePlayers().size() == 1 && KnockbackFFA.getINSTANCE().getBotManager().getConfig.getBoolean("auto-bot-join-on-1-player")) {
+            List<String> names = KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("random-names-auto-join");
+            String name = names.get(new Random().nextInt(names.size() - 1));
+            Bot bot = new BotA(name, KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
+            KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().put(name, bot);
+
         }
     }
 

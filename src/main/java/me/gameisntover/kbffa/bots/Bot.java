@@ -1,33 +1,45 @@
 package me.gameisntover.kbffa.bots;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.Knocker;
-import me.gameisntover.kbffa.util.Items;
+import me.gameisntover.kbffa.util.Message;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+import java.util.Random;
+
 @Getter
+@Setter
 public abstract class Bot implements Listener {
     private String name;
-    Zombie zombie;
+    Mob mob;
     private boolean inArena;
-    private boolean dead;
+
+    public abstract Mob getMob(Location location);
+
+    public abstract ItemStack getItemInHand();
+
 
     public Bot(String name, Location location) {
         assert location.getWorld() != null;
         this.name = name;
-        zombie = (Zombie) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
-        zombie.getEquipment().setItemInMainHand(Items.KNOCKBACK_STICK.getItem());
+        mob = getMob(location);
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
         skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
@@ -45,53 +57,78 @@ public abstract class Bot implements Listener {
         leatherBootMeta.setColor(Color.RED);
         leatherBoot.setItemMeta(leatherBootMeta);
         //applying equipments
-        zombie.getEquipment().setHelmet(head);
-        zombie.getEquipment().setChestplate(leatherChest);
-        zombie.getEquipment().setLeggings(leatherLeg);
-        zombie.getEquipment().setBoots(leatherBoot);
+        mob.getEquipment().setHelmet(head);
+        mob.getEquipment().setChestplate(leatherChest);
+        mob.getEquipment().setLeggings(leatherLeg);
+        mob.getEquipment().setBoots(leatherBoot);
+        mob.getEquipment().setItemInMainHand(getItemInHand());
         // --------------------------------------
-        zombie.setRemoveWhenFarAway(false);
-        zombie.setCanPickupItems(true);
-        zombie.setAdult();
-        zombie.setTarget(null);
-        zombie.setCustomName(ChatColor.translateAlternateColorCodes('&', name));
+        mob.setRemoveWhenFarAway(false);
+        mob.setCanPickupItems(true);
+        mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, 10));
+        mob.setTarget(null);
+        mob.setCustomName(ChatColor.translateAlternateColorCodes('&', name));
         KnockbackFFA.getINSTANCE().getServer().getPluginManager().registerEvents(this, KnockbackFFA.getINSTANCE());
+        mob.setMetadata("bot", new FixedMetadataValue(KnockbackFFA.getINSTANCE(), "bot-" + mob.getUniqueId()));
+        mob.setSilent(true);
         start();
-        dead = false;
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!isDead()) update();
-                else cancel();
+                update();
+                setInArena(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().contains(mob.getLocation()));
             }
         }.runTaskTimer(KnockbackFFA.getINSTANCE(), 20, 20);
     }
 
+    public void remove() {
+        HandlerList.unregisterAll(this);
+        mob.setHealth(0);
+    }
+
     public void attackPlayer(Knocker knocker) {
         Location location = knocker.getPlayer().getLocation();
-        zombie.setTarget(knocker.getPlayer());
-        zombie.setVelocity(location.getDirection());
+        mob.setTarget(knocker.getPlayer());
+        mob.setVelocity(location.getDirection());
     }
 
     public void jump() {
-        zombie.setVelocity(zombie.getLocation().getDirection().setY(0.5));
+        mob.setVelocity(mob.getLocation().getDirection().setY(0.5));
     }
 
     public void setName(String name) {
         this.name = name;
-        zombie.setCustomName(name);
+        mob.setCustomName(name);
+    }
+
+    public void chat(String message) {
+        Bukkit.broadcastMessage(Message.CHATFORMAT.toString().replace("%player%", getName()).replace("%message%", message));
     }
 
     @EventHandler
     public void onDamageEvent(EntityDamageEvent e) {
-        if (e.getEntity() != zombie) return;
+        if (e.getEntity() != mob) return;
         if (!inArena) e.setCancelled(true);
         else if (!e.getCause().equals(EntityDamageEvent.DamageCause.VOID)) e.setDamage(0);
     }
 
     @EventHandler
     public void onDeathEvent(EntityDeathEvent e) {
-        if (e.getEntity() == zombie) dead = true;
+        if (e.getEntity() != mob) return;
+        e.getEntity().setHealth(20);
+        mob.teleport(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
+        List<String> stringList = KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("bot-death-messages");
+        chat(stringList.get(new Random().nextInt(stringList.size() - 1)));
+    }
+
+    @EventHandler
+    public void onTargetEvent(EntityTargetEvent e) {
+        if (e.getEntity().equals(mob)) e.setCancelled(!isInArena());
+    }
+
+    @EventHandler
+    public void onTargetEntityEvent(EntityTargetLivingEntityEvent e) {
+        if (e.getEntity().equals(mob)) e.setCancelled(!isInArena());
     }
 
     public abstract void start();

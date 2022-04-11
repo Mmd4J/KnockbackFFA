@@ -1,6 +1,7 @@
 package me.gameisntover.kbffa.api;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
@@ -23,6 +24,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import java.io.File;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Knocker extends KnockData {
     private final File df = KnockbackFFA.getINSTANCE().getDataFolder();
@@ -37,6 +39,7 @@ public class Knocker extends KnockData {
     private Inventory inventory;
     private double balance;
     private int killStreak = 0;
+
     @SneakyThrows
     public Knocker(Player player) {
         this.player = player;
@@ -58,25 +61,27 @@ public class Knocker extends KnockData {
         new BukkitRunnable() {
             @Override
             public void run() {
-                SideBar sidebar = new SideBar(ChatColor.translateAlternateColorCodes('&',KnockbackFFA.getINSTANCE().getKnockScoreboard().getConfig.getString("Title")), "mainScoreboard");
+                SideBar sidebar = new SideBar(ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getKnockScoreboard().getConfig.getString("Title")), "mainScoreboard");
                 if (!scoreboard) {
                     cancel();
-                sidebar.getBoard().clearSlot(DisplaySlot.SIDEBAR);
+                    sidebar.getBoard().clearSlot(DisplaySlot.SIDEBAR);
                 }
                 List<String> scoreboardLines = KnockbackFFA.getINSTANCE().getKnockScoreboard().getConfig.getStringList("lines");
                 for (String string : scoreboardLines) {
-                    string = PlaceholderAPI.setPlaceholders(player,string);
-                    sidebar.add(ChatColor.translateAlternateColorCodes('&',string));
+                    string = PlaceholderAPI.setPlaceholders(player, string);
+                    sidebar.add(ChatColor.translateAlternateColorCodes('&', string));
                 }
-                    applySideBar(sidebar);
+                applySideBar(sidebar);
             }
         }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
     }
-    public void applySideBar(SideBar sideBar){
+
+    public void applySideBar(SideBar sideBar) {
         for (int i = 0; i < sideBar.getScores().size(); i++)
             sideBar.getScores().get(i).setScore(i);
         player.setScoreboard(sideBar.getBoard());
     }
+
     public void hideScoreBoard() {
         scoreboard = false;
     }
@@ -113,18 +118,23 @@ public class Knocker extends KnockData {
             }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".delay"));
         }
     }
-    public void playSound(Sounds sound){
-        getPlayer().playSound(getPlayer().getLocation(),Sound.valueOf(sound.toString()),1,1);
+
+    public void playSound(Sounds sound) {
+        getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf(sound.toString()), 1, 1);
     }
-    public void openGUI(GUI gui){
+
+    public void openGUI(GUI gui) {
         getPlayer().openInventory(gui.getInventory());
     }
-    public void sendMessage(String message){
-        getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',message));
+
+    public void sendMessage(String message) {
+        getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
-    public void sendActionBar(String message){
+
+    public void sendActionBar(String message) {
         getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
     }
+
     public void setBalance(double balance) {
         getConfig().set("balance", balance);
         saveConfig();
@@ -141,14 +151,15 @@ public class Knocker extends KnockData {
     public void removeBalance(int balance) {
         setBalance(getBalance() - balance);
     }
+
     public void removeBalance(double balance) {
         setBalance(getBalance() - balance);
     }
 
-    public void giveLobbyItems(){
-        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.shop.slot"),Items.SHOP_ITEM.getItem());
-        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.cosmetic.slot"),Items.COSMETIC_ITEM.getItem());
-        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.kits.slot"),Items.KIT_ITEM.getItem());
+    public void giveLobbyItems() {
+        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.shop.slot"), Items.SHOP_ITEM.getItem());
+        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.cosmetic.slot"), Items.COSMETIC_ITEM.getItem());
+        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.kits.slot"), Items.KIT_ITEM.getItem());
 
     }
 }

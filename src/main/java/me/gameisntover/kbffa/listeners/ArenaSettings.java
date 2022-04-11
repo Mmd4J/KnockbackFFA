@@ -54,9 +54,9 @@ public class ArenaSettings implements Listener {
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() != null) {
             Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName());
-            knocker.setInGame(true);
-            knocker.setInArena(true);
             if (!arena.contains(player.getLocation())) return;
+            if (!knocker.isInArena())
+                knocker.setInArena(true);
             if (knocker.getConfig().getString("selected-kit") == null)
                 knocker.getConfig().set("selected-kit", "Default");
             List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
@@ -66,58 +66,58 @@ public class ArenaSettings implements Listener {
             }
             Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(knocker.getConfig().getString("selected-kit"));
             for (ItemStack item : player.getInventory().getContents()) {
-                if (item == null) return;
-                if (Items.COSMETIC_ITEM.getItem().equals(item) || Items.SHOP_ITEM.getItem().equals(item) || Items.KIT_ITEM.getItem().equals(item)) {
-                    player.getInventory().clear();
-                    kit.giveKit(player);
-                    break;
+                if (item != null) {
+                    if (Items.COSMETIC_ITEM.getItem().equals(item) || Items.SHOP_ITEM.getItem().equals(item) || Items.KIT_ITEM.getItem().equals(item)) {
+                        player.getInventory().clear();
+                        kit.giveKit(player);
+                        break;
+                    }
                 }
             }
         } else knocker.setInArena(false);
         if (!knocker.isInGame()) return;
-        if (knocker.getConfig().getString("selected-trails") != null) {
-            String selectedTrails = knocker.getConfig().getString("selected-trails");
-            Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
-            DataBlock db = KnockbackFFA.getINSTANCE().getBlockDataManager().getBlockData(block);
-            if (!db.getBlockType().equals("") || db.getBlockType() != null) return;
-            if (KnockbackFFA.getINSTANCE().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
-                return;
-            db.setPrevMaterial(block.getType());
-            List<String> materialString = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getStringList(selectedTrails + ".blocks");
-            List<Material> materialList = new ArrayList<>();
-            for (String material : materialString) materialList.add(Material.getMaterial(material));
-            if (materialList.size() == 1) {
-                block.setType(materialList.get(0));
-                db.setBlockType("trail");
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
+        if (knocker.getConfig().getString("selected-trails") == null) return;
+        String selectedTrails = knocker.getConfig().getString("selected-trails");
+        Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
+        DataBlock db = KnockbackFFA.getINSTANCE().getBlockDataManager().getBlockData(block);
+        if (!db.getBlockType().equals("") || db.getBlockType() != null) return;
+        if (KnockbackFFA.getINSTANCE().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
+            return;
+        db.setPrevMaterial(block.getType());
+        List<String> materialString = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getStringList(selectedTrails + ".blocks");
+        List<Material> materialList = new ArrayList<>();
+        for (String material : materialString) materialList.add(Material.getMaterial(material));
+        if (materialList.size() == 1) {
+            block.setType(materialList.get(0));
+            db.setBlockType("trail");
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    block.setType(db.getPrevMaterial());
+                    db.setBlockType("");
+                    cancel();
+                }
+            }.runTaskTimer(KnockbackFFA.getINSTANCE(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20L, 1);
+        } else {
+            block.setType(materialList.get(0));
+            db.setBlockType("trail");
+            new BukkitRunnable() {
+                int i = 0;
+
+                @Override
+                public void run() {
+                    if (i < materialList.size() - 1) {
+                        i++;
+                        String material = materialList.get(i).name();
+                        block.setType(Material.getMaterial(material));
+                    } else {
                         block.setType(db.getPrevMaterial());
                         db.setBlockType("");
                         cancel();
                     }
-                }.runTaskTimer(KnockbackFFA.getINSTANCE(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20, 1);
-            } else {
-                block.setType(materialList.get(0));
-                db.setBlockType("trail");
-                new BukkitRunnable() {
-                    int i = 0;
-
-                    @Override
-                    public void run() {
-                        if (i < materialList.size() - 1) {
-                            i++;
-                            String material = materialList.get(i).name();
-                            block.setType(Material.getMaterial(material));
-                        } else {
-                            block.setType(db.getPrevMaterial());
-                            db.setBlockType("");
-                            cancel();
-                        }
-                    }
-                }.
-                        runTaskTimer(KnockbackFFA.getINSTANCE(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20, KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20);
-            }
+                }
+            }.
+                    runTaskTimer(KnockbackFFA.getINSTANCE(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20, KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20);
         }
     }
 }

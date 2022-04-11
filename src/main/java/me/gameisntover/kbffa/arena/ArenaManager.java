@@ -49,7 +49,7 @@ public class ArenaManager extends KnockData {
 
     public ArenaManager() {
         folder.mkdir();
-        
+
     }
 
 
@@ -104,7 +104,6 @@ public class ArenaManager extends KnockData {
                 world1.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
                 Bukkit.getWorlds().add(world1);
                 world1.loadChunk(0, 0);
-                System.out.println(world1.getName() + " successfully loaded!");
                 player.teleport(new Location(world1, spawnLoc.getX(), spawnLoc.getY(), spawnLoc.getZ()));
             }
         } else System.out.println("[KnockbackFFA] There are no arenas to teleport the player there!");

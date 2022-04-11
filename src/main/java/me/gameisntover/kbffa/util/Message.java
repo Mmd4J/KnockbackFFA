@@ -12,7 +12,7 @@ public enum Message {
     CAN_NOT_LEAVE("&cYou cannot use this command! maybe you are not in the game or bungeemode is on?"
             , "cannot-leave"),
     ALREADY_INGAME("&cYou're already in-game aren't you?", "already-ingame"),
-    NO_PERMISSION("&cYou don't have enough permissions to use this command!","notenoughperms"),
+    NO_PERMISSION("&cYou don't have enough permissions to use this command!", "notenoughperms"),
     //Arena related
     ARENA_JOIN("&eYou have joined the arena!", "join-arena"),
     ARENA_LEAVE("&cYou have joined the arena!", "leave-arena"),
@@ -24,6 +24,8 @@ public enum Message {
     COSMETIC_NO_ENOUGH_MONEY("&cYou don't have enough money to purchase this item!",
             "cosmetics.no-enough-money"),
     COSMETIC_ALREADY_OWNED("&cYou already own this item!", "cosmetics.already-owned"),
+    SUCCESSFULLY_SELECTED_COSMETIC("&eYou've selected &6%cosmetic%", "cosmetics.success-select"),
+    SUCCESSFULLY_DESELECTED_COSMETIC("&eYou've deselected &6%cosmetic%", "cosmetics.success-deselect"),
     // in-game messages
     PRIZE("&a+ &f%prize%", "prize"),
     DEATH_KNOCKED("&c You were killed by &a %killer%", "death.by-player"),
@@ -45,7 +47,8 @@ public enum Message {
 
     @Override
     public String toString() {
-        if (KnockbackFFA.getINSTANCE().getMessages().isSet(path)) return ChatColor.translateAlternateColorCodes('&',KnockbackFFA.getINSTANCE().getMessages().getString( path));
+        if (KnockbackFFA.getINSTANCE().getMessages().isSet(path))
+            return ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getMessages().getString(path));
         return ChatColor.translateAlternateColorCodes('&', defaultMessage);
     }
 
