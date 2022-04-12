@@ -77,11 +77,11 @@ public class ArenaManager extends KnockData {
      * needs @param @player
      */
     public void teleportToMainLobby(Player player) {
-        if (KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getString("mainlobby.world") == null) return;
-        double x = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getDouble("mainlobby.x");
-        double y = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getDouble("mainlobby.y");
-        double z = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getDouble("mainlobby.z");
-        World world = Bukkit.getWorld(KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getString("mainlobby.world"));
+        if (KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getString("mainlobby.world") == null) return;
+        double x = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getDouble("mainlobby.x");
+        double y = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getDouble("mainlobby.y");
+        double z = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getDouble("mainlobby.z");
+        World world = Bukkit.getWorld(KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getString("mainlobby.world"));
         if (world != null) player.teleport(new Location(world, x, y, z));
         else player.teleport(Bukkit.getWorld("world").getSpawnLocation());
     }

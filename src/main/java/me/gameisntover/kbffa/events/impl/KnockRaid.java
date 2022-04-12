@@ -1,8 +1,8 @@
-package me.gameisntover.kbffa.gameevents.gameevents;
+package me.gameisntover.kbffa.events.impl;
 
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.gameevents.GameEvent;
+import me.gameisntover.kbffa.events.GameEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;

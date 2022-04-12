@@ -6,14 +6,12 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.*;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -21,6 +19,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -83,6 +82,7 @@ public abstract class Bot implements Listener {
 
     public void remove() {
         HandlerList.unregisterAll(this);
+        mob.teleport(new Location(mob.getWorld(), 0, -20, 0));
         mob.setHealth(0);
     }
 
@@ -107,18 +107,31 @@ public abstract class Bot implements Listener {
 
     @EventHandler
     public void onDamageEvent(EntityDamageEvent e) {
+        if (e.getEntity() != mob || e.getCause() == EntityDamageEvent.DamageCause.VOID) return;
+        if (!isInArena()) e.setCancelled(true);
+        else e.setDamage(0);
+    }
+
+    @EventHandler
+    public void onMobDamageEvent(EntityDamageByEntityEvent e) {
+        //Deflection method
         if (e.getEntity() != mob) return;
-        if (!inArena) e.setCancelled(true);
-        else if (!e.getCause().equals(EntityDamageEvent.DamageCause.VOID)) e.setDamage(0);
+        if (!isInArena()) return;
+        if (Arrays.asList(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, EntityDamageEvent.DamageCause.ENTITY_ATTACK).contains(e.getCause())) {
+            Random random = new Random();
+            if (random.nextInt(4) == 2) mob.launchProjectile(EnderPearl.class, mob.getVelocity());
+            //Don't ask why i used integer here instead of nextBoolean since it would be really unfair for players...
+        }
     }
 
     @EventHandler
     public void onDeathEvent(EntityDeathEvent e) {
         if (e.getEntity() != mob) return;
-        e.getEntity().setHealth(20);
-        mob.teleport(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
         List<String> stringList = KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("bot-death-messages");
         chat(stringList.get(new Random().nextInt(stringList.size() - 1)));
+        e.getEntity().setHealth(20);
+        mob.teleport(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
+        //KNOWN ISSUE : Bot has loot drop so it drops some stuffs when he teleports back to lobby.
     }
 
     @EventHandler

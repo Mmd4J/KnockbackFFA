@@ -4,10 +4,11 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.arena.Arena;
-import me.gameisntover.kbffa.arena.ArenaConfiguration;
 import me.gameisntover.kbffa.arena.ArenaManager;
 import me.gameisntover.kbffa.arena.GameRules;
+import me.gameisntover.kbffa.arena.ZoneConfiguration;
 import me.gameisntover.kbffa.arena.regions.BlockDataManager;
+import me.gameisntover.kbffa.bots.Bot;
 import me.gameisntover.kbffa.bots.BotManager;
 import me.gameisntover.kbffa.command.CommandManager;
 import me.gameisntover.kbffa.gui.ButtonManager;
@@ -54,7 +55,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     private ItemConfig items;
     private ScoreboardConfiguration knockScoreboard;
     private CosmeticConfiguration cosmeticConfiguration;
-    private ArenaConfiguration arenaConfiguration;
+    private ZoneConfiguration zoneConfiguration;
     BotManager botManager;
 
     public Knocker getKnocker(Player player) {
@@ -105,6 +106,11 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 p.getInventory().addItem(Items.ARROW.getItem());
     }
 
+    @Override
+    public void onDisable() {
+        for (Bot bot : botManager.getBotHandler().values()) bot.remove();
+    }
+
     private void registerPlaceholders() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -153,7 +159,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             arenaDataFolder.mkdir();
         }
         cosmeticConfiguration = new CosmeticConfiguration();
-        arenaConfiguration = new ArenaConfiguration();
+        zoneConfiguration = new ZoneConfiguration();
         File folder = new File(getDataFolder(), "Kits" + File.separator);
         if (!folder.exists()) {
             folder.mkdir();
@@ -179,7 +185,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 if (arenaList.size() > 0) {
                     String arenaName = arenaList.get(0).getName();
                     arenaManager.setEnabledArena(arenaName);
-                    arenaConfiguration.save();
+                    zoneConfiguration.save();
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Knocker knocker = getKnocker(p);
                         if (!knocker.isInGame()) return;

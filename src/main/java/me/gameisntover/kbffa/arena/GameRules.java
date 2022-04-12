@@ -1,8 +1,8 @@
 package me.gameisntover.kbffa.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.arena.regions.Cuboid;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.arena.regions.Cuboid;
 import me.gameisntover.kbffa.util.Items;
 import me.gameisntover.kbffa.util.Message;
 import net.md_5.bungee.api.ChatMessageType;
@@ -34,11 +34,11 @@ public class GameRules implements Listener {
     public void onPlayerDamages(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
-        for (String sz : KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getStringList("registered-safezones")) {
-            if (KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getString("Safezones." + sz + ".world") != null) {
+        for (String sz : KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getStringList("registered-safezones")) {
+            if (KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getString("Safezones." + sz + ".world") != null) {
 
-                Location loc1 = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getLocation("Safezones." + sz + ".pos1");
-                Location loc2 = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getLocation("Safezones." + sz + ".pos2");
+                Location loc1 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("Safezones." + sz + ".pos1");
+                Location loc2 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("Safezones." + sz + ".pos2");
                 Cuboid s1box = new Cuboid(loc1, loc2);
                 Location location = player.getLocation();
                 if (s1box.contains(location)) {
@@ -52,15 +52,16 @@ public class GameRules implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        List<String> voids = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getStringList("registered-voids");
+        List<String> voids = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getStringList("registered-voids");
         for (String vd : voids) {
-            if (KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getLocation("voids." + vd + ".pos1") == null) return;
-            Location pos1 = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getLocation("voids." + vd + ".pos1");
-            Location pos2 = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getLocation("voids." + vd + ".pos2");
+            if (KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos1") == null)
+                return;
+            Location pos1 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos1");
+            Location pos2 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos2");
 
             Cuboid bb = new Cuboid(pos1, pos2);
             if (!bb.contains(player.getLocation())) return;
-            Integer damage = KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.getInt("voids." + vd + ".damage");
+            Integer damage = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getInt("voids." + vd + ".damage");
             if (damage == null) return;
             new BukkitRunnable() {
                 @Override

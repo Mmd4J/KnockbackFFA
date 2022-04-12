@@ -1,8 +1,8 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.command.KnockCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class SetMainLobbyCommand extends KnockCommand {
     private final String name;
+
     public SetMainLobbyCommand(String name) {
         super(name);
         this.name = name;
@@ -39,12 +40,12 @@ public class SetMainLobbyCommand extends KnockCommand {
         Player p = knocker.getPlayer();
         p.sendMessage(ChatColor.GREEN + "Main lobby spawn has been set");
         Location loc = p.getLocation();
-        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("mainlobby.x", loc.getX());
-        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("mainlobby.y", loc.getY());
-        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("mainlobby.z", loc.getZ());
+        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.x", loc.getX());
+        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.y", loc.getY());
+        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.z", loc.getZ());
         String world = Objects.requireNonNull(loc.getWorld()).getName();
-        KnockbackFFA.getINSTANCE().getArenaConfiguration().getConfig.set("mainlobby.world", world);
-        KnockbackFFA.getINSTANCE().getArenaConfiguration().save();
+        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.world", world);
+        KnockbackFFA.getINSTANCE().getZoneConfiguration().save();
     }
 
     @Override

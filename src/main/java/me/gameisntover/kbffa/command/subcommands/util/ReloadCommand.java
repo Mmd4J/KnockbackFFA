@@ -34,7 +34,7 @@ public class ReloadCommand extends KnockCommand {
         KnockbackFFA.getINSTANCE().reloadConfig();
         KnockbackFFA.getINSTANCE().loadMessages();
         KnockbackFFA.getINSTANCE().loadSounds();
-        KnockbackFFA.getINSTANCE().getArenaConfiguration().reload();
+        KnockbackFFA.getINSTANCE().getZoneConfiguration().reload();
         KnockbackFFA.getINSTANCE().getKnockScoreboard().reload();
         KnockbackFFA.getINSTANCE().getItems().reload();
         KnockbackFFA.getINSTANCE().getCosmeticConfiguration().reload();
