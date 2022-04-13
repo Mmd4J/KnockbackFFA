@@ -12,10 +12,10 @@ bot-add-messages:
   - "Hi everyone :d"
   - "Hello guys!"
   - "Hey!"
-auto-bot-join-on-1-player: true
 random-names-auto-join:
   - "Jack"
   - "Notch"
   - "Dream"
   - "Technoblade"
   - "Gamerboy"
+bot-speed: 5

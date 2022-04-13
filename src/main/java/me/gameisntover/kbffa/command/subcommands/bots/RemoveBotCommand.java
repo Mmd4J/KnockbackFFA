@@ -37,8 +37,9 @@ public class RemoveBotCommand extends KnockCommand {
                 Bot bot = KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().get(args[0]);
                 bot.remove();
                 KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().remove(args[0]);
+                knocker.sendMessage("&aSuccessfully removed the bot from the game");
             }
-        }
+        } else knocker.sendMessage("&cWrong usage :" + getSyntax());
     }
 
     @Override

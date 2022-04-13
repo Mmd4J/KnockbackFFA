@@ -1,9 +1,8 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
-import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Items;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,7 @@ public class WandCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.AQUA +"gives player position selector wand";
+        return "gives player position selector wand";
     }
 
     @Override

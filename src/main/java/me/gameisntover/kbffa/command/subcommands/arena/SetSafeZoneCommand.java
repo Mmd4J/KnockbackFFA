@@ -24,7 +24,7 @@ public class SetSafeZoneCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.translateAlternateColorCodes('&', "&5Setups a new safezone with the selected positions (from wand)");
+        return "Setups a new safezone with the selected positions (from wand)";
     }
 
     @Override

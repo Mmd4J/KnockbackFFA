@@ -16,7 +16,7 @@ public class ReloadCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.AQUA + "reloads the kbffa configuration files";
+        return "reloads the kbffa configuration files";
     }
 
     @Override

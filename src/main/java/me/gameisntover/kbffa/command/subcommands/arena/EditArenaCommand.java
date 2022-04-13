@@ -1,10 +1,10 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.regions.Cuboid;
 import me.gameisntover.kbffa.command.KnockCommand;
-import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.gui.Button;
 import me.gameisntover.kbffa.gui.GUI;
 import me.gameisntover.kbffa.listeners.WandListener;
@@ -34,13 +34,13 @@ public class EditArenaCommand extends KnockCommand {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender),args);
+        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
         return false;
     }
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.AQUA+ "shows the sender a gui to edit arena details.";
+        return "shows the sender a gui to edit arena details.";
     }
 
     @Override
@@ -182,6 +182,6 @@ public class EditArenaCommand extends KnockCommand {
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s ->  s.replace(".yml", "")).toArray(String[]::new));
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
     }
 }

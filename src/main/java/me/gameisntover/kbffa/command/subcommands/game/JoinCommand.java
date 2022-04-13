@@ -5,7 +5,6 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Message;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +18,7 @@ public class JoinCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.translateAlternateColorCodes('&', "&6Players can use this command to join the game");
+        return "Players can use this command to join the game";
     }
 
     @Override

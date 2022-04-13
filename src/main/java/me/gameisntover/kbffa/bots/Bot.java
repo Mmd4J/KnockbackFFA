@@ -5,7 +5,9 @@ import lombok.Setter;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.util.Message;
+import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
@@ -20,7 +22,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 @Getter
@@ -30,10 +31,9 @@ public abstract class Bot implements Listener {
     Mob mob;
     private boolean inArena;
 
-    public abstract Mob getMob(Location location);
-
     public abstract ItemStack getItemInHand();
 
+    public abstract Mob getMob(Location location);
 
     public Bot(String name, Location location) {
         assert location.getWorld() != null;
@@ -64,7 +64,7 @@ public abstract class Bot implements Listener {
         // --------------------------------------
         mob.setRemoveWhenFarAway(false);
         mob.setCanPickupItems(true);
-        mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, 10));
+        mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, KnockbackFFA.getINSTANCE().getBotManager().getConfig.getInt("bot-speed")));
         mob.setTarget(null);
         mob.setCustomName(ChatColor.translateAlternateColorCodes('&', name));
         KnockbackFFA.getINSTANCE().getServer().getPluginManager().registerEvents(this, KnockbackFFA.getINSTANCE());
@@ -107,9 +107,17 @@ public abstract class Bot implements Listener {
 
     @EventHandler
     public void onDamageEvent(EntityDamageEvent e) {
-        if (e.getEntity() != mob || e.getCause() == EntityDamageEvent.DamageCause.VOID) return;
-        if (!isInArena()) e.setCancelled(true);
-        else e.setDamage(0);
+        if (e.getEntity() != mob) return;
+        if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+            if (mob.getHealth() - e.getDamage() <= 0) {
+                mob.setHealth(20);
+                onDeath();
+                e.setCancelled(true);
+            }
+        } else {
+            if (!isInArena()) e.setCancelled(true);
+            else e.setDamage(0);
+        }
     }
 
     @EventHandler
@@ -124,15 +132,9 @@ public abstract class Bot implements Listener {
         }
     }
 
-    @EventHandler
-    public void onDeathEvent(EntityDeathEvent e) {
-        if (e.getEntity() != mob) return;
-        List<String> stringList = KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("bot-death-messages");
-        chat(stringList.get(new Random().nextInt(stringList.size() - 1)));
-        e.getEntity().setHealth(20);
-        mob.teleport(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
-        //KNOWN ISSUE : Bot has loot drop so it drops some stuffs when he teleports back to lobby.
-    }
+
+    public abstract void onDeath();
+
 
     @EventHandler
     public void onTargetEvent(EntityTargetEvent e) {
@@ -142,6 +144,17 @@ public abstract class Bot implements Listener {
     @EventHandler
     public void onTargetEntityEvent(EntityTargetLivingEntityEvent e) {
         if (e.getEntity().equals(mob)) e.setCancelled(!isInArena());
+    }
+
+    @EventHandler
+    public void onEntityPressurePlate(EntityInteractEvent e) {
+        if (e.getEntity() != mob) return;
+        if (e.getBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
+            Block block = e.getBlock();
+            block.getDrops().clear();
+            mob.setVelocity(mob.getLocation().getDirection().setY(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
+            mob.getWorld().playSound(mob.getLocation(), Sounds.JUMP_PLATE.toSound(), 1, 1);
+        }
     }
 
     public abstract void start();

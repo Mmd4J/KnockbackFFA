@@ -1,9 +1,9 @@
 package me.gameisntover.kbffa.command.subcommands.kit;
 
 import me.gameisntover.kbffa.KnockbackFFA;
+import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.kit.Kit;
-import me.gameisntover.kbffa.api.Knocker;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
@@ -20,7 +20,7 @@ public class DelKitCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.AQUA + "Deletes the specified kit";
+        return "Deletes the specified kit";
     }
 
     @Override
@@ -37,11 +37,10 @@ public class DelKitCommand extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
-        if (args.length != 1){
+        if (args.length != 1) {
             p.sendMessage(ChatColor.RED + "Usage: /delkit <kitname>");
-        return;
-        }
-        else{
+            return;
+        } else {
             Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(args[0]);
             kit.getFile().delete();
             p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0] + "!");

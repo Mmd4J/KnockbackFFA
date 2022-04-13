@@ -5,7 +5,6 @@ import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Message;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +19,7 @@ public class LeaveCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.translateAlternateColorCodes('&', "&5leaves the game if the player is already in game");
+        return "leaves the game if the player is already in game";
     }
 
     @Override

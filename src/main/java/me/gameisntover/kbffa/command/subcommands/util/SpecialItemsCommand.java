@@ -4,7 +4,6 @@ import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Items;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +17,7 @@ public class SpecialItemsCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.translateAlternateColorCodes('&', "&5a basic gui for giving some special items good for creating kits.");
+        return "basic gui for giving some special items good for creating kits.";
     }
 
     @Override

@@ -21,7 +21,7 @@ public class CreateWorldCommand extends KnockCommand {
 
     @Override
     public @NotNull String getKnockDescription() {
-        return ChatColor.translateAlternateColorCodes('&', "Generates / load a custom world which is useful for creating arenas!");
+        return "Generates / load a custom world which is useful for creating arenas!";
     }
 
     @Override
