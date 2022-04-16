@@ -3,6 +3,8 @@ package me.gameisntover.kbffa.bots;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.util.Items;
+import me.gameisntover.kbffa.util.Message;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -38,6 +40,10 @@ public class BotA extends Bot {
         List<String> stringList = KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("bot-death-messages");
         chat(stringList.get(new Random().nextInt(stringList.size() - 1)));
         super.mob.teleport(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
+        if (lastDamager != null)
+            Bukkit.broadcastMessage(Message.DEATH_KNOCKED_GOBAL.toString().replace("%killer%", lastDamager.getName()).replace("%player_name%", mob.getName()));
+        else Bukkit.broadcastMessage(Message.DEATH_VOID_GLOBAL.toString().replace("%player_name%", mob.getName()));
+
     }
 
     @Override

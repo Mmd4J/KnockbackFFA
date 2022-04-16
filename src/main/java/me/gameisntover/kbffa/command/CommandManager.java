@@ -32,7 +32,7 @@ public class CommandManager {
                 , new CreateWorldCommand("createworld"), new GotoWorldCommand("gotoworld"), new SetVoidCommand("setvoid")
                 , new SpecialItemsCommand("specialitems"), new ReloadCommand("reload"), new DelKitCommand("delkit"),
                 new CreateKitCommand("createkit"), new WandCommand("wand"), new EditArenaCommand("editarena"), new CreateArenaCommand("createarena"),
-                new DelArenaCommand("delarena"), new HelpCommand("help"), new AddBotCommand("addbot"), new RemoveBotCommand("removebot"),
+                new DelArenaCommand("delarena"), new HelpCommand("kbffahelp"), new AddBotCommand("addbot"), new RemoveBotCommand("removebot"),
                 new CreateAIPath("createaipath"));
         for (KnockCommand sb : subCommands) {
             sb.setName(sb.getKnockDescription());

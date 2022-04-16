@@ -10,6 +10,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Mob;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -29,6 +30,7 @@ import java.util.Random;
 public abstract class Bot implements Listener {
     private String name;
     Mob mob;
+    Player lastDamager;
     private boolean inArena;
 
     public abstract ItemStack getItemInHand();
@@ -67,6 +69,7 @@ public abstract class Bot implements Listener {
         mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, KnockbackFFA.getINSTANCE().getBotManager().getConfig.getInt("bot-speed")));
         mob.setTarget(null);
         mob.setCustomName(ChatColor.translateAlternateColorCodes('&', name));
+        mob.setCustomNameVisible(true);
         KnockbackFFA.getINSTANCE().getServer().getPluginManager().registerEvents(this, KnockbackFFA.getINSTANCE());
         mob.setMetadata("bot", new FixedMetadataValue(KnockbackFFA.getINSTANCE(), "bot-" + mob.getUniqueId()));
         mob.setSilent(true);
@@ -124,6 +127,7 @@ public abstract class Bot implements Listener {
     public void onMobDamageEvent(EntityDamageByEntityEvent e) {
         //Deflection method
         if (e.getEntity() != mob) return;
+        if (e.getDamager() instanceof Player) lastDamager = (Player) e.getDamager();
         if (!isInArena()) return;
         if (Arrays.asList(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, EntityDamageEvent.DamageCause.ENTITY_ATTACK).contains(e.getCause())) {
             Random random = new Random();

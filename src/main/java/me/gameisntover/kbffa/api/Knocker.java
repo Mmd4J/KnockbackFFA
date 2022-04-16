@@ -47,7 +47,7 @@ public class Knocker extends KnockData {
         if (!df.exists()) df.mkdir();
         if (!file.exists()) file.createNewFile();
         this.config = YamlConfiguration.loadConfiguration(file);
-        this.name = player.getDisplayName();
+        this.name = player.getName();
         this.inventory = player.getInventory();
     }
 

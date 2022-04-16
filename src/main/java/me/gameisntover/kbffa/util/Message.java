@@ -29,7 +29,7 @@ public enum Message {
     // in-game messages
     PRIZE("&a+ &f%prize%", "prize"),
     DEATH_KNOCKED("&c You were killed by &a %killer%", "death.by-player"),
-    DEATH_KNOCKED_GOBAL("&c %player_name%&e was killed by &a %killer%",
+    DEATH_KNOCKED_GOBAL("&c %player_name%&e was killed by &a%killer%",
             "death.by-player-global"),
     DEATH_VOID("&bYou fell into the void.", "death.by-void"),
     DEATH_VOID_GLOBAL("&c %player_name% &e fell in to the void.", "death.by-void-global"),

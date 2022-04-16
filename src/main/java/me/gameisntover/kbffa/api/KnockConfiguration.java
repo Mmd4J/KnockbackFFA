@@ -23,7 +23,7 @@ public abstract class KnockConfiguration {
         if (!KnockbackFFA.getINSTANCE().getDataFolder().exists()) KnockbackFFA.getINSTANCE().getDataFolder().mkdir();
         if (!getFile.exists()) {
             getFile.canExecute();
-            if (getResourceName() != null) KnockbackFFA.getINSTANCE().saveResource(getResourceName(), true);
+            if (getResourceName() != null) KnockbackFFA.getINSTANCE().saveResource(getResourceName(), false);
         }
         getConfig = YamlConfiguration.loadConfiguration(getFile);
 
