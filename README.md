@@ -1,5 +1,5 @@
 # KnockBackFFA
-KnockbackFFA is a free fun minigame which gives players a kb stick and some pearls and some special items to fight and throw each other in the void!
+KnockbackFFA is a free fun minigame which gives players a knockback stick and some pearls and some special items to fight and throw each other in the void!
 
 ## Features
 
