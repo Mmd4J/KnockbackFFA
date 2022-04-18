@@ -39,6 +39,7 @@ import java.util.*;
 
 @Getter
 public final class KnockbackFFA extends JavaPlugin implements Listener {
+
     @Getter
     private static KnockbackFFA INSTANCE;
     private final Map<Player, Knocker> knockerHandler = new HashMap<>();
@@ -204,7 +205,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 if (timer == 0) {
                     //what should happen when timer is up
                     timer = getConfig().getInt("ArenaChangeTimer");
-                    if (arenaList.size() > 1) { //checking if arenaList even has arenas
+                    if (!arenaList.isEmpty()) { //checking if arenaList even has arenas
                         arenaID++;
                         if (!(arenaID <= arenaList.size())) arenaID = 1;
                         arenaManager.changeArena(arenaList.get(arenaID - 1));
