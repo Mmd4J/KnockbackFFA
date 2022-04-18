@@ -42,7 +42,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
     @Getter
     private static KnockbackFFA INSTANCE;
-    private final Map<Player, Knocker> knockerHandler = new HashMap<>();
+    private final Map<UUID, Knocker> knockerHandler = new HashMap<>();
     private FileConfiguration messages;
     private FileConfiguration sounds;
     private int arenaID = 0;
@@ -60,10 +60,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     BotManager botManager;
 
     public Knocker getKnocker(Player player) {
-        if (knockerHandler.containsKey(player))
-            return knockerHandler.get(player);
-        Knocker knocker = new Knocker(player);
-        knockerHandler.put(player, knocker);
+        if (knockerHandler.containsKey(player.getUniqueId()))
+            return knockerHandler.get(player.getUniqueId());
+        Knocker knocker = new Knocker(player.getUniqueId());
+        knockerHandler.put(player.getUniqueId(), knocker);
         return knocker;
     }
 

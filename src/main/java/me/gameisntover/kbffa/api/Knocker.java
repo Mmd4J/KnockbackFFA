@@ -11,6 +11,7 @@ import me.gameisntover.kbffa.util.Items;
 import me.gameisntover.kbffa.util.Sounds;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -23,32 +24,31 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Knocker extends KnockData {
     private final File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private File file;
-    private Player player;
-    private String name;
+    private UUID uuid;
     private File folder = new File(getDf(), "player data" + File.separator);
     private FileConfiguration config;
     private boolean inGame = KnockbackFFA.getINSTANCE().BungeeMode();
     private boolean inArena;
     private boolean scoreboard;
-    private Inventory inventory;
     private double balance;
     private int killStreak = 0;
+    private Inventory inventory;
 
     @SneakyThrows
-    public Knocker(Player player) {
-        this.player = player;
-        this.file = loadDataFile(folder, player.getUniqueId() + ".yml");
+    public Knocker(UUID uuid) {
+        this.uuid = uuid;
+        this.file = loadDataFile(folder, uuid + ".yml");
         if (!df.exists()) df.mkdir();
         if (!file.exists()) file.createNewFile();
         this.config = YamlConfiguration.loadConfiguration(file);
-        this.name = player.getName();
-        this.inventory = player.getInventory();
+        this.inventory = getPlayer().getInventory();
     }
 
     @SneakyThrows
@@ -68,7 +68,7 @@ public class Knocker extends KnockData {
                 }
                 List<String> scoreboardLines = KnockbackFFA.getINSTANCE().getKnockScoreboard().getConfig.getStringList("lines");
                 for (String string : scoreboardLines) {
-                    string = PlaceholderAPI.setPlaceholders(player, string);
+                    string = PlaceholderAPI.setPlaceholders(getPlayer(), string);
                     sidebar.add(ChatColor.translateAlternateColorCodes('&', string));
                 }
                 applySideBar(sidebar);
@@ -79,7 +79,7 @@ public class Knocker extends KnockData {
     public void applySideBar(SideBar sideBar) {
         for (int i = 0; i < sideBar.getScores().size(); i++)
             sideBar.getScores().get(i).setScore(i);
-        player.setScoreboard(sideBar.getBoard());
+        getPlayer().setScoreboard(sideBar.getBoard());
     }
 
     public void hideScoreBoard() {
@@ -99,9 +99,9 @@ public class Knocker extends KnockData {
         String cosmeticType = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".type");
         if (cosmeticType == null) return;
         if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE"))
-            player.spawnParticle(Particle.valueOf(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".effect-type")), player.getLocation(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".amount"));
+            getPlayer().spawnParticle(Particle.valueOf(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".effect-type")), getPlayer().getLocation(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".amount"));
         if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".sound")) != null)
-            player.playSound(player.getLocation(), Sound.valueOf(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".sound")), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".volume"), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".pitch"));
+            getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".sound")), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".volume"), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".pitch"));
         if (cosmeticType.equalsIgnoreCase("SOUND")) {
             List<String> soundList = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getStringList(cosmeticName + ".sounds");
             new BukkitRunnable() {
@@ -111,7 +111,7 @@ public class Knocker extends KnockData {
                         String sound = soundList.get(i).substring(0, soundList.get(i).indexOf(":"));
                         float pitch = Float.parseFloat(soundList.get(i).substring(soundList.get(i).indexOf(":") + 1, soundList.get(i).indexOf(",")));
                         float volume = Float.parseFloat(soundList.get(i).substring(soundList.get(i).indexOf(",") + 1));
-                        player.getWorld().playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
+                        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf(sound), volume, pitch);
                         if (i == soundList.size() - 1) cancel();
                     }
                 }
@@ -161,5 +161,9 @@ public class Knocker extends KnockData {
         getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.cosmetic.slot"), Items.COSMETIC_ITEM.getItem());
         getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.kits.slot"), Items.KIT_ITEM.getItem());
 
+    }
+
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
     }
 }
