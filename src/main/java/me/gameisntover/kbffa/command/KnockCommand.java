@@ -18,14 +18,15 @@ public abstract class KnockCommand extends Command {
     protected KnockCommand(@NotNull String name) {
         super(name);
         getKnockName = name;
-
     }
 
     public abstract @NotNull String getKnockDescription();
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
+        if (sender.hasPermission("knockbackffa.command." + getKnockName))
+            perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
+        else sender.sendMessage(getPermissionMessage());
         return false;
     }
 

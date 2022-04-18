@@ -33,7 +33,7 @@ public class CommandManager {
                 , new SpecialItemsCommand("specialitems"), new ReloadCommand("reload"), new DelKitCommand("delkit"),
                 new CreateKitCommand("createkit"), new WandCommand("wand"), new EditArenaCommand("editarena"), new CreateArenaCommand("createarena"),
                 new DelArenaCommand("delarena"), new HelpCommand("kbffahelp"), new AddBotCommand("addbot"), new RemoveBotCommand("removebot"),
-                new CreateAIPath("createaipath"));
+                new CreateAIPath("createaipath"), new SetSafeZoneCommand("setsafezone"));
         for (KnockCommand sb : subCommands) {
             sb.setName(sb.getKnockDescription());
             sb.setName(sb.getKnockName);
