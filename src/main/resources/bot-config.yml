@@ -5,17 +5,19 @@ bot-death-messages:
   - "XDDD"
   - "God DAMMIT!"
   - "You gonna pay for that >:("
-  - "Ahhhhh"
+  - "Ahhhhh that was lag *totally*"
 bot-add-messages:
   - "Yo, everyone!"
   - "I'm going to knock everyone down!"
-  - "Hi everyone :d"
+  - "Hi everyone :D"
   - "Hello guys!"
   - "Hey!"
+  - "Let me show you how the boss PVP"
 random-names-auto-join:
   - "Jack"
   - "Notch"
   - "Dream"
   - "Technoblade"
   - "Gamerboy"
+  - "MinecraftGamerbot"
 bot-speed: 5
