@@ -209,7 +209,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                         arenaID++;
                         if (!(arenaID <= arenaList.size())) arenaID = 1;
                         arenaManager.changeArena(arenaList.get(arenaID - 1));
-                    } else if (arenaList.size() == 1) arenaManager.setEnabledArena(arenaList.get(0).getName());
+                    }
 
                 }
             }
