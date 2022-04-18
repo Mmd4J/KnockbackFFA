@@ -18,20 +18,8 @@ public class Region implements ConfigurationSerializable {
     private double y2;
     private double z2;
     private World world;
-    @NotNull
-    @Override
-    public Map<String, Object> serialize() {
-        Map<String,Object> map = new HashMap();
-        map.put("x1",x1);
-        map.put("x2",x2);
-        map.put("y1",y1);
-        map.put("y2",y2);
-        map.put("z1",z1);
-        map.put("z2",z2);
-        map.put("world",world);
-        return map;
-    }
-    public Region(Location loc1,Location loc2){
+
+    public Region(Location loc1, Location loc2) {
         x1 = loc1.getX();
         y1 = loc1.getY();
         z1 = loc1.getZ();
@@ -40,7 +28,8 @@ public class Region implements ConfigurationSerializable {
         z2 = loc2.getZ();
         world = loc1.getWorld();
     }
-    public Region(int x1,int y1, int z1, int x2, int y2, int z2, World world){
+
+    public Region(int x1, int y1, int z1, int x2, int y2, int z2, World world) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
@@ -49,13 +38,30 @@ public class Region implements ConfigurationSerializable {
         this.z2 = z2;
         this.world = world;
     }
-    public Location getPosition1(){
-        return new Location(world,x1,y1,z1);
+
+    @NotNull
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap();
+        map.put("x1", x1);
+        map.put("x2", x2);
+        map.put("y1", y1);
+        map.put("y2", y2);
+        map.put("z1", z1);
+        map.put("z2", z2);
+        map.put("world", world);
+        return map;
     }
-    public Location getPosition2(){
-        return new Location(world,x2,y2,z2);
+
+    public Location getPosition1() {
+        return new Location(world, x1, y1, z1);
     }
-    public boolean contains(Location location){
+
+    public Location getPosition2() {
+        return new Location(world, x2, y2, z2);
+    }
+
+    public boolean contains(Location location) {
         return (location.getX() >= x1 && location.getX() <= x2 && location.getY() >= y1 && location.getY() <= y2 && location.getZ() >= z1 && location.getZ() <= z2 && location.getWorld() == world);
     }
-    }
+}

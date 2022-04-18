@@ -9,12 +9,7 @@ import java.io.File;
 
 public abstract class KnockConfiguration {
 
-    public abstract String getName();
-
-    public abstract String getResourceName();
-
     public File getFile;
-
     public FileConfiguration getConfig;
 
     @SneakyThrows
@@ -28,6 +23,10 @@ public abstract class KnockConfiguration {
         getConfig = YamlConfiguration.loadConfiguration(getFile);
 
     }
+
+    public abstract String getName();
+
+    public abstract String getResourceName();
 
     public void reload() {
         getConfig = YamlConfiguration.loadConfiguration(getFile);

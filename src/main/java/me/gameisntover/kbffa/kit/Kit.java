@@ -25,6 +25,7 @@ public class Kit {
     private String kitName;
     private Material icon;
     private double price;
+
     @SneakyThrows
     public Kit(String kitsName) {
         this.kitName = kitsName;
@@ -33,8 +34,8 @@ public class Kit {
         file = new File(df, "Kits" + File.separator + kitsName + ".yml");
         if (!file.exists()) file.createNewFile();
         config = YamlConfiguration.loadConfiguration(file);
-    icon = Material.getMaterial(getConfig().getString("KitIcon"));
-    price = getConfig().getDouble("Price");
+        icon = Material.getMaterial(getConfig().getString("KitIcon"));
+        price = getConfig().getDouble("Price");
     }
 
     @SneakyThrows
@@ -54,6 +55,7 @@ public class Kit {
         icon = Material.getMaterial(getConfig().getString("KitIcon"));
         price = getConfig().getDouble("Price");
     }
+
     public void giveKit(Player player) {
         if (getConfig().getList("KitContents") != null) {
             List<ItemStack> kitContents = Arrays.asList(getConfig().getList("KitContents").toArray(new ItemStack[0]));
@@ -67,9 +69,9 @@ public class Kit {
         } else {
             Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
             knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
-                knocker.saveConfig();
-            }
+            knocker.saveConfig();
         }
+    }
 
     @SneakyThrows
     public void save() {

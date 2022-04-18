@@ -28,14 +28,10 @@ import java.util.Random;
 @Getter
 @Setter
 public abstract class Bot implements Listener {
-    private String name;
     Mob mob;
     Player lastDamager;
+    private String name;
     private boolean inArena;
-
-    public abstract ItemStack getItemInHand();
-
-    public abstract Mob getMob(Location location);
 
     public Bot(String name, Location location) {
         assert location.getWorld() != null;
@@ -82,6 +78,10 @@ public abstract class Bot implements Listener {
             }
         }.runTaskTimer(KnockbackFFA.getINSTANCE(), 20, 20);
     }
+
+    public abstract ItemStack getItemInHand();
+
+    public abstract Mob getMob(Location location);
 
     public void remove() {
         HandlerList.unregisterAll(this);

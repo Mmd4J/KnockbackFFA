@@ -30,6 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -43,6 +44,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     @Getter
     private static KnockbackFFA INSTANCE;
     private final Map<UUID, Knocker> knockerHandler = new HashMap<>();
+    BotManager botManager;
     private FileConfiguration messages;
     private FileConfiguration sounds;
     private int arenaID = 0;
@@ -57,9 +59,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     private ScoreboardConfiguration knockScoreboard;
     private CosmeticConfiguration cosmeticConfiguration;
     private ZoneConfiguration zoneConfiguration;
-    BotManager botManager;
 
-    public Knocker getKnocker(Player player) {
+    @NotNull
+    public Knocker getKnocker(@NotNull Player player) {
         if (knockerHandler.containsKey(player.getUniqueId()))
             return knockerHandler.get(player.getUniqueId());
         Knocker knocker = new Knocker(player.getUniqueId());
@@ -69,6 +71,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
     public Knocker getKnocker(String name) {
         Player player = Bukkit.getPlayer(name);
+        if (player == null) return null;
         return getKnocker(player);
     }
 

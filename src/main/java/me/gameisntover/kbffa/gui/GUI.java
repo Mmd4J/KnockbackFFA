@@ -55,12 +55,12 @@ public class GUI implements Listener {
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
-      if (openEventConsumer!=null)  if (e.getInventory().equals(inventory)) openEventConsumer.accept(e);
+        if (openEventConsumer != null) if (e.getInventory().equals(inventory)) openEventConsumer.accept(e);
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if (closeEventConsumer!=null)  if (e.getInventory().equals(inventory)) closeEventConsumer.accept(e);
+        if (closeEventConsumer != null) if (e.getInventory().equals(inventory)) closeEventConsumer.accept(e);
     }
 
     public void add(Button button, int slot) {

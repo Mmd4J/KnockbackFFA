@@ -18,6 +18,12 @@ import java.util.Random;
 public class BotA extends Bot {
     Mob mob;
 
+    public BotA(String name, Location location) {
+        super(name, location);
+        Zombie zombie = (Zombie) mob;
+        zombie.setAdult();
+    }
+
     @Override
     public ItemStack getItemInHand() {
         return Items.KNOCKBACK_STICK.getItem();
@@ -27,12 +33,6 @@ public class BotA extends Bot {
     public Mob getMob(Location location) {
         mob = (Mob) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
         return mob;
-    }
-
-    public BotA(String name, Location location) {
-        super(name, location);
-        Zombie zombie = (Zombie) mob;
-        zombie.setAdult();
     }
 
     @Override

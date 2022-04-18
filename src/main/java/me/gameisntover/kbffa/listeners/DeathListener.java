@@ -47,7 +47,7 @@ public class DeathListener implements Listener {
         } else if (damager instanceof Player || damager.hasMetadata("bot")) killer.put(player, damager);
 
     }
-    
+
 
     @EventHandler
     public void playerDeathByVoid(PlayerDeathEvent e) {

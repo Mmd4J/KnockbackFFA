@@ -1,5 +1,7 @@
 # KnockBackFFA
-KnockbackFFA is a free fun minigame which gives players a knockback stick and some pearls and some special items to fight and throw each other in the void!
+
+KnockbackFFA is a free fun minigame which gives players a knockback stick and some pearls and some special items to
+fight and throw each other in the void!
 
 ## Supported Versions
 
@@ -14,23 +16,23 @@ KnockbackFFA is a free fun minigame which gives players a knockback stick and so
 - 1.12.x
 
 > Expremental Support
+
 - 1.11.x
 - 1.10.x
 - 1.9.x
 - 1.8.x
 
-
 ## Features
 
- - Configurable
- - Custom Death Messages
- - Custom Placeholders
- - Developer API
- - PlaceholderAPI support
- - Chat format
- - Killstreak and killreward system
- - Scoreboard
- - Multiple Arenas Support
- - Custom Voids (per arena)
- - Cosmetics
- - Bots
+- Configurable
+- Custom Death Messages
+- Custom Placeholders
+- Developer API
+- PlaceholderAPI support
+- Chat format
+- Killstreak and killreward system
+- Scoreboard
+- Multiple Arenas Support
+- Custom Voids (per arena)
+- Cosmetics
+- Bots

@@ -135,13 +135,13 @@ public class Knocker extends KnockData {
         getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
     }
 
+    public float getBalance() {
+        return getConfig().getInt("balance");
+    }
+
     public void setBalance(double balance) {
         getConfig().set("balance", balance);
         saveConfig();
-    }
-
-    public float getBalance() {
-        return getConfig().getInt("balance");
     }
 
     public void addBalance(float balance) {

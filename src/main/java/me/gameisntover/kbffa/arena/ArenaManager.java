@@ -26,6 +26,11 @@ public class ArenaManager extends KnockData {
     private File df = KnockbackFFA.getINSTANCE().getDataFolder();
     private Map<String, Arena> arenaHandler = new HashMap<>();
 
+    public ArenaManager() {
+        folder.mkdir();
+
+    }
+
     @SneakyThrows
     public Arena create(String arenaName, Location pos1, Location pos2) {
         cfile = loadDataFile(folder, arenaName);
@@ -46,12 +51,6 @@ public class ArenaManager extends KnockData {
             return arena;
         }
     }
-
-    public ArenaManager() {
-        folder.mkdir();
-
-    }
-
 
     /**
      * sets the arena enabled
