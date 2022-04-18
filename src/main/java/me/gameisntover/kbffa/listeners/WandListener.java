@@ -15,9 +15,10 @@ public class WandListener implements Listener {
     public static Map<Player, Location> pos2m = new HashMap<>();
 
     @EventHandler
+    @SuppressWarnings("deprecation") // to support 1.8.x
     public void wandSelectionEvent(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (!player.getInventory().getItemInMainHand().equals(Items.POSITION_SELECTOR_WAND.getItem())) return;
+        if (!player.getInventory().getItemInHand().equals(Items.POSITION_SELECTOR_WAND.getItem())) return;
         if (e.getClickedBlock() == null) return;
         Location clickedLocation = e.getClickedBlock().getLocation();
         switch (e.getAction()) {
