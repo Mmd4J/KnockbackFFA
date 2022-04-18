@@ -5,14 +5,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-public final class PlayerTeleportsToArenaEvent extends Event implements Cancellable {
+public final class ArenaJoinEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final Arena arena;
     private final Player player;
-    private boolean isCancelled;
+    private boolean cancelled;
 
-    public PlayerTeleportsToArenaEvent(Player player, Arena arena) {
+    public ArenaJoinEvent(Player player, Arena arena) {
         this.player = player;
         this.arena = arena;
     }
@@ -31,15 +32,15 @@ public final class PlayerTeleportsToArenaEvent extends Event implements Cancella
 
     @Override
     public boolean isCancelled() {
-        return this.isCancelled;
+        return this.cancelled;
     }
 
     @Override
-    public void setCancelled(boolean arg0) {
-        this.isCancelled = arg0;
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 

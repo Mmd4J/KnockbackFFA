@@ -3,7 +3,7 @@ package me.gameisntover.kbffa.arena;
 import lombok.Data;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
+import me.gameisntover.kbffa.api.event.ArenaJoinEvent;
 import me.gameisntover.kbffa.arena.regions.Cuboid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -97,7 +97,7 @@ public class Arena {
         if (!(getName().equalsIgnoreCase(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName())))
             return;
         Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(getName());
-        PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, arena);
+        ArenaJoinEvent event = new ArenaJoinEvent(player, arena);
         Bukkit.getPluginManager().callEvent(event);
         player.teleport(getSpawnLocation());
     }

@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockData;
 import me.gameisntover.kbffa.api.Knocker;
-import me.gameisntover.kbffa.api.event.PlayerTeleportsToArenaEvent;
+import me.gameisntover.kbffa.api.event.ArenaJoinEvent;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.*;
@@ -91,7 +91,7 @@ public class ArenaManager extends KnockData {
      */
     public void teleportPlayerToArena(Player player) {
         if (getFolder().list().length > 0) {
-            PlayerTeleportsToArenaEvent event = new PlayerTeleportsToArenaEvent(player, getEnabledArena());
+            ArenaJoinEvent event = new ArenaJoinEvent(player, getEnabledArena());
             Bukkit.getPluginManager().callEvent(event);
             Location spawnLoc = getEnabledArena().getSpawnLocation();
             if (event.isCancelled()) return;
