@@ -60,6 +60,6 @@ public class Expansion extends PlaceholderExpansion {
             if (index == arenaList.size() - 1) return arenaList.get(0).replace(".yml", "");
             else return arenaList.get(index + 2).replace(".yml", "");
         }
-        return null;
+        return "Invalid Placeholder";
     }
 }
