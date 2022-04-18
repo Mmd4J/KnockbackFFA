@@ -109,7 +109,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        for (Bot bot : botManager.getBotHandler().values()) bot.remove();
+        botManager.getBotHandler().values().forEach(Bot::remove);
     }
 
     private void registerPlaceholders() {
