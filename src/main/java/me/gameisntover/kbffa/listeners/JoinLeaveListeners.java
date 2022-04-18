@@ -20,7 +20,6 @@ public class JoinLeaveListeners implements Listener {
         knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").add("Default"));
         knocker.getConfig().set("selected-kit", "Default");
         knocker.saveConfig();
-        if (!KnockbackFFA.getINSTANCE().BungeeMode()) knocker.setInGame(false);
         if (KnockbackFFA.getINSTANCE().getConfig().getBoolean("joinsound"))
             player.playSound(player.getLocation(), Sounds.PLAYER_JOIN.toSound(), 1, 1);
         if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null) knocker.setInGame(false);
@@ -29,11 +28,9 @@ public class JoinLeaveListeners implements Listener {
                 KnockbackFFA.getINSTANCE().getArenaManager().teleportPlayerToArena(player);
                 player.getInventory().clear();
                 knocker.giveLobbyItems();
-                knocker.setInGame(KnockbackFFA.getINSTANCE().BungeeMode());
             } else {
                 if (!knocker.isInGame()) {
                     KnockbackFFA.getINSTANCE().getArenaManager().teleportToMainLobby(player);
-                    knocker.setInGame(KnockbackFFA.getINSTANCE().BungeeMode());
                 }
             }
         }
@@ -42,7 +39,6 @@ public class JoinLeaveListeners implements Listener {
     @EventHandler
     public void playerLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
-        knocker.setInGame(false);
+        KnockbackFFA.getINSTANCE().unloadKnocker(player.getUniqueId());
     }
 }

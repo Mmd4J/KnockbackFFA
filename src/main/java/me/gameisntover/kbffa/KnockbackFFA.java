@@ -75,6 +75,10 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         return getKnocker(player);
     }
 
+    public void unloadKnocker(UUID uuid){
+        knockerHandler.remove(uuid);
+    }
+
     @SneakyThrows
     @Override
     public void onEnable() {

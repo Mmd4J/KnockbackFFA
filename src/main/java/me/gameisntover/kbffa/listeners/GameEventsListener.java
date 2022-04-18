@@ -27,8 +27,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 public class GameEventsListener implements Listener {
     @EventHandler
     public void noHunger(FoodLevelChangeEvent e) {
+        e.setFoodLevel(20);
         e.setCancelled(true);
-        if (e.getFoodLevel() < 20) e.setFoodLevel(20);
     }
 
     @EventHandler
@@ -45,7 +45,7 @@ public class GameEventsListener implements Listener {
         Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
         if (knocker.isInGame()) {
             if (e.getAction() != Action.PHYSICAL) return;
-            if (e.getClickedBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
+            if (Material.LIGHT_WEIGHTED_PRESSURE_PLATE.equals(e.getClickedBlock().getType())) {
                 Block block = e.getClickedBlock();
                 block.getDrops().clear();
                 player.setVelocity(player.getLocation().getDirection().setY(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
