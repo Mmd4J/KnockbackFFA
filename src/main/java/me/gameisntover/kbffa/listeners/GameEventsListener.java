@@ -34,21 +34,21 @@ public class GameEventsListener implements Listener {
     @EventHandler
     public void playerChatFormat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame())
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
+        if (KnockbackFFA.getInstance().BungeeMode() || knocker.isInGame())
             e.setFormat(Message.CHATFORMAT.toString().replace("%player%", player.getName()).replace("%message%", e.getMessage()));
     }
 
     @EventHandler
     public void onPressureButton(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (knocker.isInGame()) {
             if (e.getAction() != Action.PHYSICAL) return;
             if (Material.LIGHT_WEIGHTED_PRESSURE_PLATE.equals(e.getClickedBlock().getType())) {
                 Block block = e.getClickedBlock();
                 block.getDrops().clear();
-                player.setVelocity(player.getLocation().getDirection().setY(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
+                player.setVelocity(player.getLocation().getDirection().setY(KnockbackFFA.getInstance().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
                 player.playSound(player.getLocation(), Sounds.JUMP_PLATE.toSound(), 1, 1);
             }
         }
@@ -66,17 +66,17 @@ public class GameEventsListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (!knocker.isInGame()) return;
         if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
             Block block = e.getBlockPlaced();
-            DataBlock db = KnockbackFFA.getINSTANCE().getBlockDataManager().getBlockData(block);
+            DataBlock db = KnockbackFFA.getInstance().getBlockDataManager().getBlockData(block);
             db.setBlockType("BuildingBlock");
-            String arenaName = KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName();
+            String arenaName = KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getName();
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equalsIgnoreCase(arenaName)) {
+                    if (KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getName().equalsIgnoreCase(arenaName)) {
                         switch (block.getType()) {
                             case WHITE_WOOL:
                                 block.setType(Material.YELLOW_WOOL);
@@ -98,15 +98,15 @@ public class GameEventsListener implements Listener {
                     }
                 }
             };
-            runnable.runTaskTimer(KnockbackFFA.getINSTANCE(), 10L, 20L);
+            runnable.runTaskTimer(KnockbackFFA.getInstance(), 10L, 20L);
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getINSTANCE(), () -> player.getInventory().addItem(Items.BUILDING_BLOCK.getItem()), 1);
+            scheduler.scheduleSyncDelayedTask(KnockbackFFA.getInstance(), () -> player.getInventory().addItem(Items.BUILDING_BLOCK.getItem()), 1);
         }
         if (e.getBlockPlaced().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
             Block block = e.getBlockPlaced();
             block.getDrops().clear();
             BukkitScheduler blockTimer = Bukkit.getServer().getScheduler();
-            blockTimer.scheduleSyncDelayedTask(KnockbackFFA.getINSTANCE(),
+            blockTimer.scheduleSyncDelayedTask(KnockbackFFA.getInstance(),
                     () -> e.getBlock().setType(Material.AIR), 100);
         }
     }

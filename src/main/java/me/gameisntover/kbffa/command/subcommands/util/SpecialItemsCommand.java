@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class SpecialItemsCommand extends KnockCommand {
-    public SpecialItemsCommand(String name) {
-        super(name);
+    public SpecialItemsCommand() {
+        super("specialitems");
     }
 
     @Override

@@ -13,11 +13,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class SetMainLobbyCommand extends KnockCommand {
-    private final String name;
-
-    public SetMainLobbyCommand(String name) {
-        super(name);
-        this.name = name;
+    public SetMainLobbyCommand() {
+        super("setmainlobby");
     }
 
     @Override
@@ -40,12 +37,12 @@ public class SetMainLobbyCommand extends KnockCommand {
         Player p = knocker.getPlayer();
         p.sendMessage(ChatColor.GREEN + "Main lobby spawn has been set");
         Location loc = p.getLocation();
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.x", loc.getX());
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.y", loc.getY());
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.z", loc.getZ());
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("mainlobby.x", loc.getX());
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("mainlobby.y", loc.getY());
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("mainlobby.z", loc.getZ());
         String world = Objects.requireNonNull(loc.getWorld()).getName();
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("mainlobby.world", world);
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().save();
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("mainlobby.world", world);
+        KnockbackFFA.getInstance().getZoneConfiguration().save();
     }
 
     @Override

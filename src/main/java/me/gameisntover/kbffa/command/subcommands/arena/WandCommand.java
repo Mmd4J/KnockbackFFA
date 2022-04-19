@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class WandCommand extends KnockCommand {
-    public WandCommand(String name) {
-        super(name);
+    public WandCommand() {
+        super("wand");
     }
 
     @Override

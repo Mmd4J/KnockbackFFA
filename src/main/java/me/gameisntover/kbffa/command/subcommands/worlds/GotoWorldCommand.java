@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GotoWorldCommand extends KnockCommand {
-    public GotoWorldCommand(String name) {
-        super(name);
+    public GotoWorldCommand() {
+        super("gotoworld");
     }
 
     @Override

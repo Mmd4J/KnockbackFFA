@@ -19,8 +19,8 @@ public class BoardManager {
 
     public void register(Player player){
         FastBoard board = new FastBoard(player);
-        String title = KnockbackFFA.getINSTANCE().getKnockScoreboard().getConfig.getString("Title");
-        List<String> lines = KnockbackFFA.getINSTANCE().getKnockScoreboard()
+        String title = KnockbackFFA.getInstance().getKnockScoreboard().getConfig.getString("Title");
+        List<String> lines = KnockbackFFA.getInstance().getKnockScoreboard()
                 .getConfig.getStringList("lines");
         for(int i = 0; i <= lines.size(); i++){
             lines.set(i, translate(PlaceholderAPI.setPlaceholders(player, lines.get(i))));
@@ -36,9 +36,9 @@ public class BoardManager {
     }
 
     private void updateScoreboards(){
-        List<String> lines = KnockbackFFA.getINSTANCE()
+        List<String> lines = KnockbackFFA.getInstance()
                 .getKnockScoreboard().getConfig.getStringList("lines");
-        Bukkit.getScheduler().runTaskTimerAsynchronously(KnockbackFFA.getINSTANCE(), () ->
+        Bukkit.getScheduler().runTaskTimerAsynchronously(KnockbackFFA.getInstance(), () ->
                 playerBoards.values().forEach(board -> {
             final List<String> playerLines = new ArrayList<>();
             for(int i = 0; i <= lines.size(); i++){

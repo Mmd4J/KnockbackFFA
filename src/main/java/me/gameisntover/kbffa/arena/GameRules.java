@@ -26,19 +26,19 @@ public class GameRules implements Listener {
     public void onPlayerItemPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
-        if (knocker.isInGame() || KnockbackFFA.getINSTANCE().BungeeMode()) e.setCancelled(true);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (knocker.isInGame() || KnockbackFFA.getInstance().BungeeMode()) e.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerDamages(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
-        for (String sz : KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getStringList("registered-safezones")) {
-            if (KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getString("Safezones." + sz + ".world") != null) {
+        for (String sz : KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getStringList("registered-safezones")) {
+            if (KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getString("Safezones." + sz + ".world") != null) {
 
-                Location loc1 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("Safezones." + sz + ".pos1");
-                Location loc2 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("Safezones." + sz + ".pos2");
+                Location loc1 = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getLocation("Safezones." + sz + ".pos1");
+                Location loc2 = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getLocation("Safezones." + sz + ".pos2");
                 Cuboid s1box = new Cuboid(loc1, loc2);
                 Location location = player.getLocation();
                 if (s1box.contains(location)) {
@@ -52,16 +52,16 @@ public class GameRules implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        List<String> voids = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getStringList("registered-voids");
+        List<String> voids = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getStringList("registered-voids");
         for (String vd : voids) {
-            if (KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos1") == null)
+            if (KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos1") == null)
                 return;
-            Location pos1 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos1");
-            Location pos2 = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos2");
+            Location pos1 = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos1");
+            Location pos2 = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getLocation("voids." + vd + ".pos2");
 
             Cuboid bb = new Cuboid(pos1, pos2);
             if (!bb.contains(player.getLocation())) return;
-            Integer damage = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getInt("voids." + vd + ".damage");
+            Integer damage = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getInt("voids." + vd + ".damage");
             if (damage == null) return;
             new BukkitRunnable() {
                 @Override
@@ -72,14 +72,14 @@ public class GameRules implements Listener {
                         player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, damage));
                     }
                 }
-            }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
+            }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
         }
     }
 
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
+        if (KnockbackFFA.getInstance().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
 
     }
 
@@ -87,8 +87,8 @@ public class GameRules implements Listener {
     public void onBowUse(ProjectileLaunchEvent e) {
         if (!(e.getEntity().getShooter() instanceof Player)) return;
         Player player = (Player) e.getEntity().getShooter();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
-        if (!KnockbackFFA.getINSTANCE().BungeeMode() || !knocker.isInGame()) return;
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (!KnockbackFFA.getInstance().BungeeMode() || !knocker.isInGame()) return;
         if (!Items.BOW.getItem().equals(player.getInventory().getItemInMainHand())) return;
         new BukkitRunnable() {
             int timer = 10;
@@ -110,6 +110,6 @@ public class GameRules implements Listener {
                     }
                 }
             }
-        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
+        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
     }
 }

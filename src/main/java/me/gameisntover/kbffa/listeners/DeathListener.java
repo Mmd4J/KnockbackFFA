@@ -25,11 +25,11 @@ public class DeathListener implements Listener {
     public void playerDamageCheck(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (!player.getType().equals(EntityType.PLAYER)) return;
-        if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) return;
+        if (!KnockbackFFA.getInstance().BungeeMode() && !knocker.isInGame()) return;
         if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
-            e.setDamage(KnockbackFFA.getINSTANCE().getConfig().getInt("default-void-damage"));
+            e.setDamage(KnockbackFFA.getInstance().getConfig().getInt("default-void-damage"));
         else e.setDamage(0);
     }
 
@@ -53,12 +53,12 @@ public class DeathListener implements Listener {
     public void playerDeathByVoid(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Entity damager = killer.get(player);
-        if (KnockbackFFA.getINSTANCE().getArenaManager() == null) return;
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
-        Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena();
+        if (KnockbackFFA.getInstance().getArenaManager() == null) return;
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        Arena arena = KnockbackFFA.getInstance().getArenaManager().getEnabledArena();
         killer.remove(player);
         knocker.setInArena(false);
-        if (!KnockbackFFA.getINSTANCE().BungeeMode() && !knocker.isInGame()) return;
+        if (!KnockbackFFA.getInstance().BungeeMode() && !knocker.isInGame()) return;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -67,7 +67,7 @@ public class DeathListener implements Listener {
                 arena.teleportPlayer(player);
                 cancel();
             }
-        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 1);
+        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 1);
         World world = player.getWorld();
         List<Entity> entList = world.getEntities();
         for (Entity current : entList) if ((current instanceof Item)) current.remove();
@@ -80,8 +80,8 @@ public class DeathListener implements Listener {
         } else {
             if (damager != player && damager instanceof Player) {
                 knocker.loadCosmetic(knocker.selectedCosmetic());
-                Knocker damageKnocker = KnockbackFFA.getINSTANCE().getKnocker((Player) damager);
-                float prize = KnockbackFFA.getINSTANCE().getConfig().getInt("killprize");
+                Knocker damageKnocker = KnockbackFFA.getInstance().getKnocker((Player) damager);
+                float prize = KnockbackFFA.getInstance().getConfig().getInt("killprize");
                 damageKnocker.sendMessage(Message.PRIZE.toString().replace("%prize%", prize + "").replace("&", "§"));
                 damageKnocker.addBalance(prize);
                 damageKnocker.getConfig().set("kills", damageKnocker.getConfig().getInt("kills") + 1);

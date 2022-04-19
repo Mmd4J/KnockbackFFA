@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateArenaCommand extends KnockCommand {
-    public CreateArenaCommand(String name) {
-        super(name);
+    public CreateArenaCommand() {
+        super("createarena");
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CreateArenaCommand extends KnockCommand {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
+        perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
         return false;
     }
 
@@ -59,7 +59,7 @@ public class CreateArenaCommand extends KnockCommand {
         } else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
             Location loc1 = WandListener.pos1m.get(p);
             Location loc2 = WandListener.pos2m.get(p);
-            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().create(args[0], loc1, loc2);
+            Arena arena = KnockbackFFA.getInstance().getArenaManager().create(args[0], loc1, loc2);
             List<String> blocks = new ArrayList<>();
             Cuboid region = new Cuboid(loc1, loc2);
             for (Block block : region.getBlocks()) blocks.add(block.getType().name());
@@ -75,8 +75,8 @@ public class CreateArenaCommand extends KnockCommand {
             arena.getConfig().set("arena.spawn", p.getLocation());
             arena.getConfig().set("blocks", blocks);
             arena.save();
-            if (KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list().length == 1)
-                KnockbackFFA.getINSTANCE().getArenaManager().setEnabledArena(args[0]);
+            if (KnockbackFFA.getInstance().getArenaManager().getFolder().list().length == 1)
+                KnockbackFFA.getInstance().getArenaManager().setEnabledArena(args[0]);
             ArenaCreateEvent event = new ArenaCreateEvent(p, arena);
             Bukkit.getPluginManager().callEvent(event);
             p.sendMessage(ChatColor.GREEN + "Arena " + args[0] + " has been created!");

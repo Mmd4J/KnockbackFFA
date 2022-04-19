@@ -12,8 +12,8 @@ import java.util.List;
 
 public class AddBotCommand extends KnockCommand {
 
-    public AddBotCommand(@NotNull String name) {
-        super(name);
+    public AddBotCommand() {
+        super("addbot");
     }
 
     @Override
@@ -34,14 +34,14 @@ public class AddBotCommand extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         if (args.length > 0) {
-            if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null)
+            if (KnockbackFFA.getInstance().getArenaManager().getEnabledArena() == null)
                 knocker.sendMessage("&cThere is no arena for bot to join there! please create arena before using");
             else {
-                if (KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().containsKey(args[0]))
+                if (KnockbackFFA.getInstance().getBotManager().getBotHandler().containsKey(args[0]))
                     knocker.sendMessage("This bot already exists!");
                 else {
-                    Bot bot = new BotA(args[0], KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
-                    KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().put(args[0], bot);
+                    Bot bot = new BotA(args[0], KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getSpawnLocation());
+                    KnockbackFFA.getInstance().getBotManager().getBotHandler().put(args[0], bot);
                 }
             }
         } else knocker.sendMessage("&cWrong usage!" + getSyntax());

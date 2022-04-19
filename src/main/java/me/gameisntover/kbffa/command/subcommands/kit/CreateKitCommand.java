@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class CreateKitCommand extends KnockCommand {
-    public CreateKitCommand(String name) {
-        super(name);
+    public CreateKitCommand() {
+        super("createkit");
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CreateKitCommand extends KnockCommand {
             return;
         }
         if (args.length == 1) {
-            Kit kit = KnockbackFFA.getINSTANCE().getKitManager().create(args[0], p.getInventory().getContents(), p.getInventory().getItemInMainHand().getType());
+            Kit kit = KnockbackFFA.getInstance().getKitManager().create(args[0], p.getInventory().getContents(), p.getInventory().getItemInMainHand().getType());
             p.sendMessage(ChatColor.GREEN + "I've created the kit " + args[0] + "! now you need to configure it in the plugins plugins/KnockbackFFA/kits!");
         }
     }

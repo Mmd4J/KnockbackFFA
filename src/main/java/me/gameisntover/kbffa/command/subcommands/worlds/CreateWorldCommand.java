@@ -12,11 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateWorldCommand extends KnockCommand {
-    private String name;
 
-    public CreateWorldCommand(String name) {
-        super(name);
-        this.name = name;
+    public CreateWorldCommand() {
+        super("createworld");
     }
 
     @Override

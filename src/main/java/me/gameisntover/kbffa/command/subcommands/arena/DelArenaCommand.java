@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DelArenaCommand extends KnockCommand {
-    public DelArenaCommand(@NotNull String name) {
-        super(name);
+    public DelArenaCommand() {
+        super("delarena");
     }
 
     @Override
@@ -33,13 +33,13 @@ public class DelArenaCommand extends KnockCommand {
 
     @Override
     public void perform(Knocker knocker, String[] args) {
-        Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(args[0]);
+        Arena arena = KnockbackFFA.getInstance().getArenaManager().load(args[0]);
         if (arena.isReady()) arena.removeArena();
         else knocker.sendMessage("&cThe arena does not exists!");
     }
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).collect(Collectors.toList());
+        return Arrays.stream(KnockbackFFA.getInstance().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).collect(Collectors.toList());
     }
 }

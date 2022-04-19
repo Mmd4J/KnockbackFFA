@@ -43,7 +43,7 @@ import java.util.*;
 public final class KnockbackFFA extends JavaPlugin implements Listener {
 
     @Getter
-    private static KnockbackFFA INSTANCE;
+    private static KnockbackFFA instance;
     private final Map<UUID, Knocker> knockerHandler = new HashMap<>();
     BotManager botManager;
     private FileConfiguration messages;
@@ -84,7 +84,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     @SneakyThrows
     @Override
     public void onEnable() {
-        INSTANCE = this;
+        long time = System.currentTimeMillis();
+        instance = this;
         arenaManager = new ArenaManager();
         kitManager = new KitManager();
         blockDataManager = new BlockDataManager();
@@ -106,11 +107,12 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         loadConfig();
         getLogger().info("Loading Commands");
         commandManager = new CommandManager();
-        getLogger().info("Loading Java Classes");
+        getLogger().info("Loading Listeners");
         loadListeners();
         getLogger().info("Loading Tasks");
         loadTasks();
-        getLogger().info("Enjoy using plugin :)");
+        long takenTime = (System.currentTimeMillis() - time);
+        getLogger().info("Plugin loaded successfully in " + takenTime + "ms");
         registerPlaceholders();
         for (Knocker p : getInGamePlayers())
             if (p.getPlayer().getInventory().contains(Material.BOW) && !p.getPlayer().getInventory().contains(Material.ARROW))
@@ -244,7 +246,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
         if (!getConfig().getBoolean("ClearItems.enabled")) return;
         scheduler.scheduleSyncRepeatingTask(this, () -> {
-            Bukkit.broadcastMessage(Message.ITEM_CLEAR.toString().replace("&", "§"));
+            Bukkit.broadcastMessage(Message.ITEM_CLEAR.toString());
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                 Knocker knocker = getKnocker(p);
                 if (!knocker.isInGame()) return;

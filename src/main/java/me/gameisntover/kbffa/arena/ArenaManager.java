@@ -22,8 +22,8 @@ public class ArenaManager extends KnockData {
     private Arena enabledArena;
     private File cfile;
     private FileConfiguration config;
-    private File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData" + File.separator);
-    private File df = KnockbackFFA.getINSTANCE().getDataFolder();
+    private File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData" + File.separator);
+    private File df = KnockbackFFA.getInstance().getDataFolder();
     private Map<String, Arena> arenaHandler = new HashMap<>();
 
     public ArenaManager() {
@@ -76,11 +76,11 @@ public class ArenaManager extends KnockData {
      * needs @param @player
      */
     public void teleportToMainLobby(Player player) {
-        if (KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getString("mainlobby.world") == null) return;
-        double x = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getDouble("mainlobby.x");
-        double y = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getDouble("mainlobby.y");
-        double z = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getDouble("mainlobby.z");
-        World world = Bukkit.getWorld(KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getString("mainlobby.world"));
+        if (KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getString("mainlobby.world") == null) return;
+        double x = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getDouble("mainlobby.x");
+        double y = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getDouble("mainlobby.y");
+        double z = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getDouble("mainlobby.z");
+        World world = Bukkit.getWorld(KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getString("mainlobby.world"));
         if (world != null) player.teleport(new Location(world, x, y, z));
         else player.teleport(Bukkit.getWorld("world").getSpawnLocation());
     }
@@ -135,7 +135,7 @@ public class ArenaManager extends KnockData {
         String arenaName = arena.getName();
         setEnabledArena(arenaName);
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(p);
+            Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
             if (!knocker.isInGame()) return;
             p.getInventory().clear();
             knocker.giveLobbyItems();

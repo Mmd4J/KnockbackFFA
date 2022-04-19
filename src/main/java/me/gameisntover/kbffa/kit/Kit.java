@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 public class Kit {
     private File file;
     private FileConfiguration config;
-    private File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "Kits" + File.separator);
-    private File df = KnockbackFFA.getINSTANCE().getDataFolder();
+    private File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
+    private File df = KnockbackFFA.getInstance().getDataFolder();
     private String kitName;
     private Material icon;
     private double price;
@@ -52,7 +52,7 @@ public class Kit {
         getConfig().set("KitIcon", icon != null && icon != Material.AIR ? icon.name() : "BARRIER");
         getConfig().set("KitDescription", Arrays.asList(ChatColor.GRAY + "Another cool kit!", ChatColor.GRAY + "Must be configured in plugins/KnockbackFFA/kits !"));
         save();
-        icon = Material.getMaterial(getConfig().getString("KitIcon"));
+        this.icon = Material.getMaterial(getConfig().getString("KitIcon"));
         price = getConfig().getDouble("Price");
     }
 
@@ -67,7 +67,7 @@ public class Kit {
                 if (item.getType().toString().contains("Boots")) player.getInventory().setBoots(item);
             }
         } else {
-            Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
             knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
             knocker.saveConfig();
         }

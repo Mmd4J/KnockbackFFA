@@ -29,7 +29,7 @@ public class GUI implements Listener {
         setInventory(Bukkit.createInventory(null, guiLayers * 9, name));
         setName(name);
         setLayers(guiLayers);
-        Bukkit.getPluginManager().registerEvents(this, KnockbackFFA.getINSTANCE());
+        Bukkit.getPluginManager().registerEvents(this, KnockbackFFA.getInstance());
     }
 
     @EventHandler

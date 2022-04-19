@@ -62,21 +62,21 @@ public abstract class Bot implements Listener {
         // --------------------------------------
         mob.setRemoveWhenFarAway(false);
         mob.setCanPickupItems(true);
-        mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, KnockbackFFA.getINSTANCE().getBotManager().getConfig.getInt("bot-speed")));
+        mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, KnockbackFFA.getInstance().getBotManager().getConfig.getInt("bot-speed")));
         mob.setTarget(null);
         mob.setCustomName(ChatColor.translateAlternateColorCodes('&', name));
         mob.setCustomNameVisible(true);
-        KnockbackFFA.getINSTANCE().getServer().getPluginManager().registerEvents(this, KnockbackFFA.getINSTANCE());
-        mob.setMetadata("bot", new FixedMetadataValue(KnockbackFFA.getINSTANCE(), "bot-" + mob.getUniqueId()));
+        KnockbackFFA.getInstance().getServer().getPluginManager().registerEvents(this, KnockbackFFA.getInstance());
+        mob.setMetadata("bot", new FixedMetadataValue(KnockbackFFA.getInstance(), "bot-" + mob.getUniqueId()));
         mob.setSilent(true);
         start();
         new BukkitRunnable() {
             @Override
             public void run() {
                 update();
-                setInArena(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().contains(mob.getLocation()));
+                setInArena(KnockbackFFA.getInstance().getArenaManager().getEnabledArena().contains(mob.getLocation()));
             }
-        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 20, 20);
+        }.runTaskTimer(KnockbackFFA.getInstance(), 20, 20);
     }
 
     public abstract ItemStack getItemInHand();
@@ -156,7 +156,7 @@ public abstract class Bot implements Listener {
         if (e.getBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
             Block block = e.getBlock();
             block.getDrops().clear();
-            mob.setVelocity(mob.getLocation().getDirection().setY(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
+            mob.setVelocity(mob.getLocation().getDirection().setY(KnockbackFFA.getInstance().getItems().getConfig.getInt("SpecialItems.JumpPlate.jumpLevel")));
             mob.getWorld().playSound(mob.getLocation(), Sounds.JUMP_PLATE.toSound(), 1, 1);
         }
     }

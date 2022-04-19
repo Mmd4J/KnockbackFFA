@@ -25,12 +25,12 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (knocker.isInArena()) return;
-        String[] arenaList = KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list();
+        String[] arenaList = KnockbackFFA.getInstance().getArenaManager().getFolder().list();
         if (arenaList == null) return;
         for (String arenaName : arenaList) {
-            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(arenaName.replace(".yml", ""));
+            Arena arena = KnockbackFFA.getInstance().getArenaManager().load(arenaName.replace(".yml", ""));
             e.setCancelled(!arena.getConfig().getBoolean("block-break"));
         }
     }
@@ -38,12 +38,12 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
         if (!knocker.isInGame()) return;
-        String[] arenaList = KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list();
+        String[] arenaList = KnockbackFFA.getInstance().getArenaManager().getFolder().list();
         assert arenaList != null;
         for (String arenaName : arenaList) {
-            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(arenaName.replace(".yml", ""));
+            Arena arena = KnockbackFFA.getInstance().getArenaManager().load(arenaName.replace(".yml", ""));
             e.setCancelled(knocker.isInArena() && !arena.getConfig().getBoolean("item-drop"));
         }
     }
@@ -51,9 +51,9 @@ public class ArenaSettings implements Listener {
     @EventHandler
     public void onPlayerGoesToArena(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getINSTANCE().getKnocker(player);
-        if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() != null) {
-            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName());
+        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        if (KnockbackFFA.getInstance().getArenaManager().getEnabledArena() != null) {
+            Arena arena = KnockbackFFA.getInstance().getArenaManager().load(KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getName());
             if (!arena.contains(player.getLocation())) return;
             if (!knocker.isInArena())
                 knocker.setInArena(true);
@@ -64,7 +64,7 @@ public class ArenaSettings implements Listener {
                 ownedKits.add("Default");
                 knocker.getConfig().set("owned-kits", ownedKits);
             }
-            Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(knocker.getConfig().getString("selected-kit"));
+            Kit kit = KnockbackFFA.getInstance().getKitManager().load(knocker.getConfig().getString("selected-kit"));
             for (ItemStack item : player.getInventory().getContents()) {
                 if (item != null) {
                     if (Items.COSMETIC_ITEM.getItem().equals(item) || Items.SHOP_ITEM.getItem().equals(item) || Items.KIT_ITEM.getItem().equals(item)) {
@@ -79,12 +79,12 @@ public class ArenaSettings implements Listener {
         if (knocker.getConfig().getString("selected-trails") == null) return;
         String selectedTrails = knocker.getConfig().getString("selected-trails");
         Block block = player.getWorld().getBlockAt(e.getFrom().getBlockX(), e.getFrom().getBlockY() - 1, e.getFrom().getBlockZ());
-        DataBlock db = KnockbackFFA.getINSTANCE().getBlockDataManager().getBlockData(block);
+        DataBlock db = KnockbackFFA.getInstance().getBlockDataManager().getBlockData(block);
         if (!db.getBlockType().equals("") || db.getBlockType() != null) return;
-        if (KnockbackFFA.getINSTANCE().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
+        if (KnockbackFFA.getInstance().getConfig().getStringList("no-trail-blocks").contains(block.getType().toString()))
             return;
         db.setPrevMaterial(block.getType());
-        List<String> materialString = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getStringList(selectedTrails + ".blocks");
+        List<String> materialString = KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getStringList(selectedTrails + ".blocks");
         List<Material> materialList = new ArrayList<>();
         for (String material : materialString) materialList.add(Material.getMaterial(material));
         if (materialList.size() == 1) {
@@ -97,7 +97,7 @@ public class ArenaSettings implements Listener {
                     db.setBlockType("");
                     cancel();
                 }
-            }.runTaskTimer(KnockbackFFA.getINSTANCE(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20L, 1);
+            }.runTaskTimer(KnockbackFFA.getInstance(), KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20L, 1);
         } else {
             block.setType(materialList.get(0));
             db.setBlockType("trail");
@@ -117,7 +117,7 @@ public class ArenaSettings implements Listener {
                     }
                 }
             }.
-                    runTaskTimer(KnockbackFFA.getINSTANCE(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20, KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20);
+                    runTaskTimer(KnockbackFFA.getInstance(), KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20, KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(selectedTrails + ".speed") * 20);
         }
     }
 }

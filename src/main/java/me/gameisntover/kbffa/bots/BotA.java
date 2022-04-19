@@ -37,9 +37,9 @@ public class BotA extends Bot {
 
     @Override
     public void onDeath() {
-        List<String> stringList = KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("bot-death-messages");
+        List<String> stringList = KnockbackFFA.getInstance().getBotManager().getConfig.getStringList("bot-death-messages");
         chat(stringList.get(new Random().nextInt(stringList.size() - 1)));
-        super.mob.teleport(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getSpawnLocation());
+        super.mob.teleport(KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getSpawnLocation());
         if (lastDamager != null)
             Bukkit.broadcastMessage(Message.DEATH_KNOCKED_GOBAL.toString().replace("%killer%", lastDamager.getName()).replace("%player_name%", mob.getName()));
         else Bukkit.broadcastMessage(Message.DEATH_VOID_GLOBAL.toString().replace("%player_name%", mob.getName()));
@@ -48,13 +48,13 @@ public class BotA extends Bot {
 
     @Override
     public void start() {
-        chat(KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("bot-add-messages").get(new Random().nextInt(KnockbackFFA.getINSTANCE().getBotManager().getConfig.getStringList("bot-add-messages").size() - 1)));
+        chat(KnockbackFFA.getInstance().getBotManager().getConfig.getStringList("bot-add-messages").get(new Random().nextInt(KnockbackFFA.getInstance().getBotManager().getConfig.getStringList("bot-add-messages").size() - 1)));
     }
 
     @Override
     public void update() {
         if (mob.getTarget() == null) {
-            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena();
+            Arena arena = KnockbackFFA.getInstance().getArenaManager().getEnabledArena();
             if (arena.getNearestAIPath(getMob().getLocation()) != null && !getMob().getLocation().getWorld().getBlockAt(new Location(getMob().getLocation().getWorld(), getMob().getLocation().getBlockX(), getMob().getLocation().getBlockY() - 1, getMob().getLocation().getBlockZ())).
                     getType().equals(Material.AIR) && !isInArena())
                 getMob().setVelocity(arena.getNearestAIPath(getMob().getLocation()).getDirection());

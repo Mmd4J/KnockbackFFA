@@ -14,8 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DelKitCommand extends KnockCommand {
-    public DelKitCommand(String name) {
-        super(name);
+    public DelKitCommand() {
+        super("delkit");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DelKitCommand extends KnockCommand {
             p.sendMessage(ChatColor.RED + "Usage: /delkit <kitname>");
             return;
         } else {
-            Kit kit = KnockbackFFA.getINSTANCE().getKitManager().load(args[0]);
+            Kit kit = KnockbackFFA.getInstance().getKitManager().load(args[0]);
             kit.getFile().delete();
             p.sendMessage(ChatColor.GREEN + "I've deleted the kit " + args[0] + "!");
         }
@@ -49,6 +49,6 @@ public class DelKitCommand extends KnockCommand {
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(new File(KnockbackFFA.getINSTANCE().getDataFolder(), "Kits" + File.separator).list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
+        return Arrays.asList(Arrays.stream(new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator).list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
     }
 }

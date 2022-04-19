@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveBotCommand extends KnockCommand {
-    public RemoveBotCommand(@NotNull String name) {
-        super(name);
+    public RemoveBotCommand() {
+        super("removebot");
     }
 
     @Override
@@ -33,10 +33,10 @@ public class RemoveBotCommand extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         if (args.length > 0) {
-            if (KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().containsKey(args[0])) {
-                Bot bot = KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().get(args[0]);
+            if (KnockbackFFA.getInstance().getBotManager().getBotHandler().containsKey(args[0])) {
+                Bot bot = KnockbackFFA.getInstance().getBotManager().getBotHandler().get(args[0]);
                 bot.remove();
-                KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().remove(args[0]);
+                KnockbackFFA.getInstance().getBotManager().getBotHandler().remove(args[0]);
                 knocker.sendMessage("&aSuccessfully removed the bot from the game");
             }
         } else knocker.sendMessage("&cWrong usage :" + getSyntax());
@@ -44,6 +44,6 @@ public class RemoveBotCommand extends KnockCommand {
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return new ArrayList<>(KnockbackFFA.getINSTANCE().getBotManager().getBotHandler().keySet());
+        return new ArrayList<>(KnockbackFFA.getInstance().getBotManager().getBotHandler().keySet());
     }
 }

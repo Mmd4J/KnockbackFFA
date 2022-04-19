@@ -14,11 +14,11 @@ public abstract class KnockConfiguration {
 
     @SneakyThrows
     public KnockConfiguration() {
-        getFile = new File(KnockbackFFA.getINSTANCE().getDataFolder(), getName() + ".yml");
-        if (!KnockbackFFA.getINSTANCE().getDataFolder().exists()) KnockbackFFA.getINSTANCE().getDataFolder().mkdir();
+        getFile = new File(KnockbackFFA.getInstance().getDataFolder(), getName() + ".yml");
+        if (!KnockbackFFA.getInstance().getDataFolder().exists()) KnockbackFFA.getInstance().getDataFolder().mkdir();
         if (!getFile.exists()) {
             getFile.canExecute();
-            if (getResourceName() != null) KnockbackFFA.getINSTANCE().saveResource(getResourceName(), false);
+            if (getResourceName() != null) KnockbackFFA.getInstance().saveResource(getResourceName(), false);
         }
         getConfig = YamlConfiguration.loadConfiguration(getFile);
 

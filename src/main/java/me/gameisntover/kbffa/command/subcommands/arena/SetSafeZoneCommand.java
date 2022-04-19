@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class SetSafeZoneCommand extends KnockCommand {
-    public SetSafeZoneCommand(String name) {
-        super(name);
+    public SetSafeZoneCommand() {
+        super("setsafezone");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class SetSafeZoneCommand extends KnockCommand {
             p.sendMessage(ChatColor.RED + "You must choose some positions before using this command use /wand");
             return;
         }
-        List<String> safezones = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getStringList("registered-safezones");
+        List<String> safezones = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getStringList("registered-safezones");
         int sz;
         if (safezones.size() == 0) sz = 1;
         else {
@@ -51,12 +51,12 @@ public class SetSafeZoneCommand extends KnockCommand {
         String world = p.getWorld().getName();
         Location loc1 = WandListener.pos1m.get(p);
         Location loc2 = WandListener.pos2m.get(p);
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("Safezones." + sz + ".world", world);
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("Safezones." + sz + ".pos1", loc1);
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("Safezones." + sz + ".pos2", loc2);
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("Safezones." + sz + ".world", world);
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("Safezones." + sz + ".pos1", loc1);
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("Safezones." + sz + ".pos2", loc2);
         safezones.add(sz + "");
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("registered-safezones", safezones);
-        KnockbackFFA.getINSTANCE().getZoneConfiguration().save();
+        KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("registered-safezones", safezones);
+        KnockbackFFA.getInstance().getZoneConfiguration().save();
         p.sendMessage(ChatColor.GREEN + "Safezone " + sz + " has been saved in the arena config file!");
     }
 

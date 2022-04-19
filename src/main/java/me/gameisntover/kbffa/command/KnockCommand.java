@@ -25,7 +25,7 @@ public abstract class KnockCommand extends Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
         if (sender.hasPermission("knockbackffa.command." + getKnockName))
-            perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
+            perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
         else sender.sendMessage(getPermissionMessage());
         return false;
     }
@@ -41,6 +41,6 @@ public abstract class KnockCommand extends Command {
     @NotNull
     @Override
     public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-        return performTab(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
+        return performTab(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
     }
 }

@@ -49,7 +49,7 @@ public class ReworkedKnocker {
      * @return true if he has enough balance false if not
      */
     public boolean removeBalance(int balance){
-        if(this.balance > balance){
+        if(this.balance >= balance){
             this.balance -= balance;
             return true;
         }

@@ -18,7 +18,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
 
 import java.io.File;
 import java.util.List;
@@ -27,12 +26,12 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Knocker extends KnockData {
-    private final File df = KnockbackFFA.getINSTANCE().getDataFolder();
+    private final File df = KnockbackFFA.getInstance().getDataFolder();
     private File file;
     private UUID uuid;
     private File folder = new File(getDf(), "player data" + File.separator);
     private FileConfiguration config;
-    private boolean inGame = KnockbackFFA.getINSTANCE().BungeeMode();
+    private boolean inGame = KnockbackFFA.getInstance().BungeeMode();
     private boolean inArena;
     private boolean scoreboard;
     private double balance;
@@ -56,12 +55,12 @@ public class Knocker extends KnockData {
 
     public void showScoreBoard() {
         if(!scoreboard) scoreboard = true;
-        KnockbackFFA.getINSTANCE().getScoreboardManager().register(getPlayer());
+        KnockbackFFA.getInstance().getScoreboardManager().register(getPlayer());
     }
 
     public void hideScoreBoard() {
         scoreboard = false;
-        KnockbackFFA.getINSTANCE().getScoreboardManager().unregister(getPlayer());
+        KnockbackFFA.getInstance().getScoreboardManager().unregister(getPlayer());
     }
 
     public String selectedCosmetic() {
@@ -74,14 +73,14 @@ public class Knocker extends KnockData {
 
     public void loadCosmetic(String cosmeticName) {
         if (cosmeticName == null) return;
-        String cosmeticType = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".type");
+        String cosmeticType = KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".type");
         if (cosmeticType == null) return;
         if (cosmeticType.equalsIgnoreCase("KILL_PARTICLE"))
-            getPlayer().spawnParticle(Particle.valueOf(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".effect-type")), getPlayer().getLocation(), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".amount"));
-        if (KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".sound")) != null)
-            getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf(KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".sound")), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".volume"), KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".pitch"));
+            getPlayer().spawnParticle(Particle.valueOf(KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".effect-type")), getPlayer().getLocation(), KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".amount"));
+        if (KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".sound")) != null)
+            getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf(KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmeticName + ".sound")), KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".volume"), KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".pitch"));
         if (cosmeticType.equalsIgnoreCase("SOUND")) {
-            List<String> soundList = KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getStringList(cosmeticName + ".sounds");
+            List<String> soundList = KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getStringList(cosmeticName + ".sounds");
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -93,7 +92,7 @@ public class Knocker extends KnockData {
                         if (i == soundList.size() - 1) cancel();
                     }
                 }
-            }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, KnockbackFFA.getINSTANCE().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".delay"));
+            }.runTaskTimer(KnockbackFFA.getInstance(), 0, KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(cosmeticName + ".delay"));
         }
     }
 
@@ -135,9 +134,9 @@ public class Knocker extends KnockData {
     }
 
     public void giveLobbyItems() {
-        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.shop.slot"), Items.SHOP_ITEM.getItem());
-        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.cosmetic.slot"), Items.COSMETIC_ITEM.getItem());
-        getPlayer().getInventory().setItem(KnockbackFFA.getINSTANCE().getItems().getConfig.getInt("LobbyItems.kits.slot"), Items.KIT_ITEM.getItem());
+        getPlayer().getInventory().setItem(KnockbackFFA.getInstance().getItems().getConfig.getInt("LobbyItems.shop.slot"), Items.SHOP_ITEM.getItem());
+        getPlayer().getInventory().setItem(KnockbackFFA.getInstance().getItems().getConfig.getInt("LobbyItems.cosmetic.slot"), Items.COSMETIC_ITEM.getItem());
+        getPlayer().getInventory().setItem(KnockbackFFA.getInstance().getItems().getConfig.getInt("LobbyItems.kits.slot"), Items.KIT_ITEM.getItem());
 
     }
 

@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class SetVoidCommand extends KnockCommand {
-    public SetVoidCommand(String name) {
-        super(name);
+    public SetVoidCommand() {
+        super("setvoid");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class SetVoidCommand extends KnockCommand {
             Location pos1 = WandListener.pos1m.get(p);
             Location pos2 = WandListener.pos2m.get(p);
             int vd;
-            List<String> voids = KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getStringList("registered-voids");
+            List<String> voids = KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getStringList("registered-voids");
             if (voids.size() == 0) vd = 1;
             else {
                 String szstring = voids.get(voids.size() - 1);
@@ -48,12 +48,12 @@ public class SetVoidCommand extends KnockCommand {
                 vd++;
             }
             voids.add(vd + "");
-            if (KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.getString("voids." + vd) == null) {
-                KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("voids." + vd + ".pos1", pos1);
-                KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("voids." + vd + ".pos2", pos2);
-                KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("voids." + vd + ".damage", 8);
-                KnockbackFFA.getINSTANCE().getZoneConfiguration().getConfig.set("registered-voids", voids);
-                KnockbackFFA.getINSTANCE().getZoneConfiguration().save();
+            if (KnockbackFFA.getInstance().getZoneConfiguration().getConfig.getString("voids." + vd) == null) {
+                KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("voids." + vd + ".pos1", pos1);
+                KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("voids." + vd + ".pos2", pos2);
+                KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("voids." + vd + ".damage", 8);
+                KnockbackFFA.getInstance().getZoneConfiguration().getConfig.set("registered-voids", voids);
+                KnockbackFFA.getInstance().getZoneConfiguration().save();
                 p.sendMessage(ChatColor.GREEN + "Void " + vd + " has been set and now players will get damage if they go there");
             }
         } else p.sendMessage(ChatColor.RED + "You have to set two positions first!");

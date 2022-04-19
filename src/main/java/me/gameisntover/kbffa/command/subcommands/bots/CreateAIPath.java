@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CreateAIPath extends KnockCommand {
-    public CreateAIPath(@NotNull String name) {
-        super(name);
+    public CreateAIPath() {
+        super("createaipath");
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CreateAIPath extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         if (args.length > 0) {
-            Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(args[0]);
+            Arena arena = KnockbackFFA.getInstance().getArenaManager().load(args[0]);
             if (arena == null) knocker.sendMessage("&cThe specified arena could not be found!");
             else {
                 arena.createAIPath(knocker.getPlayer().getLocation());
@@ -44,6 +44,6 @@ public class CreateAIPath extends KnockCommand {
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getInstance().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
     }
 }

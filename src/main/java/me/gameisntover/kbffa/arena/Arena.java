@@ -23,7 +23,7 @@ import java.util.Map;
 public class Arena {
     private String name;
     private Cuboid region;
-    private File file, arenaFolder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "ArenaData");
+    private File file, arenaFolder = new File(KnockbackFFA.getInstance().getDataFolder(), "ArenaData");
     private FileConfiguration config;
     private boolean ready;
 
@@ -63,7 +63,7 @@ public class Arena {
 
             @Override
             public void run() {
-                int amountBlocksEachSec = KnockbackFFA.getINSTANCE().getConfig().getInt("autoresetcheck-blocks");
+                int amountBlocksEachSec = KnockbackFFA.getInstance().getConfig().getInt("autoresetcheck-blocks");
                 int startPoint = allBlocks - remainBlocks;
                 while (startPoint < blocks.size() && amountBlocksEachSec > 0 && remainBlocks > 0) {
                     Material material = Material.getMaterial(materials.get(startPoint));
@@ -76,7 +76,7 @@ public class Arena {
                 }
                 if (remainBlocks <= 0) cancel();
             }
-        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
+        }.runTaskTimer(KnockbackFFA.getInstance(), 0, 20);
     }
 
     /**
@@ -85,7 +85,7 @@ public class Arena {
      * @return true if the arena is the enabled arena
      */
     public boolean isEnabled() {
-        return KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equals(getName());
+        return KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getName().equals(getName());
     }
 
     /**
@@ -94,9 +94,9 @@ public class Arena {
      * @param player player
      */
     public void teleportPlayer(Player player) {
-        if (!(getName().equalsIgnoreCase(KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName())))
+        if (!(getName().equalsIgnoreCase(KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getName())))
             return;
-        Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(getName());
+        Arena arena = KnockbackFFA.getInstance().getArenaManager().load(getName());
         ArenaJoinEvent event = new ArenaJoinEvent(player, arena);
         Bukkit.getPluginManager().callEvent(event);
         player.teleport(getSpawnLocation());
@@ -109,8 +109,8 @@ public class Arena {
      */
     public void removeArena() {
         getFile().delete();
-        while (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena().getName().equals(getName()))
-            KnockbackFFA.getINSTANCE().getArenaManager().setEnabledArena(KnockbackFFA.getINSTANCE().getArenaManager().randomArena());
+        while (KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getName().equals(getName()))
+            KnockbackFFA.getInstance().getArenaManager().setEnabledArena(KnockbackFFA.getInstance().getArenaManager().randomArena());
         save();
     }
 

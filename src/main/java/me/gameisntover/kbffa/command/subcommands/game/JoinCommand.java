@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class JoinCommand extends KnockCommand {
-    public JoinCommand(String name) {
-        super(name);
+    public JoinCommand() {
+        super("join");
     }
 
     @Override
@@ -34,10 +34,10 @@ public class JoinCommand extends KnockCommand {
     @Override
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
-        if (KnockbackFFA.getINSTANCE().BungeeMode() || knocker.isInGame())
+        if (KnockbackFFA.getInstance().BungeeMode() || knocker.isInGame())
             p.sendMessage(Message.ALREADY_INGAME.toString());
         else {
-            if (KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena() == null)
+            if (KnockbackFFA.getInstance().getArenaManager().getEnabledArena() == null)
                 knocker.getPlayer().sendMessage(Message.NO_READY_ARENA.toString());
             else {
                 String joinText = Message.ARENA_JOIN.toString();
@@ -50,7 +50,7 @@ public class JoinCommand extends KnockCommand {
                 knocker.showScoreBoard();
                 knocker.setInGame(true);
             }
-            KnockbackFFA.getINSTANCE().getArenaManager().teleportPlayerToArena(p);
+            KnockbackFFA.getInstance().getArenaManager().teleportPlayerToArena(p);
         }
     }
 

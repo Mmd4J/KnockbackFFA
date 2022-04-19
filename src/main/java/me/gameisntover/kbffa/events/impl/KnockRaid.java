@@ -17,7 +17,7 @@ public class KnockRaid implements GameEvent {
 
     @Override
     public void start() {
-        Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().getEnabledArena();
+        Arena arena = KnockbackFFA.getInstance().getArenaManager().getEnabledArena();
         skeleton = (Skeleton) arena.getSpawnLocation().getWorld().spawnEntity(arena.getSpawnLocation(), EntityType.PILLAGER);
         skeleton.setAbsorptionAmount(1000);
         double maxhp = skeleton.getHealth() + skeleton.getAbsorptionAmount();

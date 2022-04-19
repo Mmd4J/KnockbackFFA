@@ -13,7 +13,7 @@ import java.util.Map;
 @Getter
 public class KitManager {
     private final Map<String, Kit> kitHandler = new HashMap<>();
-    private File folder = new File(KnockbackFFA.getINSTANCE().getDataFolder(), "Kits" + File.separator);
+    private File folder = new File(KnockbackFFA.getInstance().getDataFolder(), "Kits" + File.separator);
 
     @SneakyThrows
     public Kit create(String kitname, ItemStack[] items, Material icon) {

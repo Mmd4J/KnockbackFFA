@@ -15,16 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ResetArenaCommand extends KnockCommand {
-    private String name;
 
-    public ResetArenaCommand(String name) {
-        super(name);
-        this.name = name;
+    public ResetArenaCommand() {
+        super("resetarena");
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
+        perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
         return false;
     }
 
@@ -47,9 +45,9 @@ public class ResetArenaCommand extends KnockCommand {
     public void perform(Knocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length > 0) {
-            File file = new File(KnockbackFFA.getINSTANCE().getArenaManager().getFolder() + File.separator + args[0] + ".yml");
+            File file = new File(KnockbackFFA.getInstance().getArenaManager().getFolder() + File.separator + args[0] + ".yml");
             if (file.exists()) {
-                Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(args[0]);
+                Arena arena = KnockbackFFA.getInstance().getArenaManager().load(args[0]);
                 arena.resetArena();
                 p.sendMessage(ChatColor.GREEN + "Arena has been reset!");
             } else p.sendMessage(ChatColor.RED + "Arena does not exist");
@@ -58,6 +56,6 @@ public class ResetArenaCommand extends KnockCommand {
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getInstance().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
     }
 }

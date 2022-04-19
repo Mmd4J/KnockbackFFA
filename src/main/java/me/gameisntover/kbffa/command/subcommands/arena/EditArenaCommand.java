@@ -28,13 +28,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EditArenaCommand extends KnockCommand {
-    public EditArenaCommand(String name) {
-        super(name);
+    public EditArenaCommand() {
+        super("editarena");
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getINSTANCE().getKnocker((Player) sender), args);
+        perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
         return false;
     }
 
@@ -60,18 +60,18 @@ public class EditArenaCommand extends KnockCommand {
             p.sendMessage(ChatColor.RED + "Command Arguements missing or is invalid /editarena arenaname");
             return;
         }
-        List<String> arenaList = Arrays.asList(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list());
+        List<String> arenaList = Arrays.asList(KnockbackFFA.getInstance().getArenaManager().getFolder().list());
         if (!arenaList.contains(args[0] + ".yml")) {
             p.sendMessage(ChatColor.RED + "That arena name does not exist!");
             return;
         }
         p.sendMessage(ChatColor.GREEN + "You are now editing " + args[0]);
-        Arena arena = KnockbackFFA.getINSTANCE().getArenaManager().load(args[0]);
+        Arena arena = KnockbackFFA.getInstance().getArenaManager().load(args[0]);
         GUI arenaGUI = new GUI("Arena Editor", (short) 5);
         List<String> blockbreaklore = new ArrayList<>();
         blockbreaklore.add(ChatColor.GRAY + "Toggle whether or not players can break blocks");
         blockbreaklore.add(ChatColor.GREEN + "Currently Block Breaking is " + arena.getConfig().getBoolean("block-break"));
-        Button blockBreak = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.DIAMOND_PICKAXE, 1, ChatColor.GRAY + "Block Break", blockbreaklore).create(ItemFlag.HIDE_ATTRIBUTES), e -> {
+        Button blockBreak = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.DIAMOND_PICKAXE, 1, ChatColor.GRAY + "Block Break", blockbreaklore).create(ItemFlag.HIDE_ATTRIBUTES), e -> {
             arena.getConfig().set("block-break", !arena.getConfig().getBoolean("block-break"));
             arena.save();
             ItemMeta im = e.getCurrentItem().getItemMeta();
@@ -84,7 +84,7 @@ public class EditArenaCommand extends KnockCommand {
         List<String> itemDropLore = new ArrayList<>();
         itemDropLore.add(ChatColor.GRAY + "Toggle whether or not players can drop items");
         itemDropLore.add(ChatColor.GREEN + "Currently Item Dropping is " + arena.getConfig().getBoolean("item-drop"));
-        Button itemDrop = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.DIAMOND, 1, ChatColor.GRAY + "Item Drop", itemDropLore).create(), e -> {
+        Button itemDrop = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.DIAMOND, 1, ChatColor.GRAY + "Item Drop", itemDropLore).create(), e -> {
             arena.getConfig().set("item-drop", !arena.getConfig().getBoolean("item-drop"));
             arena.save();
             ItemMeta im = e.getCurrentItem().getItemMeta();
@@ -94,7 +94,7 @@ public class EditArenaCommand extends KnockCommand {
             im.setLore(itemDropLore);
             e.getCurrentItem().setItemMeta(im);
         });
-        Button setSpawn = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.NETHER_STAR, 1, ChatColor.GRAY + "Set Spawn", Arrays.asList("sets the spawn point of players")).create(), e -> {
+        Button setSpawn = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.NETHER_STAR, 1, ChatColor.GRAY + "Set Spawn", Arrays.asList("sets the spawn point of players")).create(), e -> {
             Player player = (Player) e.getWhoClicked();
             arena.getConfig().set("arena.spawn", player.getLocation());
             arena.save();
@@ -103,7 +103,7 @@ public class EditArenaCommand extends KnockCommand {
         List<String> autoResetLore = new ArrayList<>();
         autoResetLore.add(ChatColor.GRAY + "Toggle whether or not the arena will reset blocks placed or broke automatically");
         autoResetLore.add(ChatColor.GREEN + "Currently Auto Reset is " + arena.getConfig().getBoolean("auto-reset"));
-        Button autoReset = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.DISPENSER, 1, ChatColor.GRAY + "Auto Reset", autoResetLore).create(), e -> {
+        Button autoReset = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.DISPENSER, 1, ChatColor.GRAY + "Auto Reset", autoResetLore).create(), e -> {
             arena.getConfig().set("auto-reset", !arena.getConfig().getBoolean("auto-reset"));
             arena.save();
             p.sendMessage("Auto Reset is now set to" + arena.getConfig().getBoolean("auto-reset"));
@@ -125,7 +125,7 @@ public class EditArenaCommand extends KnockCommand {
             meta.setLore(autoResetLore);
             item.setItemMeta(meta);
         });
-        Button setpos = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.REDSTONE_BLOCK, 1, ChatColor.GRAY + "Set Position", Arrays.asList(ChatColor.GRAY + "set the new arena positions from here!")).create(), e -> {
+        Button setpos = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.REDSTONE_BLOCK, 1, ChatColor.GRAY + "Set Position", Arrays.asList(ChatColor.GRAY + "set the new arena positions from here!")).create(), e -> {
             if (WandListener.pos1m.get(e.getWhoClicked()) != null && WandListener.pos2m.get(e.getWhoClicked()) != null) {
                 Location loc1 = WandListener.pos1m.get(e.getWhoClicked());
                 Location loc2 = WandListener.pos2m.get(e.getWhoClicked());
@@ -149,7 +149,7 @@ public class EditArenaCommand extends KnockCommand {
         List<String> worldBorderlore = new ArrayList<>();
         worldBorderlore.add(ChatColor.GRAY + "Toggle whether or not the world border is enabled.");
         worldBorderlore.add(ChatColor.GREEN + "Currently the world border is " + arena.getConfig().getBoolean("world-border"));
-        Button worldBorder = KnockbackFFA.getINSTANCE().getButtonManager().create(new ItemBuilder(Material.BARRIER, 1, ChatColor.GRAY + "World Border", worldBorderlore).create(), e -> {
+        Button worldBorder = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.BARRIER, 1, ChatColor.GRAY + "World Border", worldBorderlore).create(), e -> {
             arena.getConfig().set("world-border", !arena.getConfig().getBoolean("world-border"));
             arena.save();
             Location spawnLoc = arena.getConfig().getLocation("arena.spawn");
@@ -182,6 +182,6 @@ public class EditArenaCommand extends KnockCommand {
 
     @Override
     public List<String> performTab(Knocker knocker, String[] args) {
-        return Arrays.asList(Arrays.stream(KnockbackFFA.getINSTANCE().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
+        return Arrays.asList(Arrays.stream(KnockbackFFA.getInstance().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
     }
 }

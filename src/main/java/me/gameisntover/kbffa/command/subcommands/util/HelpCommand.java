@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class HelpCommand extends KnockCommand {
-    public HelpCommand(@NotNull String name) {
-        super(name);
+    public HelpCommand() {
+        super("kbffahelp");
     }
 
     @Override
@@ -32,9 +32,9 @@ public class HelpCommand extends KnockCommand {
     public void perform(Knocker knocker, String[] args) {
         knocker.sendMessage("&8==================================");
         knocker.sendMessage("&3[Advanced] KnockbackFFA help");
-        for (KnockCommand cmd : KnockbackFFA.getINSTANCE().getCommandManager().getSubCommands())
+        for (KnockCommand cmd : KnockbackFFA.getInstance().getCommandManager().getSubCommands())
             knocker.sendMessage("&b" + cmd.getSyntax() + " : &f" + cmd.getKnockDescription());
-        knocker.sendMessage("&3[Advanced] KnockbackFFA version : " + KnockbackFFA.getINSTANCE().getDescription().getVersion());
+        knocker.sendMessage("&3[Advanced] KnockbackFFA version : " + KnockbackFFA.getInstance().getDescription().getVersion());
         knocker.sendMessage("&8==================================");
     }
 

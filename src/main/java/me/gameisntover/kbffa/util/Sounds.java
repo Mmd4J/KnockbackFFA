@@ -19,8 +19,8 @@ public enum Sounds {
     }
 
     public Sound toSound() {
-        if (KnockbackFFA.getINSTANCE().getSounds().isSet(path))
-            return Sound.valueOf(KnockbackFFA.getINSTANCE().getSounds().getString(path));
+        if (KnockbackFFA.getInstance().getSounds().isSet(path))
+            return Sound.valueOf(KnockbackFFA.getInstance().getSounds().getString(path));
         else return Sound.valueOf(soundname);
 
     }
