@@ -23,6 +23,20 @@ public class ReworkedKnocker {
     private boolean scoreboardEnabled = true;
 
     /**
+     * Adds a kill to the player kills
+     */
+    public void addKill(){
+        kills += 1;
+    }
+
+    /**
+     * Adds a death to the player deaths
+     */
+    public void addDeath(){
+        deaths += 1;
+    }
+
+    /**
      * Adds balance to the player's
      * @param balance is the added amount of balance
      */
