@@ -3,10 +3,8 @@ package me.gameisntover.kbffa.api;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.gui.GUI;
-import me.gameisntover.kbffa.scoreboard.SideBar;
 import me.gameisntover.kbffa.util.Items;
 import me.gameisntover.kbffa.util.Sounds;
 import net.md_5.bungee.api.ChatMessageType;
@@ -57,33 +55,13 @@ public class Knocker extends KnockData {
     }
 
     public void showScoreBoard() {
-        scoreboard = true;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                SideBar sidebar = new SideBar(ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getKnockScoreboard().getConfig.getString("Title")), "mainScoreboard");
-                if (!scoreboard) {
-                    cancel();
-                    sidebar.getBoard().clearSlot(DisplaySlot.SIDEBAR);
-                }
-                List<String> scoreboardLines = KnockbackFFA.getINSTANCE().getKnockScoreboard().getConfig.getStringList("lines");
-                for (String string : scoreboardLines) {
-                    string = PlaceholderAPI.setPlaceholders(getPlayer(), string);
-                    sidebar.add(ChatColor.translateAlternateColorCodes('&', string));
-                }
-                applySideBar(sidebar);
-            }
-        }.runTaskTimer(KnockbackFFA.getINSTANCE(), 0, 20);
-    }
-
-    public void applySideBar(SideBar sideBar) {
-        for (int i = 0; i < sideBar.getScores().size(); i++)
-            sideBar.getScores().get(i).setScore(i);
-        getPlayer().setScoreboard(sideBar.getBoard());
+        if(!scoreboard) scoreboard = true;
+        KnockbackFFA.getINSTANCE().getScoreboardManager().register(getPlayer());
     }
 
     public void hideScoreBoard() {
         scoreboard = false;
+        KnockbackFFA.getINSTANCE().getScoreboardManager().unregister(getPlayer());
     }
 
     public String selectedCosmetic() {

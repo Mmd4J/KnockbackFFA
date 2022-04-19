@@ -20,7 +20,7 @@ fight and throw each other in the void!
 - 1.11.x
 - 1.10.x
 - 1.9.x
-- 1.8.x
+- 1.8.8
 
 ## Features
 

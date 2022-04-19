@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,9 +45,9 @@ public enum Items {
         this.defaultItem = defaultItem;
     }
 
+    @NotNull
     public ItemStack getItem() {
         if (item != null) return item;
-        else if (defaultItem != null) return defaultItem;
-        else return null;
+        else return defaultItem;
     }
 }

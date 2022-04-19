@@ -15,6 +15,7 @@ import me.gameisntover.kbffa.gui.ButtonManager;
 import me.gameisntover.kbffa.hook.Expansion;
 import me.gameisntover.kbffa.kit.KitManager;
 import me.gameisntover.kbffa.listeners.*;
+import me.gameisntover.kbffa.scoreboard.BoardManager;
 import me.gameisntover.kbffa.scoreboard.ScoreboardConfiguration;
 import me.gameisntover.kbffa.util.*;
 import org.bukkit.Bukkit;
@@ -59,6 +60,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     private ScoreboardConfiguration knockScoreboard;
     private CosmeticConfiguration cosmeticConfiguration;
     private ZoneConfiguration zoneConfiguration;
+    private BoardManager scoreboardManager;
 
     @NotNull
     public Knocker getKnocker(@NotNull Player player) {
@@ -87,6 +89,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         kitManager = new KitManager();
         blockDataManager = new BlockDataManager();
         botManager = new BotManager();
+        scoreboardManager = new BoardManager();
         if (!Bukkit.getOnlinePlayers().isEmpty())
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Knocker knocker = getKnocker(player);
