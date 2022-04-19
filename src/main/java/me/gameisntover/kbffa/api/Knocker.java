@@ -1,7 +1,8 @@
 package me.gameisntover.kbffa.api;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
@@ -15,8 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,33 +26,22 @@ import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 public class Knocker extends KnockData {
-    private final File df = KnockbackFFA.getINSTANCE().getDataFolder();
-    private File file;
-    private UUID uuid;
-    private File folder = new File(getDf(), "player data" + File.separator);
-    private FileConfiguration config;
+    private final UUID uuid;
     private boolean inGame = KnockbackFFA.getINSTANCE().BungeeMode();
     private boolean inArena;
     private boolean scoreboard;
     private double balance;
-    private int killStreak = 0;
-    private Inventory inventory;
+    private final int killStreak = 0;
+    private final Inventory inventory;
 
     @SneakyThrows
     public Knocker(UUID uuid) {
+        super(Bukkit.getPlayer(uuid).getName());
         this.uuid = uuid;
-        this.file = loadDataFile(folder, uuid + ".yml");
-        if (!df.exists()) df.mkdir();
-        if (!file.exists()) file.createNewFile();
-        this.config = YamlConfiguration.loadConfiguration(file);
         this.inventory = getPlayer().getInventory();
-    }
-
-    @SneakyThrows
-    public void saveConfig() {
-        config.save(file);
     }
 
     public void showScoreBoard() {
@@ -165,5 +153,10 @@ public class Knocker extends KnockData {
 
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
+    }
+
+    @Override
+    public File getFolder() {
+        return new File(KnockbackFFA.getINSTANCE().getDataFolder(), "players");
     }
 }
