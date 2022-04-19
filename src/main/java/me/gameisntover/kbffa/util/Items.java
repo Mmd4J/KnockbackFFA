@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public enum Items {
     POSITION_SELECTOR_WAND(new ItemBuilder(Material.BLAZE_ROD, 1, ChatColor.GOLD + "Position Selector Wand", Arrays.asList("Use this wand to select positions!",
-            "LEFTCLICK = First Position", "RIGHTCLICK = Second position")).create(Enchantment.MENDING, 1, ItemFlag.HIDE_ENCHANTS)),
+            "LEFTCLICK = First Position", "RIGHTCLICK = Second position")).create(Enchantment.DURABILITY, 1, ItemFlag.HIDE_ENCHANTS)),
     COSMETIC_ITEM(new ItemBuilder(Material.getMaterial(KnockbackFFA.getINSTANCE().getItems().getConfig.getString("LobbyItems.cosmetic.material")), 1, ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getItems().getConfig.getString("LobbyItems.cosmetic.name")), KnockbackFFA.getINSTANCE().getItems().getConfig.getStringList("LobbyItems.cosmetic.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList())).create(),
             new ItemBuilder(Material.CHEST, 1, ChatColor.DARK_PURPLE + "Cosmetics Menu", Collections.singletonList(ChatColor.GRAY + "Click to open the cosmetics menu!")).create()),
     KIT_ITEM(new ItemBuilder(Material.getMaterial(KnockbackFFA.getINSTANCE().getItems().getConfig.getString("LobbyItems.kits.material")), 1, ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getINSTANCE().getItems().getConfig.getString("LobbyItems.kits.name")), KnockbackFFA.getINSTANCE().getItems().getConfig.getStringList("LobbyItems.kits.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList())).create(ItemFlag.HIDE_ATTRIBUTES),
