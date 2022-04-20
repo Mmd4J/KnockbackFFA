@@ -7,6 +7,8 @@ import me.gameisntover.kbffa.database.Database;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class SQLite implements Database {
@@ -40,11 +42,18 @@ public class SQLite implements Database {
                 knocker.setSelectedCosmetic(result.getString("selectedCosmetic"));
                 knocker.setSelectedTrail(result.getString("selectedTrail"));
                 knocker.setSelectedKit(result.getString("selectedKit"));
+                knocker.getOwnedKits().addAll(toList(result.getString("ownedKits")));
+                knocker.getOwnedTrails().addAll(toList(result.getString("ownedTrails")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return knocker;
+    }
+
+    @Override
+    public void updateKnocker(ReworkedKnocker kncoker){
+        // to update the knocker
     }
 
     private Connection createConnection(){
@@ -59,17 +68,18 @@ public class SQLite implements Database {
 
     private void createTables(){
         String sql = "CREATE TABLE IF NOT EXIST kbffa (\n" +
-                "uuid text PRIMARY KEY,\n" +
-                "name text NOT NULL,\n" +
-                "kills integer NOT NULL DEFAULT 0,\n" +
-                "deaths integer NOT NULL DEFAULT 0,\n" +
-                "maxkillstreak integer NOT NULL DEFAULT 0,\n" +
-                "balance integer NOT NULL DEFAULT 0,\n" +
-                "selectedCosmetic text NOT NULL,\n" +
-                "selectedTrail text NOT NULL,\n" +
-                "selectedKit text NOT NULL,\n" +
+                "uuid text PRIMARY KEY NOT NULL,\n" +
+                "name VARCHAR(16) NOT NULL,\n" +
+                "kills INT(20) NOT NULL DEFAULT 0,\n" +
+                "deaths INT(20) NOT NULL DEFAULT 0,\n" +
+                "maxkillstreak INT(20) NOT NULL DEFAULT 0,\n" +
+                "balance INT(20) NOT NULL DEFAULT 0,\n" +
+                "selectedCosmetic VARCHAR(30) NOT NULL,\n" +
+                "selectedTrail VARCHAR(30) NOT NULL,\n" +
+                "selectedKit VARCHAR(30) NOT NULL,\n" +
+                "ownedKits MEDIUMTEXT NOT NULL, \n" +
+                "ownedTrails MEDIUMTEXT NOT NULL, \n" +
                 ");";
-
         try (Connection connection = createConnection()){
             Statement statement = connection.createStatement();
             statement.execute(sql);
@@ -78,5 +88,21 @@ public class SQLite implements Database {
         }
     }
 
+    private String fromList(List<String> list){
+        StringBuilder builder = new StringBuilder();
+        int i = 1;
+        for (String string : list){
+            builder.append(string);
+            if(i != list.size()){
+                builder.append(", ");
+            }
+            i++;
+        }
+        return builder.toString();
+    }
+
+    private List<String> toList(String string){
+        return Arrays.asList(string.split(", "));
+    }
 
 }

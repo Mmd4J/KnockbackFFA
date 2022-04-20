@@ -7,6 +7,6 @@ import java.util.UUID;
 public interface Database {
 
     ReworkedKnocker getKnocker(UUID uuid);
-
+    void updateKnocker(ReworkedKnocker knocker);
 
 }
