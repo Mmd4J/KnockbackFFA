@@ -18,6 +18,7 @@ public class ReworkedKnocker {
 
     private final UUID playerID;
     private final List<String> ownedKits = new ArrayList<>();
+    private final List<String> ownedTrails = new ArrayList<>();
     private String selectedKit, selectedCosmetic, selectedTrail;
     private int kills, deaths, balance;
     private boolean scoreboardEnabled = true;
