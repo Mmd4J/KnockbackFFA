@@ -5,7 +5,7 @@ fight and throw each other in the void!
 
 ## Supported Versions
 
-> Full supported
+> Fully supported
 
 - 1.18.x
 - 1.17.x
@@ -15,7 +15,7 @@ fight and throw each other in the void!
 - 1.13.x
 - 1.12.x
 
-> Expremental Support
+> Expremential Support
 
 - 1.11.x
 - 1.10.x
@@ -30,9 +30,9 @@ fight and throw each other in the void!
 - Developer API
 - PlaceholderAPI support
 - Chat format
-- Killstreak and killreward system
+- Killstreaks and killrewards
 - Scoreboard
 - Multiple Arenas Support
 - Custom Voids (per arena)
 - Cosmetics
-- Bots
+- **NEW** PvP Bots
