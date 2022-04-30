@@ -35,4 +35,4 @@ fight and throw each other in the void!
 - Multiple Arenas Support
 - Custom Voids (per arena)
 - Cosmetics
-- **NEW** PvP Bots
+- **NEW** PvE Bots
