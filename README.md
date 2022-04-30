@@ -15,7 +15,7 @@ fight and throw each other in the void!
 - 1.13.x
 - 1.12.x
 
-> Expremential Support
+> Experimental Support
 
 - 1.11.x
 - 1.10.x
