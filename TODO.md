@@ -5,6 +5,8 @@
 - [ ] Seperate the kbffa into Core and API modules
 - [ ] Re-Write SpigotMC description
 - [ ] Write a wiki on github or gitbook
+- [ ] Use [reposilite](https://reposilite.com/) to make a maven repo for the API
+
 
 > Development TODO
 
