@@ -81,7 +81,7 @@ public class DeathListener implements Listener {
             if (damager != player && damager instanceof Player) {
                 knocker.loadCosmetic(knocker.selectedCosmetic());
                 Knocker damageKnocker = KnockbackFFA.getInstance().getKnocker((Player) damager);
-                float prize = KnockbackFFA.getInstance().getConfig().getInt("killprize");
+                float prize = KnockbackFFA.getInstance().getConfig().getInt("kill-prize");
                 damageKnocker.sendMessage(Message.PRIZE.toString().replace("%prize%", prize + "").replace("&", "§"));
                 damageKnocker.addBalance(prize);
                 damageKnocker.getConfig().set("kills", damageKnocker.getConfig().getInt("kills") + 1);
