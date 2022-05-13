@@ -16,3 +16,4 @@
 - [ ] Rework cosmetics
 - [ ] Use ReworkedKnocker
 - [ ] Make SQLite functioning
+- [ ] Create a SpigotMC updater
