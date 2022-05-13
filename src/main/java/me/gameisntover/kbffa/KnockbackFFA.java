@@ -190,7 +190,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             return;
         List<Arena> arenaList = arenaManager.getArenaList();
         arenaManager.setEnabledArena(arenaList.get(0));
-        timer = getConfig().getInt("ArenaChangeTimer");
+        timer = getConfig().getInt("arena-switch-timer");
 
         new BukkitRunnable() {
             @Override
@@ -216,7 +216,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                 timer--;
                 if (timer == 0) {
                     //what should happen when timer is up
-                    timer = getConfig().getInt("ArenaChangeTimer");
+                    timer = getConfig().getInt("arena-switch-timer");
                     if (!arenaList.isEmpty()) { //checking if arenaList even has arenas
                         arenaID++;
                         if (!(arenaID <= arenaList.size())) arenaID = 1;
@@ -244,7 +244,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         }.runTaskTimer(this, 0, 5);
 
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        if (!getConfig().getBoolean("ClearItems.enabled")) return;
+        if (!getConfig().getBoolean("wipe-items.enabled")) return;
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             Bukkit.broadcastMessage(Message.ITEM_CLEAR.toString());
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
@@ -258,7 +258,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     p.playSound(p.getLocation(), Sounds.ITEM_REMOVED.toSound(), 1, 1);
                 }
             }
-        }, getConfig().getInt("ClearItems.delay"), getConfig().getInt("ClearItems.period") * 20L);
+        }, 10L, getConfig().getInt("wipe-items.period") * 20L);
     }
 
     private void loadListeners() {
@@ -269,7 +269,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     }
 
     public boolean BungeeMode() {
-        return getConfig().getBoolean("Bungee-Mode");
+        return getConfig().getBoolean("bungee");
     }
 
 
