@@ -20,7 +20,7 @@ public class JoinLeaveListeners implements Listener {
         knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").add("Default"));
         knocker.getConfig().set("selected-kit", "Default");
         knocker.saveConfig();
-        if (KnockbackFFA.getInstance().getConfig().getBoolean("joinsound"))
+        if (KnockbackFFA.getInstance().getConfig().getBoolean("join-sound"))
             player.playSound(player.getLocation(), Sounds.PLAYER_JOIN.toSound(), 1, 1);
         if (KnockbackFFA.getInstance().getArenaManager().getEnabledArena() == null) knocker.setInGame(false);
         else {
