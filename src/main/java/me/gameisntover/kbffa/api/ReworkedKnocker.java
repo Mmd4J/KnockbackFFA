@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,12 +17,21 @@ import java.util.UUID;
 @Data
 public class ReworkedKnocker {
 
+    private static final HashMap<UUID, ReworkedKnocker> KNOCKERS = new HashMap<>();
+
     private final UUID playerID;
     private final List<String> ownedKits = new ArrayList<>();
     private final List<String> ownedTrails = new ArrayList<>();
     private String selectedKit, selectedCosmetic, selectedTrail;
     private int kills, deaths, balance;
     private boolean scoreboardEnabled = true;
+
+    /**
+     * @return the loaded knocker player
+     */
+    public static ReworkedKnocker getKnocker(UUID playerID) {
+        return KNOCKERS.get(playerID);
+    }
 
     /**
      * Adds a kill to the player kills
@@ -55,6 +65,16 @@ public class ReworkedKnocker {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param override is whether should it override the player in the map
+     */
+    public void save(boolean override) {
+        if(KNOCKERS.containsKey(playerID) && !override) {
+            return;
+        }
+        KNOCKERS.put(playerID, this);
     }
 
     /**
