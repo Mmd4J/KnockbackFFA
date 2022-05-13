@@ -1,23 +1,29 @@
-#Bot configuration settings
-bot-death-messages:
-  - "LOL"
-  - "Oh no :("
-  - "XDDD"
-  - "God DAMMIT!"
-  - "You gonna pay for that >:("
-  - "Ahhhhh that was lag *totally*"
-bot-add-messages:
-  - "Yo, everyone!"
-  - "I'm going to knock everyone down!"
-  - "Hi everyone :D"
-  - "Hello guys!"
-  - "Hey!"
-  - "Let me show you how the boss PVP"
-random-names-auto-join:
-  - "Jack"
-  - "Notch"
-  - "Dream"
-  - "Technoblade"
-  - "Gamerboy"
-  - "MinecraftGamerbot"
-bot-speed: 5
+# bot configuration settings
+bot:
+  speed: 5
+  armor:
+    helmet: LEATHER
+    chestplate: LEATHER
+    leggings: LEATHER
+    boots: LEATHER
+  death-messages:
+    - "LOL"
+    - "Oh no :("
+    - "XDDD"
+    - "God DAMMIT!"
+    - "You gonna pay for that >:("
+    - "Ahhhhh that was lag *totally*"
+  add-messages:
+    - "Yo, everyone!"
+    - "I'm going to knock everyone down!"
+    - "Hi everyone :D"
+    - "Hello guys!"
+    - "Hey!"
+    - "Let me show you how the boss PVP"
+  random-names:
+    - "Jack"
+    - "Notch"
+    - "Dream"
+    - "Technoblade"
+    - "Gamerboy"
+    - "MinecraftGamerbot"
