@@ -62,7 +62,7 @@ public abstract class Bot implements Listener {
         // --------------------------------------
         mob.setRemoveWhenFarAway(false);
         mob.setCanPickupItems(true);
-        mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, KnockbackFFA.getInstance().getBotManager().getConfig.getInt("bot-speed")));
+        mob.addPotionEffect(PotionEffectType.SPEED.createEffect(999999, KnockbackFFA.getInstance().getBotManager().getConfig.getInt("bot.speed")));
         mob.setTarget(null);
         mob.setCustomName(ChatColor.translateAlternateColorCodes('&', name));
         mob.setCustomNameVisible(true);
