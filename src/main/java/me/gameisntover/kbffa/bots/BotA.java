@@ -48,7 +48,7 @@ public class BotA extends Bot {
 
     @Override
     public void start() {
-        chat(KnockbackFFA.getInstance().getBotManager().getConfig.getStringList("bot-add-messages").get(new Random().nextInt(KnockbackFFA.getInstance().getBotManager().getConfig.getStringList("bot-add-messages").size() - 1)));
+        chat(KnockbackFFA.getInstance().getBotManager().getConfig.getStringList("bot.add-messages").get(new Random().nextInt(KnockbackFFA.getInstance().getBotManager().getConfig.getStringList("bot.add-messages").size() - 1)));
     }
 
     @Override
