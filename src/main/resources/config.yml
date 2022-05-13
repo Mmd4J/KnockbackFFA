@@ -1,16 +1,17 @@
 # delay between arena switches in seconds (default is 900 seconds / 15 minutes)
-ArenaChangeTimer: 900
+arena-switch-timer: 900
 # clears items after a specific period (default time is 60 seconds / 1 minutes)
-ClearItems:
+wipe-items:
   enabled: true
-  delay: 0
   period: 60
-# Bungee-Mode makes players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
-Bungee-Mode: false
+# Bungee makes players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
+bungee: false
 # stores player inventory before they join the game but you can set it to false so when a player leaves the game. They'll lose their previous inventory before they join the game(Bungee-Mode Only)
 save-inventory-on-join: true
-joinsound: true
-killprize: 10
+# this is configurable in sounds.yml
+join-sound: true
+# amount of given coins on kill
+kill-prize: 10
 default-void-damage: 6
 # autoresetcheck-blocks is amount of blocks that will be checked in every second
 # default is 10000 blocks or 10k
