@@ -1,23 +1,23 @@
-#It would changes arena when you give it a time so it would change the arena after that time. the default time is 900 or 15 minutes.
+# delay between arena switches in seconds (default is 900 seconds / 15 minutes)
 ArenaChangeTimer: 900
+# clears items after a specific period (default time is 60 seconds / 1 minutes)
 ClearItems:
   enabled: true
   delay: 0
   period: 60
-#Clearing items after a time. the default time is 60 seconds or 1 minutes.
+# Bungee-Mode makes players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
 Bungee-Mode: false
-#Bungee-Mode would make players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
+# stores player inventory before they join the game but you can set it to false so when a player leaves the game. They'll lose their previous inventory before they join the game(Bungee-Mode Only)
 save-inventory-on-join: true
-#stores player inventory before they join the game but you can set it to false so when a player leaves the game. They'll lose their previous inventory before they join the game(Bungee-Mode Only)
 joinsound: true
 killprize: 10
 default-void-damage: 6
+# autoresetcheck-blocks is amount of blocks that will be checked in every second
+# default is 10000 blocks or 10k
 autoresetcheck-blocks: 10000
-#autoresetcheck-blocks is amount of blocks that will be checked in every second
-#Default is 10000 blocks or 10k blocks which means 10k blocks will be checked in each seconds
+# trails won't work in these blocks
 no-trail-blocks:
   - 'WATER'
   - 'LAVA'
   - 'SIGN'
   - 'WALLSIGN'
-#Trails won't work in these blocks
