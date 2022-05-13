@@ -48,12 +48,13 @@ public class SQLite implements Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        knocker.save(false);
         return knocker;
     }
 
     @Override
     public void updateKnocker(ReworkedKnocker kncoker){
-        // to update the knocker
+        // update the knocker on the database
     }
 
     private Connection createConnection(){
