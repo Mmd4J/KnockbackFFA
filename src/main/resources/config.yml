@@ -6,6 +6,13 @@ wipe-items:
   period: 60
 # Bungee makes players join to the game when they join your server (You don't need save-inventory-on-join and mainlobby if this is true)
 bungee: false
+players:
+  # caching info for the upcoming leaderboards system (requires PlaceholderAPI)
+  cache-info:
+    # keep this one empty if you don't have a disguise plugin
+    name-placeholder: ''
+    prefix-placeholder: '%vault_prefix%'
+    suffix-placeholder: '%vault_suffix%'
 # stores player inventory before they join the game but you can set it to false so when a player leaves the game. They'll lose their previous inventory before they join the game(Bungee-Mode Only)
 save-inventory-on-join: true
 # this is configurable in sounds.yml
