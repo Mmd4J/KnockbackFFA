@@ -34,17 +34,24 @@ public class ReworkedKnocker {
     }
 
     /**
+     * unloads the player from the KNOCKERS map
+     */
+    public static void unload(UUID playerID) {
+        KNOCKERS.remove(playerID);
+    }
+
+    /**
      * Adds a kill to the player kills
      */
     public void addKill(){
-        kills += 1;
+        this.kills += 1;
     }
 
     /**
      * Adds a death to the player deaths
      */
     public void addDeath(){
-        deaths += 1;
+        this.deaths += 1;
     }
 
     /**
