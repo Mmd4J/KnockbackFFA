@@ -30,7 +30,7 @@ public class SQLite implements Database {
 
     @Override
     public ReworkedKnocker getKnocker(UUID uuid) {
-        String sql = "SELECT * FROM kbffa WHERE uuid=" + uuid;
+        final String sql = "SELECT * FROM kbffa WHERE uuid=" + uuid;
         ReworkedKnocker knocker = new ReworkedKnocker(uuid);
         try (Connection connection = createConnection()) {
             Statement statement = connection.createStatement();
@@ -53,10 +53,11 @@ public class SQLite implements Database {
     }
 
     @Override
-    public void updateKnocker(ReworkedKnocker kncoker){
+    public void updateKnocker(ReworkedKnocker knocker){
         String sql = "INSERT INTO kbffa(uuid,name,kills,deaths,balance,selectedKit,selectedTrail,ownedKits,ownedTrails) VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, knocker.getPlayerID());
             //update data here
             statement.executeUpdate();
         } catch (SQLException ignored) { /* should un-ignore later */ }  
@@ -73,7 +74,7 @@ public class SQLite implements Database {
     }
 
     private void createTables(){
-        String sql = "CREATE TABLE IF NOT EXIST kbffa (\n" +
+        final String sql = "CREATE TABLE IF NOT EXIST kbffa (\n" +
                 "uuid text PRIMARY KEY NOT NULL,\n" +
                 "name VARCHAR(16) NOT NULL,\n" +
                 "kills INT(20) NOT NULL DEFAULT 0,\n" +
@@ -81,10 +82,11 @@ public class SQLite implements Database {
                 "maxkillstreak INT(20) NOT NULL DEFAULT 0,\n" +
                 "balance INT(20) NOT NULL DEFAULT 0,\n" +
                 "selectedCosmetic VARCHAR(30) NOT NULL,\n" +
-                "selectedTrail VARCHAR(30) NOT NULL,\n" +
                 "selectedKit VARCHAR(30) NOT NULL,\n" +
+                "selectedTrail VARCHAR(30) NOT NULL,\n" +
                 "ownedKits MEDIUMTEXT NOT NULL, \n" +
                 "ownedTrails MEDIUMTEXT NOT NULL, \n" +
+                "settings MEDIUMTEXT NOT NULL, \n" +
                 ");";
         try (Connection connection = createConnection()){
             Statement statement = connection.createStatement();
