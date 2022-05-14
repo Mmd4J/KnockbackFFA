@@ -1,0 +1,8 @@
+holograms:
+  # the amount if top players to display
+  top-size: 15
+  example-hologram-1:
+    type: KILLS
+    location: world,0,0,0
+    title: 'Top Kills'
+    format: '#{rank} {prefix} {name} {suffix} &8 - &f{kills}'
