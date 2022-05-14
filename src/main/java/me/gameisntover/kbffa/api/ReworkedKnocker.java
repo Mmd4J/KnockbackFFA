@@ -29,7 +29,7 @@ public class ReworkedKnocker {
     /**
      * @return the loaded knocker player
      */
-    public static ReworkedKnocker getKnocker(UUID playerID) {
+    public static ReworkedKnocker get(UUID playerID) {
         return KNOCKERS.get(playerID);
     }
 
@@ -81,7 +81,7 @@ public class ReworkedKnocker {
      * @return The bukkit player through the UUID
      */
     public Player getPlayer() {
-        return Bukkit.getPlayer(playerID);
+        return Bukkit.getPlayer(this.playerID);
     }
 
 }
