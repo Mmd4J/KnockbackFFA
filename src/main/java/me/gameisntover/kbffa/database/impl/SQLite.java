@@ -54,7 +54,12 @@ public class SQLite implements Database {
 
     @Override
     public void updateKnocker(ReworkedKnocker kncoker){
-        // update the knocker on the database
+        String sql = "INSERT INTO kbffa(uuid,name,kills,deaths,balance,selectedKit,selectedTrail,ownedKits,ownedTrails) VALUES(?,?,?,?,?,?,?,?,?)";
+        try (Connection connection = createConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            //update data here
+            statement.executeUpdate();
+        } catch (SQLException ignored) { /* should un-ignore later */ }  
     }
 
     private Connection createConnection(){
