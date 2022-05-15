@@ -78,10 +78,10 @@ public class ReworkedKnocker {
      * @param override is whether should it override the player in the map
      */
     public void save(boolean override) {
-        if(KNOCKERS.containsKey(playerID) && !override) {
+        if(KNOCKERS.containsKey(this.playerID) && !override) {
             return;
         }
-        KNOCKERS.put(playerID, this);
+        KNOCKERS.put(this.playerID, this);
     }
 
     /**
