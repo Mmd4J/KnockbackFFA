@@ -1,4 +1,4 @@
-# KnockBackFFA
+# KnockbackFFA
 
 KnockbackFFA is a free fun minigame which gives players a knockback stick and some pearls and some special items to
 fight and throw each other in the void!
@@ -36,3 +36,14 @@ fight and throw each other in the void!
 - Custom Voids (per arena)
 - Cosmetics
 - **NEW** PvE Bots
+
+## Plugin support / hooks
+
+> PlaceholderAPI
+
+You can view them on the [wiki](https://github.com/GaMeIsNtOvEr/KnockbackFFA)
+
+## Used Libraries / Software
+
+ - [SpigotMC](https://spigotmc.org) - The type of servers this plugin runs on
+ - [FastBoard](https://github.com/MrMicky-FR/FastBoard) - A free open source lightweight packet-based scoreboard API for Bukkit plugins
