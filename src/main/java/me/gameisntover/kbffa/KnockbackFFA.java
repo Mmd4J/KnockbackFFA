@@ -11,6 +11,7 @@ import me.gameisntover.kbffa.arena.regions.BlockDataManager;
 import me.gameisntover.kbffa.bots.Bot;
 import me.gameisntover.kbffa.bots.BotManager;
 import me.gameisntover.kbffa.command.CommandManager;
+import me.gameisntover.kbffa.database.DatabaseManager;
 import me.gameisntover.kbffa.gui.ButtonManager;
 import me.gameisntover.kbffa.hook.Expansion;
 import me.gameisntover.kbffa.kit.KitManager;
@@ -60,6 +61,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     private ScoreboardConfiguration knockScoreboard;
     private CosmeticConfiguration cosmeticConfiguration;
     private ZoneConfiguration zoneConfiguration;
+    private DatabaseManager databaseManager;
     private BoardManager scoreboardManager;
 
     @NotNull
@@ -86,6 +88,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     public void onEnable() {
         long time = System.currentTimeMillis();
         instance = this;
+        loadConfig();
+        databaseManager = new DatabaseManager("SQLITE");
         arenaManager = new ArenaManager();
         kitManager = new KitManager();
         blockDataManager = new BlockDataManager();
@@ -104,7 +108,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         if (!getDataFolder().exists()) getDataFolder().mkdir();
         loadMessages();
         loadSounds();
-        loadConfig();
         getLogger().info("Loading Commands");
         commandManager = new CommandManager();
         getLogger().info("Loading Listeners");
