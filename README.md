@@ -47,3 +47,4 @@ You can view them on the [wiki](https://github.com/GaMeIsNtOvEr/KnockbackFFA)
 
  - [SpigotMC](https://spigotmc.org) - The type of servers this plugin runs on
  - [FastBoard](https://github.com/MrMicky-FR/FastBoard) - A free open source lightweight packet-based scoreboard API for Bukkit plugins
+ - [Hologram-Lib](https://github.com/unldenis/Hologram-Lib) - Asynchronous, high-performance Minecraft Hologram library
