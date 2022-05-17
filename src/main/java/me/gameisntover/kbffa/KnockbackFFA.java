@@ -88,26 +88,22 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     public void onEnable() {
         long time = System.currentTimeMillis();
         instance = this;
+        getLogger().info("Loading config files...");
+        if (!getDataFolder().exists()) getDataFolder().mkdir();
         loadConfig();
+        loadMessages();
+        loadSounds();
+        getLogger().info("Connecting to the database...");
         databaseManager = new DatabaseManager("SQLITE");
         arenaManager = new ArenaManager();
         kitManager = new KitManager();
         blockDataManager = new BlockDataManager();
         botManager = new BotManager();
         scoreboardManager = new BoardManager();
-        if (!Bukkit.getOnlinePlayers().isEmpty())
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                Knocker knocker = getKnocker(player);
-                knocker.setInGame(BungeeMode());
-            }
         buttonManager = new ButtonManager();
         Field f = getServer().getClass().getDeclaredField("commandMap");
         f.setAccessible(true);
         commandMap = (CommandMap) f.get(getServer());
-        getLogger().info("Loading Configuration Files");
-        if (!getDataFolder().exists()) getDataFolder().mkdir();
-        loadMessages();
-        loadSounds();
         getLogger().info("Loading Commands");
         commandManager = new CommandManager();
         getLogger().info("Loading Listeners");
@@ -117,9 +113,16 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         long takenTime = (System.currentTimeMillis() - time);
         getLogger().info("Plugin loaded successfully in " + takenTime + "ms");
         registerPlaceholders();
-        for (Knocker p : getInGamePlayers())
+        if (!Bukkit.getOnlinePlayers().isEmpty()) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                Knocker knocker = getKnocker(player);
+                knocker.setInGame(BungeeMode());
+            }
+        }
+        for (Knocker p : getInGamePlayers()) {
             if (p.getPlayer().getInventory().contains(Material.BOW) && !p.getPlayer().getInventory().contains(Material.ARROW))
                 p.getInventory().addItem(Items.ARROW.getItem());
+        }
     }
 
     @Override
@@ -135,6 +138,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     }
 
     public List<Knocker> getInGamePlayers() {
+        // update this shit
         List<Knocker> knockers = new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
             Knocker knocker = getKnocker(p);
