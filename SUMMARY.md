@@ -3,6 +3,6 @@
 * [KnockbackFFA](README.md)
 * [KnockbackFFA - Plans](TODO.md)
 
-## Group 1
+## Setting Up
 
-* [🌟 Getting Started](group-1/getting-started.md)
+* [🌟 Getting Started](setting-up/getting-started.md)
