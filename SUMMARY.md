@@ -5,4 +5,4 @@
 
 ## Setting Up
 
-* [🌟 Getting Started](setting-up/getting-started.md)
+* [🌟 Getting Started](wiki/setting-up/getting-started.md)
