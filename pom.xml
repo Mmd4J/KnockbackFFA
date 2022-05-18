@@ -38,6 +38,10 @@
                                     <pattern>fr.mrmicky.fastboard</pattern>
                                     <shadedPattern>me.gameisntover.kbffa.fastboard</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>me.gameisntover.kbffa.bstats</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -99,6 +103,13 @@
             <groupId>com.github.unldenis</groupId>
             <artifactId>Hologram-Lib</artifactId>
             <version>master-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.bstats</groupId>
+          <artifactId>bstats-bukkit</artifactId>
+          <version>3.0.0</version>
+          <scope>compile</scope>
         </dependency>
 
         <!-- Project side dependancy -->
