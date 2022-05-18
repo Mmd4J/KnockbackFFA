@@ -19,6 +19,7 @@ import me.gameisntover.kbffa.listeners.*;
 import me.gameisntover.kbffa.scoreboard.BoardManager;
 import me.gameisntover.kbffa.scoreboard.ScoreboardConfiguration;
 import me.gameisntover.kbffa.util.*;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -95,6 +96,9 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         loadSounds();
         getLogger().info("Connecting to the database...");
         databaseManager = new DatabaseManager("SQLITE");
+        getLogger().info("Connecting to bStats...");
+        Metrics metrics = new Metrics(this, 15224);
+        //use metrics to add custom chars
         arenaManager = new ArenaManager();
         kitManager = new KitManager();
         blockDataManager = new BlockDataManager();
