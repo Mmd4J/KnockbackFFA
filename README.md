@@ -46,5 +46,6 @@ You can view them on the [wiki](https://github.com/GaMeIsNtOvEr/KnockbackFFA)
 ## Used Libraries / Software
 
  - [SpigotMC](https://spigotmc.org) - The type of servers this plugin runs on
+ - [bStats](https://bstats.org) - A free open source data collector for MC plugins
  - [FastBoard](https://github.com/MrMicky-FR/FastBoard) - A free open source lightweight packet-based scoreboard API for Bukkit plugins
  - [Hologram-Lib](https://github.com/unldenis/Hologram-Lib) - Asynchronous, high-performance Minecraft Hologram library
