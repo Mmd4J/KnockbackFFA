@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.util;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.permissions.PermissionDefault;
@@ -30,7 +30,7 @@ public class ReloadCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         KnockbackFFA.getInstance().reloadConfig();
         KnockbackFFA.getInstance().loadMessages();
         KnockbackFFA.getInstance().loadSounds();
@@ -42,7 +42,7 @@ public class ReloadCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 

@@ -8,6 +8,7 @@ import java.util.Map;
 
 @Getter
 public class BotManager extends KnockConfiguration {
+
     private Map<String, Bot> botHandler = new HashMap<>();
 
     @Override

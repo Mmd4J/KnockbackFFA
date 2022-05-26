@@ -3,7 +3,7 @@ package me.gameisntover.kbffa.bots;
 import lombok.Getter;
 import lombok.Setter;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.*;
@@ -89,7 +89,7 @@ public abstract class Bot implements Listener {
         mob.setHealth(0);
     }
 
-    public void attackPlayer(Knocker knocker) {
+    public void attackPlayer(ReworkedKnocker knocker) {
         Location location = knocker.getPlayer().getLocation();
         mob.setTarget(knocker.getPlayer());
         mob.setVelocity(location.getDirection());

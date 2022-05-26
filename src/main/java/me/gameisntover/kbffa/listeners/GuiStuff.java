@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.gui.Button;
 import me.gameisntover.kbffa.gui.GUI;
 import me.gameisntover.kbffa.kit.Kit;
@@ -25,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class GuiStuff implements Listener {
@@ -35,13 +36,12 @@ public class GuiStuff implements Listener {
         ItemMeta itemMeta = item.getItemMeta();
         Player player = e.getPlayer();
         if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
+        ReworkedKnocker knocker = ReworkedKnocker.get(player.getUniqueId());
         assert itemMeta != null;
-        assert Items.COSMETIC_ITEM.getItem() != null;
         if (Items.COSMETIC_ITEM.getItem().equals(item)) {
             e.setCancelled(true);
             GUI cosmeticMenu = new GUI("Cosmetic Menu", (short) 5);
-            List<String> cList = knocker.getConfig().getStringList("owned-cosmetics");
+            List<String> cList = knocker.getOwnedCosmetics();
             cList.forEach(cosmetic -> {
                         if (KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name") != null) {
                             String displayName = ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name"));
@@ -49,33 +49,32 @@ public class GuiStuff implements Listener {
                             List<String> lore = KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getStringList(cosmetic + ".lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
                             assert icon != null;
                             Button cosmeticItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.getMaterial(icon), 1, displayName, Collections.singletonList("")).create(), event -> {
-                                List<String> ownedCosmetics = knocker.getConfig().getStringList("owned-cosmetics");
+                                List<String> ownedCosmetics = knocker.getOwnedCosmetics();
                                 String selC = ownedCosmetics.get(event.getSlot());
                                 assert event.getCurrentItem() != null;
                                 assert event.getCurrentItem().getItemMeta() != null;
                                 if (KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(selC + ".type").equals("KILL_PARTICLE"))
-                                    knocker.getConfig().set("selected-trails", event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
+                                    knocker.setSelectedTrail(event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
                                 else if (KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(selC + ".type").equals("TRAIL"))
-                                    knocker.getConfig().set("selected-trails", event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
-                                knocker.saveConfig();
+                                    knocker.setSelectedCosmetic(event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY) ? selC : "");
                                 player.closeInventory();
                             });
                             ItemMeta meta = cosmeticItem.getItem().getItemMeta();
                             if (KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmetic + ".type").equals("KILL_PARTICLE")) {
-                                if (knocker.getConfig().getString("selected-cosmetic") == null)
-                                    knocker.getConfig().set("selected-cosmetic", cosmetic);
-                                cosmeticItem.setSelected(knocker.getConfig().getString("selected-cosmetic").equals(cosmetic));
+                                if (knocker.getSelectedCosmetic() == null)
+                                        knocker.setSelectedCosmetic(cosmetic);
+                                cosmeticItem.setSelected(knocker.getSelectedCosmetic().equals(cosmetic));
                             } else if (KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmetic + ".type").equals("TRAIL"))
-                                if (knocker.getConfig().getString("selected-trails") == null)
-                                    knocker.getConfig().set("selected-trails", cosmetic);
-                            cosmeticItem.setSelected(knocker.getConfig().getString("selected-trails").equals(cosmetic));
+                                if (knocker.getSelectedTrail() == null)
+                                    knocker.setSelectedTrail(cosmetic);
+                            cosmeticItem.setSelected(knocker.getSelectedTrail().equals(cosmetic));
                             meta.setLore(lore);
                             cosmeticItem.getItem().setItemMeta(meta);
                             cosmeticMenu.add(cosmeticItem, cList.indexOf(cosmetic));
                         } else {
                             cList.remove(cosmetic);
-                            knocker.getConfig().set("owned-cosmetics", cList);
-                            knocker.saveConfig();
+                            knocker.getOwnedCosmetics().removeIf(s -> Objects.equals(s, s));
+                            knocker.getOwnedCosmetics().addAll(cList);
                         }
                     }
             );
@@ -98,17 +97,16 @@ public class GuiStuff implements Listener {
             GUI cosmeticShop = new GUI("Cosmetic Shop", (short) 5);
             Button cosmeticItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.getMaterial(cIcon), 1, cName, Arrays.asList("")).create(), event -> {
                 List<String> cosmetics = KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getList("registered-cosmetics").stream().map(s -> s.toString()).collect(Collectors.toList());
-                List<String> cList = knocker.getConfig().getStringList("owned-cosmetics");
+                List<String> cList = knocker.getOwnedCosmetics();
                 for (String cosmetic : cosmetics) {
                     Button cosmeticsItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.getMaterial(KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmetic + ".icon")), 1, ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getString(cosmetic + ".name")), Collections.singletonList("")).create(), event1 -> {
                         float playerBal = knocker.getBalance();
                         if (playerBal >= KnockbackFFA.getInstance().getCosmeticConfiguration().getConfig.getInt(cosmetics.get(event1.getSlot()) + ".price")) {
-                            List<String> ownedCosmetics = knocker.getConfig().getStringList("owned-cosmetics");
+                            List<String> ownedCosmetics = knocker.getOwnedCosmetics();
                             if (!ownedCosmetics.contains(cosmetics.get(event1.getSlot()))) {
                                 knocker.removeBalance(KnockbackFFA.getInstance().getItems().getConfig.getInt(cosmetics.get(event1.getSlot()) + ".price"));
                                 ownedCosmetics.add(cosmetics.get(event1.getSlot()));
-                                knocker.getConfig().set("owned-cosmetics", ownedCosmetics);
-                                knocker.saveConfig();
+                                knocker.getOwnedCosmetics().addAll(ownedCosmetics);
                                 player.sendMessage(Message.COSMETIC_PURCHASE_SUCCESS.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                             } else
                                 player.sendMessage(Message.COSMETIC_ALREADY_OWNED.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
@@ -123,7 +121,7 @@ public class GuiStuff implements Listener {
                     cosmeticsItem.getItem().setItemMeta(cosmeticMeta);
                     cosmeticShop.add(cosmeticsItem, cosmetics.indexOf(cosmetic));
                 }
-                knocker.openGUI(cosmeticShop);
+                knocker.getPlayer().openInventory(cosmeticShop.getInventory());
             });
             ItemMeta cosmeticMeta = cosmeticItem.getItem().getItemMeta();
             cosmeticMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getInstance().getItems().getConfig.getString("ShopMenu.cosmetic.name")));
@@ -135,19 +133,18 @@ public class GuiStuff implements Listener {
             Button kitItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(Material.getMaterial(kIcon), 1, kName, Arrays.asList("")).create(), event -> {
                 GUI kitShop = new GUI("Kit Shop", (short) 5);
                 List<String> cosmetics = Arrays.asList(KnockbackFFA.getInstance().getKitManager().getFolder().list()).stream().map(s -> s.replace(".yml", "")).collect(Collectors.toList());
-                List<String> cList = knocker.getConfig().getStringList("owned-kits");
+                List<String> cList = knocker.getOwnedKits();
                 for (String cosmetic : cosmetics) {
                     if (cosmetic == null) return;
                     Kit kit = KnockbackFFA.getInstance().getKitManager().load(cosmetic);
                     Button kitsItem = KnockbackFFA.getInstance().getButtonManager().create(new ItemBuilder(kit.getIcon(), 1, kit.getKitName(), Collections.singletonList("")).create(), event1 -> {
                         float playerBal = knocker.getBalance();
                         if (playerBal >= kit.getPrice()) {
-                            List<String> ownedKits = knocker.getConfig().getStringList("owned-kits");
+                            List<String> ownedKits = knocker.getOwnedKits();
                             if (!ownedKits.contains(cosmetics.get(event1.getSlot()))) {
-                                knocker.removeBalance(kit.getPrice());
+                                knocker.removeBalance((int) kit.getPrice());
                                 ownedKits.add(cosmetics.get(event1.getSlot()));
-                                knocker.getConfig().set("owned-kits", ownedKits);
-                                knocker.saveConfig();
+                                knocker.getOwnedKits().addAll(ownedKits);
                                 player.closeInventory();
                                 player.sendMessage(Message.COSMETIC_PURCHASE_SUCCESS.toString().replace("&", "§").replace("%cosmetic%", cosmetics.get(event1.getSlot())));
                             } else
@@ -170,16 +167,15 @@ public class GuiStuff implements Listener {
                     kitsItem.getItem().setItemMeta(kitsMeta);
                     kitShop.add(kitsItem, cosmetics.indexOf(cosmetic));
                 }
-                knocker.openGUI(kitShop);
+                knocker.getPlayer().openInventory(kitShop.getInventory());
             });
             ItemMeta kitMeta = kitItem.getItem().getItemMeta();
             kitMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', KnockbackFFA.getInstance().getItems().getConfig.getString("ShopMenu.kit.name")));
             kitMeta.setLore(KnockbackFFA.getInstance().getItems().getConfig.getStringList("ShopMenu.kit.lore").stream().map(s -> s.replace("&", "§")).collect(Collectors.toList()));
             kitItem.getItem().setItemMeta(kitMeta);
             shopMenu.add(kitItem, KnockbackFFA.getInstance().getItems().getConfig.getInt("ShopMenu.kit.slot"));
-            knocker.openGUI(shopMenu);
+            knocker.getPlayer().openInventory(shopMenu.getInventory());
         }
-        assert Items.KIT_ITEM.getItem() != null;
         if (Items.KIT_ITEM.getItem().equals(item)) {
             e.setCancelled(true);
             GUI kitsMenu = new GUI("Kits Menu", (short) 5);
@@ -191,10 +187,9 @@ public class GuiStuff implements Listener {
                 Player player1 = (Player) inventoryCloseEvent.getPlayer();
                 player1.playSound(player1.getLocation(), Sounds.GUI_CLOSE.toSound(), 1, 1);
             });
-            if (knocker.getConfig().getList("owned-kits") != null && knocker.getConfig().getList("owned-kits").size() > 0) {
-                if (knocker.getConfig().getList("owned-kits") == null)
-                    knocker.getConfig().set("owned-kits", Collections.singletonList("Default"));
-                List<String> kitsList = knocker.getConfig().getList("owned-kits").stream().map(Object::toString).collect(Collectors.toList());
+            if (!knocker.getOwnedKits().isEmpty()) {
+                knocker.getOwnedKits().add("Default");
+                List<String> kitsList = knocker.getOwnedKits().stream().map(Object::toString).collect(Collectors.toList());
                 for (String kit : kitsList) {
                     if (kit == null) return;
                     Kit kitItems = KnockbackFFA.getInstance().getKitManager().load(kit);
@@ -204,16 +199,15 @@ public class GuiStuff implements Listener {
                         assert event.getCurrentItem() != null;
                         assert event.getCurrentItem().getItemMeta() != null;
                         if (!event.getCurrentItem().getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
-                            knocker.getConfig().set("selected-kit", selC);
+                            knocker.setSelectedKit(selC);
                             player.sendMessage(Message.SUCCESSFULLY_SELECTED_COSMETIC.toString().replace("%cosmetic%", selC));
                         } else {
-                            knocker.getConfig().set("selected-kit", "");
+                            knocker.setSelectedKit("");
                             player.sendMessage(Message.SUCCESSFULLY_DESELECTED_COSMETIC.toString().replace("%cosmetic%", selC));
                         }
-                        knocker.saveConfig();
                         player.closeInventory();
                     });
-                    kitItem.setSelected(knocker.getConfig().getString("selected-kit").equalsIgnoreCase(kit));
+                    kitItem.setSelected(knocker.getSelectedKit().equalsIgnoreCase(kit));
                     ItemMeta kitMeta = kitItem.getItem().getItemMeta();
                     if (kitItem.getItem().getType() == Material.AIR) kitItem.getItem().setType(Material.BARRIER);
 
@@ -224,7 +218,6 @@ public class GuiStuff implements Listener {
                     kitItem.getItem().setItemMeta(kitMeta);
                     kitsMenu.add(kitItem, kitsList.indexOf(kit));
                 }
-                knocker.saveConfig();
                 kitsMenu.setOpenEventConsumer(event -> {
                     Player player1 = (Player) event.getPlayer();
                     player1.playSound(player1.getLocation(), Sounds.GUI_OPEN.toSound(), 1, 1);
@@ -234,7 +227,7 @@ public class GuiStuff implements Listener {
                     player1.playSound(player1.getLocation(), Sounds.GUI_CLOSE.toSound(), 1, 1);
                 });
             }
-            knocker.openGUI(kitsMenu);
+            knocker.getPlayer().openInventory(kitsMenu.getInventory());
         }
     }
 

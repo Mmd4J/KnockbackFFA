@@ -2,6 +2,8 @@ package me.gameisntover.kbffa.database;
 
 import me.gameisntover.kbffa.database.impl.SQLite;
 
+import java.util.UUID;
+
 public class DatabaseManager {
 
     private final Database database;
@@ -17,7 +19,11 @@ public class DatabaseManager {
                 break;
             default: database = new SQLite();
         }
-
     }
+
+    public void loadPlayer(UUID uuid){
+        database.getKnocker(uuid);
+    }
+
 
 }

@@ -2,7 +2,7 @@ package me.gameisntover.kbffa.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +35,9 @@ public class Expansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String placeholder) {
         Player player1 = player.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player1);
-        if (placeholder.equalsIgnoreCase("player_kills")) return knocker.getConfig().getInt("kills") + "";
-        if (placeholder.equalsIgnoreCase("player_deaths")) return knocker.getConfig().getInt("deaths") + "";
+        ReworkedKnocker knocker = ReworkedKnocker.get(player1.getUniqueId());
+        if (placeholder.equalsIgnoreCase("player_kills")) return knocker.getKills() + "";
+        if (placeholder.equalsIgnoreCase("player_deaths")) return knocker.getDeaths() + "";
         if (placeholder.equalsIgnoreCase("player_balance"))
             return knocker.getBalance() + "";
         if (placeholder.equalsIgnoreCase("current_map")) {

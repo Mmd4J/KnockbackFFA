@@ -2,7 +2,6 @@ package me.gameisntover.kbffa;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.ArenaManager;
 import me.gameisntover.kbffa.arena.GameRules;
@@ -33,7 +32,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -46,7 +44,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
 
     @Getter
     private static KnockbackFFA instance;
-    private final Map<UUID, Knocker> knockerHandler = new HashMap<>();
     BotManager botManager;
     private FileConfiguration messages;
     private FileConfiguration sounds;
@@ -64,25 +61,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
     private ZoneConfiguration zoneConfiguration;
     private DatabaseManager databaseManager;
     private BoardManager scoreboardManager;
-
-    @NotNull
-    public Knocker getKnocker(@NotNull Player player) {
-        if (knockerHandler.containsKey(player.getUniqueId()))
-            return knockerHandler.get(player.getUniqueId());
-        Knocker knocker = new Knocker(player.getUniqueId());
-        knockerHandler.put(player.getUniqueId(), knocker);
-        return knocker;
-    }
-
-    public Knocker getKnocker(String name) {
-        Player player = Bukkit.getPlayer(name);
-        if (player == null) return null;
-        return getKnocker(player);
-    }
-
-    public void unloadKnocker(UUID uuid){
-        knockerHandler.remove(uuid);
-    }
 
     @SneakyThrows
     @Override
@@ -117,16 +95,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         long takenTime = (System.currentTimeMillis() - time);
         getLogger().info("Plugin loaded successfully in " + takenTime + "ms");
         registerPlaceholders();
-        if (!Bukkit.getOnlinePlayers().isEmpty()) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                Knocker knocker = getKnocker(player);
-                knocker.setInGame(BungeeMode());
-            }
-        }
-        for (Knocker p : getInGamePlayers()) {
-            if (p.getPlayer().getInventory().contains(Material.BOW) && !p.getPlayer().getInventory().contains(Material.ARROW))
-                p.getInventory().addItem(Items.ARROW.getItem());
-        }
     }
 
     @Override
@@ -139,16 +107,6 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
         new Expansion().register();
         getLogger().info("Successfully registered placeholders");
-    }
-
-    public List<Knocker> getInGamePlayers() {
-        // update this shit
-        List<Knocker> knockers = new ArrayList<>();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            Knocker knocker = getKnocker(p);
-            if (knocker.isInGame()) knockers.add(knocker);
-        }
-        return knockers;
     }
 
     @SneakyThrows
@@ -211,8 +169,8 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
                     arenaManager.setEnabledArena(arenaName);
                     zoneConfiguration.save();
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        Knocker knocker = getKnocker(p);
-                        if (!knocker.isInGame()) return;
+                        boolean ingame = ArenaManager.isInGame(p.getUniqueId());
+                        if (!ingame) return;
                         arenaManager.changeArena(arenaManager.load(arenaName.replace(".yml", "")));
                         cancel();
                     }
@@ -242,8 +200,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
             @Override
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    Knocker knocker = getKnocker(p);
-                    if (!knocker.isInGame()) return;
+                    if (!ArenaManager.isInGame(p.getUniqueId())) return;
                     World world = p.getWorld();
                     List<Entity> entList = world.getEntities();
                     for (Entity current : entList)
@@ -259,8 +216,7 @@ public final class KnockbackFFA extends JavaPlugin implements Listener {
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             Bukkit.broadcastMessage(Message.ITEM_CLEAR.toString());
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                Knocker knocker = getKnocker(p);
-                if (!knocker.isInGame()) return;
+                if (!ArenaManager.isInGame(p.getUniqueId())) return;
                 World world = p.getWorld();
                 List<Entity> entList = world.getEntities();
                 for (Entity current : entList) {

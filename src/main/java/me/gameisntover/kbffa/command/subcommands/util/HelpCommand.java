@@ -1,8 +1,9 @@
 package me.gameisntover.kbffa.command.subcommands.util;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.command.KnockCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,17 +30,18 @@ public class HelpCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
-        knocker.sendMessage("&8==================================");
-        knocker.sendMessage("&3[Advanced] KnockbackFFA help");
+    public void perform(ReworkedKnocker knocker, String[] args) {
+        Player player = knocker.getPlayer();
+        player.sendMessage("&8==================================");
+        player.sendMessage("&3[Advanced] KnockbackFFA help");
         for (KnockCommand cmd : KnockbackFFA.getInstance().getCommandManager().getSubCommands())
-            knocker.sendMessage("&b" + cmd.getSyntax() + " : &f" + cmd.getKnockDescription());
-        knocker.sendMessage("&3[Advanced] KnockbackFFA version : " + KnockbackFFA.getInstance().getDescription().getVersion());
-        knocker.sendMessage("&8==================================");
+            player.sendMessage("&b" + cmd.getSyntax() + " : &f" + cmd.getKnockDescription());
+        player.sendMessage("&3[Advanced] KnockbackFFA version : " + KnockbackFFA.getInstance().getDescription().getVersion());
+        player.sendMessage("&8==================================");
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

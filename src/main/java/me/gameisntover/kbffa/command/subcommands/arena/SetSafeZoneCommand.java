@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.listeners.WandListener;
 import org.bukkit.ChatColor;
@@ -34,7 +34,7 @@ public class SetSafeZoneCommand extends KnockCommand {
 
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (WandListener.pos2m.get(p) != null && WandListener.pos1m.get(p) == null) {
             p.sendMessage(ChatColor.RED + "You must choose some positions before using this command use /wand");
@@ -61,7 +61,7 @@ public class SetSafeZoneCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

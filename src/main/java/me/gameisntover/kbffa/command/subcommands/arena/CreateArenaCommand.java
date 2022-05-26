@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.api.event.ArenaCreateEvent;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.regions.Cuboid;
@@ -36,7 +36,7 @@ public class CreateArenaCommand extends KnockCommand {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
+        perform(ReworkedKnocker.get(((Player) sender).getUniqueId()), args);
         return false;
     }
 
@@ -47,7 +47,7 @@ public class CreateArenaCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length != 1) {
             p.sendMessage(ChatColor.RED + "You must specify a name for the arena!");
@@ -55,7 +55,6 @@ public class CreateArenaCommand extends KnockCommand {
         }
         if (WandListener.pos1m.get(p) == null && WandListener.pos2m.get(p) == null) {
             p.sendMessage(ChatColor.RED + "You must set the first and second positions of the arena!");
-            return;
         } else if (WandListener.pos1m.get(p) != null && WandListener.pos2m.get(p) != null) {
             Location loc1 = WandListener.pos1m.get(p);
             Location loc2 = WandListener.pos2m.get(p);
@@ -84,7 +83,7 @@ public class CreateArenaCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

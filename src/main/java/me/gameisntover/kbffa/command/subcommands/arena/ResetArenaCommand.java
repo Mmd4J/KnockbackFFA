@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.command.KnockCommand;
 import org.bukkit.ChatColor;
@@ -22,7 +22,7 @@ public class ResetArenaCommand extends KnockCommand {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
+        perform(ReworkedKnocker.get(((Player)sender).getUniqueId()), args);
         return false;
     }
 
@@ -42,7 +42,7 @@ public class ResetArenaCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length > 0) {
             File file = new File(KnockbackFFA.getInstance().getArenaManager().getFolder() + File.separator + args[0] + ".yml");
@@ -55,7 +55,7 @@ public class ResetArenaCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return Arrays.asList(Arrays.stream(KnockbackFFA.getInstance().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
     }
 }

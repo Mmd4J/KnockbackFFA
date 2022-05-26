@@ -1,7 +1,6 @@
 package me.gameisntover.kbffa.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.arena.regions.Cuboid;
 import me.gameisntover.kbffa.util.Items;
 import me.gameisntover.kbffa.util.Message;
@@ -26,8 +25,7 @@ public class GameRules implements Listener {
     public void onPlayerItemPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (knocker.isInGame() || KnockbackFFA.getInstance().BungeeMode()) e.setCancelled(true);
+        if (ArenaManager.isInGame(player.getUniqueId())) e.setCancelled(true);
     }
 
     @EventHandler
@@ -78,8 +76,7 @@ public class GameRules implements Listener {
 
     @EventHandler
     public void onArrowOnGround(PlayerPickupArrowEvent e) {
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getInstance().BungeeMode() || knocker.isInGame()) e.setCancelled(true);
+        if (ArenaManager.isInGame(e.getPlayer().getUniqueId())) e.setCancelled(true);
 
     }
 
@@ -87,8 +84,7 @@ public class GameRules implements Listener {
     public void onBowUse(ProjectileLaunchEvent e) {
         if (!(e.getEntity().getShooter() instanceof Player)) return;
         Player player = (Player) e.getEntity().getShooter();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (!KnockbackFFA.getInstance().BungeeMode() || !knocker.isInGame()) return;
+        if (!ArenaManager.isInGame(player.getUniqueId())) return;
         if (!Items.BOW.getItem().equals(player.getInventory().getItemInMainHand())) return;
         new BukkitRunnable() {
             int timer = 10;

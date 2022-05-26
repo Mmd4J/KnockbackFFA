@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.command.subcommands.worlds;
 
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GotoWorldCommand extends KnockCommand {
@@ -33,7 +32,7 @@ public class GotoWorldCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length == 0) {
             p.sendMessage(ChatColor.RED + "You need to enter more details like what world you're going to travel..." + getSyntax());
@@ -46,7 +45,7 @@ public class GotoWorldCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
-        return Bukkit.getWorlds().stream().map(world -> world.getName()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
+        return null;
     }
 }

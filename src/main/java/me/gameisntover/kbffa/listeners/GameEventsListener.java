@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.listeners;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.arena.ArenaManager;
 import me.gameisntover.kbffa.arena.regions.DataBlock;
 import me.gameisntover.kbffa.util.Items;
 import me.gameisntover.kbffa.util.Message;
@@ -34,16 +34,14 @@ public class GameEventsListener implements Listener {
     @EventHandler
     public void playerChatFormat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(e.getPlayer());
-        if (KnockbackFFA.getInstance().BungeeMode() || knocker.isInGame())
+        if (ArenaManager.isInGame(player.getUniqueId()))
             e.setFormat(Message.CHATFORMAT.toString().replace("%player%", player.getName()).replace("%message%", e.getMessage()));
     }
 
     @EventHandler
     public void onPressureButton(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (knocker.isInGame()) {
+        if (ArenaManager.isInGame(player.getUniqueId())) {
             if (e.getAction() != Action.PHYSICAL) return;
             if (Material.LIGHT_WEIGHTED_PRESSURE_PLATE.equals(e.getClickedBlock().getType())) {
                 Block block = e.getClickedBlock();
@@ -57,7 +55,9 @@ public class GameEventsListener implements Listener {
                 Sign sign = (Sign) e.getClickedBlock().getState();
                 if (!(ChatColor.YELLOW + "[A]KnockbackFFA").equalsIgnoreCase(sign.getLine(0))) return;
                 if (!(ChatColor.GREEN + "Join").equalsIgnoreCase(sign.getLine(1))) return;
-                if (knocker.isInGame()) player.sendMessage(Message.ALREADY_INGAME.toString());
+                if (ArenaManager.isInGame(player.getUniqueId())) {
+                    player.sendMessage(Message.ALREADY_INGAME.toString());
+                }
                 else player.chat("/join");
             }
         }
@@ -66,8 +66,7 @@ public class GameEventsListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         Player player = e.getPlayer();
-        Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-        if (!knocker.isInGame()) return;
+        if (!ArenaManager.isInGame(player.getUniqueId())) return;
         if (e.getBlockPlaced().getType() == Material.WHITE_WOOL) {
             Block block = e.getBlockPlaced();
             DataBlock db = KnockbackFFA.getInstance().getBlockDataManager().getBlockData(block);

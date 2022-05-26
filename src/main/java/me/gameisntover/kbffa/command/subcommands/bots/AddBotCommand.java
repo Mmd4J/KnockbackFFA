@@ -1,10 +1,11 @@
 package me.gameisntover.kbffa.command.subcommands.bots;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.bots.Bot;
 import me.gameisntover.kbffa.bots.BotA;
 import me.gameisntover.kbffa.command.KnockCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,24 +33,25 @@ public class AddBotCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
+        Player player = knocker.getPlayer();
         if (args.length > 0) {
             if (KnockbackFFA.getInstance().getArenaManager().getEnabledArena() == null)
-                knocker.sendMessage("&cThere is no arena for bot to join there! please create arena before using");
+                player.sendMessage("&cThere is no arena for bot to join there! please create arena before using");
             else {
                 if (KnockbackFFA.getInstance().getBotManager().getBotHandler().containsKey(args[0]))
-                    knocker.sendMessage("This bot already exists!");
+                    player.sendMessage("This bot already exists!");
                 else {
                     Bot bot = new BotA(args[0], KnockbackFFA.getInstance().getArenaManager().getEnabledArena().getSpawnLocation());
                     KnockbackFFA.getInstance().getBotManager().getBotHandler().put(args[0], bot);
                 }
             }
-        } else knocker.sendMessage("&cWrong usage!" + getSyntax());
+        } else player.sendMessage("&cWrong usage!" + getSyntax());
 
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

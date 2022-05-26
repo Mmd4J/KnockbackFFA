@@ -1,8 +1,7 @@
 package me.gameisntover.kbffa.command;
 
 import lombok.Getter;
-import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,9 +23,11 @@ public abstract class KnockCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        if (sender.hasPermission("knockbackffa.command." + getKnockName))
-            perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
-        else sender.sendMessage(getPermissionMessage());
+        if (sender.hasPermission("knockbackffa.command." + getKnockName)) {
+            perform(ReworkedKnocker.get(((Player) sender).getUniqueId()), args);
+        } else {
+            sender.sendMessage(getPermissionMessage());
+        }
         return false;
     }
 
@@ -34,13 +35,13 @@ public abstract class KnockCommand extends Command {
 
     public abstract String getSyntax();
 
-    public abstract void perform(Knocker knocker, String[] args);
+    public abstract void perform(ReworkedKnocker knocker, String[] args);
 
-    public abstract List<String> performTab(Knocker knocker, String[] args);
+    public abstract List<String> performTab(ReworkedKnocker knocker, String[] args);
 
     @NotNull
     @Override
     public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-        return performTab(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
+        return performTab(ReworkedKnocker.get(((Player) sender).getUniqueId()), args);
     }
 }

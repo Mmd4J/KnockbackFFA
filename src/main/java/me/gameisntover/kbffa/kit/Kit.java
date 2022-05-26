@@ -3,7 +3,7 @@ package me.gameisntover.kbffa.kit;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -67,9 +67,8 @@ public class Kit {
                 if (item.getType().toString().contains("Boots")) player.getInventory().setBoots(item);
             }
         } else {
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(player);
-            knocker.getConfig().set("owned-kits", knocker.getConfig().getStringList("owned-kits").stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
-            knocker.saveConfig();
+            ReworkedKnocker knocker = ReworkedKnocker.get(player.getUniqueId());
+            knocker.getOwnedKits().addAll(knocker.getOwnedKits().stream().filter(s -> s.contains(kitName)).collect(Collectors.toList()));
         }
     }
 

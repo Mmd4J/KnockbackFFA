@@ -2,7 +2,8 @@ package me.gameisntover.kbffa.command.subcommands.game;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
+import me.gameisntover.kbffa.arena.ArenaManager;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.entity.Player;
@@ -33,24 +34,28 @@ public class LeaveCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
-        if (!KnockbackFFA.getInstance().BungeeMode() && knocker.isInGame()) {
+        if (!ArenaManager.isInGame(p.getUniqueId())) {
             String leaveText = Message.ARENA_LEAVE.toString();
             leaveText = PlaceholderAPI.setPlaceholders(p, leaveText);
             p.sendMessage(leaveText);
             KnockbackFFA.getInstance().getArenaManager().teleportToMainLobby(p);
             p.getInventory().clear();
-            if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join"))
-                p.getInventory().setContents(knocker.getInventory().getContents());
-            knocker.hideScoreBoard();
-            knocker.setInGame(false);
-        } else p.sendMessage(Message.CAN_NOT_LEAVE.toString());
-
+            /* will be back l8r
+             if (KnockbackFFA.getInstance().getConfig().getBoolean("save-inventory-on-join")){
+                //TODO: recach invs p.getInventory().setContents(knocker.getInventory().getContents());
+            }
+            */
+            knocker.setScoreboardEnabled(false);
+            ArenaManager.setInGame(p.getUniqueId(), false);
+        } else {
+            p.sendMessage(Message.CAN_NOT_LEAVE.toString());
+        }
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

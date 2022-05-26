@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import me.gameisntover.kbffa.KnockbackFFA;
 import me.gameisntover.kbffa.api.KnockData;
-import me.gameisntover.kbffa.api.Knocker;
 import me.gameisntover.kbffa.api.event.ArenaJoinEvent;
+import me.gameisntover.kbffa.util.CommonUtils;
 import me.gameisntover.kbffa.util.Message;
 import me.gameisntover.kbffa.util.Sounds;
 import org.bukkit.*;
@@ -26,9 +26,23 @@ public class ArenaManager extends KnockData {
     private File df = KnockbackFFA.getInstance().getDataFolder();
     private Map<String, Arena> arenaHandler = new HashMap<>();
 
+    private static final HashMap<UUID, Boolean> INGAME = new HashMap<>();
+
     public ArenaManager() {
         folder.mkdir();
+    }
 
+    public static boolean isInGame(UUID uuid){
+        if(KnockbackFFA.getInstance().BungeeMode()) return true;
+        return INGAME.containsKey(uuid);
+    }
+
+    public static void setInGame(UUID uuid, boolean ingame){
+        if(!ingame){
+            INGAME.remove(uuid);
+            return;
+        }
+        INGAME.put(uuid, true);
     }
 
     @SneakyThrows
@@ -135,13 +149,12 @@ public class ArenaManager extends KnockData {
         String arenaName = arena.getName();
         setEnabledArena(arenaName);
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            Knocker knocker = KnockbackFFA.getInstance().getKnocker(p);
-            if (!knocker.isInGame()) return;
+            if (!isInGame(p.getUniqueId())) return;
             p.getInventory().clear();
-            knocker.giveLobbyItems();
+            CommonUtils.giveLobbyItems(p);
             teleportPlayerToArena(p);
             p.playSound(p.getLocation(), Sounds.ARENA_CHANGE.toSound(), 1, 1);
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Message.ARENA_CHANGE.toString()).replace("%arena%", arenaName));
+            p.sendMessage(Message.ARENA_CHANGE.toString().replace("%arena%", arenaName));
         }
         if (arena.getConfig().getBoolean("auto-reset")) arena.resetArena();
     }

@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Items;
 import org.bukkit.inventory.ItemStack;
@@ -30,13 +30,13 @@ public class WandCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         ItemStack wand = Items.POSITION_SELECTOR_WAND.getItem();
         knocker.getPlayer().getInventory().addItem(wand);
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

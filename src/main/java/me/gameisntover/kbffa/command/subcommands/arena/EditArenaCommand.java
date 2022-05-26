@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.arena;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.arena.Arena;
 import me.gameisntover.kbffa.arena.regions.Cuboid;
 import me.gameisntover.kbffa.command.KnockCommand;
@@ -34,7 +34,7 @@ public class EditArenaCommand extends KnockCommand {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        perform(KnockbackFFA.getInstance().getKnocker((Player) sender), args);
+        perform(ReworkedKnocker.get(((Player)sender).getUniqueId()), args);
         return false;
     }
 
@@ -54,7 +54,7 @@ public class EditArenaCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length != 1) {
             p.sendMessage(ChatColor.RED + "Command Arguements missing or is invalid /editarena arenaname");
@@ -177,11 +177,11 @@ public class EditArenaCommand extends KnockCommand {
         arenaGUI.add(setpos, 13);
         arenaGUI.add(worldBorder, 14);
         arenaGUI.add(autoReset, 15);
-        knocker.openGUI(arenaGUI);
+        knocker.getPlayer().openInventory(arenaGUI.getInventory());
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return Arrays.asList(Arrays.stream(KnockbackFFA.getInstance().getArenaManager().getFolder().list()).map(s -> s.replace(".yml", "")).toArray(String[]::new));
     }
 }

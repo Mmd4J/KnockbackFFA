@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * This is a reworked version of {@link Knocker} since it has to be cleaned up for any SQL database
+ * This is a reworked version of the kbffa custom player since it has to be cleaned up for any SQL database
  * This class won't be used yet.
  */
 
@@ -20,9 +20,10 @@ public class ReworkedKnocker {
     private static final HashMap<UUID, ReworkedKnocker> KNOCKERS = new HashMap<>();
 
     private final UUID playerID;
+    private final List<String> ownedCosmetics = new ArrayList<>();
     private final List<String> ownedKits = new ArrayList<>();
     private final List<String> ownedTrails = new ArrayList<>();
-    private String selectedKit, selectedCosmetic, selectedTrail;
+    private String selectedCosmetic, selectedKit, selectedTrail;
     private int kills, deaths, balance;
     private boolean scoreboardEnabled = true;
 

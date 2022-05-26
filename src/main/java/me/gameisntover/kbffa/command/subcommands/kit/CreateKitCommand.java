@@ -1,7 +1,7 @@
 package me.gameisntover.kbffa.command.subcommands.kit;
 
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.kit.Kit;
 import org.bukkit.ChatColor;
@@ -32,7 +32,7 @@ public class CreateKitCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
         if (args.length == 0) {
             p.sendMessage(ChatColor.RED + "Usage: /createkit <kitname>");
@@ -45,7 +45,7 @@ public class CreateKitCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

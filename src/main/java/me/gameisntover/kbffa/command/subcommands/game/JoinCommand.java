@@ -2,8 +2,10 @@ package me.gameisntover.kbffa.command.subcommands.game;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.gameisntover.kbffa.KnockbackFFA;
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
+import me.gameisntover.kbffa.arena.ArenaManager;
 import me.gameisntover.kbffa.command.KnockCommand;
+import me.gameisntover.kbffa.util.CommonUtils;
 import me.gameisntover.kbffa.util.Message;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
@@ -32,9 +34,9 @@ public class JoinCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Player p = knocker.getPlayer();
-        if (KnockbackFFA.getInstance().BungeeMode() || knocker.isInGame())
+        if (ArenaManager.isInGame(p.getUniqueId()))
             p.sendMessage(Message.ALREADY_INGAME.toString());
         else {
             if (KnockbackFFA.getInstance().getArenaManager().getEnabledArena() == null)
@@ -43,19 +45,19 @@ public class JoinCommand extends KnockCommand {
                 String joinText = Message.ARENA_JOIN.toString();
                 joinText = PlaceholderAPI.setPlaceholders(p, joinText);
                 p.sendMessage(joinText);
-                knocker.setInventory(p.getInventory());
+                //TODO re-cache inventories: knocker.setInventory(p.getInventory());
                 p.getInventory().clear();
                 p.setFoodLevel(20);
-                knocker.giveLobbyItems();
-                knocker.showScoreBoard();
-                knocker.setInGame(true);
+                CommonUtils.giveLobbyItems(p);
+                knocker.setScoreboardEnabled(true);
+                ArenaManager.setInGame(p.getUniqueId(), true);
             }
             KnockbackFFA.getInstance().getArenaManager().teleportPlayerToArena(p);
         }
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
 }

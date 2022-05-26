@@ -1,6 +1,6 @@
 package me.gameisntover.kbffa.command.subcommands.util;
 
-import me.gameisntover.kbffa.api.Knocker;
+import me.gameisntover.kbffa.api.ReworkedKnocker;
 import me.gameisntover.kbffa.command.KnockCommand;
 import me.gameisntover.kbffa.util.Items;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class SpecialItemsCommand extends KnockCommand {
     }
 
     @Override
-    public void perform(Knocker knocker, String[] args) {
+    public void perform(ReworkedKnocker knocker, String[] args) {
         Inventory specialItems = Bukkit.createInventory(null, 9, "Special Items");
         specialItems.addItem(Items.KNOCKBACK_STICK.getItem());
         specialItems.addItem(Items.BOW.getItem());
@@ -43,7 +43,8 @@ public class SpecialItemsCommand extends KnockCommand {
     }
 
     @Override
-    public List<String> performTab(Knocker knocker, String[] args) {
+    public List<String> performTab(ReworkedKnocker knocker, String[] args) {
         return null;
     }
+
 }
