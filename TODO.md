@@ -2,7 +2,7 @@
 
 > General TODO
 
-* [ ] Write a wiki on github or gitbook
+* [X] Write a wiki on github or gitbook
 * [ ] Seperate the kbffa into Core and API modules
 * [ ] Re-Write SpigotMC description
 * [ ] Use [reposilite](https://reposilite.com/) to make a maven repo for the API

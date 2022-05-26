@@ -19,7 +19,7 @@ import me.gameisntover.kbffa.listeners.*;
 import me.gameisntover.kbffa.scoreboard.BoardManager;
 import me.gameisntover.kbffa.scoreboard.ScoreboardConfiguration;
 import me.gameisntover.kbffa.util.*;
-import org.bstats.bukkit.Metrics;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
